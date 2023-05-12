@@ -578,6 +578,8 @@ asset_in_files = {
         os.path.join('ranking', 'ctrl', 'SettingUpDownValue.brctr.json5'),
         os.path.join('ranking', 'timg', 'tt_pattern_chek_alpha_nasi_32x32.tpl'),
         os.path.join('ranking', 'timg', 'tt_pattern_chek_bokashi_32x32.tpl'),
+        # New Settings
+        os.path.join('button', 'ctrl', 'SettingsWheel.brctr.json5'),
         # Teams
         os.path.join('button', 'ctrl', 'TeamConfirmOK.brctr.json5'),
         os.path.join('control', 'anim', 'common_w204_team_position.brlan.json5'),

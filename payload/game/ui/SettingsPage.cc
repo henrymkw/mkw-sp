@@ -16,7 +16,7 @@ void SettingsPage::onInit() {
     setInputManager(&m_inputManager);
     m_inputManager.setWrappingMode(MultiControlInputManager::WrappingMode::Y);
 
-    initChildren(4 + std::size(m_settingControls) + !!blackBack());
+    initChildren(4 + std::size(m_settingControls) + !!blackBack() + std::size(m_settingsWheelButton));
     insertChild(0, &m_pageTitleText, 0);
     insertChild(1, &m_categoryControl, 0);
     insertChild(2, instructionText(), 0);
@@ -26,6 +26,10 @@ void SettingsPage::onInit() {
     }
     if (blackBack()) {
         insertChild(4 + std::size(m_settingControls), blackBack(), 0);
+    }
+    //Hopefully this adds corrrectly
+    for (u32 i = 0; i < std::size(m_settingsWheelButton); i++) {
+        insertChild(4 + std::size(m_settingControls) + 1 + i, &m_settingsWheelButton[i], 0);
     }
 
     m_pageTitleText.load(false);
@@ -59,6 +63,13 @@ void SettingsPage::onInit() {
         blackBack()->m_zIndex = -1.0f;
     }
 
+    //LOAD NEW BUTTONS
+    m_settingsWheelButton[0].load("button", "SettingsWheel", "WheelButton0", 0x1, false, false);
+    m_settingsWheelButton[1].load("button", "SettingsWheel", "WheelButton1", 0x1, false, false);
+    m_settingsWheelButton[2].load("button", "SettingsWheel", "WheelButton2", 0x1, false, false);
+    m_settingsWheelButton[3].load("button", "SettingsWheel", "WheelButton3", 0x1, false, false);
+    m_settingsWheelButton[4].load("button", "SettingsWheel", "WheelButton4", 0x1, false, false);
+
     m_inputManager.setHandler(MenuInputManager::InputId::Back, &m_onBack, false, false);
     m_categoryControl.setFrontHandler(&m_onCategoryControlFront);
     m_categoryControl.setSelectHandler(&m_onCategoryControlSelect);
@@ -68,6 +79,12 @@ void SettingsPage::onInit() {
         m_settingControls[i].setChangeHandler(&m_onSettingControlChange);
         m_settingControls[i].setFrontHandler(&m_onSettingControlFront);
         m_settingControls[i].setSelectHandler(&m_onSettingControlSelect);
+    }
+
+    for (u32 i = 0; i < std::size(m_settingsWheelButton); i++) {
+        m_settingsWheelButton[i].setFrontHandler(&m_onSettingsWheelButtonFront, false);
+        m_settingsWheelButton[i].setSelectHandler(&m_onSettingsWheelButtonSelect, false);
+        m_settingsWheelButton[i].setDeselectHandler(&m_onSettingsWheelButtonDeselect, false);
     }
 
     m_pageTitleText.setMessage(10076);
@@ -203,6 +220,20 @@ void SettingsPage::onBackButtonFront(PushButton *button, u32 /* localPlayerId */
     f32 delay = button->getDelay();
     startReplace(Anim::Prev, delay);
 }
+
+
+void SettingsPage::onSettingsWheelButtonFront(PushButton * /* button */, u32 /* localPlayerId */) {
+}
+
+void SettingsPage::onSettingsWheelButtonSelect(PushButton * /* button */, u32 /* localPlayerId */) {
+}
+
+void SettingsPage::onSettingsWheelButtonDeselect(PushButton * /* button */, u32 /* localPlayerId */) {
+}
+
+
+
+
 
 u32 SettingsPage::getSheetCount() const {
     u32 sheetCount = 0;
