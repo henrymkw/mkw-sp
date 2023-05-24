@@ -1,5 +1,5 @@
 {
-    "main brlyt": "common_w203_launch_button_half",
+    "main brlyt": "SettingsWheelButton",
     "bmg": "Menu",
     "picture source brlyt": "",
     "groups": [
@@ -110,7 +110,7 @@
             "scale x 16:9": 1.0,
             "scale y 16:9": 1.0,
             "first message": 0,
-            "message count": 1,
+            "message count": 0,
             "first picture": 0,
             "picture count": 0,
         },
