@@ -29,7 +29,7 @@ void SettingsPage::onInit() {
     }
     //Hopefully this adds corrrectly
     for (u32 i = 0; i < std::size(m_settingsWheelButton); i++) {
-        insertChild(4 + std::size(m_settingControls) + 1 + i, &m_settingsWheelButton[i], 0);
+        insertChild(4 + std::size(m_settingControls) + !!blackBack() + i, &m_settingsWheelButton[i], 0);
     }
 
     m_pageTitleText.load(false);
