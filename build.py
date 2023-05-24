@@ -499,6 +499,8 @@ asset_in_files = {
         os.path.join('ranking', 'timg', 'tt_pattern_chek_bokashi_32x32.tpl'),
         #New Settings
         os.path.join('button', 'ctrl', 'SettingsWheel.brctr.json5'),
+        os.path.join('button', 'blyt', 'SettingsWheelButton.brlyt.json5'),
+        os.path.join('button', 'timg', 'tt_pattern_chek_32x32_alpha.tpl'),
         os.path.join('button', 'blyt', 'common_w203_launch_button_half.brlyt.json5'),
         os.path.join('button', 'anim', 'common_w083_earth_chat_message_fade_in.brlan.json5'),
         os.path.join('button', 'anim', 'common_w083_earth_chat_message_fade_in_after.brlan.json5'),
