@@ -273,6 +273,9 @@ asset_in_files = {
         os.path.join('ranking', 'ctrl', 'SettingUpDownValue.brctr.json5'),
         os.path.join('ranking', 'timg', 'tt_pattern_chek_alpha_nasi_32x32.tpl'),
         os.path.join('ranking', 'timg', 'tt_pattern_chek_bokashi_32x32.tpl'),
+        #New Settings
+        os.path.join('button', 'ctrl', 'SettingsWheel.brctr.json5'),
+        os.path.join('button', 'blyt', 'common_w203_launch_button_half.brlyt.json5'),
         # Teams
         os.path.join('button', 'anim', 'online_team_select_light_01_ok.brlan.json5'),
         os.path.join('button', 'anim', 'online_team_select_light_01_stop.brlan.json5'),
@@ -381,6 +384,9 @@ asset_in_files = {
         os.path.join('ranking', 'ctrl', 'SettingUpDownValue.brctr.json5'),
         os.path.join('ranking', 'timg', 'tt_pattern_chek_alpha_nasi_32x32.tpl'),
         os.path.join('ranking', 'timg', 'tt_pattern_chek_bokashi_32x32.tpl'),
+        #New Settings
+        os.path.join('button', 'ctrl', 'SettingsWheel.brctr.json5'),
+        os.path.join('button', 'blyt', 'common_w203_launch_button_half.brlyt.json5'),
         # Teams
         os.path.join('button', 'ctrl', 'TeamConfirmOK.brctr.json5'),
         os.path.join('control', 'anim', 'common_w204_team_position.brlan.json5'),
@@ -488,6 +494,9 @@ asset_in_files = {
         os.path.join('ranking', 'ctrl', 'SettingUpDownValue.brctr.json5'),
         os.path.join('ranking', 'timg', 'tt_pattern_chek_alpha_nasi_32x32.tpl'),
         os.path.join('ranking', 'timg', 'tt_pattern_chek_bokashi_32x32.tpl'),
+        #New Settings
+        os.path.join('button', 'ctrl', 'SettingsWheel.brctr.json5'),
+        os.path.join('button', 'blyt', 'common_w203_launch_button_half.brlyt.json5'),
     ],
     os.path.join('Scene', 'UI', 'MenuSingleSP.arc.lzma'): [
         os.path.join('button', 'ctrl', 'SettingsButton.brctr.json5'),
@@ -580,6 +589,7 @@ asset_in_files = {
         os.path.join('ranking', 'timg', 'tt_pattern_chek_bokashi_32x32.tpl'),
         # New Settings
         os.path.join('button', 'ctrl', 'SettingsWheel.brctr.json5'),
+        os.path.join('button', 'blyt', 'common_w203_launch_button_half.brlyt.json5'),
         # Teams
         os.path.join('button', 'ctrl', 'TeamConfirmOK.brctr.json5'),
         os.path.join('control', 'anim', 'common_w204_team_position.brlan.json5'),
@@ -693,6 +703,9 @@ asset_in_files = {
         os.path.join('ranking', 'ctrl', 'SettingUpDownValue.brctr.json5'),
         os.path.join('ranking', 'timg', 'tt_pattern_chek_alpha_nasi_32x32.tpl'),
         os.path.join('ranking', 'timg', 'tt_pattern_chek_bokashi_32x32.tpl'),
+        #New Settings
+        os.path.join('button', 'ctrl', 'SettingsWheel.brctr.json5'),
+        os.path.join('button', 'blyt', 'common_w203_launch_button_half.brlyt.json5'),
         # HUD
         os.path.join('game_image', 'anim', 'battle_total_point_off.brlan.json5'),
         os.path.join('game_image', 'anim', 'battle_total_point_on.brlan.json5'),
