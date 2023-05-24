@@ -60,15 +60,15 @@ private:
     };
 
     void onBack(u32 localPlayerId);
-    void onCategoryControlFront(UpDownControl *control, u32 localPlayerId);
+    /*void onCategoryControlFront(UpDownControl *control, u32 localPlayerId);
     void onCategoryControlSelect(UpDownControl *control, u32 localPlayerId);
     void onCategoryValueChange(TextUpDownValueControl::TextControl *text, u32 index);
     void onSettingControlChange(UpDownControl *control, u32 localPlayerId, u32 index);
     void onSettingControlFront(UpDownControl *control, u32 localPlayerId);
-    void onSettingControlSelect(UpDownControl *control, u32 localPlayerId);
+    void onSettingControlSelect(UpDownControl *control, u32 localPlayerId);*/
     void onBackButtonFront(PushButton *button, u32 localPlayerId);
-    u32 getSheetCount() const;
-    CategoryInfo getCategoryInfo(u32 sheetIndex) const;
+    /*u32 getSheetCount() const;
+    CategoryInfo getCategoryInfo(u32 sheetIndex) const;*/
 
     void onSettingsWheelButtonFront(PushButton *button, u32 localPlayerId);
     void onSettingsWheelButtonSelect(PushButton *button, u32 localPlayerId);
@@ -83,23 +83,23 @@ private:
     //UI elements
     MultiControlInputManager m_inputManager;
     CtrlMenuPageTitleText m_pageTitleText;
-    UpDownControl m_categoryControl;
+    /*UpDownControl m_categoryControl;
     TextUpDownValueControl m_categoryValue;
     UpDownControl m_settingControls[6];
-    TextUpDownValueControl m_settingValues[6];
+    TextUpDownValueControl m_settingValues[6];*/
     CtrlMenuBackButton m_backButton;
 
-//Array should work for this?
+//Array should work for this? NEW ELEMENTS
     PushButton m_settingsWheelButton[5];
 
     //Input handlers
     H<MultiControlInputManager> m_onBack{this, &SettingsPage::onBack};
-    H<UpDownControl> m_onCategoryControlFront{this, &SettingsPage::onCategoryControlFront};
+    /*H<UpDownControl> m_onCategoryControlFront{this, &SettingsPage::onCategoryControlFront};
     H<UpDownControl> m_onCategoryControlSelect{this, &SettingsPage::onCategoryControlSelect};
     C<TextUpDownValueControl> m_onCategoryValueChange{this, &SettingsPage::onCategoryValueChange};
     C<UpDownControl> m_onSettingControlChange{this, &SettingsPage::onSettingControlChange};
     H<UpDownControl> m_onSettingControlFront{this, &SettingsPage::onSettingControlFront};
-    H<UpDownControl> m_onSettingControlSelect{this, &SettingsPage::onSettingControlSelect};
+    H<UpDownControl> m_onSettingControlSelect{this, &SettingsPage::onSettingControlSelect};*/
     H<PushButton> m_onBackButtonFront{this, &SettingsPage::onBackButtonFront};
 
 //Figure out how this works with an array of pushbuttons.
