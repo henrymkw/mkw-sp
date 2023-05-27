@@ -1526,8 +1526,8 @@
                                 "translate x": 0.0,
                                 "translate y": 0.0,
                                 "rotate": 0.0,
-                                "scale x": 1.0,
-                                "scale y": 1.0,
+                                "scale x": 1.5,
+                                "scale y": 1.5,
                             },
                         ],
                         "texture uv gens": [
