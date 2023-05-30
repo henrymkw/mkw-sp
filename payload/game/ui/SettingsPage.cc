@@ -92,7 +92,7 @@ void SettingsPage::onInit() {
 void SettingsPage::onActivate() {
     instructionText()->setMessageAll(0);
 
-    //m_categoryControl.selectDefault(0);
+    m_settingsWheelButton[2].selectDefault(0);
 }
 
 BlackBackControl *SettingsPage::blackBack() {
