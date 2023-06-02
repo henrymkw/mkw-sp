@@ -2299,11 +2299,7 @@
                         },
                     ],
                 },
-<<<<<<< Updated upstream
 				{
-=======
-                {
->>>>>>> Stashed changes
                     "magic": "pan1",
                     "flags": {
                         "visible": true,
@@ -2314,7 +2310,6 @@
                     "opacity": 255,
                     "name": "pause_w_fade_n",
                     "user data": "",
-<<<<<<< Updated upstream
                     "translation x": -0.0,
                     "translation y": -0.0,
                     "translation z": 0.0,
@@ -2323,21 +2318,10 @@
                     "rotation z": 0.0,
                     "scale x": 0.9,
                     "scale y": 0.9,
-=======
-                    "translation x": -141.0,
-                    "translation y": 3.0,
-                    "translation z": 10.0,
-                    "rotation x": 0.0,
-                    "rotation y": 0.0,
-                    "rotation z": 0.0,
-                    "scale x": 1.0,
-                    "scale y": 1.0,
->>>>>>> Stashed changes
                     "size x": 50.0,
                     "size y": 50.0,
                     "children": [
                         {
-<<<<<<< Updated upstream
                             "magic": "bnd1",
                             "flags": {
                                 "visible": true,
@@ -2360,8 +2344,6 @@
                             "size y": 55.0,
                         },
                         {
-=======
->>>>>>> Stashed changes
                             "magic": "pan1",
                             "flags": {
                                 "visible": true,
@@ -2378,13 +2360,8 @@
                             "rotation x": 0.0,
                             "rotation y": 0.0,
                             "rotation z": 0.0,
-<<<<<<< Updated upstream
                             "scale x": 1.0,
                             "scale y": 1.0,
-=======
-                            "scale x": 0.9,
-                            "scale y": 0.9,
->>>>>>> Stashed changes
                             "size x": 30.0,
                             "size y": 30.0,
                             "children": [
@@ -2395,34 +2372,20 @@
                                         "influenced alpha": false,
                                         "location adjust": false,
                                     },
-<<<<<<< Updated upstream
                                     "base position": "top center",
                                     "opacity": 0,
                                     "name": "black_base",
                                     "user data": "",
                                     "translation x": 0.0,
                                     "translation y": 20.0,
-=======
-                                    "base position": "center",
-                                    "opacity": 255,
-                                    "name": "color_base",
-                                    "user data": "",
-                                    "translation x": 0.0,
-                                    "translation y": 0.0,
->>>>>>> Stashed changes
                                     "translation z": 20.0,
                                     "rotation x": 0.0,
                                     "rotation y": 0.0,
                                     "rotation z": 0.0,
                                     "scale x": 1.0,
                                     "scale y": 1.0,
-<<<<<<< Updated upstream
                                     "size x": 272.0,
                                     "size y": 40.0,
-=======
-                                    "size x": 236.0,
-                                    "size y": 38.0,
->>>>>>> Stashed changes
                                     "vertex color top left r": 255,
                                     "vertex color top left g": 255,
                                     "vertex color top left b": 255,
@@ -2439,11 +2402,7 @@
                                     "vertex color bottom right g": 255,
                                     "vertex color bottom right b": 255,
                                     "vertex color bottom right a": 255,
-<<<<<<< Updated upstream
                                     "material": 15,
-=======
-                                    "material": 10,
->>>>>>> Stashed changes
                                     "uv sets": [
                                         {
                                             "top left u": 0.0,
@@ -2469,24 +2428,15 @@
                                     "name": "shadow",
                                     "user data": "",
                                     "translation x": 0.777778,
-<<<<<<< Updated upstream
                                     "translation y": -3.0,
-=======
-                                    "translation y": -2.0,
->>>>>>> Stashed changes
                                     "translation z": 0.0,
                                     "rotation x": 0.0,
                                     "rotation y": 0.0,
                                     "rotation z": 0.0,
                                     "scale x": 1.0,
                                     "scale y": 1.0,
-<<<<<<< Updated upstream
                                     "size x": 280.0,
                                     "size y": 48.0,
-=======
-                                    "size x": 240.0,
-                                    "size y": 45.0,
->>>>>>> Stashed changes
                                     "vertex color top left r": 255,
                                     "vertex color top left g": 0,
                                     "vertex color top left b": 0,
@@ -2503,11 +2453,7 @@
                                     "vertex color bottom right g": 255,
                                     "vertex color bottom right b": 0,
                                     "vertex color bottom right a": 255,
-<<<<<<< Updated upstream
                                     "material": 14,
-=======
-                                    "material": 2,
->>>>>>> Stashed changes
                                     "uv sets": [
                                         {
                                             "top left u": 0.0,
@@ -2540,13 +2486,8 @@
                                     "rotation z": 0.0,
                                     "scale x": 1.0,
                                     "scale y": 1.0,
-<<<<<<< Updated upstream
                                     "size x": 286.0,
                                     "size y": 50.0,
-=======
-                                    "size x": 244.0,
-                                    "size y": 45.0,
->>>>>>> Stashed changes
                                     "vertex color top left r": 255,
                                     "vertex color top left g": 0,
                                     "vertex color top left b": 0,
@@ -2563,11 +2504,7 @@
                                     "vertex color bottom right g": 255,
                                     "vertex color bottom right b": 0,
                                     "vertex color bottom right a": 255,
-<<<<<<< Updated upstream
                                     "material": 13,
-=======
-                                    "material": 1,
->>>>>>> Stashed changes
                                     "uv sets": [
                                         {
                                             "top left u": 0.0,
@@ -2600,13 +2537,8 @@
                                     "rotation z": 0.0,
                                     "scale x": 1.0,
                                     "scale y": 1.0,
-<<<<<<< Updated upstream
                                     "size x": 280.0,
                                     "size y": 45.0,
-=======
-                                    "size x": 240.0,
-                                    "size y": 42.0,
->>>>>>> Stashed changes
                                     "vertex color top left r": 255,
                                     "vertex color top left g": 255,
                                     "vertex color top left b": 255,
@@ -2623,11 +2555,7 @@
                                     "vertex color bottom right g": 255,
                                     "vertex color bottom right b": 255,
                                     "vertex color bottom right a": 255,
-<<<<<<< Updated upstream
                                     "material": 12,
-=======
-                                    "material": 0,
->>>>>>> Stashed changes
                                     "uv sets": [
                                         {
                                             "top left u": 0.0,
@@ -2648,7 +2576,6 @@
                                         "influenced alpha": false,
                                         "location adjust": false,
                                     },
-<<<<<<< Updated upstream
                                     "base position": "top center",
                                     "opacity": 255,
                                     "name": "black_right",
@@ -2757,27 +2684,14 @@
                                     "user data": "",
                                     "translation x": 0.0,
                                     "translation y": 20.0,
-=======
-                                    "base position": "center",
-                                    "opacity": 255,
-                                    "name": "color_down",
-                                    "user data": "",
-                                    "translation x": 0.0,
-                                    "translation y": 0.0,
->>>>>>> Stashed changes
                                     "translation z": 0.0,
                                     "rotation x": 0.0,
                                     "rotation y": 0.0,
                                     "rotation z": 0.0,
                                     "scale x": 1.0,
                                     "scale y": 1.0,
-<<<<<<< Updated upstream
                                     "size x": 272.0,
                                     "size y": 3.0,
-=======
-                                    "size x": 246.0,
-                                    "size y": 45.0,
->>>>>>> Stashed changes
                                     "vertex color top left r": 255,
                                     "vertex color top left g": 0,
                                     "vertex color top left b": 0,
@@ -2789,123 +2703,12 @@
                                     "vertex color bottom left r": 255,
                                     "vertex color bottom left g": 255,
                                     "vertex color bottom left b": 0,
-<<<<<<< Updated upstream
                                     "vertex color bottom left a": 0,
                                     "vertex color bottom right r": 255,
                                     "vertex color bottom right g": 255,
                                     "vertex color bottom right b": 0,
                                     "vertex color bottom right a": 0,
                                     "material": 17,
-=======
-                                    "vertex color bottom left a": 255,
-                                    "vertex color bottom right r": 255,
-                                    "vertex color bottom right g": 255,
-                                    "vertex color bottom right b": 0,
-                                    "vertex color bottom right a": 255,
-                                    "material": 6,
-                                    "uv sets": [
-                                        {
-                                            "top left u": 0.0,
-                                            "top left v": 0.0,
-                                            "top right u": 30.0,
-                                            "top right v": 0.0,
-                                            "bottom left u": 0.0,
-                                            "bottom left v": 4.0,
-                                            "bottom right u": 30.0,
-                                            "bottom right v": 4.0,
-                                        },
-                                    ],
-                                },
-                                {
-                                    "magic": "pic1",
-                                    "flags": {
-                                        "visible": true,
-                                        "influenced alpha": false,
-                                        "location adjust": false,
-                                    },
-                                    "base position": "top center",
-                                    "opacity": 255,
-                                    "name": "shadow_top_left",
-                                    "user data": "",
-                                    "translation x": -119.0,
-                                    "translation y": 21.5,
-                                    "translation z": 0.0,
-                                    "rotation x": 0.0,
-                                    "rotation y": 0.0,
-                                    "rotation z": 0.0,
-                                    "scale x": 1.0,
-                                    "scale y": 1.0,
-                                    "size x": 3.0,
-                                    "size y": 10.0,
-                                    "vertex color top left r": 0,
-                                    "vertex color top left g": 0,
-                                    "vertex color top left b": 0,
-                                    "vertex color top left a": 255,
-                                    "vertex color top right r": 0,
-                                    "vertex color top right g": 0,
-                                    "vertex color top right b": 0,
-                                    "vertex color top right a": 255,
-                                    "vertex color bottom left r": 255,
-                                    "vertex color bottom left g": 255,
-                                    "vertex color bottom left b": 255,
-                                    "vertex color bottom left a": 0,
-                                    "vertex color bottom right r": 255,
-                                    "vertex color bottom right g": 255,
-                                    "vertex color bottom right b": 255,
-                                    "vertex color bottom right a": 0,
-                                    "material": 7,
-                                    "uv sets": [
-                                        {
-                                            "top left u": 0.0,
-                                            "top left v": 0.0,
-                                            "top right u": 30.0,
-                                            "top right v": 0.0,
-                                            "bottom left u": 0.0,
-                                            "bottom left v": 4.0,
-                                            "bottom right u": 30.0,
-                                            "bottom right v": 4.0,
-                                        },
-                                    ],
-                                },
-                                {
-                                    "magic": "pic1",
-                                    "flags": {
-                                        "visible": true,
-                                        "influenced alpha": false,
-                                        "location adjust": false,
-                                    },
-                                    "base position": "top center",
-                                    "opacity": 255,
-                                    "name": "shadow_top_right",
-                                    "user data": "",
-                                    "translation x": 119.111099,
-                                    "translation y": 21.5,
-                                    "translation z": 0.0,
-                                    "rotation x": 0.0,
-                                    "rotation y": 0.0,
-                                    "rotation z": 0.0,
-                                    "scale x": 1.0,
-                                    "scale y": 1.0,
-                                    "size x": 2.0,
-                                    "size y": 10.0,
-                                    "vertex color top left r": 0,
-                                    "vertex color top left g": 0,
-                                    "vertex color top left b": 0,
-                                    "vertex color top left a": 255,
-                                    "vertex color top right r": 0,
-                                    "vertex color top right g": 0,
-                                    "vertex color top right b": 0,
-                                    "vertex color top right a": 255,
-                                    "vertex color bottom left r": 255,
-                                    "vertex color bottom left g": 255,
-                                    "vertex color bottom left b": 255,
-                                    "vertex color bottom left a": 0,
-                                    "vertex color bottom right r": 255,
-                                    "vertex color bottom right g": 255,
-                                    "vertex color bottom right b": 255,
-                                    "vertex color bottom right a": 0,
-                                    "material": 12,
->>>>>>> Stashed changes
                                     "uv sets": [
                                         {
                                             "top left u": 0.0,
@@ -2928,24 +2731,16 @@
                                     },
                                     "base position": "bottom center",
                                     "opacity": 255,
-<<<<<<< Updated upstream
                                     "name": "black_bottom",
                                     "user data": "",
                                     "translation x": -0.0,
                                     "translation y": -20.0,
-=======
-                                    "name": "shadow_botom",
-                                    "user data": "",
-                                    "translation x": -119.111115,
-                                    "translation y": -21.111111,
->>>>>>> Stashed changes
                                     "translation z": 0.0,
                                     "rotation x": 0.0,
                                     "rotation y": 0.0,
                                     "rotation z": 0.0,
                                     "scale x": 1.0,
                                     "scale y": 1.0,
-<<<<<<< Updated upstream
                                     "size x": 272.0,
                                     "size y": 3.0,
                                     "vertex color top left r": 255,
@@ -2965,27 +2760,6 @@
                                     "vertex color bottom right b": 0,
                                     "vertex color bottom right a": 255,
                                     "material": 22,
-=======
-                                    "size x": 3.0,
-                                    "size y": 15.0,
-                                    "vertex color top left r": 0,
-                                    "vertex color top left g": 0,
-                                    "vertex color top left b": 0,
-                                    "vertex color top left a": 0,
-                                    "vertex color top right r": 0,
-                                    "vertex color top right g": 0,
-                                    "vertex color top right b": 0,
-                                    "vertex color top right a": 0,
-                                    "vertex color bottom left r": 255,
-                                    "vertex color bottom left g": 255,
-                                    "vertex color bottom left b": 255,
-                                    "vertex color bottom left a": 255,
-                                    "vertex color bottom right r": 255,
-                                    "vertex color bottom right g": 255,
-                                    "vertex color bottom right b": 255,
-                                    "vertex color bottom right a": 255,
-                                    "material": 8,
->>>>>>> Stashed changes
                                     "uv sets": [
                                         {
                                             "top left u": 0.0,
@@ -3006,28 +2780,18 @@
                                         "influenced alpha": false,
                                         "location adjust": false,
                                     },
-<<<<<<< Updated upstream
                                     "base position": "center",
                                     "opacity": 80,
                                     "name": "color_down",
                                     "user data": "",
                                     "translation x": -0.0,
                                     "translation y": -0.0,
-=======
-                                    "base position": "bottom center",
-                                    "opacity": 255,
-                                    "name": "shadow_botom_00",
-                                    "user data": "",
-                                    "translation x": -119.111115,
-                                    "translation y": -21.111111,
->>>>>>> Stashed changes
                                     "translation z": 0.0,
                                     "rotation x": 0.0,
                                     "rotation y": 0.0,
                                     "rotation z": 0.0,
                                     "scale x": 1.0,
                                     "scale y": 1.0,
-<<<<<<< Updated upstream
                                     "size x": 286.0,
                                     "size y": 50.0,
                                     "vertex color top left r": 255,
@@ -3047,27 +2811,6 @@
                                     "vertex color bottom right b": 0,
                                     "vertex color bottom right a": 255,
                                     "material": 16,
-=======
-                                    "size x": 3.0,
-                                    "size y": 15.0,
-                                    "vertex color top left r": 0,
-                                    "vertex color top left g": 0,
-                                    "vertex color top left b": 0,
-                                    "vertex color top left a": 0,
-                                    "vertex color top right r": 0,
-                                    "vertex color top right g": 0,
-                                    "vertex color top right b": 0,
-                                    "vertex color top right a": 0,
-                                    "vertex color bottom left r": 255,
-                                    "vertex color bottom left g": 255,
-                                    "vertex color bottom left b": 255,
-                                    "vertex color bottom left a": 255,
-                                    "vertex color bottom right r": 255,
-                                    "vertex color bottom right g": 255,
-                                    "vertex color bottom right b": 255,
-                                    "vertex color bottom right a": 255,
-                                    "material": 13,
->>>>>>> Stashed changes
                                     "uv sets": [
                                         {
                                             "top left u": 0.0,
@@ -3088,7 +2831,6 @@
                                         "influenced alpha": false,
                                         "location adjust": false,
                                     },
-<<<<<<< Updated upstream
                                     "base position": "center left",
                                     "opacity": 255,
                                     "name": "fukashi_00",
@@ -3096,21 +2838,11 @@
                                     "translation x": 135.555603,
                                     "translation y": 0.0,
                                     "translation z": 35.0,
-=======
-                                    "base position": "bottom center",
-                                    "opacity": 255,
-                                    "name": "hight_light",
-                                    "user data": "",
-                                    "translation x": -118.888885,
-                                    "translation y": 4.5,
-                                    "translation z": 0.0,
->>>>>>> Stashed changes
                                     "rotation x": 0.0,
                                     "rotation y": 0.0,
                                     "rotation z": 0.0,
                                     "scale x": 1.0,
                                     "scale y": 1.0,
-<<<<<<< Updated upstream
                                     "size x": 400.0,
                                     "size y": 53.0,
                                     "vertex color top left r": 255,
@@ -3130,27 +2862,6 @@
                                     "vertex color bottom right b": 0,
                                     "vertex color bottom right a": 255,
                                     "material": 18,
-=======
-                                    "size x": 2.222229,
-                                    "size y": 20.0,
-                                    "vertex color top left r": 255,
-                                    "vertex color top left g": 255,
-                                    "vertex color top left b": 255,
-                                    "vertex color top left a": 0,
-                                    "vertex color top right r": 255,
-                                    "vertex color top right g": 255,
-                                    "vertex color top right b": 255,
-                                    "vertex color top right a": 0,
-                                    "vertex color bottom left r": 255,
-                                    "vertex color bottom left g": 255,
-                                    "vertex color bottom left b": 255,
-                                    "vertex color bottom left a": 100,
-                                    "vertex color bottom right r": 255,
-                                    "vertex color bottom right g": 255,
-                                    "vertex color bottom right b": 255,
-                                    "vertex color bottom right a": 100,
-                                    "material": 9,
->>>>>>> Stashed changes
                                     "uv sets": [
                                         {
                                             "top left u": 0.0,
@@ -3171,7 +2882,6 @@
                                         "influenced alpha": false,
                                         "location adjust": false,
                                     },
-<<<<<<< Updated upstream
                                     "base position": "center right",
                                     "opacity": 255,
                                     "name": "fukashi_01",
@@ -3179,21 +2889,11 @@
                                     "translation x": -135.555603,
                                     "translation y": -0.0,
                                     "translation z": 35.0,
-=======
-                                    "base position": "bottom center",
-                                    "opacity": 255,
-                                    "name": "hight_light_00",
-                                    "user data": "",
-                                    "translation x": 119.259186,
-                                    "translation y": 4.499999,
-                                    "translation z": 0.0,
->>>>>>> Stashed changes
                                     "rotation x": 0.0,
                                     "rotation y": 0.0,
                                     "rotation z": 0.0,
                                     "scale x": 1.0,
                                     "scale y": 1.0,
-<<<<<<< Updated upstream
                                     "size x": 400.0,
                                     "size y": 53.0,
                                     "vertex color top left r": 255,
@@ -3213,27 +2913,6 @@
                                     "vertex color bottom right b": 0,
                                     "vertex color bottom right a": 255,
                                     "material": 19,
-=======
-                                    "size x": 2.222229,
-                                    "size y": 20.0,
-                                    "vertex color top left r": 255,
-                                    "vertex color top left g": 255,
-                                    "vertex color top left b": 255,
-                                    "vertex color top left a": 0,
-                                    "vertex color top right r": 255,
-                                    "vertex color top right g": 255,
-                                    "vertex color top right b": 255,
-                                    "vertex color top right a": 0,
-                                    "vertex color bottom left r": 255,
-                                    "vertex color bottom left g": 255,
-                                    "vertex color bottom left b": 255,
-                                    "vertex color bottom left a": 100,
-                                    "vertex color bottom right r": 255,
-                                    "vertex color bottom right g": 255,
-                                    "vertex color bottom right b": 255,
-                                    "vertex color bottom right a": 100,
-                                    "material": 14,
->>>>>>> Stashed changes
                                     "uv sets": [
                                         {
                                             "top left u": 0.0,
@@ -3248,11 +2927,7 @@
                                     ],
                                 },
                                 {
-<<<<<<< Updated upstream
                                     "magic": "pan1",
-=======
-                                    "magic": "txt1",
->>>>>>> Stashed changes
                                     "flags": {
                                         "visible": true,
                                         "influenced alpha": false,
@@ -3260,172 +2935,18 @@
                                     },
                                     "base position": "center",
                                     "opacity": 255,
-<<<<<<< Updated upstream
                                     "name": "text_null",
                                     "user data": "",
                                     "translation x": -0.0,
                                     "translation y": -1e-06,
-=======
-                                    "name": "text_shadow",
-                                    "user data": "",
-                                    "translation x": -0.0,
-                                    "translation y": -1.0,
->>>>>>> Stashed changes
                                     "translation z": 30.0,
                                     "rotation x": 0.0,
                                     "rotation y": 0.0,
                                     "rotation z": 0.0,
                                     "scale x": 1.0,
                                     "scale y": 1.0,
-<<<<<<< Updated upstream
                                     "size x": 60.0,
                                     "size y": 60.0,
-=======
-                                    "size x": 220.0,
-                                    "size y": 55.0,
-                                    "maximum string size": 162,
-                                    "string size": 30,
-                                    "material": 11,
-                                    "font": 0,
-                                    "text position": "center",
-                                    "text alignment": "unspecified",
-                                    "text": "あつめてコインであそびたい！",
-                                    "top color r": 255,
-                                    "top color g": 255,
-                                    "top color b": 255,
-                                    "top color a": 255,
-                                    "bottom color r": 255,
-                                    "bottom color g": 255,
-                                    "bottom color b": 255,
-                                    "bottom color a": 255,
-                                    "font size x": 34.400002,
-                                    "font size y": 40.799999,
-                                    "character space": 0.0,
-                                    "line space": 0.0,
-                                },
-                                {
-                                    "magic": "txt1",
-                                    "flags": {
-                                        "visible": true,
-                                        "influenced alpha": false,
-                                        "location adjust": false,
-                                    },
-                                    "base position": "center",
-                                    "opacity": 255,
-                                    "name": "text",
-                                    "user data": "",
-                                    "translation x": 0.0,
-                                    "translation y": 0.0,
-                                    "translation z": 30.0,
-                                    "rotation x": 0.0,
-                                    "rotation y": 0.0,
-                                    "rotation z": 0.0,
-                                    "scale x": 1.0,
-                                    "scale y": 1.0,
-                                    "size x": 220.0,
-                                    "size y": 55.0,
-                                    "maximum string size": 162,
-                                    "string size": 30,
-                                    "material": 3,
-                                    "font": 0,
-                                    "text position": "center",
-                                    "text alignment": "unspecified",
-                                    "text": "あつめてコインであそびたい！",
-                                    "top color r": 255,
-                                    "top color g": 255,
-                                    "top color b": 255,
-                                    "top color a": 255,
-                                    "bottom color r": 255,
-                                    "bottom color g": 255,
-                                    "bottom color b": 255,
-                                    "bottom color a": 255,
-                                    "font size x": 34.400002,
-                                    "font size y": 40.799999,
-                                    "character space": 0.0,
-                                    "line space": 0.0,
-                                },
-                                {
-                                    "magic": "txt1",
-                                    "flags": {
-                                        "visible": true,
-                                        "influenced alpha": false,
-                                        "location adjust": false,
-                                    },
-                                    "base position": "center",
-                                    "opacity": 0,
-                                    "name": "text_light_01",
-                                    "user data": "",
-                                    "translation x": 0.0,
-                                    "translation y": 0.0,
-                                    "translation z": 30.0,
-                                    "rotation x": 0.0,
-                                    "rotation y": 0.0,
-                                    "rotation z": 0.0,
-                                    "scale x": 1.0,
-                                    "scale y": 1.0,
-                                    "size x": 220.0,
-                                    "size y": 55.0,
-                                    "maximum string size": 162,
-                                    "string size": 30,
-                                    "material": 5,
-                                    "font": 0,
-                                    "text position": "center",
-                                    "text alignment": "unspecified",
-                                    "text": "あつめてコインであそびたい！",
-                                    "top color r": 255,
-                                    "top color g": 255,
-                                    "top color b": 255,
-                                    "top color a": 255,
-                                    "bottom color r": 255,
-                                    "bottom color g": 255,
-                                    "bottom color b": 255,
-                                    "bottom color a": 255,
-                                    "font size x": 38.700005,
-                                    "font size y": 45.899998,
-                                    "character space": 0.0,
-                                    "line space": 0.0,
-                                },
-                                {
-                                    "magic": "txt1",
-                                    "flags": {
-                                        "visible": true,
-                                        "influenced alpha": false,
-                                        "location adjust": false,
-                                    },
-                                    "base position": "center",
-                                    "opacity": 0,
-                                    "name": "text_light_02",
-                                    "user data": "",
-                                    "translation x": 0.0,
-                                    "translation y": 0.0,
-                                    "translation z": 30.0,
-                                    "rotation x": 0.0,
-                                    "rotation y": 0.0,
-                                    "rotation z": 0.0,
-                                    "scale x": 1.0,
-                                    "scale y": 1.0,
-                                    "size x": 220.0,
-                                    "size y": 55.0,
-                                    "maximum string size": 162,
-                                    "string size": 30,
-                                    "material": 4,
-                                    "font": 0,
-                                    "text position": "center",
-                                    "text alignment": "unspecified",
-                                    "text": "あつめてコインであそびたい！",
-                                    "top color r": 255,
-                                    "top color g": 255,
-                                    "top color b": 255,
-                                    "top color a": 255,
-                                    "bottom color r": 255,
-                                    "bottom color g": 255,
-                                    "bottom color b": 255,
-                                    "bottom color a": 255,
-                                    "font size x": 38.700005,
-                                    "font size y": 45.899998,
-                                    "character space": 0.0,
-                                    "line space": 0.0,
->>>>>>> Stashed changes
                                 },
                             ],
                         },
