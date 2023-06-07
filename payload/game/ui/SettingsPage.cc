@@ -20,9 +20,7 @@ void SettingsPage::onInit() {
     insertChild(0, &m_pageTitleText, 0);
     insertChild(1, instructionText(), 0);
     insertChild(2, &m_backButton, 0);
-    /*for (u32 i = 0; i < std::size(m_settingControls); i++) {
-        insertChild(4 + i, &m_settingControls[i], 0);
-    }*/
+    
     if (blackBack()) {
         insertChild(3, blackBack(), 0);
     }
@@ -32,19 +30,7 @@ void SettingsPage::onInit() {
     }
 
     m_pageTitleText.load(false);
-    /*m_categoryControl.load(getSheetCount(), 0, "control", "CategoryUpDownBase", "Category",
-            "CategoryUpDownButtonR", "RightButton", "CategoryUpDownButtonL", "LeftButton",
-            m_categoryValue.animator(), 0x1, false, false, true, true);
-    m_categoryValue.load("ranking", "CategoryUpDownValue", "Value", "CategoryUpDownText", "Text");
-    for (u32 i = 0; i < std::size(m_settingControls); i++) {
-        char variant[0x20];
-        snprintf(variant, sizeof(variant), "UpDown%u", i);
-        m_settingControls[i].load(1, 0, "control", "SettingUpDownBase", variant,
-                "SettingUpDownButtonR", "RightButton", "SettingUpDownButtonL", "LeftButton",
-                m_settingValues[i].animator(), 0x1, false, false, true, true);
-        m_settingValues[i].load("ranking", "SettingUpDownValue", "Value", "SettingUpDownText",
-                "Text");
-    }*/
+    
     auto sectionId = SectionManager::Instance()->currentSection()->id();
     if (blackBack()) {
         instructionText()->load("bg", "ObiInstructionTextPopup", "ObiInstructionTextPopup",
@@ -62,7 +48,7 @@ void SettingsPage::onInit() {
         blackBack()->m_zIndex = -1.0f;
     }
 
-    //LOAD NEW BUTTONS
+    //LOAD NEW BUTTONS (put this in loop later)
     m_settingsWheelButton[0].load("button", "SettingsWheel", "WheelButton0", 0x1, false, false);
     m_settingsWheelButton[1].load("button", "SettingsWheel", "WheelButton1", 0x1, false, false);
     m_settingsWheelButton[2].load("button", "SettingsWheel", "WheelButton2", 0x1, false, false);
@@ -70,15 +56,9 @@ void SettingsPage::onInit() {
     m_settingsWheelButton[4].load("button", "SettingsWheel", "WheelButton4", 0x1, false, false);
 
     m_inputManager.setHandler(MenuInputManager::InputId::Back, &m_onBack, false, false);
-    /*m_categoryControl.setFrontHandler(&m_onCategoryControlFront);
-    m_categoryControl.setSelectHandler(&m_onCategoryControlSelect);
-    m_categoryValue.setChangeHandler(&m_onCategoryValueChange);*/
+
     m_backButton.setFrontHandler(&m_onBackButtonFront, false);
-    /*for (u32 i = 0; i < std::size(m_settingControls); i++) {
-        m_settingControls[i].setChangeHandler(&m_onSettingControlChange);
-        m_settingControls[i].setFrontHandler(&m_onSettingControlFront);
-        m_settingControls[i].setSelectHandler(&m_onSettingControlSelect);
-    }*/
+
 
     for (u32 i = 0; i < std::size(m_settingsWheelButton); i++) {
         m_settingsWheelButton[i].setFrontHandler(&m_onSettingsWheelButtonFront, false);
@@ -87,6 +67,14 @@ void SettingsPage::onInit() {
     }
 
     m_pageTitleText.setMessage(10076);
+
+    m_settingsWheelButton[1].setMessage("setting_name", 10004);
+    m_settingsWheelButton[1].setMessage("current_option", 10005);
+
+    m_settingsWheelButton[0].setPaneVisible("pause_w_fade_n", false);
+    m_settingsWheelButton[1].setPaneVisible("pause_w_fade_n", false);
+    m_settingsWheelButton[3].setPaneVisible("pause_w_fade_n", false);
+    m_settingsWheelButton[4].setPaneVisible("pause_w_fade_n", false);
 }
 
 void SettingsPage::onActivate() {
