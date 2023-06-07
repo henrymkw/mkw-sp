@@ -16,7 +16,7 @@
                 {
                     "name": "tt_pattern_chek_32x32_alpha.tpl",
                 },
-				{
+                {
                     "name": "tt_pattern_chek_alpha_nasi_32x32.tpl",
                 },
             ],
@@ -733,7 +733,7 @@
                         },
                     },
                 },
-				{
+                {
                     "name": "fuchi_pattern",
                     "tev color 0 r": 135,
                     "tev color 0 g": 103,
@@ -891,6 +891,12 @@
                                 "matrix": 30,
                             },
                         ],
+                        "material color": {
+                            "r": 255,
+                            "g": 255,
+                            "b": 255,
+                            "a": 255,
+                        },
                     },
                 },
                 {
@@ -947,6 +953,12 @@
                                 "matrix": 30,
                             },
                         ],
+                        "material color": {
+                            "r": 255,
+                            "g": 255,
+                            "b": 255,
+                            "a": 255,
+                        },
                     },
                 },
                 {
@@ -1107,6 +1119,12 @@
                                 "matrix": 30,
                             },
                         ],
+                        "material color": {
+                            "r": 255,
+                            "g": 255,
+                            "b": 255,
+                            "a": 255,
+                        },
                     },
                 },
                 {
@@ -1267,6 +1285,12 @@
                                 "matrix": 30,
                             },
                         ],
+                        "material color": {
+                            "r": 255,
+                            "g": 255,
+                            "b": 255,
+                            "a": 255,
+                        },
                     },
                 },
                 {
@@ -1323,6 +1347,12 @@
                                 "matrix": 30,
                             },
                         ],
+                        "material color": {
+                            "r": 255,
+                            "g": 255,
+                            "b": 255,
+                            "a": 255,
+                        },
                     },
                 },
                 {
@@ -1636,7 +1666,7 @@
                             "operator": 3,
                         },
                     },
-                }
+                },
             ],
         },
         {
@@ -2299,7 +2329,7 @@
                         },
                     ],
                 },
-				{
+                {
                     "magic": "pan1",
                     "flags": {
                         "visible": true,
@@ -2926,28 +2956,6 @@
                                         },
                                     ],
                                 },
-                                {
-                                    "magic": "pan1",
-                                    "flags": {
-                                        "visible": true,
-                                        "influenced alpha": false,
-                                        "location adjust": false,
-                                    },
-                                    "base position": "center",
-                                    "opacity": 255,
-                                    "name": "text_null",
-                                    "user data": "",
-                                    "translation x": -0.0,
-                                    "translation y": -1e-06,
-                                    "translation z": 30.0,
-                                    "rotation x": 0.0,
-                                    "rotation y": 0.0,
-                                    "rotation z": 0.0,
-                                    "scale x": 1.0,
-                                    "scale y": 1.0,
-                                    "size x": 60.0,
-                                    "size y": 60.0,
-                                },
                             ],
                         },
                     ],
@@ -3061,7 +3069,7 @@
                         },
                     ],
                 },
-				{
+                {
                     "magic": "grp1",
                     "name": "select_free_g",
                     "panes": [
