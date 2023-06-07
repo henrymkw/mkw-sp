@@ -130,7 +130,7 @@
             "scale x 16:9": 0.9,
             "scale y 16:9": 0.9,
             "first message": 0,
-            "message count": 0,
+            "message count": 2,
             "first picture": 0,
             "picture count": 0,
         },
@@ -170,7 +170,7 @@
             "scale x 16:9": 0.9,
             "scale y 16:9": 0.9,
             "first message": 0,
-            "message count": 0,
+            "message count": 2,
             "first picture": 0,
             "picture count": 0,
         },
@@ -190,19 +190,19 @@
             "scale x 16:9": 0.8,
             "scale y 16:9": 0.8,
             "first message": 0,
-            "message count": 0,
+            "message count": 2,
             "first picture": 0,
             "picture count": 0,
         },
     ],
     "messages": [
 		{
-            "pane": "score",
+            "pane": "current_option",
             "name": "rightsidetext",
             "message id": 10030
         },
 		{
-            "pane": "menu_text",
+            "pane": "setting_name",
             "name": "leftsidetext",
             "message id": 10028
         }

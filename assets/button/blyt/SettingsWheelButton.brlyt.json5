@@ -98,7 +98,7 @@
                     },
                 },
                 {
-                    "name": "menu_text",
+                    "name": "setting_name",
                     "tev color 0 r": 0,
                     "tev color 0 g": 0,
                     "tev color 0 b": 0,
@@ -323,7 +323,7 @@
                     },
                 },
                 {
-                    "name": "score",
+                    "name": "current_option",
                     "tev color 0 r": 255,
                     "tev color 0 g": 255,
                     "tev color 0 b": 255,
@@ -2254,7 +2254,7 @@
                             },
                             "base position": "center",
                             "opacity": 255,
-                            "name": "score",
+                            "name": "current_option",
                             "user data": "",
                             "translation x": 145.499985,
                             "translation y": 2.389618,
@@ -2295,7 +2295,7 @@
                             },
                             "base position": "center",
                             "opacity": 255,
-                            "name": "menu_text",
+                            "name": "setting_name",
                             "user data": "",
                             "translation x": -142.069611,
                             "translation y": 2.889618,
@@ -2972,10 +2972,10 @@
                     "name": "select_free",
                     "panes": [
                         {
-                            "name": "score",
+                            "name": "current_option",
                         },
                         {
-                            "name": "menu_text",
+                            "name": "setting_name",
                         },
                         {
                             "name": "select_gold_01",
@@ -2987,10 +2987,10 @@
                     "name": "slide_fade",
                     "panes": [
                         {
-                            "name": "score",
+                            "name": "current_option",
                         },
                         {
-                            "name": "menu_text",
+                            "name": "setting_name",
                         },
                         {
                             "name": "ranking_null",
