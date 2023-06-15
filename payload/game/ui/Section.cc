@@ -27,6 +27,7 @@
 #include "game/ui/ServicePackToolsPage.hh"
 #include "game/ui/ServicePackTopPage.hh"
 #include "game/ui/SettingsPage.hh"
+#include "game/ui/SettingsOptionsPage.hh"
 #include "game/ui/SingleTopPage.hh"
 #include "game/ui/StorageBenchmarkPage.hh"
 #include "game/ui/TeamConfirmPage.hh"
@@ -480,6 +481,8 @@ void Section::addPages(SectionId id) {
             // Extended sections add their used pages here!
 
             // clang-format on
+            //Settings Popup
+            {SectionId::LicenseSettings, PageId::SettingsOptions},
     };
     for (const auto &addition : additions) {
         if (addition.first == id) {
@@ -593,6 +596,8 @@ Page *Section::CreatePage(PageId pageId) {
         return new PackSelectPage;
     case PageId::CourseDebug:
         return new CourseDebugPage;
+    case PageId::SettingsOptions:
+        return new SettingsOptionsPage;
     default:
         return REPLACED(CreatePage)(pageId);
     }

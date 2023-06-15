@@ -218,6 +218,7 @@ enum class PageId {
     // Do not explicitly assign values to prevent merge conflicts
     PackSelect,
     CourseDebug,
+    SettingsOptions,
     // }
 
     Ext_MaxExclusive__,

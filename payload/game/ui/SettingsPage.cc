@@ -144,6 +144,9 @@ void SettingsPage::onBackButtonFront(PushButton *button, u32 /* localPlayerId */
 
 
 void SettingsPage::onSettingsWheelButtonFront(PushButton * /* button */, u32 /* localPlayerId */) {
+
+    push(PageId::SettingsOptions, Anim::Next);
+
 }
 
 void SettingsPage::onSettingsWheelButtonSelect(PushButton * /* button */, u32 /* localPlayerId */) {
