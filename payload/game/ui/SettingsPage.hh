@@ -68,6 +68,8 @@ private:
     void onSettingsWheelButtonSelect(PushButton *button, u32 localPlayerId);
     void onSettingsWheelButtonDeselect(PushButton *button, u32 localPlayerId);
 
+    CategoryInfo getCategoryInfo(u32 sheetIndex) const;
+
     template <typename T>
     using H = typename T::template Handler<SettingsPage>;
 
