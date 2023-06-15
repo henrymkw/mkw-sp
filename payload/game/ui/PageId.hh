@@ -215,6 +215,7 @@ enum class PageId {
     Ext_MinExclusive__ = 0xff,
 
     // Extensions go here {
+    SettingsOptions,
     // }
 
     Ext_MaxExclusive__,
