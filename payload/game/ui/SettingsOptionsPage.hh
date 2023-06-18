@@ -1,5 +1,6 @@
 #pragma once
 
+#include "game/ui/BlackBackControl.hh"
 #include "game/ui/Page.hh"
 #include "game/ui/ctrl/CtrlMenuBackButton.hh"
 #include "game/ui/ctrl/CtrlMenuInstructionText.hh"
@@ -18,7 +19,9 @@ public:
 private:
     MultiControlInputManager m_inputManager;
 
-    //UI Elements
+    BlackBackControl m_blackBackControl;
+
+    // UI Elements
     PushButton m_optionButton;
 };
 

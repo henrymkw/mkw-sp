@@ -517,6 +517,10 @@ asset_in_files = {
         os.path.join('button', 'blyt', 'common_w083_earth_chat_message.brlyt.json5'),
         os.path.join('button', 'ctrl', 'SettingsOptionAndDescription.brctr.json5'),
         os.path.join('button', 'blyt', 'SettingsOptionAndDescription.brlyt.json5'),
+        os.path.join('control', 'ctrl', 'RankingBlackBack.brctr.json5'),
+        os.path.join('control', 'blyt', 'gr_black_down.brlyt.json5'),
+        os.path.join('control', 'timg', 'tt_pattern_chek_32x32.tpl'),
+
     ],
     os.path.join('Scene', 'UI', 'MenuSingleSP.arc.lzma'): [
         os.path.join('button', 'ctrl', 'SettingsButton.brctr.json5'),
