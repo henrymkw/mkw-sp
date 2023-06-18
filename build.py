@@ -518,6 +518,8 @@ asset_in_files = {
         os.path.join('button', 'anim', 'common_w083_earth_chat_message_text_light_02_select.brlan.json5'),
         os.path.join('button', 'anim', 'common_w083_earth_chat_message_text_light_02_stop.brlan.json5'),
         os.path.join('button', 'blyt', 'common_w083_earth_chat_message.brlyt.json5'),
+        os.path.join('button', 'ctrl', 'SettingsOptionAndDescription.brctr.json5'),
+        os.path.join('button', 'blyt', 'SettingsOptionAndDescription.brlyt.json5'),
     ],
     os.path.join('Scene', 'UI', 'MenuSingleSP.arc.lzma'): [
         os.path.join('button', 'ctrl', 'SettingsButton.brctr.json5'),
