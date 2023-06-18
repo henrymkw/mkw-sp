@@ -1,6 +1,9 @@
 #pragma once
 
 #include "game/ui/Page.hh"
+#include "game/ui/ctrl/CtrlMenuBackButton.hh"
+#include "game/ui/ctrl/CtrlMenuInstructionText.hh"
+#include "game/ui/ctrl/CtrlMenuPageTitleText.hh"
 
 namespace UI {
 
@@ -10,9 +13,13 @@ public:
     ~SettingsOptionsPage() override;
 
     void onInit() override;
+    void onActivate() override;
 
 private:
-    MenuInputManager m_inputManager;
+    MultiControlInputManager m_inputManager;
+
+    //UI Elements
+    PushButton m_optionButton;
 };
 
 } // namespace UI
