@@ -73,7 +73,6 @@ void WiiPad::processChuck(void *r4, RaceInputState &raceInputState, UIInputState
     }
 }
 
-
 void WiiPad::process(RaceInputState &raceInputState, UIInputState &uiInputState) {
     REPLACED(process)(raceInputState, uiInputState);
 
