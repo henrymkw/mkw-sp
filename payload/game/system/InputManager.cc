@@ -65,11 +65,24 @@ UserPad::UserPad() = default;
 
 UserPad::~UserPad() = default;
 
+void WiiPad::processChuck(void *r4, RaceInputState &raceInputState, UIInputState &uiInputState) {
+    REPLACED(processChuck)(r4, raceInputState, uiInputState);
+
+    if (auto *saveStateManager = SP::SaveStateManager::Instance()) {
+        saveStateManager->processInput(raceInputState.rawButtons & KPAD_CL_BUTTON_DOWN);
+    }
+}
+
+
 void WiiPad::process(RaceInputState &raceInputState, UIInputState &uiInputState) {
     REPLACED(process)(raceInputState, uiInputState);
 
     if (InputManager::Instance()->isMirror()) {
         uiInputState.stick.x *= -1.0f;
+    }
+
+    if (auto *saveStateManager = SP::SaveStateManager::Instance()) {
+        saveStateManager->processInput(raceInputState.rawButtons & WPAD_CL_BUTTON_HOME);
     }
 }
 
@@ -79,7 +92,7 @@ void WiiPad::processClassic(void *r4, RaceInputState &raceInputState, UIInputSta
     processSimplified(raceInputState, raceInputState.rawButtons & KPAD_CL_TRIGGER_ZL);
 
     if (auto *saveStateManager = SP::SaveStateManager::Instance()) {
-        saveStateManager->processInput(raceInputState.rawButtons & KPAD_CL_BUTTON_MINUS);
+        saveStateManager->processInput(raceInputState.rawButtons & KPAD_CL_TRIGGER_ZR);
     }
 }
 
@@ -90,6 +103,10 @@ void GCPad::process(RaceInputState &raceInputState, UIInputState &uiInputState) 
 
     if (InputManager::Instance()->isMirror()) {
         uiInputState.stick.x *= -1.0f;
+    }
+
+    if (auto *saveStateManager = SP::SaveStateManager::Instance()) {
+        saveStateManager->processInput(raceInputState.rawButtons & PAD_TRIGGER_Z);
     }
 }
 
