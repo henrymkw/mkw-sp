@@ -28,11 +28,11 @@ void SettingsOptionsPage::onInit() {
 
 void SettingsOptionsPage::onActivate() {}
 
-void SettingsOptionsPage::onBack(u32 localPlayerId) {
+void SettingsOptionsPage::onBack(u32 /* localPlayerId */) {
     startReplace(Anim::Prev, 0.0f);
 }
 
-void SettingsOptionsPage::onBackButtonFront(PushButton *button, u32 /* local playerId*/) {
+void SettingsOptionsPage::onBackButtonFront(PushButton *button, u32 /* localPlayerId*/) {
     f32 delay = button->getDelay();
     startReplace(Anim::Prev, delay);
 }
