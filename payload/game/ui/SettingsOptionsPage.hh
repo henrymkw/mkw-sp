@@ -25,7 +25,11 @@ private:
     BlackBackControl m_blackBackControl;
 
     // UI Elements
-    PushButton m_optionButton;
+    PushButton m_optionButton0;
+    PushButton m_optionButton1;
+    PushButton m_optionButton2;
+    PushButton m_optionButton3;
+    PushButton m_optionButton4;
 
     CtrlMenuBackButton m_backButton;
 
