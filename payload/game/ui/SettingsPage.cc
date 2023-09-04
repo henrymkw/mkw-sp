@@ -16,21 +16,40 @@ void SettingsPage::onInit() {
     setInputManager(&m_inputManager);
     m_inputManager.setWrappingMode(MultiControlInputManager::WrappingMode::Y);
 
-    initChildren(3 + !!blackBack() + std::size(m_settingsWheelButton));
+    auto m_categoryInfo = getCategoryInfo(1);
+
+    auto category = static_cast<SP::ClientSettings::Category>(m_categoryInfo.categoryIndex);
+    for (u32 i = 0; i < SP::ClientSettings::entryCount; i++) {
+        if (SP::ClientSettings::entries[i].category != category ||
+                SP::ClientSettings::entries[i].valueCount == 0 ||
+                SP::ClientSettings::entries[i].hidden) {
+            continue;
+        }
+        const SP::ClientSettings::Entry &entry = SP::ClientSettings::entries[i];
+        u32 chosen = System::SaveManager::Instance()->getSetting(i) - entry.valueOffset;
+
+        if (entry.valueNames) {
+            m_settingOptionIds.push_back(entry.valueExplanationMessageIds[chosen]);
+        } else {
+            m_settingOptionIds.push_back(10004);
+        }
+        m_settingNameIds.push_back(static_cast<const u32 &&>(entry.messageId));
+    }
+
+    initChildren(3 + std::size(m_settingButtons) + !!blackBack());
     insertChild(0, &m_pageTitleText, 0);
     insertChild(1, instructionText(), 0);
     insertChild(2, &m_backButton, 0);
-    
+
     if (blackBack()) {
         insertChild(3, blackBack(), 0);
     }
-    //ADD NEW BUTTONS
-    for (u32 i = 0; i < std::size(m_settingsWheelButton); i++) {
-        insertChild(3 + !!blackBack() + i, &m_settingsWheelButton[i], 0);
+    for (u32 i = 0; i < std::size(m_settingButtons); i++) {
+        insertChild(3 + i + !!blackBack(), &m_settingButtons[i], 0);
     }
 
     m_pageTitleText.load(false);
-    
+
     auto sectionId = SectionManager::Instance()->currentSection()->id();
     if (blackBack()) {
         instructionText()->load("bg", "ObiInstructionTextPopup", "ObiInstructionTextPopup",
@@ -48,77 +67,40 @@ void SettingsPage::onInit() {
         blackBack()->m_zIndex = -1.0f;
     }
 
-    //LOAD NEW BUTTONS (put this in loop later)
-    m_settingsWheelButton[0].load("button", "SettingsWheel", "WheelButton0", 0x0, false, false);
-    m_settingsWheelButton[1].load("button", "SettingsWheel", "WheelButton1", 0x0, false, false);
-    m_settingsWheelButton[2].load("button", "SettingsWheel", "WheelButton2", 0x1, false, false);
-    m_settingsWheelButton[3].load("button", "SettingsWheel", "WheelButton3", 0x0, false, false);
-    m_settingsWheelButton[4].load("button", "SettingsWheel", "WheelButton4", 0x0, false, false);
+    for (u32 i = 0; i < std::size(m_settingButtons); i++) {
+        char variant[13];
+        snprintf(variant, sizeof(variant), "WheelButton%u", i);
+        m_settingButtons[i].load("button", "SettingsWheel", variant, 0x1, false, false);
+    }
 
     m_inputManager.setHandler(MenuInputManager::InputId::Back, &m_onBack, false, false);
 
     m_backButton.setFrontHandler(&m_onBackButtonFront, false);
 
-//Hardcode to category of index 0 for now
-    auto categoryInfo = getCategoryInfo(0);
-
-
-    for (u32 i = 0; i < std::size(m_settingsWheelButton); i++) {
-        m_settingsWheelButton[i].setFrontHandler(&m_onSettingsWheelButtonFront, false);
-        m_settingsWheelButton[i].setSelectHandler(&m_onSettingsWheelButtonSelect, false);
-        m_settingsWheelButton[i].setDeselectHandler(&m_onSettingsWheelButtonDeselect, false);
+    for (u32 i = 0; i < std::size(m_settingButtons); i++) {
+        m_settingButtons[i].setFrontHandler(&m_onSettingsWheelButtonFront, false);
+        m_settingButtons[i].setSelectHandler(&m_onSettingsWheelButtonSelect, false);
+        m_settingButtons[i].setDeselectHandler(&m_onSettingsWheelButtonDeselect, false);
+        m_settingButtons[i].setVisible(true);
+        m_settingButtons[i].setMessage("setting_name", *m_settingNameIds[i]);
+        m_settingButtons[i].setMessage("current_option", *m_settingOptionIds[i]);
+        m_settingButtons[i].m_index = i;
     }
 
     m_pageTitleText.setMessage(10076);
 
-    //DYNAMIC TEXT/SETTING GET
-    auto category = static_cast<SP::ClientSettings::Category>(categoryInfo.categoryIndex);
-    u32 i = 0;
-    for (u32 j = categoryInfo.settingIndex; j < SP::ClientSettings::entryCount && i < std::size(m_settingsWheelButton); j++) {
-        //skip If the entry is not matching the current category
-        if (SP::ClientSettings::entries[j].category != category) {
-            continue;
-        }
-        //skip if the entries value count is 0 or entry is hidden
-        if (SP::ClientSettings::entries[j].valueCount == 0) {
-            continue;
-        }
-        if (SP::ClientSettings::entries[j].hidden) {
-            continue;
-        }
-
-        
-        const SP::ClientSettings::Entry &entry = SP::ClientSettings::entries[j];
-        m_settingsWheelButton[i].setMessage("setting_name", entry.messageId);
-        
-        u32 chosen = System::SaveManager::Instance()->getSetting(j) - entry.valueOffset;
-        
-        m_settingsWheelButton[i].setVisible(true);
-        
-        
-        if (entry.valueNames) {
-            m_settingsWheelButton[i].setMessage("current_option", entry.valueMessageIds[chosen]);
-        } else {
-            /*chosen += entry.valueOffset;
-            MessageInfo info{};
-            info.intVals[0] = chosen;
-            shownText->setMessageAll(entry.valueMessageIds[0], &info);
-            hiddenText->setMessageAll(entry.valueMessageIds[0], &info);*/
-            m_settingsWheelButton[i].setMessage("current_option", 10004);
-        }
-        i++;
-    }
-
-    m_settingsWheelButton[0].setPaneVisible("pause_w_fade_n", false);
-    m_settingsWheelButton[1].setPaneVisible("pause_w_fade_n", false);
-    m_settingsWheelButton[3].setPaneVisible("pause_w_fade_n", false);
-    m_settingsWheelButton[4].setPaneVisible("pause_w_fade_n", false);
+    m_settingButtons[0].setPaneVisible("pause_w_fade_n", false);
+    m_settingButtons[1].setPaneVisible("pause_w_fade_n", false);
+    m_settingButtons[3].setPaneVisible("pause_w_fade_n", false);
+    m_settingButtons[4].setPaneVisible("pause_w_fade_n", false);
 }
 
 void SettingsPage::onActivate() {
     instructionText()->setMessageAll(0);
 
-    m_settingsWheelButton[2].selectDefault(0);
+    m_settingButtons[2].selectDefault(0);
+    m_buttonIndex = 2;
+    m_selected = 2;
 }
 
 BlackBackControl *SettingsPage::blackBack() {
@@ -142,21 +124,49 @@ void SettingsPage::onBackButtonFront(PushButton *button, u32 /* localPlayerId */
     startReplace(Anim::Prev, delay);
 }
 
-
 void SettingsPage::onSettingsWheelButtonFront(PushButton * /* button */, u32 /* localPlayerId */) {
-
     push(PageId::SettingsOptions, Anim::Next);
-
 }
 
-void SettingsPage::onSettingsWheelButtonSelect(PushButton * /* button */, u32 /* localPlayerId */) {
+void SettingsPage::onSettingsWheelButtonSelect(PushButton *button, u32 /* localPlayerId */) {
+    bool isMovingDown =
+            ((button->m_index == 0 && m_buttonIndex == 4) || (button->m_index > m_buttonIndex)) &&
+            !(button->m_index == 4 && m_buttonIndex == 0);
+
+    if (isMovingDown) {
+        u32 temp = *m_settingNameIds[m_settingNameIds.count() - 1];
+        m_settingNameIds.pop_back();
+        m_settingNameIds.push_front(static_cast<const u32 &&>(temp));
+        for (u32 i = 0; i < std::size(m_settingButtons); i++) {
+            m_settingButtons[i].setMessage("setting_name", *m_settingNameIds[i]);
+        }
+        if (m_selected == 0) {
+            m_selected = m_settingNameIds.count() - 1;
+
+        } else {
+            m_selected--;
+        }
+    } else {
+        u32 temp = *m_settingNameIds[0];
+        m_settingNameIds.pop_front();
+        m_settingNameIds.push_back(static_cast<const u32 &&>(temp));
+        for (u32 i = 0; i < std::size(m_settingButtons); i++) {
+            m_settingButtons[i].setMessage("setting_name", *m_settingNameIds[i]);
+        }
+        if (m_selected == m_settingNameIds.count() - 1) {
+            m_selected = 0;
+        } else {
+            m_selected++;
+        }
+    }
+    m_buttonIndex = button->m_index;
 }
 
-void SettingsPage::onSettingsWheelButtonDeselect(PushButton * /* button */, u32 /* localPlayerId */) {
-}
+void SettingsPage::onSettingsWheelButtonDeselect(PushButton * /* button */,
+        u32 /* localPlayerId */) {}
 
 SettingsPage::CategoryInfo SettingsPage::getCategoryInfo(u32 sheetIndex) const {
-    u32 controlCount = std::size(m_settingsWheelButton);
+    u32 controlCount = std::size(m_settingButtons);
     CategoryInfo info{};
     u32 sheetCount = 0;
     u32 categoryCount = magic_enum::enum_count<SP::ClientSettings::Category>();
@@ -175,7 +185,7 @@ SettingsPage::CategoryInfo SettingsPage::getCategoryInfo(u32 sheetIndex) const {
             }
             if (settingCount % controlCount == 0) {
                 if (sheetCount == sheetIndex) {
-                    info.categorySheetIndex = settingCount / std::size(m_settingsWheelButton);
+                    info.categorySheetIndex = settingCount / std::size(m_settingButtons);
                     info.settingIndex = i;
                 }
                 sheetCount++;
@@ -189,7 +199,6 @@ SettingsPage::CategoryInfo SettingsPage::getCategoryInfo(u32 sheetIndex) const {
     }
     assert(false);
 }
-
 
 SettingsPagePopup::SettingsPagePopup() = default;
 
