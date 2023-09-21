@@ -26,6 +26,8 @@ struct Entry {
     const u32 *valueExplanationMessageIds;
     std::optional<u32> vanillaValue{};
     bool hidden = false;
+    SP::ClientSettings::MenuType menuType;
+
 };
 
 template <typename C>
