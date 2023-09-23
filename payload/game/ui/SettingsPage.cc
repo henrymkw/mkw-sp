@@ -67,9 +67,9 @@ void SettingsPage::onInit() {
         blackBack()->m_zIndex = -1.0f;
     }
 
-    for (u32 i = 0; i < std::size(m_settingButtons); i++) {
-        char variant[13];
-        snprintf(variant, sizeof(variant), "WheelButton%u", i);
+    for (u8 i = 0; i < std::size(m_settingButtons); i++) {
+        char variant[15];
+        snprintf(variant, sizeof(variant), "WheelButton%hhu", i);
         m_settingButtons[i].load("button", "SettingsWheel", variant, 0x1, false, false);
     }
 
