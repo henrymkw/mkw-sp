@@ -105,14 +105,6 @@ enum class Category {
     DebugOverlay,
 };
 
-enum class MenuType {
-    OptionAndDescription,
-    LargeOption,
-    Slider,
-    Number,
-    Hidden,
-};
-
 // Shared in VS, BT, and/or Room
 enum class EngineClass {
     Mixed,
