@@ -1,6 +1,7 @@
 #pragma once
 
 #include "sp/settings/IniReader.hh"
+#include "sp/settings/ClientSettings.hh"
 
 extern "C" {
 #include <revolution.h>
