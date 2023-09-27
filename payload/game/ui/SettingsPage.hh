@@ -6,6 +6,7 @@
 #include "game/ui/ctrl/CtrlMenuBackButton.hh"
 #include "game/ui/ctrl/CtrlMenuInstructionText.hh"
 #include "game/ui/ctrl/CtrlMenuPageTitleText.hh"
+#include "sp/CircularBuffer.hh"
 
 namespace UI {
 
@@ -63,7 +64,6 @@ private:
 
     void onBackButtonFront(PushButton *button, u32 localPlayerId);
 
-
     void onSettingsWheelButtonFront(PushButton *button, u32 localPlayerId);
     void onSettingsWheelButtonSelect(PushButton *button, u32 localPlayerId);
     void onSettingsWheelButtonDeselect(PushButton *button, u32 localPlayerId);
@@ -76,25 +76,26 @@ private:
     template <typename T>
     using C = typename T::template ChangeHandler<SettingsPage>;
 
-    //UI elements
+    // UI elements
     MultiControlInputManager m_inputManager;
     CtrlMenuPageTitleText m_pageTitleText;
 
     CtrlMenuBackButton m_backButton;
 
-//Array should work for this? NEW ELEMENTS
-    PushButton m_settingsWheelButton[5];
+    s32 m_buttonIndex;
+    u32 m_selected;
+    PushButton m_settingButtons[5];
+    SP::CircularBuffer<u32, 32> m_settingNameIds;
+    SP::CircularBuffer<s32, 32> m_settingOptionIds;
 
-    //Input handlers
     H<MultiControlInputManager> m_onBack{this, &SettingsPage::onBack};
 
     H<PushButton> m_onBackButtonFront{this, &SettingsPage::onBackButtonFront};
 
-//Figure out how this works with an array of pushbuttons.
     H<PushButton> m_onSettingsWheelButtonFront{this, &SettingsPage::onSettingsWheelButtonFront};
     H<PushButton> m_onSettingsWheelButtonSelect{this, &SettingsPage::onSettingsWheelButtonSelect};
-    H<PushButton> m_onSettingsWheelButtonDeselect{this, &SettingsPage::onSettingsWheelButtonDeselect};
-
+    H<PushButton> m_onSettingsWheelButtonDeselect{this,
+            &SettingsPage::onSettingsWheelButtonDeselect};
 
 protected:
     IHandler *m_handler = nullptr;

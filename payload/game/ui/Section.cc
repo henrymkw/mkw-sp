@@ -26,8 +26,8 @@
 #include "game/ui/ServicePackChannelPage.hh"
 #include "game/ui/ServicePackToolsPage.hh"
 #include "game/ui/ServicePackTopPage.hh"
-#include "game/ui/SettingsPage.hh"
 #include "game/ui/SettingsOptionsPage.hh"
+#include "game/ui/SettingsPage.hh"
 #include "game/ui/SingleTopPage.hh"
 #include "game/ui/StorageBenchmarkPage.hh"
 #include "game/ui/TeamConfirmPage.hh"
@@ -481,7 +481,7 @@ void Section::addPages(SectionId id) {
             // Extended sections add their used pages here!
 
             // clang-format on
-            //Settings Popup
+            // Settings Popup
             {SectionId::LicenseSettings, PageId::SettingsOptions},
     };
     for (const auto &addition : additions) {
