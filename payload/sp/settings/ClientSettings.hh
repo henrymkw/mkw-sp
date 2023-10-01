@@ -56,6 +56,7 @@ enum class Setting {
     VSVehicles,
     VSItemFrequency,
     VSMegaClouds,
+    HopDodgePractice,
 
     // Battle
     BTTeamSize,
@@ -304,6 +305,11 @@ enum class RoomCourseSelection {
 };
 
 enum class VSMegaClouds {
+    Disable,
+    Enable,
+};
+
+enum class HopDodgePractice {
     Disable,
     Enable,
 };
@@ -624,6 +630,11 @@ struct Helper<ClientSettings::Setting, ClientSettings::Setting::RoomVehicles> {
 template <>
 struct Helper<ClientSettings::Setting, ClientSettings::Setting::VSMegaClouds> {
     using type = SP::ClientSettings::VSMegaClouds;
+};
+
+template <>
+struct Helper<ClientSettings::Setting, ClientSettings::Setting::HopDodgePractice> {
+    using type = SP::ClientSettings::HopDodgePractice;
 };
 
 template <>

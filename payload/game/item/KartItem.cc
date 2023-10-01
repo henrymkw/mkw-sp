@@ -1,5 +1,7 @@
 #include "KartItem.hh"
 
+#include "game/item/PowManager.hh"
+
 #include "game/system/RaceConfig.hh"
 #include "game/system/RaceManager.hh"
 #include "game/system/SaveManager.hh"
@@ -72,8 +74,52 @@ void KartItem::calc() {
         } else if (!m_inventory.getItemWheelPressed()) {
             m_inventory.setItem(nextItem());
             m_inventory.setItemWheelPressed(true);
+            // usePow();
         }
     }
+    auto hopDodge = saveManager->getSetting<SP::ClientSettings::Setting::HopDodgePractice>();
+    if (hopDodge == SP::ClientSettings::HopDodgePractice::Enable &&
+            gameMode == System::RaceConfig::GameMode::OfflineVS) {
+        auto *playerPadProxy = System::RaceManager::Instance()->player(0)->padProxy();
+        auto buttons = playerPadProxy->currentRaceInputState().rawButtons;
+        auto controller = playerPadProxy->pad()->getControllerId();
+        bool updateItem = false;
+        switch (controller) {
+        case Registry::Controller::WiiWheel:
+            updateItem = (buttons & PAD_BUTTON_START) == PAD_BUTTON_START;
+            break;
+        case Registry::Controller::WiiRemoteAndNunchuck:
+            updateItem = (buttons & WPAD_BUTTON_DOWN) == WPAD_BUTTON_DOWN;
+            break;
+        case Registry::Controller::Classic:
+            updateItem = (buttons & KPAD_CL_TRIGGER_ZL) == KPAD_CL_TRIGGER_ZL;
+            break;
+        case Registry::Controller::GameCube:
+            updateItem = (buttons & PAD_BUTTON_Y) == PAD_BUTTON_Y;
+            break;
+        case Registry::Controller::None:
+            return;
+        }
+        if (!updateItem) {
+            m_inventory.setItemWheelPressed(false);
+        } else if (!m_inventory.getItemWheelPressed()) {
+            // m_inventory.setItem(nextItem());
+            m_inventory.setItemWheelPressed(true);
+            usePow();
+        }
+    }
+}
+
+void KartItem::usePow() {
+    auto saveManager = System::SaveManager::Instance();
+    auto hopDodge = saveManager->getSetting<SP::ClientSettings::Setting::HopDodgePractice>();
+    if (hopDodge == SP::ClientSettings::HopDodgePractice::Enable) {
+        auto powManager = Item::PowManager::Instance();
+        powManager->unk(1);
+    } else {
+        REPLACED(usePow)();
+    }
+    // SP_LOG("usePow() called");
 }
 
 } // namespace Item

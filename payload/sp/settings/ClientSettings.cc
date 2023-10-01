@@ -427,6 +427,16 @@ const Entry entries[] = {
         .valueMessageIds = (u32[]) { 20038, 20039 },
         .valueExplanationMessageIds = (u32[]) { 20036, 20037 },
     },
+    [static_cast<u32>(Setting::HopDodgePractice)] = {
+        .category = Category::VS,
+        .name = magic_enum::enum_name(Setting::HopDodgePractice),
+        .messageId = 10454,
+        .defaultValue = static_cast<u32>(HopDodgePractice::Disable),
+        .valueCount = magic_enum::enum_count<HopDodgePractice>(),
+        .valueNames = magic_enum::enum_names<HopDodgePractice>().data(),
+        .valueMessageIds = (u32[]) { 10455, 10456 },
+        .valueExplanationMessageIds = (u32[]) { 10457, 10458 },
+    },
     [static_cast<u32>(Setting::BTTeamSize)] = {
         .category = Category::BT,
         .name = magic_enum::enum_name(Setting::BTTeamSize),

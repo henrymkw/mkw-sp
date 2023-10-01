@@ -1265,6 +1265,7 @@
 0x80724430 Jugem_80724430
 0x80724880 Jugem_80724880
 0x8072624c _ZN5Enemy9KartEnemy5isCpuEv
+0x8072a570 _ZN5Enemy11KartEnemy103unkEv
 0x8073942c _ZN5Enemy12EnemyManager4calcEv
 0x80739740 _ZN5Enemy12EnemyManager15IsOfflineBattleEv
 0x807397bc _ZNK5Enemy12EnemyManager7hasCpusEv
@@ -1296,7 +1297,10 @@
 0x807ad824 ItemObjKouraAo_807ad824
 0x807ad958 ItemObjKouraAo_807ad958
 0x807aec64 ItemObjKouraMidori_807aec64
+0x807b1b2c _ZN4Item8KartItem6usePowEv
+0x807b1db4 _ZN4Item10PowManager3unkEj
 0x807b54f4 Item_807b54f4
+0x807bb9e0 _ZN4Item13ItemSlotTable13resetPowTimerEv
 0x807bc940 _ZN4Item13ItemInventory7setItemENS_6ItemIdE
 0x807bc97c _ZN4Item13ItemInventory9resetItemEv
 0x807bc9c0 _ZN4Item13ItemInventory13resetHeldItemEv
@@ -1597,6 +1601,7 @@
 0x809c2f3c unk_809c2f3c
 0x809C2F44 _ZN4Race13FieldDirector10s_instanceE
 0x809c3618 _ZN4Item11ItemManager10s_instanceE
+0x809c3660 _ZN4Item10PowManager10s_instanceE
 0x809c4330 _ZN3Geo11ObjDirector10s_instanceE
 0x809c4680 s_racePage
 0x809c4680 _ZN2UI8RacePage10s_instanceE
