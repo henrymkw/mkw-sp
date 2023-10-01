@@ -11,6 +11,10 @@ extern "C" {
 #include <cstdio>
 #include <cstdlib>
 
+namespace SP::ClientSettings {
+enum class MenuType;
+}
+
 namespace SP::Settings {
 
 template <typename C>
@@ -25,6 +29,7 @@ struct Entry {
     const u32 *valueMessageIds;
     const u32 *valueExplanationMessageIds;
     std::optional<u32> vanillaValue{};
+    SP::ClientSettings::MenuType menuType;
     bool hidden = false;
 };
 
