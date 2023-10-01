@@ -8,7 +8,8 @@
 namespace Enemy {
 
 void KartEnemy10::unk() {
-    if (System::SaveManager::Instance()->getSetting<SP::ClientSettings::Setting::HopDodgePractice>() ==
+    if (System::SaveManager::Instance()
+                    ->getSetting<SP::ClientSettings::Setting::HopDodgePractice>() ==
             SP::ClientSettings::HopDodgePractice::Disable) {
         REPLACED(unk)();
     }

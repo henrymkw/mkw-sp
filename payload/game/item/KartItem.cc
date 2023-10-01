@@ -74,7 +74,6 @@ void KartItem::calc() {
         } else if (!m_inventory.getItemWheelPressed()) {
             m_inventory.setItem(nextItem());
             m_inventory.setItemWheelPressed(true);
-            // usePow();
         }
     }
     auto hopDodge = saveManager->getSetting<SP::ClientSettings::Setting::HopDodgePractice>();
