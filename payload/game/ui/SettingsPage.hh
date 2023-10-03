@@ -81,6 +81,8 @@ private:
     CtrlMenuPageTitleText m_pageTitleText;
 
     CtrlMenuBackButton m_backButton;
+    PushButton m_arrowUp;
+    PushButton m_arrowDown;
 
     s32 m_buttonIndex;
     u32 m_selected;
