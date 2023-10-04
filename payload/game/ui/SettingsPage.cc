@@ -137,8 +137,12 @@ void SettingsPage::onSettingsWheelButtonSelect(PushButton *button, u32 /* localP
         u32 temp = *m_settingNameIds[m_settingNameIds.count() - 1];
         m_settingNameIds.pop_back();
         m_settingNameIds.push_front(static_cast<const u32 &&>(temp));
+        u32 temp2 = *m_settingOptionIds[m_settingOptionIds.count() - 1];
+        m_settingOptionIds.pop_back();
+        m_settingOptionIds.push_front(static_cast<const u32 &&>(temp2));
         for (u32 i = 0; i < std::size(m_settingButtons); i++) {
             m_settingButtons[i].setMessage("setting_name", *m_settingNameIds[i]);
+            m_settingButtons[i].setMessage("current_option", *m_settingOptionIds[i]);
         }
         if (m_selected == 0) {
             m_selected = m_settingNameIds.count() - 1;
@@ -150,8 +154,12 @@ void SettingsPage::onSettingsWheelButtonSelect(PushButton *button, u32 /* localP
         u32 temp = *m_settingNameIds[0];
         m_settingNameIds.pop_front();
         m_settingNameIds.push_back(static_cast<const u32 &&>(temp));
+        u32 temp2 = *m_settingOptionIds[0];
+        m_settingOptionIds.pop_front();
+        m_settingOptionIds.push_back(static_cast<const u32 &&>(temp2));
         for (u32 i = 0; i < std::size(m_settingButtons); i++) {
             m_settingButtons[i].setMessage("setting_name", *m_settingNameIds[i]);
+            m_settingButtons[i].setMessage("current_option", *m_settingOptionIds[i]);
         }
         if (m_selected == m_settingNameIds.count() - 1) {
             m_selected = 0;
