@@ -48,6 +48,9 @@ public:
 
     void setReplacement(PageId pageId);
 
+    u32 getCategoryIndex();
+    u32 getSelectedSetting();
+
 protected:
     virtual LayoutUIControl *instructionText() = 0;
     virtual BlackBackControl *blackBack() = 0;
@@ -84,6 +87,8 @@ private:
     PushButton m_arrowUp;
     PushButton m_arrowDown;
 
+    CategoryInfo m_categoryInfo;
+
     s32 m_buttonIndex;
     u32 m_selected;
     PushButton m_settingButtons[5];
@@ -117,6 +122,9 @@ public:
     void configure(IHandler *handler);
     void pop(Anim anim);
 
+    u32 getCategoryIndex();
+    u32 getSelectedSetting();
+
 private:
     LayoutUIControl m_instructionText;
     BlackBackControl m_blackBack;
@@ -136,6 +144,9 @@ public:
     BlackBackControl *blackBack() override;
 
     void configure(IHandler *handler, PageId replacement);
+
+    u32 getCategoryIndex();
+    u32 getSelectedSetting();
 
 private:
     CtrlMenuInstructionText m_instructionText;

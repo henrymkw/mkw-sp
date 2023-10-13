@@ -1,5 +1,8 @@
 #include "SettingsOptionsPage.hh"
 
+#include "game/ui/SectionManager.hh"
+#include "game/ui/SettingsPage.hh"
+
 namespace UI {
 
 SettingsOptionsPage::SettingsOptionsPage() = default;
@@ -33,7 +36,12 @@ void SettingsOptionsPage::onInit() {
     m_backButton.setFrontHandler(&m_onBackButtonFront, false);
 }
 
-void SettingsOptionsPage::onActivate() {}
+void SettingsOptionsPage::onActivate() {
+    // auto *settingsPage =
+    // SectionManager::Instance()->currentSection()->page<PageId::MenuSettings>();
+    // u32 categoryIdx = settingsPage->getCategoryIndex();
+    // u32 settingIdx = settingsPage->getSelectedSetting();
+}
 
 void SettingsOptionsPage::onBack(u32 /* localPlayerId */) {
     startReplace(Anim::Prev, 0.0f);

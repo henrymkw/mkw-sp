@@ -43,7 +43,6 @@ void SettingsPage::onInit() {
     insertChild(3, &m_arrowUp, 0);
     insertChild(4, &m_arrowDown, 0);
 
-
     if (blackBack()) {
         insertChild(5, blackBack(), 0);
     }
@@ -52,7 +51,6 @@ void SettingsPage::onInit() {
     }
 
     m_pageTitleText.load(false);
-
 
     auto sectionId = SectionManager::Instance()->currentSection()->id();
     if (blackBack()) {
@@ -215,6 +213,14 @@ SettingsPage::CategoryInfo SettingsPage::getCategoryInfo(u32 sheetIndex) const {
     assert(false);
 }
 
+u32 SettingsPage::getCategoryIndex() {
+    return m_categoryInfo.categoryIndex;
+}
+
+u32 SettingsPage::getSelectedSetting() {
+    return m_selected;
+}
+
 SettingsPagePopup::SettingsPagePopup() = default;
 
 SettingsPagePopup::~SettingsPagePopup() = default;
@@ -247,6 +253,14 @@ void SettingsPagePopup::configure(IHandler *handler) {
 void SettingsPagePopup::pop(Anim anim) {
     setAnim(anim);
     m_popRequested = true;
+}
+
+u32 SettingsPagePopup::getCategoryIndex() {
+    return SettingsPage::getCategoryIndex();
+}
+
+u32 SettingsPagePopup::getSelectedSetting() {
+    return SettingsPage::getSelectedSetting();
 }
 
 MenuSettingsPage::MenuSettingsPage() = default;
@@ -291,6 +305,14 @@ BlackBackControl *MenuSettingsPage::blackBack() {
 void MenuSettingsPage::configure(IHandler *handler, PageId replacement) {
     m_handler = handler;
     m_replacement = replacement;
+}
+
+u32 MenuSettingsPage::getCategoryIndex() {
+    return SettingsPage::getCategoryIndex();
+}
+
+u32 MenuSettingsPage::getSelectedSetting() {
+    return SettingsPage::getSelectedSetting();
 }
 
 } // namespace UI
