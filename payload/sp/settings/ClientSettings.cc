@@ -41,7 +41,7 @@ const Entry entries[] = {
         .valueNames = magic_enum::enum_names<Registry::Character>().data(),
         .valueMessageIds = nullptr,
         .valueExplanationMessageIds = nullptr,
-        .menuType = MenuType::Hidden,
+        .menuType = SP::Settings::MenuType::Hidden,
         .hidden = true,
     },
     [static_cast<u32>(Setting::Vehicle)] = {
@@ -53,7 +53,7 @@ const Entry entries[] = {
         .valueNames = magic_enum::enum_names<Registry::Vehicle>().data(),
         .valueMessageIds = nullptr,
         .valueExplanationMessageIds = nullptr,
-        .menuType = MenuType::Hidden,
+        .menuType = SP::Settings::MenuType::Hidden,
         .hidden = true,
     },
     [static_cast<u32>(Setting::DriftMode)] = {
@@ -65,7 +65,7 @@ const Entry entries[] = {
         .valueNames = magic_enum::enum_names<DriftMode>().data(),
         .valueMessageIds = nullptr,
         .valueExplanationMessageIds = nullptr,
-        .menuType = MenuType::Hidden,
+        .menuType = SP::Settings::MenuType::Hidden,
         .hidden = true,
     },
     [static_cast<u32>(Setting::VanillaMode)] = {
@@ -77,7 +77,7 @@ const Entry entries[] = {
         .valueNames = magic_enum::enum_names<VanillaMode>().data(),
         .valueMessageIds = (u32[]) { 10167, 10168 },
         .valueExplanationMessageIds = (u32[]) { 10169, 10170 },
-        .menuType = MenuType::OptionAndDescription,
+        .menuType = SP::Settings::MenuType::OptionAndDescription,
     },
     [static_cast<u32>(Setting::SimplifiedControls)] = {
         .category = Category::Race,
@@ -88,7 +88,7 @@ const Entry entries[] = {
         .valueNames = magic_enum::enum_names<SimplifiedControls>().data(),
         .valueMessageIds = (u32[]) { 10302, 10303, 10304 },
         .valueExplanationMessageIds = (u32[]) { 10305, 10306, 10307 },
-        .menuType = MenuType::OptionAndDescription,
+        .menuType = SP::Settings::MenuType::OptionAndDescription,
     },
     [static_cast<u32>(Setting::FOV169)] = {
         .category = Category::Race,
@@ -100,7 +100,7 @@ const Entry entries[] = {
         .valueMessageIds = (u32[]) { 10010, 10011 },
         .valueExplanationMessageIds = (u32[]) { 10012, 10013 },
         .vanillaValue = static_cast<u32>(FOV169::FOV169),
-        .menuType = MenuType::OptionAndDescription,
+        .menuType = SP::Settings::MenuType::OptionAndDescription,
     },
     [static_cast<u32>(Setting::FPSMode)] = {
         .category = Category::Race,
@@ -112,7 +112,7 @@ const Entry entries[] = {
         .valueMessageIds = (u32[]) { 10387, 10388, 10389 },
         .valueExplanationMessageIds = (u32[]) { 10390, 10391, 10392 },
         .vanillaValue = static_cast<u32>(FPSMode::Vanilla),
-        .menuType = MenuType::OptionAndDescription,
+        .menuType = SP::Settings::MenuType::OptionAndDescription,
     },
     [static_cast<u32>(Setting::RegionLineColor)] = {
         .category = Category::HUD,
@@ -124,7 +124,7 @@ const Entry entries[] = {
         .valueMessageIds = (u32[]) { 10195, 10196, 10197, 10198, 10199, 10200, 10332 },
         .valueExplanationMessageIds = (u32[]) { 10201, 10202, 10203, 10204, 10205, 10206, 10333 },
         .vanillaValue = static_cast<u32>(RegionLineColor::Default),
-        .menuType = MenuType::LargeOption,
+        .menuType = SP::Settings::MenuType::LargeOption,
     },
     [static_cast<u32>(Setting::FarPlayerTags)] = {
         .category = Category::HUD,
@@ -136,7 +136,7 @@ const Entry entries[] = {
         .valueMessageIds = (u32[]) { 10309, 10310 },
         .valueExplanationMessageIds = (u32[]) { 10311, 10312 },
         .vanillaValue = static_cast<u32>(FarPlayerTags::Disable),
-        .menuType = MenuType::OptionAndDescription,
+        .menuType = SP::Settings::MenuType::OptionAndDescription,
     },
     [static_cast<u32>(Setting::PlayerTags)] = {
         .category = Category::HUD,
@@ -148,7 +148,7 @@ const Entry entries[] = {
         .valueMessageIds = (u32[]) { 10184 },
         .valueExplanationMessageIds = (u32[]) { 10185 },
         .vanillaValue = 3,
-        .menuType = MenuType::Number,
+        .menuType = SP::Settings::MenuType::Number,
     },
     [static_cast<u32>(Setting::HUDLabels)] = {
         .category = Category::HUD,
@@ -160,7 +160,7 @@ const Entry entries[] = {
         .valueMessageIds = (u32[]) { 10005, 10006 },
         .valueExplanationMessageIds = (u32[]) { 10007, 10008 },
         .vanillaValue = static_cast<u32>(HUDLabels::Show),
-        .menuType = MenuType::OptionAndDescription,
+        .menuType = SP::Settings::MenuType::OptionAndDescription,
     },
     [static_cast<u32>(Setting::HUDTeamColors)] = {
         .category = Category::HUD,
@@ -171,7 +171,7 @@ const Entry entries[] = {
         .valueNames = magic_enum::enum_names<HUDTeamColors>().data(),
         .valueMessageIds = (u32[]) { 10297, 10298 },
         .valueExplanationMessageIds = (u32[]) { 10299, 10300 },
-        .menuType = MenuType::OptionAndDescription,
+        .menuType = SP::Settings::MenuType::OptionAndDescription,
     },
     [static_cast<u32>(Setting::MiniMap)] = {
         .category = Category::HUD,
@@ -183,7 +183,7 @@ const Entry entries[] = {
         .valueMessageIds = (u32[]) { 10368, 10369 },
         .valueExplanationMessageIds = (u32[]) { 10370, 10371 },
         .vanillaValue = static_cast<u32>(MiniMap::Enable),
-        .menuType = MenuType::OptionAndDescription,
+        .menuType = SP::Settings::MenuType::OptionAndDescription,
     },
     [static_cast<u32>(Setting::MapIcons)] = {
         .category = Category::HUD,
@@ -195,7 +195,7 @@ const Entry entries[] = {
         .valueMessageIds = (u32[]) { 10015, 10016 },
         .valueExplanationMessageIds = (u32[]) { 10017, 10018 },
         .vanillaValue = static_cast<u32>(MapIcons::Characters),
-        .menuType = MenuType::OptionAndDescription,
+        .menuType = SP::Settings::MenuType::OptionAndDescription,
     },
     [static_cast<u32>(Setting::InputDisplay)] = {
         .category = Category::HUD,
@@ -207,7 +207,7 @@ const Entry entries[] = {
         .valueMessageIds = (u32[]) { 10062, 10063 },
         .valueExplanationMessageIds = (u32[]) { 10064, 10065 },
         .vanillaValue = static_cast<u32>(InputDisplay::Disable),
-        .menuType = MenuType::OptionAndDescription,
+        .menuType = SP::Settings::MenuType::OptionAndDescription,
     },
     [static_cast<u32>(Setting::Speedometer)] = {
         .category = Category::HUD,
@@ -219,7 +219,7 @@ const Entry entries[] = {
         .valueMessageIds = (u32[]) { 10322, 10323, 10324, 10325, 10326, 20044 },
         .valueExplanationMessageIds = (u32[]) { 10327, 10328, 10329, 10330, 10331, 20045 },
         .vanillaValue = static_cast<u32>(Speedometer::Off),
-        .menuType = MenuType::LargeOption,
+        .menuType = SP::Settings::MenuType::LargeOption,
     },
     [static_cast<u32>(Setting::RankControl)] = {
         .category = Category::HUD,
@@ -231,7 +231,7 @@ const Entry entries[] = {
         .valueMessageIds = (u32[]) { 10122, 10123 },
         .valueExplanationMessageIds = (u32[]) { 10124, 10125 },
         .vanillaValue = static_cast<u32>(RankControl::GPVS),
-        .menuType = MenuType::OptionAndDescription,
+        .menuType = SP::Settings::MenuType::OptionAndDescription,
     },
     [static_cast<u32>(Setting::Volume)] = {
         .category = Category::Sound,
@@ -243,7 +243,7 @@ const Entry entries[] = {
         .valueMessageIds = (u32[]) { 10373 },
         .valueExplanationMessageIds = (u32[]) { 10374 },
         .vanillaValue = 10,
-        .menuType = MenuType::Slider,
+        .menuType = SP::Settings::MenuType::Slider,
     },
     [static_cast<u32>(Setting::MusicVolume)] = {
         .category = Category::Sound,
@@ -255,7 +255,7 @@ const Entry entries[] = {
         .valueMessageIds = (u32[]) { 10376 },
         .valueExplanationMessageIds = (u32[]) { 10377 },
         .vanillaValue = 10,
-        .menuType = MenuType::Slider,
+        .menuType = SP::Settings::MenuType::Slider,
     },
     [static_cast<u32>(Setting::ItemMusic)] = {
         .category = Category::Sound,
@@ -267,7 +267,7 @@ const Entry entries[] = {
         .valueMessageIds = (u32[]) { 10128, 10129, 10130 },
         .valueExplanationMessageIds = (u32[]) { 10131, 10132, 10133 },
         .vanillaValue = static_cast<u32>(ItemMusic::All),
-        .menuType = MenuType::OptionAndDescription,
+        .menuType = SP::Settings::MenuType::OptionAndDescription,
     },
     [static_cast<u32>(Setting::LastLapJingle)] = {
         .category = Category::Sound,
@@ -279,7 +279,7 @@ const Entry entries[] = {
         .valueMessageIds = (u32[]) { 10135, 10136 },
         .valueExplanationMessageIds = (u32[]) { 10137, 10138 },
         .vanillaValue = static_cast<u32>(LastLapJingle::GameplayOnly),
-        .menuType = MenuType::OptionAndDescription,
+        .menuType = SP::Settings::MenuType::OptionAndDescription,
     },
     [static_cast<u32>(Setting::LastLapSpeedup)] = {
         .category = Category::Sound,
@@ -291,7 +291,7 @@ const Entry entries[] = {
         .valueMessageIds = (u32[]) { 10140, 10141, 10142 },
         .valueExplanationMessageIds = (u32[]) { 10143, 10144, 10145 },
         .vanillaValue = static_cast<u32>(LastLapSpeedup::Static),
-        .menuType = MenuType::OptionAndDescription,
+        .menuType = SP::Settings::MenuType::OptionAndDescription,
     },
     [static_cast<u32>(Setting::TAClass)] = {
         .category = Category::TA,
@@ -302,7 +302,7 @@ const Entry entries[] = {
         .valueNames = magic_enum::enum_names<TAClass>().data(),
         .valueMessageIds = (u32[]) { 3413, 10072, 3414 },
         .valueExplanationMessageIds = (u32[]) { 10079, 10081, 10080 },
-        .menuType = MenuType::OptionAndDescription,
+        .menuType = SP::Settings::MenuType::OptionAndDescription,
     },
     [static_cast<u32>(Setting::TAGhostSorting)] = {
         .category = Category::TA,
@@ -313,7 +313,7 @@ const Entry entries[] = {
         .valueNames = magic_enum::enum_names<TAGhostSorting>().data(),
         .valueMessageIds = (u32[]) { 10171, 10172, 10173, 10174, 10175 },
         .valueExplanationMessageIds = (u32[]) { 10176, 10177, 10178, 10179, 10180 },
-        .menuType = MenuType::OptionAndDescription,
+        .menuType = SP::Settings::MenuType::OptionAndDescription,
     },
     [static_cast<u32>(Setting::TAGhostTagVisibility)] = {
         .category = Category::TA,
@@ -325,7 +325,7 @@ const Entry entries[] = {
         .valueMessageIds = (u32[]) { 10029, 10030, 10031 },
         .valueExplanationMessageIds = (u32[]) { 10032, 10033, 10034 },
         .vanillaValue = static_cast<u32>(TAGhostTagVisibility::Watched),
-        .menuType = MenuType::OptionAndDescription,
+        .menuType = SP::Settings::MenuType::OptionAndDescription,
     },
     [static_cast<u32>(Setting::TAGhostTagContent)] = {
         .category = Category::TA,
@@ -337,7 +337,7 @@ const Entry entries[] = {
         .valueMessageIds = (u32[]) { 10036, 10037, 10053, 10038 },
         .valueExplanationMessageIds = (u32[]) { 10039, 10040, 10054, 10041 },
         .vanillaValue = static_cast<u32>(TAGhostTagContent::Name),
-        .menuType = MenuType::OptionAndDescription,
+        .menuType = SP::Settings::MenuType::OptionAndDescription,
     },
     [static_cast<u32>(Setting::TASolidGhosts)] = {
         .category = Category::TA,
@@ -349,7 +349,7 @@ const Entry entries[] = {
         .valueMessageIds = (u32[]) { 10029, 10030, 10031 },
         .valueExplanationMessageIds = (u32[]) { 10043, 10044, 10045 },
         .vanillaValue = static_cast<u32>(TASolidGhosts::None),
-        .menuType = MenuType::OptionAndDescription,
+        .menuType = SP::Settings::MenuType::OptionAndDescription,
     },
     [static_cast<u32>(Setting::TAGhostSound)] = {
         .category = Category::TA,
@@ -361,7 +361,7 @@ const Entry entries[] = {
         .valueMessageIds = (u32[]) { 10029, 10030, 10031 },
         .valueExplanationMessageIds = (u32[]) { 10067, 10068, 10069 },
         .vanillaValue = static_cast<u32>(TAGhostSound::Watched),
-        .menuType = MenuType::OptionAndDescription,
+        .menuType = SP::Settings::MenuType::OptionAndDescription,
     },
     [static_cast<u32>(Setting::VSTeamSize)] = {
         .category = Category::VS,
@@ -372,7 +372,7 @@ const Entry entries[] = {
         .valueNames = magic_enum::enum_names<TeamSize>().data(),
         .valueMessageIds = (u32[]) { 10208, 10209, 10210, 10211, 10212, 10218 },
         .valueExplanationMessageIds = (u32[]) { 10213, 10214, 10215, 10216, 10217, 10393 },
-        .menuType = MenuType::LargeOption,
+        .menuType = SP::Settings::MenuType::LargeOption,
     },
     [static_cast<u32>(Setting::VSRaceCount)] = {
         .category = Category::VS,
@@ -384,7 +384,7 @@ const Entry entries[] = {
         .valueNames = nullptr,
         .valueMessageIds = (u32[]) { 10225 },
         .valueExplanationMessageIds = (u32[]) { 10226 },
-        .menuType = MenuType::Number,
+        .menuType = SP::Settings::MenuType::Number,
     },
     [static_cast<u32>(Setting::VSCourseSelection)] = {
         .category = Category::VS,
@@ -395,7 +395,7 @@ const Entry entries[] = {
         .valueNames = magic_enum::enum_names<CourseSelection>().data(),
         .valueMessageIds = (u32[]) { 3441, 10228, 3443 },
         .valueExplanationMessageIds = (u32[]) { 10260, 10231, 10261 },
-        .menuType = MenuType::OptionAndDescription,
+        .menuType = SP::Settings::MenuType::OptionAndDescription,
     },
     [static_cast<u32>(Setting::VSClass)] = {
         .category = Category::VS,
@@ -406,7 +406,7 @@ const Entry entries[] = {
         .valueNames = magic_enum::enum_names<EngineClass>().data(),
         .valueMessageIds = (u32[]) { 10235, 10236, 10238, 10237, 10365, 10366 },
         .valueExplanationMessageIds = (u32[]) { 10239, 10240, 10242, 10241, 10361, 10362 },
-        .menuType = MenuType::LargeOption,
+        .menuType = SP::Settings::MenuType::LargeOption,
     },
     [static_cast<u32>(Setting::VSCPUMode)] = {
         .category = Category::VS,
@@ -417,7 +417,7 @@ const Entry entries[] = {
         .valueNames = magic_enum::enum_names<CPUMode>().data(),
         .valueMessageIds = (u32[]) { 3421, 3422, 3423 },
         .valueExplanationMessageIds = (u32[]) { 3425, 3426, 3427 },
-        .menuType = MenuType::OptionAndDescription,
+        .menuType = SP::Settings::MenuType::OptionAndDescription,
     },
     [static_cast<u32>(Setting::VSPlayerCount)] = {
         .category = Category::VS,
@@ -429,7 +429,7 @@ const Entry entries[] = {
         .valueNames = nullptr,
         .valueMessageIds = (u32[]) { 10439 },
         .valueExplanationMessageIds = (u32[]) { 10438 },
-        .menuType = MenuType::Number,
+        .menuType = SP::Settings::MenuType::Number,
     },
     [static_cast<u32>(Setting::VSVehicles)] = {
         .category = Category::VS,
@@ -440,7 +440,7 @@ const Entry entries[] = {
         .valueNames = magic_enum::enum_names<Vehicles>().data(),
         .valueMessageIds = (u32[]) { 10244, 10245, 10246, /* 10247, 10248, 10249, 10250 */ },
         .valueExplanationMessageIds = (u32[]) { 10251, 10252, 10253, /* 10254, 10255, 10256, 10257 */ },
-        .menuType = MenuType::OptionAndDescription,
+        .menuType = SP::Settings::MenuType::OptionAndDescription,
     },
     [static_cast<u32>(Setting::VSItemFrequency)] = {
         .category = Category::VS,
@@ -451,7 +451,7 @@ const Entry entries[] = {
         .valueNames = magic_enum::enum_names<ItemFrequency>().data(),
         .valueMessageIds = (u32[]) { 3481, 3482, 3483, 3484 },
         .valueExplanationMessageIds = (u32[]) { 3485, 3486, 3487, 3488 },
-        .menuType = MenuType::OptionAndDescription,
+        .menuType = SP::Settings::MenuType::OptionAndDescription,
     },
     [static_cast<u32>(Setting::VSMegaClouds)] = {
         .category = Category::VS,
@@ -462,7 +462,7 @@ const Entry entries[] = {
         .valueNames = magic_enum::enum_names<VSMegaClouds>().data(),
         .valueMessageIds = (u32[]) { 20038, 20039 },
         .valueExplanationMessageIds = (u32[]) { 20036, 20037 },
-        .menuType = MenuType::OptionAndDescription,
+        .menuType = SP::Settings::MenuType::OptionAndDescription,
     },
     [static_cast<u32>(Setting::BTTeamSize)] = {
         .category = Category::BT,
@@ -473,7 +473,7 @@ const Entry entries[] = {
         .valueNames = magic_enum::enum_names<TeamSize>().data(),
         .valueMessageIds = (u32[]) { 10208, 10209, 10210, 10211, 10212, 10218 },
         .valueExplanationMessageIds = (u32[]) { 10213, 10214, 10215, 10216, 10217, 10393 },
-        .menuType = MenuType::LargeOption,
+        .menuType = SP::Settings::MenuType::LargeOption,
     },
     [static_cast<u32>(Setting::BTRaceCount)] = {
         .category = Category::BT,
@@ -485,7 +485,7 @@ const Entry entries[] = {
         .valueNames = nullptr,
         .valueMessageIds = (u32[]) { 10225 },
         .valueExplanationMessageIds = (u32[]) { 10421 },
-        .menuType = MenuType::Number,
+        .menuType = SP::Settings::MenuType::Number,
     },
     [static_cast<u32>(Setting::BTCourseSelection)] = {
         .category = Category::BT,
@@ -496,7 +496,7 @@ const Entry entries[] = {
         .valueNames = magic_enum::enum_names<CourseSelection>().data(),
         .valueMessageIds = (u32[]) { 3441, 10228, 3443 },
         .valueExplanationMessageIds = (u32[]) { 10425, 10426, 10427 },
-        .menuType = MenuType::OptionAndDescription,
+        .menuType = SP::Settings::MenuType::OptionAndDescription,
     },
     [static_cast<u32>(Setting::BTCPUMode)] = {
         .category = Category::BT,
@@ -507,7 +507,7 @@ const Entry entries[] = {
         .valueNames = magic_enum::enum_names<CPUMode>().data(),
         .valueMessageIds = (u32[]) { 3421, 3422, 3423 },
         .valueExplanationMessageIds = (u32[]) { 3425, 3426, 3427 },
-        .menuType = MenuType::OptionAndDescription,
+        .menuType = SP::Settings::MenuType::OptionAndDescription,
     },
     [static_cast<u32>(Setting::BTPlayerCount)] = {
         .category = Category::BT,
@@ -519,7 +519,7 @@ const Entry entries[] = {
         .valueNames = nullptr,
         .valueMessageIds = (u32[]) { 10439 },
         .valueExplanationMessageIds = (u32[]) { 10438 },
-        .menuType = MenuType::Number,
+        .menuType = SP::Settings::MenuType::Number,
     },
     [static_cast<u32>(Setting::BTVehicles)] = {
         .category = Category::BT,
@@ -530,7 +530,7 @@ const Entry entries[] = {
         .valueNames = magic_enum::enum_names<Vehicles>().data(),
         .valueMessageIds = (u32[]) { 10244, 10245, 10246, /* 10247, 10248, 10249, 10250 */ },
         .valueExplanationMessageIds = (u32[]) { 10251, 10252, 10253, /* 10254, 10255, 10256, 10257 */ },
-        .menuType = MenuType::OptionAndDescription,
+        .menuType = SP::Settings::MenuType::OptionAndDescription,
     },
     [static_cast<u32>(Setting::BTItemFrequency)] = {
         .category = Category::BT,
@@ -541,7 +541,7 @@ const Entry entries[] = {
         .valueNames = magic_enum::enum_names<ItemFrequency>().data(),
         .valueMessageIds = (u32[]) { 3481, 3482, 3483, 3484 },
         .valueExplanationMessageIds = (u32[]) { 3485, 3486, 3487, 3488 },
-        .menuType = MenuType::OptionAndDescription,
+        .menuType = SP::Settings::MenuType::OptionAndDescription,
     },
     [static_cast<u32>(Setting::RoomTeamSize)] = {
         .category = Category::Room,
@@ -552,7 +552,7 @@ const Entry entries[] = {
         .valueNames = magic_enum::enum_names<TeamSize>().data(),
         .valueMessageIds = (u32[]) { 10208, 10209, 10210, 10211, 10212, 10218 },
         .valueExplanationMessageIds = (u32[]) { 10213, 10214, 10215, 10216, 10217, 10393 },
-        .menuType = MenuType::LargeOption,
+        .menuType = SP::Settings::MenuType::LargeOption,
         .hidden = !ENABLE_ONLINE,
     },
     [static_cast<u32>(Setting::RoomTeamSelection)] = {
@@ -564,7 +564,7 @@ const Entry entries[] = {
         .valueNames = magic_enum::enum_names<RoomTeamSelection>().data(),
         .valueMessageIds = (u32[]) { 10218, 10219, 10220 },
         .valueExplanationMessageIds = (u32[]) { 10221, 10222, 10223 },
-        .menuType = MenuType::OptionAndDescription,
+        .menuType = SP::Settings::MenuType::OptionAndDescription,
         .hidden = !ENABLE_ONLINE,
     },
     [static_cast<u32>(Setting::RoomRaceCount)] = {
@@ -577,7 +577,7 @@ const Entry entries[] = {
         .valueNames = nullptr,
         .valueMessageIds = (u32[]) { 10225 },
         .valueExplanationMessageIds = (u32[]) { 10226 },
-        .menuType = MenuType::Number,
+        .menuType = SP::Settings::MenuType::Number,
         .hidden = !ENABLE_ONLINE,
     },
     [static_cast<u32>(Setting::RoomCourseSelection)] = {
@@ -589,7 +589,7 @@ const Entry entries[] = {
         .valueNames = magic_enum::enum_names<RoomCourseSelection>().data(),
         .valueMessageIds = (u32[]) { 10228, 3443, 10229, 10230 },
         .valueExplanationMessageIds = (u32[]) { 10231, 10261, 10232, 10233 },
-        .menuType = MenuType::OptionAndDescription,
+        .menuType = SP::Settings::MenuType::OptionAndDescription,
         .hidden = !ENABLE_ONLINE,
     },
     [static_cast<u32>(Setting::RoomClass)] = {
@@ -601,7 +601,7 @@ const Entry entries[] = {
         .valueNames = magic_enum::enum_names<EngineClass>().data(),
         .valueMessageIds = (u32[]) { 10235, 10236, 10238, 10237, 10365, 10366 },
         .valueExplanationMessageIds = (u32[]) { 10239, 10240, 10242, 10241, 10361, 10362 },
-        .menuType = MenuType::LargeOption,
+        .menuType = SP::Settings::MenuType::LargeOption,
         .hidden = !ENABLE_ONLINE,
     },
     [static_cast<u32>(Setting::RoomVehicles)] = {
@@ -613,7 +613,7 @@ const Entry entries[] = {
         .valueNames = magic_enum::enum_names<Vehicles>().data(),
         .valueMessageIds = (u32[]) { 10244, 10245, 10246, /* 10247, 10248, 10249, 10250 */ },
         .valueExplanationMessageIds = (u32[]) { 10251, 10252, 10253, /* 10254, 10255, 10256, 10257 */ },
-        .menuType = MenuType::OptionAndDescription,
+        .menuType = SP::Settings::MenuType::OptionAndDescription,
         .hidden = !ENABLE_ONLINE,
     },
     [static_cast<u32>(Setting::RoomCodeHigh)] = {
@@ -625,7 +625,7 @@ const Entry entries[] = {
         .valueNames = nullptr,
         .valueMessageIds = nullptr,
         .valueExplanationMessageIds = nullptr,
-        .menuType = MenuType::Hidden,
+        .menuType = SP::Settings::MenuType::Hidden,
         .hidden = !ENABLE_ONLINE,
     },
     [static_cast<u32>(Setting::RoomCodeLow)] = {
@@ -637,7 +637,7 @@ const Entry entries[] = {
         .valueNames = nullptr,
         .valueMessageIds = nullptr,
         .valueExplanationMessageIds = nullptr,
-        .menuType = MenuType::Hidden,
+        .menuType = SP::Settings::MenuType::Hidden,
         .hidden = !ENABLE_ONLINE,
     },
     [static_cast<u32>(Setting::MiiAvatar)] = {
@@ -649,7 +649,7 @@ const Entry entries[] = {
         .valueNames = nullptr,
         .valueMessageIds = nullptr,
         .valueExplanationMessageIds = nullptr,
-        .menuType = MenuType::Hidden,
+        .menuType = SP::Settings::MenuType::Hidden,
     },
     [static_cast<u32>(Setting::MiiClient)] = {
         .category = Category::License,
@@ -660,7 +660,7 @@ const Entry entries[] = {
         .valueNames = nullptr,
         .valueMessageIds = nullptr,
         .valueExplanationMessageIds = nullptr,
-        .menuType = MenuType::Hidden,
+        .menuType = SP::Settings::MenuType::Hidden,
     },
     [static_cast<u32>(Setting::ColorPalette)] = {
         .category = Category::License,
@@ -671,7 +671,7 @@ const Entry entries[] = {
         .valueNames = magic_enum::enum_names<ColorPalette>().data(),
         .valueMessageIds = (u32[]) { 10264, 10265 },
         .valueExplanationMessageIds = (u32[]) { 10266, 10267 },
-        .menuType = MenuType::OptionAndDescription,
+        .menuType = SP::Settings::MenuType::OptionAndDescription,
     },
     [static_cast<u32>(Setting::LoadingScreenColor)] = {
         .category = Category::License,
@@ -682,7 +682,7 @@ const Entry entries[] = {
         .valueNames = nullptr,
         .valueMessageIds = nullptr,
         .valueExplanationMessageIds = nullptr,
-        .menuType = MenuType::Hidden,
+        .menuType = SP::Settings::MenuType::Hidden,
     },
     [static_cast<u32>(Setting::GCPadRumble)] = {
         .category = Category::License,
@@ -693,7 +693,7 @@ const Entry entries[] = {
         .valueNames = magic_enum::enum_names<GCPadRumble>().data(),
         .valueMessageIds = (u32[]) { 10057, 10058 },
         .valueExplanationMessageIds = (u32[]) { 10192, 10193 },
-        .menuType = MenuType::OptionAndDescription,
+        .menuType = SP::Settings::MenuType::OptionAndDescription,
     },
     [static_cast<u32>(Setting::PageTransitions)] = {
         .category = Category::License,
@@ -704,7 +704,7 @@ const Entry entries[] = {
         .valueNames = magic_enum::enum_names<PageTransitions>().data(),
         .valueMessageIds = (u32[]) { 10057, 10058 },
         .valueExplanationMessageIds = (u32[]) { 10059, 10060 },
-        .menuType = MenuType::OptionAndDescription,
+        .menuType = SP::Settings::MenuType::OptionAndDescription,
     },
     [static_cast<u32>(Setting::PerfOverlay)] = {
         .category = Category::DebugOverlay,
@@ -715,7 +715,7 @@ const Entry entries[] = {
         .valueNames = magic_enum::enum_names<PerfOverlay>().data(),
         .valueMessageIds = (u32[]) { 10337, 10338 },
         .valueExplanationMessageIds = (u32[]) { 10189, 10190 },
-        .menuType = MenuType::OptionAndDescription,
+        .menuType = SP::Settings::MenuType::OptionAndDescription,
     },
     [static_cast<u32>(Setting::RegionFlagDisplay)] = {
         .category = Category::License,
@@ -726,7 +726,7 @@ const Entry entries[] = {
         .valueNames = magic_enum::enum_names<RegionFlagDisplay>().data(),
         .valueMessageIds = (u32[]) { 10339, 10340 },
         .valueExplanationMessageIds = (u32[]) { 10335, 10336 },
-        .menuType = MenuType::OptionAndDescription,
+        .menuType = SP::Settings::MenuType::OptionAndDescription,
     },
     [static_cast<u32>(Setting::DebugCheckpoints)] = {
         .category = Category::DebugOverlay,
@@ -737,7 +737,7 @@ const Entry entries[] = {
         .valueNames = magic_enum::enum_names<DebugCheckpoints>().data(),
         .valueMessageIds = (u32[]) { 10317, 10318 },
         .valueExplanationMessageIds = (u32[]) { 10319, 10320 },
-        .menuType = MenuType::OptionAndDescription,
+        .menuType = SP::Settings::MenuType::OptionAndDescription,
     },
     [static_cast<u32>(Setting::DebugPanel)] = {
         .category = Category::DebugOverlay,
@@ -748,7 +748,7 @@ const Entry entries[] = {
         .valueNames = magic_enum::enum_names<DebugPanel>().data(),
         .valueMessageIds = (u32[]) { 10342, 10343, 10344 },
         .valueExplanationMessageIds = (u32[]) { 10345, 10346, 10347 },
-        .menuType = MenuType::OptionAndDescription,
+        .menuType = SP::Settings::MenuType::OptionAndDescription,
     },
     [static_cast<u32>(Setting::DebugKCL)] = {
         .category = Category::DebugOverlay,
@@ -759,7 +759,7 @@ const Entry entries[] = {
         .valueNames = magic_enum::enum_names<DebugKCL>().data(),
         .valueMessageIds = (u32[]) { 10349, 10351, 10353 },
         .valueExplanationMessageIds = (u32[]) { 10350, 10352, 10354 },
-        .menuType = MenuType::OptionAndDescription,
+        .menuType = SP::Settings::MenuType::OptionAndDescription,
     },
     [static_cast<u32>(Setting::YButton)] = {
         .category = Category::DebugOverlay,
@@ -770,7 +770,7 @@ const Entry entries[] = {
         .valueNames = magic_enum::enum_names<YButton>().data(),
         .valueMessageIds = (u32[]) { 10433, 10435 },
         .valueExplanationMessageIds = (u32[]) { 10434, 10436 },
-        .menuType = MenuType::OptionAndDescription,
+        .menuType = SP::Settings::MenuType::OptionAndDescription,
     },
 };
 // clang-format on

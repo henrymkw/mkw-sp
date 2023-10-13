@@ -11,11 +11,19 @@ extern "C" {
 #include <cstdio>
 #include <cstdlib>
 
-namespace SP::ClientSettings {
-enum class MenuType;
-}
+//namespace SP::ClientSettings {
+//enum class MenuType;
+//}
 
 namespace SP::Settings {
+
+enum class MenuType {
+    OptionAndDescription,
+    LargeOption,
+    Slider,
+    Number,
+    Hidden,
+};
 
 template <typename C>
 struct Entry {
@@ -29,7 +37,7 @@ struct Entry {
     const u32 *valueMessageIds;
     const u32 *valueExplanationMessageIds;
     std::optional<u32> vanillaValue{};
-    SP::ClientSettings::MenuType menuType;
+    SP::Settings::MenuType menuType = MenuType::Hidden;
     bool hidden = false;
 };
 
