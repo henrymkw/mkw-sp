@@ -27,12 +27,6 @@
             "first animation": 7,
             "animation count": 2,
         },
-        {
-            "name": "Choice",
-            "pane": "active_anim",
-            "first animation": 9,
-            "animation count": 4,
-        },
     ],
     "animations": [
         {
@@ -96,34 +90,6 @@
             "brlan": "common_w024_rule_icon_text_light_01_stop.brlan",
             "next": "",
             "reversed": false,
-            "speed": 1.0,
-        },
-        {
-            "name": "ChoiceOff",
-            "brlan": "common_w024_rule_icon_active_off.brlan",
-            "next": "",
-            "reversed": false,
-            "speed": 1.0,
-        },
-        {
-            "name": "ChoiceOffToOn",
-            "brlan": "common_w024_rule_icon_active_off_to_on.brlan",
-            "next": "ChoiceOn",
-            "reversed": false,
-            "speed": 1.0,
-        },
-        {
-            "name": "ChoiceOn",
-            "brlan": "common_w024_rule_icon_active_on.brlan",
-            "next": "",
-            "reversed": false,
-            "speed": 1.0,
-        },
-        {
-            "name": "ChoiceOnToOff",
-            "brlan": "common_w024_rule_icon_active_off_to_on.brlan",
-            "next": "ChoiceOff",
-            "reversed": true,
             "speed": 1.0,
         },
     ],
