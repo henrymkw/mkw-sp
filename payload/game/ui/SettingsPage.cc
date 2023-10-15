@@ -75,8 +75,8 @@ void SettingsPage::onInit() {
         m_settingButtons[i].load("button", "SettingsWheel", variant, 0x1, false, false);
     }
 
-    m_arrowUp.load("button", "ArrowUpDown", "ArrowUp", 0x1, false, false);
-    m_arrowDown.load("button", "ArrowUpDown", "ArrowDown", 0x1, false, false);
+    m_arrowUp.load("button", "ArrowUpDown", "ArrowUp", 0x1, false, true);
+    m_arrowDown.load("button", "ArrowUpDown", "ArrowDown", 0x1, false, true);
 
     m_inputManager.setHandler(MenuInputManager::InputId::Back, &m_onBack, false, false);
 
