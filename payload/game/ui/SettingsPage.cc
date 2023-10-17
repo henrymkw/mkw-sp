@@ -36,18 +36,19 @@ void SettingsPage::onInit() {
         m_settingNameIds.push_back(static_cast<const u32 &&>(entry.messageId));
     }
 
-    initChildren(5 + std::size(m_settingButtons) + !!blackBack());
+    initChildren(6 + std::size(m_settingButtons) + !!blackBack());
     insertChild(0, &m_pageTitleText, 0);
     insertChild(1, instructionText(), 0);
     insertChild(2, &m_backButton, 0);
     insertChild(3, &m_arrowUp, 0);
     insertChild(4, &m_arrowDown, 0);
+    insertChild(5, &m_categorySwap, 0);
 
     if (blackBack()) {
-        insertChild(5, blackBack(), 0);
+        insertChild(6, blackBack(), 0);
     }
     for (u32 i = 0; i < std::size(m_settingButtons); i++) {
-        insertChild(5 + i + !!blackBack(), &m_settingButtons[i], 0);
+        insertChild(6 + i + !!blackBack(), &m_settingButtons[i], 0);
     }
 
     m_pageTitleText.load(false);
@@ -77,6 +78,7 @@ void SettingsPage::onInit() {
 
     m_arrowUp.load("button", "ArrowUpDown", "ArrowUp", 0x1, false, true);
     m_arrowDown.load("button", "ArrowUpDown", "ArrowDown", 0x1, false, true);
+    m_categorySwap.load("button", "CategorySwapButton", "CategorySwapButton", 0x1, false, true);
 
     m_inputManager.setHandler(MenuInputManager::InputId::Back, &m_onBack, false, false);
 
