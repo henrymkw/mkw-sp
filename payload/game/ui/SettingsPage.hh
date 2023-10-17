@@ -48,14 +48,6 @@ public:
 
     void setReplacement(PageId pageId);
 
-    u32 getCategoryIndex();
-    u32 getSelectedSetting();
-
-protected:
-    virtual LayoutUIControl *instructionText() = 0;
-    virtual BlackBackControl *blackBack() = 0;
-
-private:
     struct CategoryInfo {
         u32 categoryIndex;
         u32 categorySheetIndex;
@@ -63,7 +55,17 @@ private:
         u32 settingIndex;
     };
 
+    CategoryInfo getCategoryInfoGetter();
+    u32 getSelectedSetting();
+
+protected:
+    virtual LayoutUIControl *instructionText() = 0;
+    virtual BlackBackControl *blackBack() = 0;
+
+private:
     void onBack(u32 localPlayerId);
+    void onUp(u32 localPlayerId);
+    void onDown(u32 localPlayerId);
 
     void onBackButtonFront(PushButton *button, u32 localPlayerId);
 
@@ -96,6 +98,8 @@ private:
     SP::CircularBuffer<s32, 32> m_settingOptionIds;
 
     H<MultiControlInputManager> m_onBack{this, &SettingsPage::onBack};
+    H<MultiControlInputManager> m_onUp{this, &SettingsPage::onUp};
+    H<MultiControlInputManager> m_onDown{this, &SettingsPage::onDown};
 
     H<PushButton> m_onBackButtonFront{this, &SettingsPage::onBackButtonFront};
 
@@ -122,7 +126,7 @@ public:
     void configure(IHandler *handler);
     void pop(Anim anim);
 
-    u32 getCategoryIndex();
+    SettingsPage::CategoryInfo getCategoryInfo();
     u32 getSelectedSetting();
 
 private:
@@ -145,7 +149,7 @@ public:
 
     void configure(IHandler *handler, PageId replacement);
 
-    u32 getCategoryIndex();
+    SettingsPage::CategoryInfo getCategoryInfo();
     u32 getSelectedSetting();
 
 private:

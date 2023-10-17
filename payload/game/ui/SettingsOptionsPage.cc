@@ -1,7 +1,10 @@
 #include "SettingsOptionsPage.hh"
 
+#include "game/system/SaveManager.hh"
 #include "game/ui/SectionManager.hh"
 #include "game/ui/SettingsPage.hh"
+
+#include <cstdio>
 
 namespace UI {
 
@@ -14,42 +17,84 @@ void SettingsOptionsPage::onInit() {
     setInputManager(&m_inputManager);
 
     initChildren(7);
-    insertChild(0, &m_optionButton0, 0);
-    insertChild(1, &m_optionButton1, 0);
-    insertChild(2, &m_optionButton2, 0);
-    insertChild(3, &m_optionButton3, 0);
-    insertChild(4, &m_optionButton4, 0);
+    for (u8 i = 0; i < 5; i++) {
+        insertChild(i, &m_options[i], 0);
+    }
+    // insertChild(0, &m_optionButton0, 0);
+    // insertChild(1, &m_optionButton1, 0);
+    // insertChild(2, &m_optionButton2, 0);
+    // insertChild(3, &m_optionButton3, 0);
+    // insertChild(4, &m_optionButton4, 0);
     insertChild(5, &m_blackBackControl, 0);
     insertChild(6, &m_backButton, 0);
 
-    m_optionButton0.load("button", "SettingsOptionAndDescription", "Button4_0", 0x1, false, false);
-    m_optionButton1.load("button", "SettingsOptionAndDescription", "Button4_1", 0x1, false, false);
-    m_optionButton2.load("button", "SettingsOptionAndDescription", "Button4_2", 0x1, false, false);
-    m_optionButton3.load("button", "SettingsOptionAndDescription", "Button4_3", 0x1, false, false);
-    m_optionButton4.load("button", "SettingsOptionAndDescription", "Button4_4", 0x1, false, false);
+    for (u8 i = 0; i < 5; i++) {
+        char variant[10];
+        snprintf(variant, sizeof(variant), "Button4_%hhu", i);
+        m_options[i].load("button", "SettingsOptionAndDescription", variant, 0x1, false, false);
+    }
+
+    // m_optionButton0.load("button", "SettingsOptionAndDescription", "Button4_0", 0x1,
+    // false,false);
+    // m_optionButton1.load("button", "SettingsOptionAndDescription", "Button4_1", 0x1, false,
+    // false);
+    // m_optionButton2.load("button", "SettingsOptionAndDescription", "Button4_2", 0x1, false,
+    // false); m_optionButton3.load("button", "SettingsOptionAndDescription", "Button4_3", 0x1,
+    // false, false); m_optionButton4.load("button", "SettingsOptionAndDescription", "Button4_4",
+    // 0x1, false, false);
     m_blackBackControl.load("control", "RankingBlackBack", "RankingBlackBack");
     m_blackBackControl.m_zIndex = -150.0f;
     m_backButton.load("button", "Back", "ButtonBackPopup", 0x1, false, true);
 
-    m_optionButton0.selectDefault(0);
+    m_options[0].selectDefault(0);
     m_inputManager.setHandler(MenuInputManager::InputId::Back, &m_onBack, false, false);
     m_backButton.setFrontHandler(&m_onBackButtonFront, false);
+
+    for (u32 i = 0; i < 5; i++) {
+        m_options[i].setFrontHandler(&m_onOptionButtonFront, false);
+        m_options[i].m_index = i;
+    }
 }
 
 void SettingsOptionsPage::onActivate() {
-    // auto *settingsPage =
-    // SectionManager::Instance()->currentSection()->page<PageId::MenuSettings>();
-    // u32 categoryIdx = settingsPage->getCategoryIndex();
-    // u32 settingIdx = settingsPage->getSelectedSetting();
+    auto *settingsPage = SectionManager::Instance()->currentSection()->page<PageId::MenuSettings>();
+    auto categoryInfo = settingsPage->getCategoryInfo();
+    u32 settingIdx = settingsPage->getSelectedSetting();
+    // SP_LOG("settingIndex: %d", settingIdx);
+    const SP::ClientSettings::Entry &entry =
+            SP::ClientSettings::entries[categoryInfo.settingIndex + settingIdx];
+    // SP_LOG("categoryInfo.settingIndex: %d", categoryInfo.settingIndex);
+    for (u8 j = 0; j != 5; j++) {
+        if (j >= entry.valueCount) {
+            m_options[j].setVisible(false);
+            continue;
+        }
+        m_options[j].setVisible(true);
+        m_options[j].setMessage("text", entry.valueMessageIds[j]);
+        m_options[j].setMessage("text_00", entry.valueExplanationMessageIds[j]);
+    }
 }
 
 void SettingsOptionsPage::onBack(u32 /* localPlayerId */) {
     startReplace(Anim::Prev, 0.0f);
 }
 
-void SettingsOptionsPage::onBackButtonFront(PushButton *button, u32 /* localPlayerId*/) {
+void SettingsOptionsPage::onBackButtonFront(PushButton *button, u32 /* localPlayerId */) {
     f32 delay = button->getDelay();
     startReplace(Anim::Prev, delay);
+}
+
+void SettingsOptionsPage::onOptionButtonFront(PushButton * /* button */, u32 /* localPlayerId */) {
+    // SP_LOG("onOptionsButtonFront() called");
+    // SP_LOG("button->m_index: %d", button->m_index);
+    // auto *settingsPage =
+    // SectionManager::Instance()->currentSection()->page<PageId::MenuSettings>(); auto categoryInfo
+    // = settingsPage->getCategoryInfo(); u32 localSettingIndex =
+    // settingsPage->getSelectedSetting(); SP_LOG("categoryInfo.settingIndex: %d\nlocalSettingIndex:
+    // %d", categoryInfo.settingIndex, localSettingIndex); auto *saveManager =
+    // System::SaveManager::Instance(); u32 settingIndex = categoryInfo.settingIndex +
+    // localSettingIndex; SP_LOG("settingIndex: %d", settingIndex);
+    // saveManager->setSetting(settingIndex, button->m_index);
 }
 
 } // namespace UI

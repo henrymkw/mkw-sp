@@ -16,7 +16,7 @@ void SettingsPage::onInit() {
     setInputManager(&m_inputManager);
     m_inputManager.setWrappingMode(MultiControlInputManager::WrappingMode::Y);
 
-    auto m_categoryInfo = getCategoryInfo(1);
+    m_categoryInfo = getCategoryInfo(1);
 
     auto category = static_cast<SP::ClientSettings::Category>(m_categoryInfo.categoryIndex);
     for (u32 i = 0; i < SP::ClientSettings::entryCount; i++) {
@@ -72,13 +72,19 @@ void SettingsPage::onInit() {
     for (u8 i = 0; i < std::size(m_settingButtons); i++) {
         char variant[15];
         snprintf(variant, sizeof(variant), "WheelButton%hhu", i);
-        m_settingButtons[i].load("button", "SettingsWheel", variant, 0x1, false, false);
+        if (i == 2) {
+            m_settingButtons[i].load("button", "SettingsWheel", variant, 0x1, false, false);
+            continue;
+        }
+        m_settingButtons[i].load("button", "SettingsWheel", variant, 0x1, false, true);
     }
 
     m_arrowUp.load("button", "ArrowUpDown", "ArrowUp", 0x1, false, true);
     m_arrowDown.load("button", "ArrowUpDown", "ArrowDown", 0x1, false, true);
 
     m_inputManager.setHandler(MenuInputManager::InputId::Back, &m_onBack, false, false);
+    m_inputManager.setHandler(MenuInputManager::InputId::Up, &m_onUp, false, false);
+    m_inputManager.setHandler(MenuInputManager::InputId::Down, &m_onDown, false, false);
 
     m_backButton.setFrontHandler(&m_onBackButtonFront, false);
 
@@ -130,49 +136,66 @@ void SettingsPage::onBackButtonFront(PushButton *button, u32 /* localPlayerId */
 }
 
 void SettingsPage::onSettingsWheelButtonFront(PushButton * /* button */, u32 /* localPlayerId */) {
+    // Can sort of see the arrows when SettingsOptionsPage is the active page. Commented out until
+    // theres a way to get them visible after returning
+
+    // m_arrowUp.setVisible(false);
+    // m_arrowDown.setVisible(false);
+
     push(PageId::SettingsOptions, Anim::Next);
+
+    // TODO: set the arrows to be visible again after b is pressed
 }
 
-void SettingsPage::onSettingsWheelButtonSelect(PushButton *button, u32 /* localPlayerId */) {
-    bool isMovingDown =
-            ((button->m_index == 0 && m_buttonIndex == 4) || (button->m_index > m_buttonIndex)) &&
-            !(button->m_index == 4 && m_buttonIndex == 0);
-
-    if (isMovingDown) {
-        u32 temp = *m_settingNameIds[m_settingNameIds.count() - 1];
-        m_settingNameIds.pop_back();
-        m_settingNameIds.push_front(static_cast<const u32 &&>(temp));
-        u32 temp2 = *m_settingOptionIds[m_settingOptionIds.count() - 1];
-        m_settingOptionIds.pop_back();
-        m_settingOptionIds.push_front(static_cast<const u32 &&>(temp2));
-        for (u32 i = 0; i < std::size(m_settingButtons); i++) {
-            m_settingButtons[i].setMessage("setting_name", *m_settingNameIds[i]);
-            m_settingButtons[i].setMessage("current_option", *m_settingOptionIds[i]);
-        }
-        if (m_selected == 0) {
-            m_selected = m_settingNameIds.count() - 1;
-
-        } else {
-            m_selected--;
-        }
-    } else {
-        u32 temp = *m_settingNameIds[0];
-        m_settingNameIds.pop_front();
-        m_settingNameIds.push_back(static_cast<const u32 &&>(temp));
-        u32 temp2 = *m_settingOptionIds[0];
-        m_settingOptionIds.pop_front();
-        m_settingOptionIds.push_back(static_cast<const u32 &&>(temp2));
-        for (u32 i = 0; i < std::size(m_settingButtons); i++) {
-            m_settingButtons[i].setMessage("setting_name", *m_settingNameIds[i]);
-            m_settingButtons[i].setMessage("current_option", *m_settingOptionIds[i]);
-        }
-        if (m_selected == m_settingNameIds.count() - 1) {
-            m_selected = 0;
-        } else {
-            m_selected++;
-        }
+void SettingsPage::onUp(u32 /* localPlayerId */) {
+    u32 temp = *m_settingNameIds[0];
+    m_settingNameIds.pop_front();
+    m_settingNameIds.push_back(static_cast<const u32 &&>(temp));
+    u32 temp2 = *m_settingOptionIds[0];
+    m_settingOptionIds.pop_front();
+    m_settingOptionIds.push_back(static_cast<const u32 &&>(temp2));
+    for (u32 i = 0; i < std::size(m_settingButtons); i++) {
+        m_settingButtons[i].setMessage("setting_name", *m_settingNameIds[i]);
+        m_settingButtons[i].setMessage("current_option", *m_settingOptionIds[i]);
     }
-    m_buttonIndex = button->m_index;
+    if (m_selected == m_settingNameIds.count() - 1) {
+        m_selected = 0;
+    } else {
+        m_selected++;
+    }
+    // TODO: yeah i know will fix later
+    if (m_buttonIndex == (s32)m_settingNameIds.count() - 1) {
+        m_buttonIndex = 0;
+    } else {
+        m_buttonIndex++;
+    }
+}
+
+void SettingsPage::onDown(u32 /* localPlayerId */) {
+    u32 temp = *m_settingNameIds[m_settingNameIds.count() - 1];
+    m_settingNameIds.pop_back();
+    m_settingNameIds.push_front(static_cast<const u32 &&>(temp));
+    u32 temp2 = *m_settingOptionIds[m_settingOptionIds.count() - 1];
+    m_settingOptionIds.pop_back();
+    m_settingOptionIds.push_front(static_cast<const u32 &&>(temp2));
+    for (u32 i = 0; i < std::size(m_settingButtons); i++) {
+        m_settingButtons[i].setMessage("setting_name", *m_settingNameIds[i]);
+        m_settingButtons[i].setMessage("current_option", *m_settingOptionIds[i]);
+    }
+    if (m_selected == 0) {
+        m_selected = m_settingNameIds.count() - 1;
+
+    } else {
+        m_selected--;
+    }
+    if (m_buttonIndex == 0) {
+        m_buttonIndex = m_settingNameIds.count() - 1;
+    } else {
+        m_buttonIndex--;
+    }
+}
+
+void SettingsPage::onSettingsWheelButtonSelect(PushButton * /* button */, u32 /* localPlayerId */) {
 }
 
 void SettingsPage::onSettingsWheelButtonDeselect(PushButton * /* button */,
@@ -213,8 +236,8 @@ SettingsPage::CategoryInfo SettingsPage::getCategoryInfo(u32 sheetIndex) const {
     assert(false);
 }
 
-u32 SettingsPage::getCategoryIndex() {
-    return m_categoryInfo.categoryIndex;
+SettingsPage::CategoryInfo SettingsPage::getCategoryInfoGetter() {
+    return m_categoryInfo;
 }
 
 u32 SettingsPage::getSelectedSetting() {
@@ -255,8 +278,8 @@ void SettingsPagePopup::pop(Anim anim) {
     m_popRequested = true;
 }
 
-u32 SettingsPagePopup::getCategoryIndex() {
-    return SettingsPage::getCategoryIndex();
+SettingsPage::CategoryInfo SettingsPagePopup::getCategoryInfo() {
+    return SettingsPage::getCategoryInfoGetter();
 }
 
 u32 SettingsPagePopup::getSelectedSetting() {
@@ -307,8 +330,8 @@ void MenuSettingsPage::configure(IHandler *handler, PageId replacement) {
     m_replacement = replacement;
 }
 
-u32 MenuSettingsPage::getCategoryIndex() {
-    return SettingsPage::getCategoryIndex();
+SettingsPage::CategoryInfo MenuSettingsPage::getCategoryInfo() {
+    return SettingsPage::getCategoryInfoGetter();
 }
 
 u32 MenuSettingsPage::getSelectedSetting() {

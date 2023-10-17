@@ -19,17 +19,19 @@ public:
 private:
     void onBack(u32 localPlayerId);
     void onBackButtonFront(PushButton *button, u32 localPlayerId);
+    void onOptionButtonFront(PushButton *button, u32 localPlayerId);
 
     MultiControlInputManager m_inputManager;
 
     BlackBackControl m_blackBackControl;
 
     // UI Elements
-    PushButton m_optionButton0;
-    PushButton m_optionButton1;
-    PushButton m_optionButton2;
-    PushButton m_optionButton3;
-    PushButton m_optionButton4;
+    PushButton m_options[5];
+    // PushButton m_optionButton0;
+    // PushButton m_optionButton1;
+    // PushButton m_optionButton2;
+    // PushButton m_optionButton3;
+    // PushButton m_optionButton4;
 
     CtrlMenuBackButton m_backButton;
 
@@ -37,6 +39,7 @@ private:
     using H = typename T::template Handler<SettingsOptionsPage>;
     H<MultiControlInputManager> m_onBack{this, &SettingsOptionsPage::onBack};
     H<PushButton> m_onBackButtonFront{this, &SettingsOptionsPage::onBackButtonFront};
+    H<PushButton> m_onOptionButtonFront{this, &SettingsOptionsPage::onOptionButtonFront};
 };
 
 } // namespace UI
