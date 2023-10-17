@@ -88,6 +88,7 @@ private:
     CtrlMenuBackButton m_backButton;
     PushButton m_arrowUp;
     PushButton m_arrowDown;
+    PushButton m_categorySwap;
 
     CategoryInfo m_categoryInfo;
 
