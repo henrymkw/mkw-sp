@@ -12,6 +12,7 @@ SettingsPage::SettingsPage() = default;
 SettingsPage::~SettingsPage() = default;
 
 void SettingsPage::onInit() {
+    SP_LOG("onInit() called");
     m_inputManager.init(0x1, false);
     setInputManager(&m_inputManager);
     m_inputManager.setWrappingMode(MultiControlInputManager::WrappingMode::Y);

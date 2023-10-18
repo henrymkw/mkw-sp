@@ -11,9 +11,9 @@ extern "C" {
 #include <cstdio>
 #include <cstdlib>
 
-//namespace SP::ClientSettings {
-//enum class MenuType;
-//}
+// namespace SP::ClientSettings {
+// enum class MenuType;
+// }
 
 namespace SP::Settings {
 
