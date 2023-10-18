@@ -1,0 +1,325 @@
+{
+    "version": 10,
+    "sections": [
+        {
+            "magic": "pat1",
+            "id": 8,
+            "groups": [],
+            "name": "fuchi_check_loop",
+            "start frame": 0,
+            "end frame": 199,
+            "descending bind": true,
+        },
+        {
+            "magic": "pai1",
+            "frame count": 199,
+            "loop": true,
+            "tpls": [],
+            "contents": [
+                {
+                    "name": "fuchi_pattern",
+                    "kind": "material",
+                    "animations": [
+                        {
+                            "magic": "RLMC",
+                            "targets": [
+                                {
+                                    "id": 0,
+                                    "kind": "tev color 0 color r",
+                                    "curve type": "hermite",
+                                    "keys": [
+                                        {
+                                            "frame": 0.0,
+                                            "value": 255.0,
+                                            "slope": 0.0,
+                                        },
+                                    ],
+                                },
+                                {
+                                    "id": 0,
+                                    "kind": "tev color 0 color g",
+                                    "curve type": "hermite",
+                                    "keys": [
+                                        {
+                                            "frame": 0.0,
+                                            "value": 255.0,
+                                            "slope": 0.0,
+                                        },
+                                    ],
+                                },
+                                {
+                                    "id": 0,
+                                    "kind": "tev color 0 color b",
+                                    "curve type": "hermite",
+                                    "keys": [
+                                        {
+                                            "frame": 0.0,
+                                            "value": 255.0,
+                                            "slope": 0.0,
+                                        },
+                                    ],
+                                },
+                                {
+                                    "id": 0,
+                                    "kind": "tev color 1 color r",
+                                    "curve type": "hermite",
+                                    "keys": [
+                                        {
+                                            "frame": 0.0,
+                                            "value": 127.0,
+                                            "slope": 0.0,
+                                        },
+                                        {
+                                            "frame": 195.0,
+                                            "value": 127.0,
+                                            "slope": 0.0,
+                                        },
+                                        {
+                                            "frame": 195.0,
+                                            "value": 127.0,
+                                            "slope": -24.0,
+                                        },
+                                    ],
+                                },
+                                {
+                                    "id": 0,
+                                    "kind": "tev color 1 color g",
+                                    "curve type": "hermite",
+                                    "keys": [
+                                        {
+                                            "frame": 0.0,
+                                            "value": 251.0,
+                                            "slope": 0.0,
+                                        },
+                                    ],
+                                },
+                                {
+                                    "id": 0,
+                                    "kind": "tev color 1 color b",
+                                    "curve type": "hermite",
+                                    "keys": [
+                                        {
+                                            "frame": 0.0,
+                                            "value": 200.0,
+                                            "slope": 0.0,
+                                        },
+                                    ],
+                                },
+                            ],
+                        },
+                        {
+                            "magic": "RLTS",
+                            "targets": [
+                                {
+                                    "id": 0,
+                                    "kind": "translate s",
+                                    "curve type": "hermite",
+                                    "keys": [
+                                        {
+                                            "frame": 0.0,
+                                            "value": 0.0,
+                                            "slope": 0.025,
+                                        },
+                                        {
+                                            "frame": 200.0,
+                                            "value": 5.0,
+                                            "slope": 0.025,
+                                        },
+                                    ],
+                                },
+                            ],
+                        },
+                    ],
+                },
+                {
+                    "name": "text",
+                    "kind": "material",
+                    "animations": [
+                        {
+                            "magic": "RLMC",
+                            "targets": [
+                                {
+                                    "id": 0,
+                                    "kind": "tev color 0 color r",
+                                    "curve type": "hermite",
+                                    "keys": [
+                                        {
+                                            "frame": 1.0,
+                                            "value": 255.0,
+                                            "slope": 0.0,
+                                        },
+                                    ],
+                                },
+                                {
+                                    "id": 0,
+                                    "kind": "tev color 0 color g",
+                                    "curve type": "hermite",
+                                    "keys": [
+                                        {
+                                            "frame": 1.0,
+                                            "value": 255.0,
+                                            "slope": 0.0,
+                                        },
+                                    ],
+                                },
+                                {
+                                    "id": 0,
+                                    "kind": "tev color 0 color b",
+                                    "curve type": "hermite",
+                                    "keys": [
+                                        {
+                                            "frame": 1.0,
+                                            "value": 255.0,
+                                            "slope": 0.0,
+                                        },
+                                    ],
+                                },
+                                {
+                                    "id": 0,
+                                    "kind": "tev color 1 color r",
+                                    "curve type": "hermite",
+                                    "keys": [
+                                        {
+                                            "frame": 1.0,
+                                            "value": 90.0,
+                                            "slope": 0.0,
+                                        },
+                                        {
+                                            "frame": 100.0,
+                                            "value": 90.0,
+                                            "slope": 0.0,
+                                        },
+                                        {
+                                            "frame": 100.0,
+                                            "value": 90.0,
+                                            "slope": -6.0,
+                                        },
+                                        {
+                                            "frame": 103.0,
+                                            "value": 72.0,
+                                            "slope": -6.0,
+                                        },
+                                        {
+                                            "frame": 103.0,
+                                            "value": 72.0,
+                                            "slope": 0.0,
+                                        },
+                                        {
+                                            "frame": 195.0,
+                                            "value": 72.0,
+                                            "slope": 0.0,
+                                        },
+                                        {
+                                            "frame": 195.0,
+                                            "value": 72.0,
+                                            "slope": 3.6,
+                                        },
+                                        {
+                                            "frame": 200.0,
+                                            "value": 90.0,
+                                            "slope": 3.6,
+                                        },
+                                    ],
+                                },
+                                {
+                                    "id": 0,
+                                    "kind": "tev color 1 color g",
+                                    "curve type": "hermite",
+                                    "keys": [
+                                        {
+                                            "frame": 1.0,
+                                            "value": 90.0,
+                                            "slope": 0.0,
+                                        },
+                                        {
+                                            "frame": 100.0,
+                                            "value": 90.0,
+                                            "slope": 0.0,
+                                        },
+                                        {
+                                            "frame": 100.0,
+                                            "value": 90.0,
+                                            "slope": -6.0,
+                                        },
+                                        {
+                                            "frame": 103.0,
+                                            "value": 72.0,
+                                            "slope": -6.0,
+                                        },
+                                        {
+                                            "frame": 103.0,
+                                            "value": 72.0,
+                                            "slope": 0.0,
+                                        },
+                                        {
+                                            "frame": 195.0,
+                                            "value": 72.0,
+                                            "slope": 0.0,
+                                        },
+                                        {
+                                            "frame": 195.0,
+                                            "value": 72.0,
+                                            "slope": 3.6,
+                                        },
+                                        {
+                                            "frame": 200.0,
+                                            "value": 90.0,
+                                            "slope": 3.6,
+                                        },
+                                    ],
+                                },
+                                {
+                                    "id": 0,
+                                    "kind": "tev color 1 color b",
+                                    "curve type": "hermite",
+                                    "keys": [
+                                        {
+                                            "frame": 1.0,
+                                            "value": 90.0,
+                                            "slope": 0.0,
+                                        },
+                                        {
+                                            "frame": 100.0,
+                                            "value": 90.0,
+                                            "slope": 0.0,
+                                        },
+                                        {
+                                            "frame": 100.0,
+                                            "value": 90.0,
+                                            "slope": -6.0,
+                                        },
+                                        {
+                                            "frame": 103.0,
+                                            "value": 72.0,
+                                            "slope": -6.0,
+                                        },
+                                        {
+                                            "frame": 103.0,
+                                            "value": 72.0,
+                                            "slope": 0.0,
+                                        },
+                                        {
+                                            "frame": 195.0,
+                                            "value": 72.0,
+                                            "slope": 0.0,
+                                        },
+                                        {
+                                            "frame": 195.0,
+                                            "value": 72.0,
+                                            "slope": 3.6,
+                                        },
+                                        {
+                                            "frame": 200.0,
+                                            "value": 90.0,
+                                            "slope": 3.6,
+                                        },
+                                    ],
+                                },
+                            ],
+                        },
+                    ],
+                },
+            ],
+        },
+    ],
+}
