@@ -113,8 +113,6 @@ void SettingsPage::onActivate() {
     instructionText()->setMessageAll(0);
 
     m_settingButtons[2].selectDefault(0);
-    m_buttonIndex = 2;
-    m_selected = 2;
 }
 
 BlackBackControl *SettingsPage::blackBack() {
@@ -172,6 +170,7 @@ void SettingsPage::onUp(u32 /* localPlayerId */) {
     } else {
         m_buttonIndex++;
     }
+    SP_LOG("SettingsPage::onDown(): m_buttonIndex: %d\nm_selected: %d", m_buttonIndex, m_selected);
 }
 
 void SettingsPage::onDown(u32 /* localPlayerId */) {
@@ -196,6 +195,7 @@ void SettingsPage::onDown(u32 /* localPlayerId */) {
     } else {
         m_buttonIndex--;
     }
+    SP_LOG("SettingsPage::onUp(): m_buttonIndex: %d\nm_selected: %d", m_buttonIndex, m_selected);
 }
 
 void SettingsPage::onSettingsWheelButtonSelect(PushButton * /* button */, u32 /* localPlayerId */) {

@@ -53,7 +53,7 @@ void SettingsOptionsPage::onActivate() {
     // SP_LOG("settingIndex: %d", settingIdx);
     const SP::ClientSettings::Entry &entry = SP::ClientSettings::entries[settingIndex];
     /*SP_LOG("categoryInfo.settingIndex: %d\nsetttingIndexLocal: %d\nsettingIndex: %d",
-            categoryInfo.settingIndex, settingIndexLocal, settingIndex) */
+            categoryInfo.settingIndex, settingIndexLocal, settingIndex);*/
 
     for (u8 j = 0; j != 5; j++) {
         if (j >= entry.valueCount) {
@@ -75,20 +75,19 @@ void SettingsOptionsPage::onBackButtonFront(PushButton *button, u32 /* localPlay
     startReplace(Anim::Prev, delay);
 }
 
-void SettingsOptionsPage::onOptionButtonFront(PushButton * /* button */, u32 /* localPlayerId */) {
-    /*
+void SettingsOptionsPage::onOptionButtonFront(PushButton *button, u32 /* localPlayerId */) {
     // SP_LOG("onOptionsButtonFront() called");
     // SP_LOG("button->m_index: %d", button->m_index);
     auto *settingsPage = SectionManager::Instance()->currentSection()->page<PageId::MenuSettings>();
     auto categoryInfo = settingsPage->getCategoryInfo();
     u32 localSettingIndex = settingsPage->getSelectedSetting();
-    SP_LOG("categoryInfo.settingIndex: %d\nlocalSettingIndex: %d", categoryInfo.settingIndex,
-            localSettingIndex);
+    /*SP_LOG("categoryInfo.settingIndex: %d\nlocalSettingIndex: %d", categoryInfo.settingIndex,
+            localSettingIndex); */
     auto *saveManager = System::SaveManager::Instance();
     u32 settingIndex = categoryInfo.settingIndex + localSettingIndex;
-    // SP_LOG("settingIndex: %d", settingIndex);
+    // SP_LOG("settingIndex: %d\nbutton->m_index: %d", settingIndex, button->m_index);
+
     saveManager->setSetting(settingIndex, button->m_index);
-    */
 }
 
 } // namespace UI
