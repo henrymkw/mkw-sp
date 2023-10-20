@@ -37,6 +37,8 @@ class OptionSelectPage;
 class RaceConfirmPage;
 class RankingPage;
 class RoulettePage;
+class SPRankingGhostDownloadPage;
+class SPRankingTopTenDownloadPage;
 class SettingsPagePopup;
 class TeamConfirmPage;
 class TimeAttackGhostListPage;
@@ -150,6 +152,11 @@ struct Section::PageIdHelper<PageId::MessagePopup> {
 template <>
 struct Section::PageIdHelper<PageId::YesNoPopup> {
     using type = YesNoPagePopup;
+};
+
+template <>
+struct Section::PageIdHelper<PageId::SpinnerAwait> {
+    using type = MenuAwaitPage;
 };
 
 template <>
@@ -305,6 +312,16 @@ struct Section::PageIdHelper<PageId::OnlineModeSelect> {
 template <>
 struct Section::PageIdHelper<PageId::Ranking> {
     using type = RankingPage;
+};
+
+template <>
+struct Section::PageIdHelper<PageId::SPRankingGhostDownload> {
+    using type = SPRankingGhostDownloadPage;
+};
+
+template <>
+struct Section::PageIdHelper<PageId::SPRankingTopTenDownload> {
+    using type = SPRankingTopTenDownloadPage;
 };
 
 } // namespace UI

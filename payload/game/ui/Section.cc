@@ -20,8 +20,9 @@
 #include "game/ui/PackSelectPage.hh"
 #include "game/ui/RandomMatchingPage.hh"
 #include "game/ui/RankingPage.hh"
-#include "game/ui/RankingTopTenDownloadPage.hh"
 #include "game/ui/RoulettePage.hh"
+#include "game/ui/SPRankingGhostDownloadPage.hh"
+#include "game/ui/SPRankingTopTenDownloadPage.hh"
 #include "game/ui/SectionManager.hh"
 #include "game/ui/ServicePackChannelPage.hh"
 #include "game/ui/ServicePackToolsPage.hh"
@@ -38,6 +39,7 @@
 #include "game/ui/page/CourseDebugPage.hh"
 #include "game/ui/page/DriftSelectPage.hh"
 #include "game/ui/page/ResultTeamTotalPage.hh"
+#include "game/ui/page/WU8LibraryPage.hh"
 
 namespace UI {
 
@@ -62,6 +64,11 @@ System::SceneId Section::GetSceneId(SectionId id) {
     switch (id) {
     case SectionId::None... SectionId::Max:
         return HandleSceneIdPatches(id);
+    case SectionId::WU8Library:
+        return System::SceneId::Menu;
+    case SectionId::ServicePackChannel:
+    case SectionId::ServicePackRankings:
+        return System::SceneId::Globe;
     default:
         panic("Unhandled extended section ID! 0x%x", static_cast<s32>(id));
     }
@@ -80,6 +87,10 @@ const char *Section::GetResourceName(SectionId id) {
     switch (id) {
     case SectionId::None... SectionId::Max:
         return HandleResourceNamePatches(id);
+    case SectionId::WU8Library:
+    case SectionId::ServicePackChannel:
+    case SectionId::ServicePackRankings:
+        return "/Scene/UI/Channel";
     default:
         panic("Unhandled extended section ID! 0x%x", static_cast<s32>(id));
     }
@@ -100,6 +111,10 @@ bool Section::HasBackModel(const SectionId id) {
     switch (id) {
     case SectionId::None... SectionId::Max:
         return REPLACED(HasBackModel)(id);
+    case SectionId::WU8Library:
+    case SectionId::ServicePackChannel:
+    case SectionId::ServicePackRankings:
+        return false;
     default:
         panic("Unhandled extended section ID! 0x%x", static_cast<s32>(id));
     }
@@ -111,6 +126,9 @@ System::ContextId Section::GetContextId(const SectionId id) {
     switch (id) {
     case SectionId::None... SectionId::Max:
         return REPLACED(GetContextId)(id);
+    case SectionId::WU8Library:
+    case SectionId::ServicePackChannel:
+        return System::ContextId::SP;
     default:
         return System::ContextId::None;
     }
@@ -120,6 +138,12 @@ Sound::SoundId Section::GetSoundId(const SectionId id) {
     switch (id) {
     case SectionId::None... SectionId::Max:
         return REPLACED(GetSoundId)(id);
+    case SectionId::WU8Library:
+        return Sound::SoundId::SEQ_O_EARTH;
+    case SectionId::ServicePackChannel:
+        return Sound::SoundId::SEQ_O_SELECT_CH;
+    case SectionId::ServicePackRankings:
+        return Sound::SoundId::SEQ_O_RANKING_CH;
     default:
         panic("Unhandled extended section ID! 0x%x", static_cast<s32>(id));
     }
@@ -129,6 +153,12 @@ Sound::GroupId Section::GetGroupId(const SectionId id) {
     switch (id) {
     case SectionId::None... SectionId::Max:
         return REPLACED(GetGroupId)(id);
+    case SectionId::WU8Library:
+        return Sound::GroupId::Online;
+    case SectionId::ServicePackChannel:
+        return Sound::GroupId::Channel;
+    case SectionId::ServicePackRankings:
+        return Sound::GroupId::Rankings;
     default:
         panic("Unhandled extended section ID! 0x%x", static_cast<s32>(id));
     }
@@ -139,6 +169,11 @@ s32 Section::GetPriority(const SectionId id) {
     switch (id) {
     case SectionId::None... SectionId::Max:
         return REPLACED(GetPriority)(id);
+    case SectionId::WU8Library:
+        return 0;
+    case SectionId::ServicePackChannel:
+    case SectionId::ServicePackRankings:
+        return 1;
     default:
         panic("Unhandled extended section ID! 0x%x", static_cast<s32>(id));
     }
@@ -148,6 +183,8 @@ s32 Section::GetSoundTrigger(const PageId id) {
     switch (id) {
     case PageId::Empty... PageId::Max:
         return REPLACED(GetSoundTrigger)(id);
+    case PageId::WU8Library:
+        return 6;
     default:
         return 6;
     }
@@ -205,7 +242,7 @@ void Section::addPage(PageId pageId) {
             // The game has 5 pages for the records, we only need 1 for the settings. Remove the 4
             // others.
             {SectionId::LicenseSettings, PageId::SettingsPopup},
-            {SectionId::LicenseSettings, PageId::ServicePackChannel},
+            {SectionId::LicenseSettings, PageId::LicenseRecordsFriends},
             {SectionId::LicenseSettings, PageId::LicenseRecordsWFC},
             {SectionId::LicenseSettings, PageId::LicenseRecordsOther},
 
@@ -244,7 +281,7 @@ void Section::addPage(PageId pageId) {
             {SectionId::OnlineSingle, PageId::WifiFriendMenu},
 
             {SectionId::OnlineMulti, PageId::ConfirmWifiQuit},
-            {SectionId::OnlineMulti, PageId::ReadingGhostData},
+            {SectionId::OnlineMulti, PageId::SpinnerAwait},
             {SectionId::OnlineMulti, PageId::ConnectingNintendoWfc},
             {SectionId::OnlineMulti, PageId::Confirm},
             {SectionId::OnlineMulti, PageId::CharacterSelect},
@@ -280,18 +317,6 @@ void Section::addPage(PageId pageId) {
             // The channel section is repurposed into the Service Pack section. Remove some pages
             // that aren't needed anymore.
             {SectionId::ServicePack, PageId::TimeAttackTop},
-
-            {SectionId::ServicePackChannel, PageId::MessagePopup},
-            {SectionId::ServicePackChannel, PageId::MenuMessage},
-            {SectionId::ServicePackChannel, PageId::Confirm},
-            {SectionId::ServicePackChannel, PageId::ServicePackTop},
-            {SectionId::ServicePackChannel, PageId::StorageBenchmark},
-            {SectionId::ServicePackChannel, PageId::ServicePackTools},
-
-            {SectionId::Rankings, PageId::RaceCourseSelect},
-            {SectionId::Rankings, PageId::DirectConnection},
-            {SectionId::Rankings, PageId::OnlineConnectionManager},
-            {SectionId::Rankings, PageId::WifiConnectionFailed},
     };
     for (const auto &deletion : deletions) {
         if (deletion.first == m_id && deletion.second == pageId) {
@@ -325,10 +350,6 @@ void Section::addActivePage(PageId pageId) {
 
             {SectionId::OnlineFriend1PVS, PageId::OnlineConnectionManager},
             {SectionId::OnlineFriend1PVS, PageId::OnlineTeamSelect},
-
-            {SectionId::ServicePackChannel, PageId::StorageBenchmark},
-
-            {SectionId::Rankings, PageId::OnlineConnectionManager},
     };
     for (const auto &deletion : deletions) {
         if (deletion.first == m_id && deletion.second == pageId) {
@@ -459,7 +480,7 @@ void Section::addPages(SectionId id) {
             {SectionId::SingleSelectBTCourse, PageId::GhostManager},
 
             // Change Ghost Data
-            {SectionId::SingleChangeGhostData, PageId::ReadingGhostData},
+            {SectionId::SingleChangeGhostData, PageId::SpinnerAwait},
             {SectionId::SingleChangeGhostData, PageId::MenuMessage},
             {SectionId::SingleChangeGhostData, PageId::MessageBoardPopup},
             {SectionId::SingleChangeGhostData, PageId::SingleTop},
@@ -508,10 +529,25 @@ void Section::addPages(SectionId id) {
             {SectionId::ServicePack, PageId::Update},
             {SectionId::ServicePack, PageId::Channel},
 
+            // Extended sections add their used pages here!
+            {SectionId::WU8Library, PageId::SpinnerAwait},
+            {SectionId::WU8Library, PageId::LineBackgroundWhite},
+            {SectionId::WU8Library, PageId::WU8Library},
+
+            {SectionId::ServicePackChannel, PageId::Obi},
             {SectionId::ServicePackChannel, PageId::ServicePackChannel},
 
-            // Extended sections add their used pages here!
-
+            {SectionId::ServicePackRankings, PageId::SpinnerAwait},
+            {SectionId::ServicePackRankings, PageId::MenuMessage},
+            {SectionId::ServicePackRankings, PageId::Confirm},
+            {SectionId::ServicePackRankings, PageId::Obi},
+            {SectionId::ServicePackRankings, PageId::CourseSelect},
+            {SectionId::ServicePackRankings, PageId::Globe},
+            {SectionId::ServicePackRankings, PageId::GhostManager},
+            {SectionId::ServicePackRankings, PageId::Ranking},
+            {SectionId::ServicePackRankings, PageId::ChannelStartTimeTrial},
+            {SectionId::ServicePackRankings, PageId::SPRankingGhostDownload},
+            {SectionId::ServicePackRankings, PageId::SPRankingTopTenDownload},
             // clang-format on
             // Settings Popup
             {SectionId::LicenseSettings, PageId::SettingsOptions},
@@ -544,10 +580,15 @@ void Section::addActivePages(SectionId id) {
             {SectionId::Voting1PVS, PageId::CourseSelect},
             {SectionId::Voting1PVS, PageId::OnlineConnectionManager},
 
+            // Extended sections define their active pages here!
+            {SectionId::WU8Library, PageId::LineBackgroundWhite},
+            {SectionId::WU8Library, PageId::WU8Library},
+
+            {SectionId::ServicePackChannel, PageId::Obi},
             {SectionId::ServicePackChannel, PageId::ServicePackChannel},
 
-            // Extended sections define their active pages here!
-
+            {SectionId::ServicePackRankings, PageId::Obi},
+            {SectionId::ServicePackRankings, PageId::Ranking},
     };
     for (const auto &addition : additions) {
         if (addition.first == id) {
@@ -612,8 +653,6 @@ Page *Section::CreatePage(PageId pageId) {
         return new GhostManagerPage;
     case PageId::Ranking:
         return new RankingPage;
-    case PageId::RankingTopTenDownload:
-        return new RankingTopTenDownloadPage;
     case PageId::Channel:
         return new ChannelPage;
     case PageId::Update:
@@ -622,14 +661,20 @@ Page *Section::CreatePage(PageId pageId) {
         return new MenuSettingsPage;
     case PageId::SettingsPopup:
         return new SettingsPagePopup;
-    case PageId::ServicePackChannel:
-        return new ServicePackChannelPage;
     case PageId::PackSelect:
         return new PackSelectPage;
     case PageId::CourseDebug:
         return new CourseDebugPage;
     case PageId::SettingsOptions:
         return new SettingsOptionsPage;
+    case PageId::WU8Library:
+        return new WU8LibraryPage;
+    case PageId::ServicePackChannel:
+        return new ServicePackChannelPage;
+    case PageId::SPRankingGhostDownload:
+        return new SPRankingGhostDownloadPage;
+    case PageId::SPRankingTopTenDownload:
+        return new SPRankingTopTenDownloadPage;
     default:
         return REPLACED(CreatePage)(pageId);
     }

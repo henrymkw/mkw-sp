@@ -2,10 +2,12 @@
 
 #include "game/system/RaceConfig.hh"
 #include "game/system/SaveManager.hh"
+#include "game/ui/ModelRenderPage.hh"
 #include "game/ui/RaceConfirmPage.hh"
 #include "game/ui/RankingPage.hh"
 #include "game/ui/SectionManager.hh"
 #include "game/ui/VotingBackPage.hh"
+#include "game/ui/model/MenuModelManager.hh"
 
 #include <sp/ScopeLock.hh>
 
@@ -23,7 +25,8 @@ PageId CourseSelectPage::getReplacement() {
 }
 
 void CourseSelectPage::onInit() {
-    bool isRanking = SectionManager::Instance()->currentSection()->id() == SectionId::Rankings;
+    bool isSPRankingsSection =
+            SectionManager::Instance()->currentSection()->id() == SectionId::ServicePackRankings;
 
     m_filter = {false, false};
     m_sheetCount = 1;
@@ -34,7 +37,7 @@ void CourseSelectPage::onInit() {
     setInputManager(&m_inputManager);
     m_inputManager.setWrappingMode(MultiControlInputManager::WrappingMode::Neither);
 
-    initChildren(5 + m_buttons.size() + isRanking);
+    initChildren(5 + m_buttons.size() + isSPRankingsSection);
     insertChild(0, &m_pageTitleText, 0);
     insertChild(1, &m_sheetSelect, 0);
     insertChild(2, &m_sheetLabel, 0);
@@ -43,7 +46,7 @@ void CourseSelectPage::onInit() {
     for (size_t i = 0; i < m_buttons.size(); i++) {
         insertChild(5 + i, &m_buttons[i], 0);
     }
-    if (isRanking) {
+    if (isSPRankingsSection) {
         m_blackBackControl = std::make_unique<BlackBackControl>();
         insertChild(5 + m_buttons.size(), m_blackBackControl.get(), 0);
         m_blackBackControl->load("control", "RankingBlackBack", "RankingBlackBack");
@@ -59,7 +62,7 @@ void CourseSelectPage::onInit() {
     const char *buttonArrowLeftVariant;
     const char *courseSelectPageNumVariant;
     const char *courseSelectScrollBarVariant;
-    if (isRanking) {
+    if (isSPRankingsSection) {
         buttonArrowRightVariant = "RankingButtonArrowRight";
         buttonArrowLeftVariant = "RankingButtonArrowLeft";
         courseSelectPageNumVariant = "RankingCourseSelectPageNum";
@@ -113,7 +116,9 @@ void CourseSelectPage::onInit() {
     case SectionId::SingleSelectVSCourse:
     case SectionId::SingleSelectBTCourse:
     case SectionId::SingleChangeGhostData:
-    case SectionId::Rankings:
+    case SectionId::Voting1PVS:
+    case SectionId::Voting2PVS:
+    case SectionId::ServicePackRankings:
         filter();
         break;
     default: {
@@ -156,6 +161,27 @@ void CourseSelectPage::afterCalc() {
     }
     if (changed) {
         GXInvalidateTexAll();
+    }
+
+    // When we reach the DriftSelectPage the first time in one of these sections, no vehicle is
+    // selected for the model. Vehicles that are not selected (here, all of them) are constantly
+    // rotating, thus we would get an unexpected spin animation as the NoteModelControl of the
+    // DriftSelectPage restores the selection from GlobalContext. We avoid this by restoring the
+    // selection manually in this function.
+    auto *sectionManager = SectionManager::Instance();
+    auto *globalContext = sectionManager->globalContext();
+    auto *section = sectionManager->currentSection();
+    auto sectionId = section->id();
+    if (sectionId == SectionId::SingleChangeCourse ||
+            sectionId == SectionId::SingleChangeGhostData) {
+        auto *modelRenderPage = section->page<PageId::ModelRender>();
+        modelRenderPage->configure(0, true, true);
+        modelRenderPage->setCharacterId(0, globalContext->m_localCharacterIds[0]);
+        modelRenderPage->setVehicleId(0, globalContext->m_localVehicleIds[0]);
+        auto *driverModelManager = MenuModelManager::Instance()->driverModelManager();
+        auto *model = driverModelManager->handle(0)->model;
+        model->m_vehicleId = globalContext->m_localVehicleIds[0];
+        model->setAnim(0, 3);
     }
 }
 
@@ -258,14 +284,14 @@ void CourseSelectPage::onButtonFront(PushButton *button, u32 /* localPlayerId */
         votingBackPage->setLocalVote(entry.courseId);
         votingBackPage->setSubmitted(true);
         startReplace(Anim::Next, button->getDelay());
-    } else if (sectionId == SectionId::Rankings) {
+    } else if (sectionId == SectionId::ServicePackRankings) {
         s32 courseButtonIndex = GetButtonIndexFromCourse(entry.courseId);
 
         auto *rankingPage = section->page<PageId::Ranking>();
         rankingPage->courseControl().choose(courseButtonIndex);
 
         m_replacement = PageId::None;
-        startReplace(Anim::Prev, button->getDelay());
+        startReplace(Anim::Next, button->getDelay());
     } else {
         auto *globalContext = sectionManager->globalContext();
         auto &menuScenario = System::RaceConfig::Instance()->menuScenario();
@@ -359,7 +385,7 @@ void CourseSelectPage::onBackCommon(f32 delay) {
     } else if (sectionId == SectionId::SingleSelectBTCourse) {
         backMessageId = 3471;
     } else {
-        if (sectionId == SectionId::Rankings) {
+        if (sectionId == SectionId::ServicePackRankings) {
             m_replacement = PageId::None;
         } else if (sectionId == SectionId::Multi) {
             m_replacement = PageId::MultiDriftSelect;

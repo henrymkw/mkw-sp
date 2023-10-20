@@ -1,5 +1,8 @@
 #include "RankingPage.hh"
 
+extern "C" {
+#include "game/system/GhostFile.h"
+}
 #include "game/ui/CourseSelectPage.hh"
 #include "game/ui/SectionManager.hh"
 
@@ -35,8 +38,22 @@ void RankingPage::onBack() {
     changeSection(SectionId::ServicePackChannel, Anim::Prev, 0.0f);
 }
 
+void RankingPage::handleGhostDownload(f32 delay, u32 ghostType, u32 licenseId, s32 miiIndex) {
+    m_ghostType = ghostType;
+
+    switch (ghostType) {
+    case GHOST_TYPE_PERSONAL_BEST:
+        REPLACED(handleGhostDownload)(delay, ghostType, licenseId, miiIndex);
+        break;
+    default:
+        m_replacement = PageId::SPRankingGhostDownload;
+        startReplace(Anim::Next, delay);
+        break;
+    }
+}
+
 void RankingPage::handleTopTenDownload(f32 delay) {
-    m_replacement = PageId::RankingTopTenDownload;
+    m_replacement = PageId::SPRankingTopTenDownload;
     startReplace(Anim::Next, delay);
 }
 
@@ -44,8 +61,16 @@ UpDownControl &RankingPage::courseControl() {
     return m_courseControl;
 }
 
-void RankingPage::pop(ConfirmPage * /* confirmPage */, f32 delay) {
-    changeSection(SectionId::ServicePackChannel, Anim::Prev, delay);
+RankingPage::Area RankingPage::area() const {
+    return m_area;
+}
+
+Registry::Course RankingPage::course() const {
+    return m_course;
+}
+
+u32 RankingPage::ghostType() const {
+    return m_ghostType;
 }
 
 } // namespace UI

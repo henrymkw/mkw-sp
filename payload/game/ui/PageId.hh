@@ -84,7 +84,7 @@ enum class PageId {
     SpinnerMessagePopup = 0x4C,
     MessagePopup = 0x4D,
     YesNoPopup = 0x4E,
-    ReadingGhostData = 0x4F,
+    SpinnerAwait = 0x4F,
     ConnectingNintendoWfc = 0x50,
     MenuMessage = 0x51,
     Confirm = 0x52,
@@ -178,7 +178,7 @@ enum class PageId {
     Ranking = 0xA8,
     RankingBack = 0xAA,
 
-    ChannelGhostBackground = 0xAC,
+    ChannelStartTimeTrial = 0xAC,
     ChannelGhostSelected = 0xAD,
     RankingTopTenDownload = 0xAE,
 
@@ -205,20 +205,24 @@ enum class PageId {
     MenuSettings = 0xCE,  // Replaces LicenseRecordsOverall
     SettingsPopup = 0xCF, // Replaces LicenseRecordsFavorites
     // Disabled {
-    ServicePackChannel = 0xD0, // Replaces LicenseRecordsFriends
+    LicenseRecordsFriends = 0xD0,
     LicenseRecordsWFC = 0xD1,
     LicenseRecordsOther = 0xD2,
     // }
 
-    Max = 0xd3,
+    Max = 0xD3,
 
-    Ext_MinExclusive__ = 0xff,
+    Ext_MinExclusive__ = 0xFF,
 
     // Extensions go here {
     // Do not explicitly assign values to prevent merge conflicts
     PackSelect,
     CourseDebug,
     SettingsOptions,
+    WU8Library,
+    ServicePackChannel,
+    SPRankingGhostDownload,
+    SPRankingTopTenDownload,
     // }
 
     Ext_MaxExclusive__,
