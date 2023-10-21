@@ -13,6 +13,7 @@ SettingsPage::~SettingsPage() = default;
 
 void SettingsPage::onInit() {
     SP_LOG("onInit() called");
+    SP_LOG("Sizeof SettingsPage: %d", sizeof(SettingsPage));
     m_inputManager.init(0x1, false);
     setInputManager(&m_inputManager);
     m_inputManager.setWrappingMode(MultiControlInputManager::WrappingMode::Y);
@@ -107,6 +108,8 @@ void SettingsPage::onInit() {
     m_settingButtons[1].setPaneVisible("pause_w_fade_n", false);
     m_settingButtons[3].setPaneVisible("pause_w_fade_n", false);
     m_settingButtons[4].setPaneVisible("pause_w_fade_n", false);
+
+    m_selected = 2;
 }
 
 void SettingsPage::onActivate() {

@@ -13,6 +13,7 @@ SettingsOptionsPage::SettingsOptionsPage() = default;
 SettingsOptionsPage::~SettingsOptionsPage() = default;
 
 void SettingsOptionsPage::onInit() {
+    SP_LOG("sizeofSettingsOptionsPage: %d", sizeof(SettingsOptionsPage));
     m_inputManager.init(0x1, false);
     setInputManager(&m_inputManager);
 
@@ -23,6 +24,10 @@ void SettingsOptionsPage::onInit() {
 
     insertChild(5, &m_blackBackControl, 0);
     insertChild(6, &m_backButton, 0);
+
+    // initChildren(2);
+    // insertChild(0, &m_blackBackControl, 0);
+    // insertChild(1, &m_backButton, 0);
 
     for (u8 i = 0; i < 5; i++) {
         char variant[10];
@@ -52,8 +57,8 @@ void SettingsOptionsPage::onActivate() {
     u32 settingIndex = categoryInfo.settingIndex + settingIndexLocal;
     // SP_LOG("settingIndex: %d", settingIdx);
     const SP::ClientSettings::Entry &entry = SP::ClientSettings::entries[settingIndex];
-    /*SP_LOG("categoryInfo.settingIndex: %d\nsetttingIndexLocal: %d\nsettingIndex: %d",
-            categoryInfo.settingIndex, settingIndexLocal, settingIndex);*/
+    SP_LOG("categoryInfo.settingIndex: %d\nsetttingIndexLocal: %d\nsettingIndex: %d",
+            categoryInfo.settingIndex, settingIndexLocal, settingIndex);
 
     for (u8 j = 0; j != 5; j++) {
         if (j >= entry.valueCount) {
@@ -76,16 +81,16 @@ void SettingsOptionsPage::onBackButtonFront(PushButton *button, u32 /* localPlay
 }
 
 void SettingsOptionsPage::onOptionButtonFront(PushButton *button, u32 /* localPlayerId */) {
-    // SP_LOG("onOptionsButtonFront() called");
-    // SP_LOG("button->m_index: %d", button->m_index);
+    SP_LOG("onOptionsButtonFront() called");
+    SP_LOG("button->m_index: %d", button->m_index);
     auto *settingsPage = SectionManager::Instance()->currentSection()->page<PageId::MenuSettings>();
     auto categoryInfo = settingsPage->getCategoryInfo();
     u32 localSettingIndex = settingsPage->getSelectedSetting();
-    /*SP_LOG("categoryInfo.settingIndex: %d\nlocalSettingIndex: %d", categoryInfo.settingIndex,
-            localSettingIndex); */
+    SP_LOG("categoryInfo.settingIndex: %d\nlocalSettingIndex: %d", categoryInfo.settingIndex,
+            localSettingIndex);
     auto *saveManager = System::SaveManager::Instance();
     u32 settingIndex = categoryInfo.settingIndex + localSettingIndex;
-    // SP_LOG("settingIndex: %d\nbutton->m_index: %d", settingIndex, button->m_index);
+    SP_LOG("settingIndex: %d\nbutton->m_index: %d", settingIndex, button->m_index);
 
     saveManager->setSetting(settingIndex, button->m_index);
 }
