@@ -87,8 +87,8 @@ void SettingsPage::onInit() {
     m_categorySwap.load("button", "CategorySwapButton", "CategorySwapButton", 0x1, false, true);
 
     m_inputManager.setHandler(MenuInputManager::InputId::Back, &m_onBack, false, false);
-    m_inputManager.setHandler(MenuInputManager::InputId::Up, &m_onUp, false, false);
-    m_inputManager.setHandler(MenuInputManager::InputId::Down, &m_onDown, false, false);
+    m_inputManager.setHandler(MenuInputManager::InputId::Down, &m_onUp, false, false);
+    m_inputManager.setHandler(MenuInputManager::InputId::Up, &m_onDown, false, false);
 
     m_backButton.setFrontHandler(&m_onBackButtonFront, false);
 
