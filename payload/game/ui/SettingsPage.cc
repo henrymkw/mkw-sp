@@ -101,6 +101,10 @@ void SettingsPage::onInit() {
         m_settingButtons[i].setMessage("current_option", *m_settingOptionIds[i]);
         m_settingButtons[i].m_index = i;
     }
+    m_arrowUp.setFrontHandler(&m_onSettingsWheelButtonFront, false);
+    m_arrowDown.setFrontHandler(&m_onSettingsWheelButtonFront, false);
+    m_arrowUp.m_index = std::size(m_settingButtons);
+    m_arrowDown.m_index = m_arrowUp.m_index + 1;
 
     m_pageTitleText.setMessage(10076);
 
@@ -139,15 +143,21 @@ void SettingsPage::onBackButtonFront(PushButton *button, u32 /* localPlayerId */
     startReplace(Anim::Prev, delay);
 }
 
-void SettingsPage::onSettingsWheelButtonFront(PushButton * /* button */, u32 /* localPlayerId */) {
+void SettingsPage::onSettingsWheelButtonFront(PushButton *button, u32 /* localPlayerId */) {
     // Can sort of see the arrows when SettingsOptionsPage is the active page. Commented out until
     // theres a way to get them visible after returning
 
     // m_arrowUp.setVisible(false);
     // m_arrowDown.setVisible(false);
 
-    push(PageId::SettingsOptions, Anim::Next);
-
+    SP_LOG("ButtonFront() called");
+    if (button->m_index == m_arrowUp.m_index) {
+        onUp(0);
+    } else if (button->m_index == m_arrowDown.m_index) {
+        onDown(0);
+    } else {
+        push(PageId::SettingsOptions, Anim::Next);
+    }
     // TODO: set the arrows to be visible again after b is pressed
 }
 
@@ -201,8 +211,7 @@ void SettingsPage::onDown(u32 /* localPlayerId */) {
     SP_LOG("SettingsPage::onUp(): m_buttonIndex: %d\nm_selected: %d", m_buttonIndex, m_selected);
 }
 
-void SettingsPage::onSettingsWheelButtonSelect(PushButton * /* button */, u32 /* localPlayerId */) {
-}
+void SettingsPage::onSettingsWheelButtonSelect(PushButton *button, u32 /* localPlayerId */) {}
 
 void SettingsPage::onSettingsWheelButtonDeselect(PushButton * /* button */,
         u32 /* localPlayerId */) {}
