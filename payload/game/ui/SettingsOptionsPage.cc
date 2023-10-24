@@ -93,6 +93,10 @@ void SettingsOptionsPage::onOptionButtonFront(PushButton *button, u32 /* localPl
     SP_LOG("settingIndex: %d\nbutton->m_index: %d", settingIndex, button->m_index);
 
     saveManager->setSetting(settingIndex, button->m_index);
+
+    // TODO: Get the SettingsPage instruction text and selected option text to appear
+
+    // auto *instrucionText = settingsPage->instructionText();
 }
 
 } // namespace UI

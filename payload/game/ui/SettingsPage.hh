@@ -47,6 +47,7 @@ public:
     void onActivate() override;
 
     void setReplacement(PageId pageId);
+    // LayoutUIControl *getInstructionText();
 
     struct CategoryInfo {
         u32 categoryIndex;
@@ -74,6 +75,8 @@ private:
     void onSettingsWheelButtonDeselect(PushButton *button, u32 localPlayerId);
 
     CategoryInfo getCategoryInfo(u32 sheetIndex) const;
+
+    void setCategoryValues(u32 categoryIndex);
 
     template <typename T>
     using H = typename T::template Handler<SettingsPage>;
