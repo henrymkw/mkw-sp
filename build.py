@@ -344,6 +344,7 @@ asset_in_files = {
         os.path.join('button', 'ctrl', 'NumberGridMenu.brctr.json5'),
         os.path.join('button', 'ctrl', 'NumberMenuArrowLeft.brctr.json5'),
         os.path.join('button', 'ctrl', 'NumberMenuArrowRight.brctr.json5'),
+        os.path.join('button', 'ctrl', 'CategorySwapPage.brctr.json5'),
         # Teams
         os.path.join('button', 'anim', 'online_team_select_light_01_ok.brlan.json5'),
         os.path.join('button', 'anim', 'online_team_select_light_01_stop.brlan.json5'),
@@ -522,6 +523,7 @@ asset_in_files = {
         os.path.join('button', 'ctrl', 'NumberGridMenu.brctr.json5'),
         os.path.join('button', 'ctrl', 'NumberMenuArrowLeft.brctr.json5'),
         os.path.join('button', 'ctrl', 'NumberMenuArrowRight.brctr.json5'),
+        os.path.join('button', 'ctrl', 'CategorySwapPage.brctr.json5'),
         # Teams
         os.path.join('button', 'ctrl', 'TeamConfirmOK.brctr.json5'),
         os.path.join('control', 'anim', 'common_w204_team_position.brlan.json5'),
@@ -666,6 +668,7 @@ asset_in_files = {
         os.path.join('button', 'ctrl', 'NumberGridMenu.brctr.json5'),
         os.path.join('button', 'ctrl', 'NumberMenuArrowLeft.brctr.json5'),
         os.path.join('button', 'ctrl', 'NumberMenuArrowRight.brctr.json5'),
+        os.path.join('button', 'ctrl', 'CategorySwapPage.brctr.json5'),
         #dont forget the animations and brlyt in other szs files
 
     ],
@@ -821,6 +824,7 @@ asset_in_files = {
         os.path.join('button', 'ctrl', 'NumberGridMenu.brctr.json5'),
         os.path.join('button', 'ctrl', 'NumberMenuArrowLeft.brctr.json5'),
         os.path.join('button', 'ctrl', 'NumberMenuArrowRight.brctr.json5'),
+        os.path.join('button', 'ctrl', 'CategorySwapPage.brctr.json5'),
         # Teams
         os.path.join('button', 'ctrl', 'TeamConfirmOK.brctr.json5'),
         os.path.join('control', 'anim', 'common_w204_team_position.brlan.json5'),
@@ -1005,10 +1009,12 @@ asset_in_files = {
         os.path.join('button', 'anim', 'common_w008_back_text_light_02_select.brlan.json5'),
         os.path.join('button', 'anim', 'common_w008_back_text_light_02_stop.brlan.json5'),
         os.path.join('button', 'timg', 'tt_glass_waku_180.tpl'),
+        #end
         os.path.join('button', 'blyt', 'NumberGridMenu.brlyt.json5'),
         os.path.join('button', 'ctrl', 'NumberGridMenu.brctr.json5'),
         os.path.join('button', 'ctrl', 'NumberMenuArrowLeft.brctr.json5'),
         os.path.join('button', 'ctrl', 'NumberMenuArrowRight.brctr.json5'),
+        os.path.join('button', 'ctrl', 'CategorySwapPage.brctr.json5'),
         # HUD
         os.path.join('game_image', 'anim', 'battle_total_point_off.brlan.json5'),
         os.path.join('game_image', 'anim', 'battle_total_point_on.brlan.json5'),
