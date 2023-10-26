@@ -27,6 +27,7 @@
 #include "game/ui/ServicePackChannelPage.hh"
 #include "game/ui/ServicePackToolsPage.hh"
 #include "game/ui/ServicePackTopPage.hh"
+#include "game/ui/SettingsNumberOptions.hh"
 #include "game/ui/SettingsOptionsPage.hh"
 #include "game/ui/SettingsPage.hh"
 #include "game/ui/SingleTopPage.hh"
@@ -399,10 +400,13 @@ void Section::addPages(SectionId id) {
             // but was this the right way to go about it?
             {SectionId::GP, PageId::MenuSettings},
             {SectionId::GP, PageId::SettingsOptions},
+            //{SectionId::GP, PageId::SettingsNumberOptions},
             {SectionId::TA, PageId::MenuSettings},
             {SectionId::TA, PageId::SettingsOptions},
+            //{SectionId::TA, PageId::SettingsNumberOptions},
             {SectionId::VS1P, PageId::MenuSettings},
             {SectionId::VS1P, PageId::SettingsOptions},
+            //{SectionId::VS1P, PageId::SettingsNumberOptions},
             {SectionId::VS2P, PageId::MenuSettings},
             {SectionId::VS2P, PageId::SettingsOptions},
             {SectionId::VS3P, PageId::MenuSettings},
@@ -411,6 +415,7 @@ void Section::addPages(SectionId id) {
             {SectionId::VS4P, PageId::SettingsOptions},
             {SectionId::TeamVS1P, PageId::MenuSettings},
             {SectionId::TeamVS1P, PageId::SettingsOptions},
+            //{SectionId::TeamVS1P, PageId::SettingsNumberOptions},
             {SectionId::TeamVS2P, PageId::MenuSettings},
             {SectionId::TeamVS2P, PageId::SettingsOptions},
             {SectionId::TeamVS3P, PageId::MenuSettings},
@@ -419,6 +424,7 @@ void Section::addPages(SectionId id) {
             {SectionId::TeamVS4P, PageId::SettingsOptions},
             {SectionId::Battle1P, PageId::MenuSettings},
             {SectionId::Battle1P, PageId::SettingsOptions},
+            //{SectionId::Battle1P, PageId::SettingsNumberOptions},
             {SectionId::Battle2P, PageId::MenuSettings},
             {SectionId::Battle2P, PageId::SettingsOptions},
             {SectionId::Battle3P, PageId::MenuSettings},
@@ -427,14 +433,18 @@ void Section::addPages(SectionId id) {
             {SectionId::Battle4P, PageId::SettingsOptions},
             {SectionId::MR, PageId::MenuSettings},
             {SectionId::MR, PageId::SettingsOptions},
+            //{SectionId::MR, PageId::SettingsNumberOptions},
             {SectionId::TournamentReplay, PageId::MenuSettings},
             {SectionId::TournamentReplay, PageId::SettingsOptions},
             {SectionId::GPReplay, PageId::MenuSettings},
             {SectionId::GPReplay, PageId::SettingsOptions},
+            //{SectionId::GPReplay, PageId::SettingsNumberOptions},
             {SectionId::TAReplay, PageId::MenuSettings},
             {SectionId::TAReplay, PageId::SettingsOptions},
+            //{SectionId::TAReplay, PageId::SettingsNumberOptions},
             {SectionId::GhostTA, PageId::MenuSettings},
             {SectionId::GhostTA, PageId::SettingsOptions},
+            //{SectionId::GhostTA, PageId::SettingsNumberOptions},
             {SectionId::GhostTAOnline, PageId::MenuSettings},
             {SectionId::GhostTAOnline, PageId::SettingsOptions},
             {SectionId::GhostReplayChannel, PageId::MenuSettings},
@@ -443,6 +453,7 @@ void Section::addPages(SectionId id) {
             {SectionId::GhostReplayDownload, PageId::SettingsOptions},
             {SectionId::GhostReplay, PageId::MenuSettings},
             {SectionId::GhostReplay, PageId::SettingsOptions},
+            //{SectionId::GhostReplay, PageId::SettingsNumberOptions},
 
             // Mission Mode
             {SectionId::MR, PageId::CompetitionPersonalLeaderboard},
@@ -494,15 +505,19 @@ void Section::addPages(SectionId id) {
 
             {SectionId::Single, PageId::MenuSettings},
             {SectionId::Single, PageId::SettingsOptions},
+            //{SectionId::Single, PageId::SettingsNumberOptions},
             {SectionId::Single, PageId::PackSelect},
             {SectionId::SingleChangeDriver, PageId::MenuSettings},
             {SectionId::SingleChangeDriver, PageId::SettingsOptions},
+            //{SectionId::SingleChangeDriver, PageId::SettingsNumberOptions},
             {SectionId::SingleChangeDriver, PageId::PackSelect},
             {SectionId::SingleChangeCourse, PageId::MenuSettings},
             {SectionId::SingleChangeCourse, PageId::SettingsOptions},
+            //{SectionId::SingleChangeCourse, PageId::SettingsNumberOptions},
             {SectionId::SingleChangeCourse, PageId::PackSelect},
             {SectionId::SingleChangeGhostData, PageId::MenuSettings},
             {SectionId::SingleChangeGhostData, PageId::SettingsOptions},
+            //{SectionId::SingleChangeGhostData, PageId::SettingsNumberOptions},
             {SectionId::SingleChangeGhostData, PageId::PackSelect},
             {SectionId::Multi, PageId::MenuSettings},
             {SectionId::Multi, PageId::SettingsOptions},
@@ -551,6 +566,7 @@ void Section::addPages(SectionId id) {
             // clang-format on
             // Settings Popup
             {SectionId::LicenseSettings, PageId::SettingsOptions},
+            {SectionId::LicenseSettings, PageId::SettingsNumberOptions},
     };
     for (const auto &addition : additions) {
         if (addition.first == id) {
@@ -667,6 +683,8 @@ Page *Section::CreatePage(PageId pageId) {
         return new CourseDebugPage;
     case PageId::SettingsOptions:
         return new SettingsOptionsPage;
+    case PageId::SettingsNumberOptions:
+        return new SettingsNumberOptionsPage;
     case PageId::WU8Library:
         return new WU8LibraryPage;
     case PageId::ServicePackChannel:

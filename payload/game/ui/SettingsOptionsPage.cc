@@ -13,7 +13,8 @@ SettingsOptionsPage::SettingsOptionsPage() = default;
 SettingsOptionsPage::~SettingsOptionsPage() = default;
 
 void SettingsOptionsPage::onInit() {
-    SP_LOG("sizeofSettingsOptionsPage: %d", sizeof(SettingsOptionsPage));
+    SP_LOG("SettingsOptionsPage::onInit() called\nsizeofSettingsOptionsPage: %d",
+            sizeof(SettingsOptionsPage));
     m_inputManager.init(0x1, false);
     setInputManager(&m_inputManager);
 
@@ -81,16 +82,16 @@ void SettingsOptionsPage::onBackButtonFront(PushButton *button, u32 /* localPlay
 }
 
 void SettingsOptionsPage::onOptionButtonFront(PushButton *button, u32 /* localPlayerId */) {
-    SP_LOG("onOptionsButtonFront() called");
-    SP_LOG("button->m_index: %d", button->m_index);
+    // SP_LOG("onOptionsButtonFront() called");
+    // SP_LOG("button->m_index: %d", button->m_index);
     auto *settingsPage = SectionManager::Instance()->currentSection()->page<PageId::MenuSettings>();
     auto categoryInfo = settingsPage->getCategoryInfo();
     u32 localSettingIndex = settingsPage->getSelectedSetting();
-    SP_LOG("categoryInfo.settingIndex: %d\nlocalSettingIndex: %d", categoryInfo.settingIndex,
-            localSettingIndex);
+    // SP_LOG("categoryInfo.settingIndex: %d\nlocalSettingIndex: %d", categoryInfo.settingIndex,
+    //  localSettingIndex);
     auto *saveManager = System::SaveManager::Instance();
     u32 settingIndex = categoryInfo.settingIndex + localSettingIndex;
-    SP_LOG("settingIndex: %d\nbutton->m_index: %d", settingIndex, button->m_index);
+    // SP_LOG("settingIndex: %d\nbutton->m_index: %d", settingIndex, button->m_index);
 
     saveManager->setSetting(settingIndex, button->m_index);
 
