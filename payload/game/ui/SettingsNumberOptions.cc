@@ -13,12 +13,10 @@ SettingsNumberOptionsPage::SettingsNumberOptionsPage() = default;
 SettingsNumberOptionsPage::~SettingsNumberOptionsPage() = default;
 
 void SettingsNumberOptionsPage::onInit() {
-    SP_LOG("SettingsNumberOptionsPage::onInit() called\nsizeof(SettingsNumberOptionsPage): %d",
-            sizeof(SettingsNumberOptionsPage));
     m_inputManager.init(0x1, false);
     setInputManager(&m_inputManager);
 
-    initChildren(32);
+    initChildren(34);
     for (u8 i = 0; i < 30; i++) {
         insertChild(i, &m_options[i], 0);
     }
@@ -40,7 +38,6 @@ void SettingsNumberOptionsPage::onInit() {
     }
 
     m_blackBackControl.load("control", "RankingBlackBack", "RankingBlackBack");
-    // TODO: What does this do??
     m_blackBackControl.m_zIndex = -150.0f;
     m_backButton.load("button", "Back", "BackButtonPopup", 0x1, false, true);
 
@@ -48,19 +45,28 @@ void SettingsNumberOptionsPage::onInit() {
     m_arrowRight.load("button", "NumberMenuArrowRight", "ButtonArrowRight", 0x1, false, true);
 
     m_inputManager.setHandler(MenuInputManager::InputId::Back, &m_onBack, false, false);
-    for (u32 i = 0; i < 30; i++) {
+    m_backButton.setFrontHandler(&m_onBackButtonFront, false);
+    for (u8 i = 0; i < 30; i++) {
         m_options[i].setFrontHandler(&m_onOptionButtonFront, false);
-        m_options->setVisible(true);
         m_options[i].m_index = i;
     }
 }
 
-void SettingsNumberOptionsPage::onActivate() {}
+void SettingsNumberOptionsPage::onActivate() {
+    m_options[0].selectDefault(0);
+    for (u8 i = 0; i < 30; i++) {
+        m_options[i].setMessageAll(6602);
+    }
+}
 
-void SettingsNumberOptionsPage::onBack(u32 /* localPlayerId */) {}
+void SettingsNumberOptionsPage::onBack(u32 /* localPlayerId */) {
+    startReplace(Anim::Prev, 0.0f);
+}
 
-void SettingsNumberOptionsPage::onBackButtonFront(PushButton * /* button */,
-        u32 /* localPlayerId */) {}
+void SettingsNumberOptionsPage::onBackButtonFront(PushButton *button, u32 /* localPlayerId */) {
+    f32 delay = button->getDelay();
+    startReplace(Anim::Prev, delay);
+}
 
 void SettingsNumberOptionsPage::onOptionButtonFront(PushButton * /* button */,
         u32 /* localPlayerId */) {}
