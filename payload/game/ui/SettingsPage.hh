@@ -92,6 +92,7 @@ private:
     PushButton m_arrowUp;
     PushButton m_arrowDown;
     PushButton m_categorySwap;
+    LayoutUIControl m_categorySwapPlusIcon;
 
     CategoryInfo m_categoryInfo;
 

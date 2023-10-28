@@ -491,6 +491,8 @@ asset_in_files = {
         os.path.join('button', 'ctrl', 'NumberMenuArrowRight.brctr.json5'),
         os.path.join('button', 'ctrl', 'CategorySwapPage.brctr.json5'),
         #dont forget the animations and brlyt in other szs files
+        os.path.join('control', 'ctrl', 'ClassChange.brctr.json5'),
+        os.path.join('control', 'blyt', 'common_w105_close_text.brlyt.json5'),
 
     ],
     os.path.join('Scene', 'UI', 'MenuSingleSP.arc.lzma'): [
@@ -601,6 +603,7 @@ asset_in_files = {
         os.path.join('button', 'ctrl', 'NumberMenuArrowLeft.brctr.json5'),
         os.path.join('button', 'ctrl', 'NumberMenuArrowRight.brctr.json5'),
         os.path.join('button', 'ctrl', 'CategorySwapPage.brctr.json5'),
+
         # Teams
         os.path.join('button', 'ctrl', 'TeamConfirmOK.brctr.json5'),
         os.path.join('control', 'anim', 'common_w204_team_position.brlan.json5'),
@@ -746,6 +749,8 @@ asset_in_files = {
         os.path.join('button', 'anim', 'common_w021_yajirushi_right_select.brlan.json5'),
         os.path.join('button', 'anim', 'common_w021_yajirushi_right_select_to_free.brlan.json5'),
         os.path.join('button', 'timg', 'tt_yajirushi_type1.tpl'),
+        os.path.join('control', 'ctrl', 'ClassChange.brctr.json5'),
+        os.path.join('control', 'blyt', 'common_w105_close_text.brlyt.json5'),
         #end
         os.path.join('button', 'blyt', 'NumberGridMenu.brlyt.json5'),
         os.path.join('button', 'ctrl', 'NumberGridMenu.brctr.json5'),
