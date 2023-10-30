@@ -2,6 +2,7 @@
 
 #include "game/ui/BlackBackControl.hh"
 #include "game/ui/Page.hh"
+#include "game/ui/SectionManager.hh"
 #include "game/ui/ctrl/CtrlMenuBackButton.hh"
 #include "game/ui/ctrl/CtrlMenuInstructionText.hh"
 #include "game/ui/ctrl/CtrlMenuPageTitleText.hh"
@@ -24,6 +25,7 @@ private:
     MultiControlInputManager m_inputManager;
 
     BlackBackControl m_blackBackControl;
+    LayoutUIControl m_instructionText;
 
     PushButton m_options[30];
     PushButton m_arrowLeft;

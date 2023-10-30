@@ -11,10 +11,12 @@ class ControlGroup {
 public:
     ~ControlGroup();
     void dt(s32 type);
+    void REPLACE init();
     void calc();
 
     void logDebug(int depth = 0);
-
+    void REPLACE insert(s32 index, UIControl *child, u32 drawPass);
+    void REPLACED(insert)(s32 index, UIControl *child, u32 drawPass);
     UIControl **m_data;
     UIControl **m_dataSorted; // By z_index
     UIControl *m_parent;

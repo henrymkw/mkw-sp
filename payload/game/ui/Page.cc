@@ -64,4 +64,9 @@ void Page::logControlsDebug() {
     m_controlGroup.logDebug(1);
 }
 
+void Page::insertChild(s32 index, UIControl *child, u32 drawPass) {
+    assert(index < m_controlGroup.m_size);
+    m_controlGroup.insert(index, child, drawPass);
+}
+
 } // namespace UI

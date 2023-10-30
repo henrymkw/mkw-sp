@@ -44,17 +44,19 @@ void SettingsPage::onInit() {
     insertChild(5, &m_categorySwap, 0);
     insertChild(6, &m_categorySwapPlusIcon, 0);
 
-
     if (blackBack()) {
+        SP_LOG("blackBack() == true");
         insertChild(7, blackBack(), 0);
+    } else {
+        SP_LOG("blackBack == false");
     }
     for (u32 i = 0; i < std::size(m_settingButtons); i++) {
         insertChild(7 + i + !!blackBack(), &m_settingButtons[i], 0);
     }
 
+    auto sectionId = SectionManager::Instance()->currentSection()->id();
     m_pageTitleText.load(false);
 
-    auto sectionId = SectionManager::Instance()->currentSection()->id();
     if (blackBack()) {
         instructionText()->load("bg", "ObiInstructionTextPopup", "ObiInstructionTextPopup",
                 nullptr);
@@ -69,6 +71,9 @@ void SettingsPage::onInit() {
     if (blackBack()) {
         blackBack()->load("message_window", "BlackBack", "BlackBack");
         blackBack()->m_zIndex = -1.0f;
+        SP_LOG("blackBack() == true");
+    } else {
+        SP_LOG("blackBack() == false");
     }
 
     m_categoryInfo = getCategoryInfo(1);

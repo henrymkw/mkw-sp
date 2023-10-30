@@ -3,6 +3,7 @@
 #include "game/system/SaveManager.hh"
 #include "game/ui/SectionManager.hh"
 #include "game/ui/SettingsPage.hh"
+#include "game/ui/ctrl/CtrlMenuInstructionText.hh"
 
 #include <cstdio>
 
@@ -15,14 +16,16 @@ SettingsOptionsPage::~SettingsOptionsPage() = default;
 void SettingsOptionsPage::onInit() {
     m_inputManager.init(0x1, false);
     setInputManager(&m_inputManager);
+    m_inputManager.setWrappingMode(MultiControlInputManager::WrappingMode::Y);
 
-    initChildren(7);
+    initChildren(8);
     for (u8 i = 0; i < 5; i++) {
         insertChild(i, &m_options[i], 0);
     }
 
     insertChild(5, &m_blackBackControl, 0);
     insertChild(6, &m_backButton, 0);
+    insertChild(7, &m_instructionText, 0);
 
     for (u8 i = 0; i < 5; i++) {
         char variant[10];
@@ -32,7 +35,19 @@ void SettingsOptionsPage::onInit() {
 
     m_blackBackControl.load("control", "RankingBlackBack", "RankingBlackBack");
     m_blackBackControl.m_zIndex = -150.0f;
-    m_backButton.load("button", "Back", "ButtonBackPopup", 0x1, false, true);
+
+    auto sectionId = SectionManager::Instance()->currentSection()->id();
+
+    if (Section::GetSceneId(sectionId) == System::SceneId::Race) {
+        m_backButton.load("message_window", "Back", "ButtonBack", 0x1, false, true);
+        // m_instructionText.load();
+        m_instructionText.load("bg", "RaceObiInstructionText", "RaceObiInstructionText", nullptr);
+    } else {
+        // m_instructionText.load();
+        m_instructionText.load("bg", "MenuObiInstructionText", "MenuObiInstructionText", nullptr);
+        // load("bg", "ObiInstructionTextPopup", "ObiInstructionTextPopup", nullptr);
+        m_backButton.load("button", "Back", "ButtonBackPopup", 0x1, false, true);
+    }
 
     m_options[0].selectDefault(0);
     m_inputManager.setHandler(MenuInputManager::InputId::Back, &m_onBack, false, false);

@@ -99,8 +99,8 @@ private:
     s32 m_buttonIndex;
     u32 m_selected;
     PushButton m_settingButtons[5];
-    SP::CircularBuffer<u32, 12> m_settingNameIds;
-    SP::CircularBuffer<s32, 12> m_settingOptionIds;
+    SP::CircularBuffer<u32, 20> m_settingNameIds;
+    SP::CircularBuffer<s32, 20> m_settingOptionIds;
 
     H<MultiControlInputManager> m_onBack{this, &SettingsPage::onBack};
     H<MultiControlInputManager> m_onUp{this, &SettingsPage::onUp};

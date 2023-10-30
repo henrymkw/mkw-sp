@@ -96,7 +96,7 @@ public:
 
 protected:
     void initChildren(u32 count);
-    void insertChild(u32 index, UIControl *child, u32 drawPass);
+    void insertChild(s32 index, UIControl *child, u32 drawPass);
     void startReplace(Anim anim, f32 delay);
     void calcAnim();
     void playSound(Sound::SoundId soundId, s32 r5);

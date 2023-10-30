@@ -6,8 +6,19 @@
 
 namespace UI {
 
+void ControlGroup::init() {
+    for (size_t i = 0; i < m_size; i++) {
+        assert(m_data[i]);
+        m_data[i]->init();
+    }
+}
+
 ControlGroup::~ControlGroup() {
     dt(-1);
+}
+
+void ControlGroup::insert(s32 index, UIControl *child, u32 drawPass) {
+    REPLACED(insert)(index, child, drawPass);
 }
 
 void ControlGroup::logDebug(int depth) {
