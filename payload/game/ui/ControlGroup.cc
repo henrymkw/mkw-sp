@@ -7,7 +7,7 @@
 namespace UI {
 
 void ControlGroup::init() {
-    for (size_t i = 0; i < m_size; i++) {
+    for (s32 i = 0; i < m_size; i++) {
         assert(m_data[i]);
         m_data[i]->init();
     }

@@ -18,17 +18,18 @@ void SettingsOptionsPage::onInit() {
     setInputManager(&m_inputManager);
     m_inputManager.setWrappingMode(MultiControlInputManager::WrappingMode::Y);
 
-    initChildren(8);
-    for (u8 i = 0; i < 5; i++) {
-        insertChild(i, &m_options[i], 0);
+    initChildren(3 + std::size(m_options));
+
+    insertChild(0, &m_blackBackControl, 0);
+    insertChild(1, &m_backButton, 0);
+    insertChild(2, &m_instructionText, 0);
+
+    for (u8 i = 0; i < std::size(m_options); i++) {
+        insertChild(i + 3, &m_options[i], 0);
     }
 
-    insertChild(5, &m_blackBackControl, 0);
-    insertChild(6, &m_backButton, 0);
-    insertChild(7, &m_instructionText, 0);
-
-    for (u8 i = 0; i < 5; i++) {
-        char variant[10];
+    for (u8 i = 0; i < std::size(m_options); i++) {
+        char variant[13];
         snprintf(variant, sizeof(variant), "Button4_%hhu", i);
         m_options[i].load("button", "SettingsOptionAndDescription", variant, 0x1, false, false);
     }
@@ -40,12 +41,9 @@ void SettingsOptionsPage::onInit() {
 
     if (Section::GetSceneId(sectionId) == System::SceneId::Race) {
         m_backButton.load("message_window", "Back", "ButtonBack", 0x1, false, true);
-        // m_instructionText.load();
         m_instructionText.load("bg", "RaceObiInstructionText", "RaceObiInstructionText", nullptr);
     } else {
-        // m_instructionText.load();
         m_instructionText.load("bg", "MenuObiInstructionText", "MenuObiInstructionText", nullptr);
-        // load("bg", "ObiInstructionTextPopup", "ObiInstructionTextPopup", nullptr);
         m_backButton.load("button", "Back", "ButtonBackPopup", 0x1, false, true);
     }
 
