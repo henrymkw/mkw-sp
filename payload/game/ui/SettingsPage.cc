@@ -18,23 +18,6 @@ void SettingsPage::onInit() {
     setInputManager(&m_inputManager);
     m_inputManager.setWrappingMode(MultiControlInputManager::WrappingMode::Y);
 
-    /*for (u32 i = 0; i < SP::ClientSettings::entryCount; i++) {
-        if (SP::ClientSettings::entries[i].category != category ||
-                SP::ClientSettings::entries[i].valueCount == 0 ||
-                SP::ClientSettings::entries[i].hidden) {
-            continue;
-        }
-        const SP::ClientSettings::Entry &entry = SP::ClientSettings::entries[i];
-        u32 chosen = System::SaveManager::Instance()->getSetting(i) - entry.valueOffset;
-
-        if (entry.valueNames) {
-            m_settingOptionIds.push_back(entry.valueExplanationMessageIds[chosen]);
-        } else {
-            m_settingOptionIds.push_back(10004);
-        }
-        m_settingNameIds.push_back(static_cast<const u32 &&>(entry.messageId));
-    }*/
-
     initChildren(7 + std::size(m_settingButtons) + !!blackBack());
     insertChild(0, &m_pageTitleText, 0);
     insertChild(1, instructionText(), 0);
@@ -45,11 +28,9 @@ void SettingsPage::onInit() {
     insertChild(6, &m_categorySwapPlusIcon, 0);
 
     if (blackBack()) {
-        SP_LOG("blackBack() == true");
         insertChild(7, blackBack(), 0);
-    } else {
-        SP_LOG("blackBack == false");
     }
+
     for (u32 i = 0; i < std::size(m_settingButtons); i++) {
         insertChild(7 + i + !!blackBack(), &m_settingButtons[i], 0);
     }
@@ -71,14 +52,9 @@ void SettingsPage::onInit() {
     if (blackBack()) {
         blackBack()->load("message_window", "BlackBack", "BlackBack");
         blackBack()->m_zIndex = -1.0f;
-        SP_LOG("blackBack() == true");
-    } else {
-        SP_LOG("blackBack() == false");
     }
 
     m_categoryInfo = getCategoryInfo(1);
-
-    // auto category = static_cast<SP::ClientSettings::Category>(m_categoryInfo.categoryIndex);
     setCategoryValues(1);
 
     for (u8 i = 0; i < std::size(m_settingButtons); i++) {
@@ -138,7 +114,6 @@ void SettingsPage::onInit() {
 void SettingsPage::onActivate() {
     instructionText()->setMessageAll(0);
     instructionText()->setVisible(true);
-    // SP_LOG("instructionTextChanged");
     auto *saveManager = System::SaveManager::Instance();
     u32 settingIndex = m_categoryInfo.settingIndex + m_selected;
     auto &e = SP::ClientSettings::entries[settingIndex];
@@ -234,15 +209,11 @@ void SettingsPage::onUp(u32 /* localPlayerId */) {
     } else {
         m_buttonIndex++;
     }
-    // SP_LOG("instructionTextChanged");
     u32 settingIndex = m_categoryInfo.settingIndex + m_selected;
     auto &e = SP::ClientSettings::entries[settingIndex];
     auto *saveManager = System::SaveManager::Instance();
     instructionText()->setMessageAll(
             e.valueExplanationMessageIds[saveManager->getSetting(settingIndex) - e.valueOffset]);
-
-    // SP_LOG("SettingsPage::onDown(): m_buttonIndex: %d\nm_selected: %d", m_buttonIndex,
-    // m_selected);
 }
 
 void SettingsPage::onDown(u32 /* localPlayerId */) {
@@ -272,8 +243,6 @@ void SettingsPage::onDown(u32 /* localPlayerId */) {
     auto *saveManager = System::SaveManager::Instance();
     instructionText()->setMessageAll(
             e.valueExplanationMessageIds[saveManager->getSetting(settingIndex) - e.valueOffset]);
-
-    // SP_LOG("SettingsPage::onUp(): m_buttonIndex: %d\nm_selected: %d", m_buttonIndex, m_selected);
 }
 
 void SettingsPage::onSettingsWheelButtonSelect(PushButton * /* button */, u32 /* localPlayerId */) {
@@ -282,44 +251,29 @@ void SettingsPage::onSettingsWheelButtonSelect(PushButton * /* button */, u32 /*
 void SettingsPage::onSettingsWheelButtonDeselect(PushButton * /* button */,
         u32 /* localPlayerId */) {}
 
-SettingsPage::CategoryInfo SettingsPage::getCategoryInfo(u32 sheetIndex) const {
-    u32 controlCount = std::size(m_settingButtons); // This will always be 5
-    // SP_LOG("controlCount: %d", controlCount);
+SettingsPage::CategoryInfo SettingsPage::getCategoryInfo(u32 categoryIndex) const {
+    assert(categoryIndex < magic_enum::enum_count<SP::ClientSettings::Category>());
+
     CategoryInfo info{};
-    u32 sheetCount = 0;
-    u32 categoryCount = magic_enum::enum_count<SP::ClientSettings::Category>();
-    // SP_LOG("categoryCount: %d", categoryCount);
-    for (; info.categoryIndex < categoryCount; info.categoryIndex++) {
-        // Looping through the categories, setting the index of the category
-        auto category = static_cast<SP::ClientSettings::Category>(info.categoryIndex);
-        u32 settingCount = 0;
-        // Loop through all the settings
-        for (u32 i = 0; i < magic_enum::enum_count<SP::ClientSettings::Setting>(); i++) {
-            if (SP::ClientSettings::entries[i].category != category) {
-                continue;
-            }
-            if (SP::ClientSettings::entries[i].hidden) {
-                continue;
-            }
-            if (SP::ClientSettings::entries[i].valueCount == 0) {
-                continue;
-            }
-            if (settingCount % controlCount == 0) {
-                // SP_LOG("settingCount: %d\ncontrolCount: %d", settingCount, controlCount);
-                if (sheetCount == sheetIndex) {
-                    info.categorySheetIndex = settingCount / std::size(m_settingButtons);
-                    info.settingIndex = i;
-                }
-                sheetCount++;
-            }
-            settingCount++;
+    info.categoryIndex = categoryIndex;
+    bool seenYet = false;
+    for (u32 i = 0; i < magic_enum::enum_count<SP::ClientSettings::Setting>(); i++) {
+        if (static_cast<u32>(SP::ClientSettings::entries[i].category) != categoryIndex) {
+            continue;
         }
-        if (sheetCount > sheetIndex) {
-            info.categorySheetCount = (settingCount + controlCount - 1) / controlCount;
-            return info;
+        if (SP::ClientSettings::entries[i].hidden) {
+            continue;
         }
+        if (SP::ClientSettings::entries[i].valueCount == 0) {
+            continue;
+        }
+        if (!seenYet) {
+            info.settingIndex = i;
+            seenYet = true;
+        }
+        info.settingCount++;
     }
-    assert(false);
+    return info;
 }
 
 void SettingsPage::setCategoryValues(u32 categoryIndex) {

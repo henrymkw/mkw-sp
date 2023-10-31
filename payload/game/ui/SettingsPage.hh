@@ -51,9 +51,8 @@ public:
 
     struct CategoryInfo {
         u32 categoryIndex;
-        u32 categorySheetIndex;
-        u32 categorySheetCount;
         u32 settingIndex;
+        u32 settingCount;
     };
 
     CategoryInfo getCategoryInfoGetter();

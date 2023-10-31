@@ -115,6 +115,7 @@ void SettingsNumberOptionsPage::onOptionButtonFront(PushButton *button, u32 /* l
         saveManager->setSetting(settingIndex, button->m_index);
     } else if (button->m_index == 30) {
         // Back button
+        // TODO: Do I need this?
     } else if (button->m_index == 31) {
         // Left arrow
         // TODO: Implement a sheet system, something like this
