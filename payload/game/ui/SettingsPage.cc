@@ -157,6 +157,8 @@ void SettingsPage::onSettingsWheelButtonFront(PushButton *button, u32 /* localPl
     } else if (button->m_index == m_arrowDown.m_index) {
         onDown(0);
     } else if (button->m_index == m_categorySwap.m_index) {
+        SP_LOG("pushing SettingsCategorySwapPage");
+        push(PageId::SettingsCategorySwap, Anim::Next);
     } else {
         const SP::ClientSettings::Entry &entry =
                 SP::ClientSettings::entries[m_categoryInfo.settingIndex + m_selected];

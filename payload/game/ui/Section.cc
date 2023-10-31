@@ -27,6 +27,7 @@
 #include "game/ui/ServicePackChannelPage.hh"
 #include "game/ui/ServicePackToolsPage.hh"
 #include "game/ui/ServicePackTopPage.hh"
+#include "game/ui/SettingsCategorySwapPage.hh"
 #include "game/ui/SettingsNumberOptionsPage.hh"
 #include "game/ui/SettingsOptionsPage.hh"
 #include "game/ui/SettingsPage.hh"
@@ -401,12 +402,15 @@ void Section::addPages(SectionId id) {
             {SectionId::GP, PageId::MenuSettings},
             {SectionId::GP, PageId::SettingsOptions},
             {SectionId::GP, PageId::SettingsNumberOptions},
+            {SectionId::GP, PageId::SettingsCategorySwap},
             {SectionId::TA, PageId::MenuSettings},
             {SectionId::TA, PageId::SettingsOptions},
             {SectionId::TA, PageId::SettingsNumberOptions},
+            {SectionId::TA, PageId::SettingsCategorySwap},
             {SectionId::VS1P, PageId::MenuSettings},
             {SectionId::VS1P, PageId::SettingsOptions},
             {SectionId::VS1P, PageId::SettingsNumberOptions},
+            {SectionId::VS1P, PageId::SettingsCategorySwap},
             {SectionId::VS2P, PageId::MenuSettings},
             {SectionId::VS2P, PageId::SettingsOptions},
             {SectionId::VS3P, PageId::MenuSettings},
@@ -567,6 +571,7 @@ void Section::addPages(SectionId id) {
             // Settings Popup
             {SectionId::LicenseSettings, PageId::SettingsOptions},
             {SectionId::LicenseSettings, PageId::SettingsNumberOptions},
+            {SectionId::LicenseSettings, PageId::SettingsCategorySwap},
     };
     for (const auto &addition : additions) {
         if (addition.first == id) {
@@ -685,6 +690,8 @@ Page *Section::CreatePage(PageId pageId) {
         return new SettingsOptionsPage;
     case PageId::SettingsNumberOptions:
         return new SettingsNumberOptionsPage;
+    case PageId::SettingsCategorySwap:
+        return new SettingsCategorySwapPage;
     case PageId::WU8Library:
         return new WU8LibraryPage;
     case PageId::ServicePackChannel:
