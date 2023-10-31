@@ -1,4 +1,4 @@
-#include "SettingsNumberOptions.hh"
+#include "SettingsNumberOptionsPage.hh"
 
 #include "game/system/SaveManager.hh"
 #include "game/ui/SectionManager.hh"
@@ -113,10 +113,10 @@ void SettingsNumberOptionsPage::onOptionButtonFront(PushButton *button, u32 /* l
         auto *saveManager = System::SaveManager::Instance();
         u32 settingIndex = categoryInfo.settingIndex + localSettingIndex;
         saveManager->setSetting(settingIndex, button->m_index);
-    } else if (button->m_index == 30) {
+    } else if (button->m_index == m_backButton.m_index) {
         // Back button
         // TODO: Do I need this?
-    } else if (button->m_index == 31) {
+    } else if (button->m_index == m_arrowLeft.m_index) {
         // Left arrow
         // TODO: Implement a sheet system, something like this
         // numSheets = entry.valueCount / 30 + (entry.valueCount % 30 != 0)
@@ -124,7 +124,7 @@ void SettingsNumberOptionsPage::onOptionButtonFront(PushButton *button, u32 /* l
         // MessageInfo info{}
         // info.intVals[0] = m_currSheet * 30 + entry.valueOffset
         // m_options[i].setMessageAll(entry.valueMessageIds[0], &info)
-    } else if (button->m_index == 32) {
+    } else if (button->m_index == m_arrowRight.m_index) {
         // Right arrow
         // TODO: Implement a sheet system, something like this
         // numSheets = entry.valueCount / 30 + (entry.valueCount % 30 != 0)

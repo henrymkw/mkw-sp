@@ -224,6 +224,7 @@ enum class PageId {
     SPRankingGhostDownload,
     SPRankingTopTenDownload,
     SettingsNumberOptions,
+    SettingsCategorySwap,
     // }
 
     Ext_MaxExclusive__,

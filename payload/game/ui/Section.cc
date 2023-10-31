@@ -27,7 +27,7 @@
 #include "game/ui/ServicePackChannelPage.hh"
 #include "game/ui/ServicePackToolsPage.hh"
 #include "game/ui/ServicePackTopPage.hh"
-#include "game/ui/SettingsNumberOptions.hh"
+#include "game/ui/SettingsNumberOptionsPage.hh"
 #include "game/ui/SettingsOptionsPage.hh"
 #include "game/ui/SettingsPage.hh"
 #include "game/ui/SingleTopPage.hh"

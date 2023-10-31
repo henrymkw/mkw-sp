@@ -157,23 +157,6 @@ void SettingsPage::onSettingsWheelButtonFront(PushButton *button, u32 /* localPl
     } else if (button->m_index == m_arrowDown.m_index) {
         onDown(0);
     } else if (button->m_index == m_categorySwap.m_index) {
-        /*SP_LOG("m_categorySwap called");
-
-        m_settingNameIds.reset();
-        m_settingOptionIds.reset();
-        m_categoryInfo.categoryIndex++;
-        if (m_categoryInfo.categoryIndex == 9) {
-            m_categoryInfo.categoryIndex = 0;
-        }
-        SP_LOG("m_categoryInfo.categoryIndex: %d", m_categoryInfo.categoryIndex);
-        m_categoryInfo = getCategoryInfo(m_categoryInfo.categoryIndex);
-        setCategoryValues(m_categoryInfo.categoryIndex);
-        SP_LOG("m_categoryInfo.categoryIndex: %d", m_categoryInfo.categoryIndex);
-        for (u32 i = 0; i < std::size(m_settingButtons); i++) {
-            m_settingButtons[i].setMessage("setting_name", *m_settingNameIds[i]);
-            m_settingButtons[i].setMessage("current_option", *m_settingOptionIds[i]);
-        }
-        */
     } else {
         const SP::ClientSettings::Entry &entry =
                 SP::ClientSettings::entries[m_categoryInfo.settingIndex + m_selected];
