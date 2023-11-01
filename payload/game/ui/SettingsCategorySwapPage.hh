@@ -1,11 +1,8 @@
 #pragma once
 
 #include "game/ui/BlackBackControl.hh"
-#include "game/ui/Page.hh"
 #include "game/ui/SectionManager.hh"
 #include "game/ui/ctrl/CtrlMenuBackButton.hh"
-#include "game/ui/ctrl/CtrlMenuInstructionText.hh"
-#include "game/ui/ctrl/CtrlMenuPageTitleText.hh"
 
 namespace UI {
 
@@ -28,6 +25,9 @@ private:
     LayoutUIControl m_instructionText;
 
     PushButton m_categories[10];
+
+    PushButton m_arrowLeft;
+    PushButton m_arrowRight;
 
     CtrlMenuBackButton m_backButton;
 

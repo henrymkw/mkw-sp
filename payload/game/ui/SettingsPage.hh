@@ -58,6 +58,11 @@ public:
     CategoryInfo getCategoryInfoGetter();
     u32 getSelectedSetting();
 
+    void setCategoryValues(u32 categoryIndex);
+    void getCategoryInfo2(u32 sheetIndex);
+    void clearMessageLists();
+    void setButtons();
+
 protected:
     virtual LayoutUIControl *instructionText() = 0;
     virtual BlackBackControl *blackBack() = 0;
@@ -73,9 +78,9 @@ private:
     void onSettingsWheelButtonSelect(PushButton *button, u32 localPlayerId);
     void onSettingsWheelButtonDeselect(PushButton *button, u32 localPlayerId);
 
-    CategoryInfo getCategoryInfo(u32 sheetIndex) const;
+    // CategoryInfo getCategoryInfo(u32 sheetIndex) const;
 
-    void setCategoryValues(u32 categoryIndex);
+    // void setCategoryValues(u32 categoryIndex);
 
     template <typename T>
     using H = typename T::template Handler<SettingsPage>;

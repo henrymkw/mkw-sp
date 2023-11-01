@@ -3,6 +3,7 @@
 #include "game/host_system/Scene.hh"
 #include "game/system/SaveManager.hh"
 #include "game/ui/SectionManager.hh"
+#include "game/ui/SettingsCategorySwapPage.hh"
 #include "game/ui/page/RaceMenuPage.hh"
 
 namespace UI {
@@ -12,7 +13,6 @@ SettingsPage::SettingsPage() = default;
 SettingsPage::~SettingsPage() = default;
 
 void SettingsPage::onInit() {
-    SP_LOG("onInit() called");
     SP_LOG("Sizeof SettingsPage: %d", sizeof(SettingsPage));
     m_inputManager.init(0x1, false);
     setInputManager(&m_inputManager);
@@ -54,7 +54,7 @@ void SettingsPage::onInit() {
         blackBack()->m_zIndex = -1.0f;
     }
 
-    m_categoryInfo = getCategoryInfo(1);
+    getCategoryInfo2(1);
     setCategoryValues(1);
 
     for (u8 i = 0; i < std::size(m_settingButtons); i++) {
@@ -82,6 +82,11 @@ void SettingsPage::onInit() {
     m_inputManager.setHandler(MenuInputManager::InputId::Back, &m_onBack, false, false);
     m_inputManager.setHandler(MenuInputManager::InputId::Down, &m_onUp, false, false);
     m_inputManager.setHandler(MenuInputManager::InputId::Up, &m_onDown, false, false);
+    m_arrowUp.setFrontHandler(&m_onSettingsWheelButtonFront, false);
+    m_arrowDown.setFrontHandler(&m_onSettingsWheelButtonFront, false);
+    m_categorySwap.setFrontHandler(&m_onSettingsWheelButtonFront, true);
+    m_categorySwap.setDeselectHandler(&m_onSettingsWheelButtonDeselect, true);
+    m_categorySwap.setSelectHandler(&m_onSettingsWheelButtonSelect, true);
 
     m_backButton.setFrontHandler(&m_onBackButtonFront, false);
 
@@ -94,9 +99,7 @@ void SettingsPage::onInit() {
         m_settingButtons[i].setMessage("current_option", *m_settingOptionIds[i]);
         m_settingButtons[i].m_index = i;
     }
-    m_arrowUp.setFrontHandler(&m_onSettingsWheelButtonFront, false);
-    m_arrowDown.setFrontHandler(&m_onSettingsWheelButtonFront, false);
-    m_categorySwap.setFrontHandler(&m_onSettingsWheelButtonFront, false);
+
     m_arrowUp.m_index = std::size(m_settingButtons);
     m_arrowDown.m_index = m_arrowUp.m_index + 1;
     m_categorySwap.m_index = m_arrowDown.m_index + 1;
@@ -151,13 +154,11 @@ void SettingsPage::onSettingsWheelButtonFront(PushButton *button, u32 /* localPl
     // m_arrowUp.setVisible(false);
     // m_arrowDown.setVisible(false);
 
-    // SP_LOG("ButtonFront() called");
     if (button->m_index == m_arrowUp.m_index) {
         onUp(0);
     } else if (button->m_index == m_arrowDown.m_index) {
         onDown(0);
     } else if (button->m_index == m_categorySwap.m_index) {
-        SP_LOG("pushing SettingsCategorySwapPage");
         push(PageId::SettingsCategorySwap, Anim::Next);
     } else {
         const SP::ClientSettings::Entry &entry =
@@ -236,7 +237,7 @@ void SettingsPage::onSettingsWheelButtonSelect(PushButton * /* button */, u32 /*
 void SettingsPage::onSettingsWheelButtonDeselect(PushButton * /* button */,
         u32 /* localPlayerId */) {}
 
-SettingsPage::CategoryInfo SettingsPage::getCategoryInfo(u32 categoryIndex) const {
+void SettingsPage::getCategoryInfo2(u32 categoryIndex) {
     assert(categoryIndex < magic_enum::enum_count<SP::ClientSettings::Category>());
 
     CategoryInfo info{};
@@ -258,7 +259,9 @@ SettingsPage::CategoryInfo SettingsPage::getCategoryInfo(u32 categoryIndex) cons
         }
         info.settingCount++;
     }
-    return info;
+    m_categoryInfo.categoryIndex = info.categoryIndex;
+    m_categoryInfo.settingCount = info.settingCount;
+    m_categoryInfo.settingIndex = info.settingIndex;
 }
 
 void SettingsPage::setCategoryValues(u32 categoryIndex) {
@@ -278,6 +281,19 @@ void SettingsPage::setCategoryValues(u32 categoryIndex) {
             m_settingOptionIds.push_back(10004);
         }
         m_settingNameIds.push_back(static_cast<const u32 &&>(entry.messageId));
+    }
+}
+
+void SettingsPage::clearMessageLists() {
+    m_settingNameIds.reset();
+    m_settingOptionIds.reset();
+    m_selected = 2;
+}
+
+void SettingsPage::setButtons() {
+    for (u32 i = 0; i < std::size(m_settingButtons); i++) {
+        m_settingButtons[i].setMessage("setting_name", *m_settingNameIds[i]);
+        m_settingButtons[i].setMessage("current_option", *m_settingOptionIds[i]);
     }
 }
 
