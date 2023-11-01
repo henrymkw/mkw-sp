@@ -32,8 +32,8 @@ void SettingsCategorySwapPage::onInit() {
     insertChild(13, &m_arrowRight, 0);
 
     u8 buttonId = 0;
-    for (u8 i = 0; i < 2; i++) {
-        for (u8 j = 0; j < 5; j++) {
+    for (u8 i = 0; i < 5; i++) {
+        for (u8 j = 0; j < 2; j++) {
             char variant[18];
             snprintf(variant, sizeof(variant), "CategoryButton%hhu_%hhu", i, j);
             m_categories[buttonId].load("button", "CategorySwapPage", variant, 0x1, false, false);
