@@ -18,14 +18,15 @@ void SettingsOptionsPage::onInit() {
     setInputManager(&m_inputManager);
     m_inputManager.setWrappingMode(MultiControlInputManager::WrappingMode::Y);
 
-    initChildren(3 + std::size(m_options));
+    initChildren(4 + std::size(m_options));
 
     insertChild(0, &m_blackBackControl, 0);
     insertChild(1, &m_backButton, 0);
     insertChild(2, &m_instructionText, 0);
+    insertChild(3, &m_settingTitleText, 0);
 
     for (u8 i = 0; i < std::size(m_options); i++) {
-        insertChild(i + 3, &m_options[i], 0);
+        insertChild(i + 4, &m_options[i], 0);
     }
 
     for (u8 i = 0; i < std::size(m_options); i++) {
@@ -46,6 +47,8 @@ void SettingsOptionsPage::onInit() {
         m_instructionText.load("bg", "MenuObiInstructionText", "MenuObiInstructionText", nullptr);
         m_backButton.load("button", "Back", "ButtonBackPopup", 0x1, false, true);
     }
+
+    m_settingTitleText.load("button", "SubMenuSettingTitle", "SettingTitleTop", nullptr);
 
     m_options[0].selectDefault(0);
     m_inputManager.setHandler(MenuInputManager::InputId::Back, &m_onBack, false, false);

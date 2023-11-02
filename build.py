@@ -505,6 +505,8 @@ asset_in_files = {
         #dont forget the animations and brlyt in other szs files
         os.path.join('control', 'ctrl', 'ClassChange.brctr.json5'),
         os.path.join('control', 'blyt', 'common_w105_close_text.brlyt.json5'),
+        os.path.join('button', 'blyt', 'SubMenuSettingTitle.brlyt.json5'),
+        os.path.join('button', 'ctrl', 'SubMenuSettingTitle.brctr.json5'),
         
 
     ],
