@@ -18,7 +18,7 @@ void SettingsPage::onInit() {
     setInputManager(&m_inputManager);
     m_inputManager.setWrappingMode(MultiControlInputManager::WrappingMode::Y);
 
-    initChildren(7 + std::size(m_settingButtons) + !!blackBack());
+    initChildren(8 + std::size(m_settingButtons) + !!blackBack());
     insertChild(0, &m_pageTitleText, 0);
     insertChild(1, instructionText(), 0);
     insertChild(2, &m_backButton, 0);
@@ -26,13 +26,14 @@ void SettingsPage::onInit() {
     insertChild(4, &m_arrowDown, 0);
     insertChild(5, &m_categorySwap, 0);
     insertChild(6, &m_categorySwapPlusIcon, 0);
+    insertChild(7, &m_menuObiTopNoCurve, 0);
 
     if (blackBack()) {
-        insertChild(7, blackBack(), 0);
+        insertChild(8, blackBack(), 0);
     }
 
     for (u32 i = 0; i < std::size(m_settingButtons); i++) {
-        insertChild(7 + i + !!blackBack(), &m_settingButtons[i], 0);
+        insertChild(8 + i + !!blackBack(), &m_settingButtons[i], 0);
     }
 
     auto sectionId = SectionManager::Instance()->currentSection()->id();
@@ -71,6 +72,7 @@ void SettingsPage::onInit() {
     m_arrowDown.load("button", "ArrowUpDown", "ArrowDown", 0x1, false, true);
     m_categorySwap.load("button", "CategorySwapButton", "CategorySwapButton", 0x1, false, true);
     m_categorySwapPlusIcon.load("control", "ClassChange", "ClassChange", nullptr);
+    m_menuObiTopNoCurve.load("bg", "MenuObiTopNoCurve", "MenuObiTopNoCurve", nullptr);
 
     // u32 flags = RegisteredPadManager_getFlags(&s_sectionManager->registeredPadManager, 0);
     // u32 padType = REGISTERED_PAD_FLAGS_GET_TYPE(flags);

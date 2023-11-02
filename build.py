@@ -507,6 +507,8 @@ asset_in_files = {
         os.path.join('control', 'blyt', 'common_w105_close_text.brlyt.json5'),
         os.path.join('button', 'blyt', 'SubMenuSettingTitle.brlyt.json5'),
         os.path.join('button', 'ctrl', 'SubMenuSettingTitle.brctr.json5'),
+        os.path.join('bg', 'blyt', 'obi_top_nocurve.brlyt.json5'),
+        os.path.join('bg', 'ctrl', 'MenuObiTopNoCurve.brctr.json5'),
         
 
     ],
