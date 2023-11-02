@@ -125,6 +125,10 @@ void SettingsPage::onActivate() {
     instructionText()->setMessageAll(
             e.valueExplanationMessageIds[saveManager->getSetting(settingIndex) - e.valueOffset]);
 
+    u32 categoryId =
+            SP::ClientSettings::categoryMessageIds[static_cast<u32>(m_categoryInfo.categoryIndex)];
+    m_categorySwap.setMessageAll(categoryId);
+
     m_settingButtons[2].selectDefault(0);
 }
 
