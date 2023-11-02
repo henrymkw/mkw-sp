@@ -293,6 +293,9 @@ void SettingsPage::clearMessageLists() {
 }
 
 void SettingsPage::setButtons() {
+    u32 categoryId =
+            SP::ClientSettings::categoryMessageIds[static_cast<u32>(m_categoryInfo.categoryIndex)];
+    m_categorySwap.setMessageAll(categoryId);
     for (u32 i = 0; i < std::size(m_settingButtons); i++) {
         m_settingButtons[i].setMessage("setting_name", *m_settingNameIds[i]);
         m_settingButtons[i].setMessage("current_option", *m_settingOptionIds[i]);

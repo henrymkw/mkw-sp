@@ -21,7 +21,7 @@ void SettingsCategorySwapPage::onInit() {
     setInputManager(&m_inputManager);
     m_inputManager.setWrappingMode(MultiControlInputManager::WrappingMode::Y);
 
-    initChildren(14);
+    initChildren(15);
     for (u8 i = 0; i < 10; i++) {
         insertChild(i, &m_categories[i], 0);
     }
@@ -30,6 +30,7 @@ void SettingsCategorySwapPage::onInit() {
     insertChild(11, &m_blackBackControl, 0);
     insertChild(12, &m_arrowLeft, 0);
     insertChild(13, &m_arrowRight, 0);
+    insertChild(14, &m_instructionText, 0);
 
     u8 buttonId = 0;
     for (u8 i = 0; i < 5; i++) {
@@ -47,7 +48,7 @@ void SettingsCategorySwapPage::onInit() {
 
     m_arrowLeft.load("button", "NumberMenuArrowLeft", "ButtonArrowLeft", 0x1, false, true);
     m_arrowRight.load("button", "NumberMenuArrowRight", "ButtonArrowRight", 0x1, false, true);
-
+    m_instructionText.load("bg", "MenuObiInstructionText", "MenuObiInstructionText", nullptr);
     m_inputManager.setHandler(MenuInputManager::InputId::Back, &m_onBack, false, false);
 
     for (u8 i = 0; i < 10; i++) {
@@ -67,8 +68,15 @@ void SettingsCategorySwapPage::onInit() {
 }
 
 void SettingsCategorySwapPage::onActivate() {
-    for (u8 i = 0; i < 10; i++) {
-        // TODO: Fix the hardcode
+    // TODO: Fix this hardcode of 9 categories, make a const cast of the category array or something
+    // to fix
+    if (9 < std::size(m_categories)) {
+        m_arrowLeft.setVisible(false);
+        m_arrowRight.setVisible(false);
+    }
+
+    for (u8 i = 0; i < std::size(m_categories); i++) {
+        // TODO: Fix hardcode
         if (i >= 9) {
             m_categories[i].setVisible(false);
             m_categories[i].setMessageAll(6602);
@@ -89,11 +97,19 @@ void SettingsCategorySwapPage::onBackButtonFront(PushButton *button, u32 /*local
 }
 
 void SettingsCategorySwapPage::onButtonFront(PushButton *button, u32 /*localPlayerId*/) {
+    if (button->m_index == m_arrowLeft.m_index) {
+        // TODO: Implement sheet system
+        return;
+    } else if (button->m_index == m_arrowRight.m_index) {
+        // TODO: Implement a sheet system
+        return;
+    }
     auto *settingsPage = SectionManager::Instance()->currentSection()->page<PageId::MenuSettings>();
     settingsPage->clearMessageLists();
     settingsPage->getCategoryInfo2(button->m_index);
     settingsPage->setCategoryValues(button->m_index);
     settingsPage->setButtons();
+    onBack(0);
 }
 
 } // namespace UI

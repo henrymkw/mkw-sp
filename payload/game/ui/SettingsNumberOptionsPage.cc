@@ -18,7 +18,7 @@ void SettingsNumberOptionsPage::onInit() {
     setInputManager(&m_inputManager);
     m_inputManager.setWrappingMode(MultiControlInputManager::WrappingMode::Y);
 
-    initChildren(35);
+    initChildren(36);
     for (u8 i = 0; i < 30; i++) {
         insertChild(i, &m_options[i], 0);
     }
@@ -28,7 +28,7 @@ void SettingsNumberOptionsPage::onInit() {
     insertChild(32, &m_arrowRight, 0);
     insertChild(33, &m_blackBackControl, 0);
     insertChild(34, &m_instructionText, 0);
-
+    insertChild(35, &m_settingTitleText, 0);
     u8 buttonId = 0;
     for (u8 i = 0; i < 6; i++) {
         for (u8 j = 0; j < 5; j++) {
@@ -53,6 +53,8 @@ void SettingsNumberOptionsPage::onInit() {
     m_arrowLeft.load("button", "NumberMenuArrowLeft", "ButtonArrowLeft", 0x1, false, true);
     m_arrowRight.load("button", "NumberMenuArrowRight", "ButtonArrowRight", 0x1, false, true);
 
+    m_settingTitleText.load("button", "SubMenuSettingTitle", "SettingTitleTop", nullptr);
+
     m_inputManager.setHandler(MenuInputManager::InputId::Back, &m_onBack, false, false);
 
     for (u8 i = 0; i < 30; i++) {
@@ -76,6 +78,8 @@ void SettingsNumberOptionsPage::onActivate() {
     u32 settingIndexLocal = settingsPage->getSelectedSetting();
     u32 settingIndex = categoryInfo.settingIndex + settingIndexLocal;
     const SP::ClientSettings::Entry &entry = SP::ClientSettings::entries[settingIndex];
+    m_settingTitleText.setMessageAll(entry.messageId);
+    m_instructionText.setVisible(true);
     if (entry.valueCount <= 30) {
         m_arrowLeft.setVisible(false);
         m_arrowRight.setVisible(false);

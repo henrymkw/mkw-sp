@@ -26,6 +26,7 @@ private:
 
     BlackBackControl m_blackBackControl;
     LayoutUIControl m_instructionText;
+    LayoutUIControl m_settingTitleText;
 
     PushButton m_options[30];
     PushButton m_arrowLeft;
