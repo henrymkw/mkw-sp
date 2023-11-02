@@ -2618,9 +2618,6 @@
                     "name": "select_free_g",
                     "panes": [
                         {
-                            "name": "pause_w_fade_n",
-                        },
-                        {
                             "name": "color_down",
                         },
                         {
