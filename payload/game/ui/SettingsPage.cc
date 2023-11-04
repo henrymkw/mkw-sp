@@ -125,6 +125,10 @@ void SettingsPage::onActivate() {
     instructionText()->setMessageAll(
             e.valueExplanationMessageIds[saveManager->getSetting(settingIndex) - e.valueOffset]);
 
+    u32 categoryId =
+            SP::ClientSettings::categoryMessageIds[static_cast<u32>(m_categoryInfo.categoryIndex)];
+    m_categorySwap.setMessageAll(categoryId);
+
     m_settingButtons[2].selectDefault(0);
 }
 
@@ -280,7 +284,10 @@ void SettingsPage::setCategoryValues(u32 categoryIndex) {
             // instructionText()->setMessageAll(0);
             m_settingOptionIds.push_back(entry.valueMessageIds[chosen]);
         } else {
-            m_settingOptionIds.push_back(10004);
+            // MessageInfo info{};
+            // info.intVals[0] = i + entry.valueOffset;
+            // m_options[i].setMessageAll(entry.valueMessageIds[0], &info);
+            m_settingOptionIds.push_back(entry.valueMessageIds[0]);
         }
         m_settingNameIds.push_back(static_cast<const u32 &&>(entry.messageId));
     }
@@ -297,6 +304,8 @@ void SettingsPage::setButtons() {
             SP::ClientSettings::categoryMessageIds[static_cast<u32>(m_categoryInfo.categoryIndex)];
     m_categorySwap.setMessageAll(categoryId);
     for (u32 i = 0; i < std::size(m_settingButtons); i++) {
+        // TODO: Shot myself in the foot for this one. Need to get the buttons entry for
+        // !entry.valueNames
         m_settingButtons[i].setMessage("setting_name", *m_settingNameIds[i]);
         m_settingButtons[i].setMessage("current_option", *m_settingOptionIds[i]);
     }

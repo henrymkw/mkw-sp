@@ -55,6 +55,11 @@ public:
         u32 settingCount;
     };
 
+    struct optionId {
+        s32 messageId;
+        u32 valueChosen; // Literally for number type settings
+    };
+
     CategoryInfo getCategoryInfoGetter();
     u32 getSelectedSetting();
 
