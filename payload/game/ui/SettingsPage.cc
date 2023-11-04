@@ -161,9 +161,9 @@ void SettingsPage::onSettingsWheelButtonFront(PushButton *button, u32 /* localPl
     // m_arrowDown.setVisible(false);
 
     if (button->m_index == m_arrowUp.m_index) {
-        onUp(0);
-    } else if (button->m_index == m_arrowDown.m_index) {
         onDown(0);
+    } else if (button->m_index == m_arrowDown.m_index) {
+        onUp(0);
     } else if (button->m_index == m_categorySwap.m_index) {
         push(PageId::SettingsCategorySwap, Anim::Next);
     } else {
