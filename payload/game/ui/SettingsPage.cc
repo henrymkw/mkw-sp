@@ -299,11 +299,13 @@ void SettingsPage::clearMessageLists() {
     m_selected = 2;
 }
 
-void SettingsPage::setMiddleButton(s32 messageId) {
-    // TODO: Needs testing
+void SettingsPage::setMiddleButton(u32 settingIndex) {
+    const SP::ClientSettings::Entry &entry = SP::ClientSettings::entries[settingIndex];
+    u32 chosen = System::SaveManager::Instance()->getSetting(settingIndex) - entry.valueOffset;
+    u32 messageId = entry.valueMessageIds[chosen];
     *m_settingOptionIds[2] = messageId;
     m_settingButtons[2].setMessage("current_option", messageId);
-    // TODO: Need to set the explanation
+    instructionText()->setMessageAll(entry.valueExplanationMessageIds[chosen]);
 }
 
 void SettingsPage::setButtons() {
