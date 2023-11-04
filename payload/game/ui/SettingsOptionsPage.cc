@@ -96,7 +96,9 @@ void SettingsOptionsPage::onOptionButtonFront(PushButton *button, u32 /* localPl
     u32 localSettingIndex = settingsPage->getSelectedSetting();
     auto *saveManager = System::SaveManager::Instance();
     u32 settingIndex = categoryInfo.settingIndex + localSettingIndex;
+
     saveManager->setSetting(settingIndex, button->m_index);
+    settingsPage->setMiddleButton(settingIndex);
 }
 
 } // namespace UI

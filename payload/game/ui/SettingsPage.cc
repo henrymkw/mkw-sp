@@ -161,9 +161,9 @@ void SettingsPage::onSettingsWheelButtonFront(PushButton *button, u32 /* localPl
     // m_arrowDown.setVisible(false);
 
     if (button->m_index == m_arrowUp.m_index) {
-        onUp(0);
-    } else if (button->m_index == m_arrowDown.m_index) {
         onDown(0);
+    } else if (button->m_index == m_arrowDown.m_index) {
+        onUp(0);
     } else if (button->m_index == m_categorySwap.m_index) {
         push(PageId::SettingsCategorySwap, Anim::Next);
     } else {
@@ -297,6 +297,15 @@ void SettingsPage::clearMessageLists() {
     m_settingNameIds.reset();
     m_settingOptionIds.reset();
     m_selected = 2;
+}
+
+void SettingsPage::setMiddleButton(u32 settingIndex) {
+    const SP::ClientSettings::Entry &entry = SP::ClientSettings::entries[settingIndex];
+    u32 chosen = System::SaveManager::Instance()->getSetting(settingIndex) - entry.valueOffset;
+    u32 messageId = entry.valueMessageIds[chosen];
+    *m_settingOptionIds[2] = messageId;
+    m_settingButtons[2].setMessage("current_option", messageId);
+    instructionText()->setMessageAll(entry.valueExplanationMessageIds[chosen]);
 }
 
 void SettingsPage::setButtons() {

@@ -67,6 +67,7 @@ public:
     void getCategoryInfo2(u32 sheetIndex);
     void clearMessageLists();
     void setButtons();
+    void setMiddleButton(u32 settingIndex);
 
 protected:
     virtual LayoutUIControl *instructionText() = 0;
