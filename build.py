@@ -815,6 +815,8 @@ asset_in_files = {
         # os.path.join('bg', 'blyt', 'obi_top_nocurve.brlyt.json5'),
         # os.path.join('bg', 'ctrl', 'MenuObiTopNoCurve.brctr.json5'), Not needed here
         os.path.join('button', 'anim', 'common_w097_license_screen_menu_select_noloop.brlan.json5'),
+        #test
+        os.path.join('bg', 'blyt', 'MenuObiInstructionText.brctr.json5'),
         # HUD
         os.path.join('game_image', 'anim', 'battle_total_point_off.brlan.json5'),
         os.path.join('game_image', 'anim', 'battle_total_point_on.brlan.json5'),
