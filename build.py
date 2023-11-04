@@ -289,6 +289,7 @@ asset_in_files = {
         os.path.join('bg', 'blyt', 'obi_top_nocurve.brlyt.json5'),
         os.path.join('bg', 'ctrl', 'MenuObiTopNoCurve.brctr.json5'),
         os.path.join('button', 'anim', 'common_w097_license_screen_menu_select_noloop.brlan.json5'),
+        os.path.join('bg', 'ctrl', 'RaceObiInstructionText.brctr.json5'),
         # Teams
         os.path.join('button', 'anim', 'online_team_select_light_01_ok.brlan.json5'),
         os.path.join('button', 'anim', 'online_team_select_light_01_stop.brlan.json5'),
@@ -434,6 +435,7 @@ asset_in_files = {
         os.path.join('bg', 'blyt', 'obi_top_nocurve.brlyt.json5'),
         os.path.join('bg', 'ctrl', 'MenuObiTopNoCurve.brctr.json5'),
         os.path.join('button', 'anim', 'common_w097_license_screen_menu_select_noloop.brlan.json5'),
+        os.path.join('bg', 'ctrl', 'RaceObiInstructionText.brctr.json5'),
         # Teams
         os.path.join('button', 'ctrl', 'TeamConfirmOK.brctr.json5'),
         os.path.join('control', 'anim', 'common_w204_team_position.brlan.json5'),
@@ -524,6 +526,7 @@ asset_in_files = {
         os.path.join('bg', 'blyt', 'obi_top_nocurve.brlyt.json5'),
         os.path.join('bg', 'ctrl', 'MenuObiTopNoCurve.brctr.json5'),
         os.path.join('button', 'anim', 'common_w097_license_screen_menu_select_noloop.brlan.json5'),
+        os.path.join('bg', 'ctrl', 'RaceObiInstructionText.brctr.json5'),
         
 
     ],
@@ -646,6 +649,7 @@ asset_in_files = {
         os.path.join('bg', 'blyt', 'obi_top_nocurve.brlyt.json5'),
         os.path.join('bg', 'ctrl', 'MenuObiTopNoCurve.brctr.json5'),
         os.path.join('button', 'anim', 'common_w097_license_screen_menu_select_noloop.brlan.json5'),
+        os.path.join('bg', 'ctrl', 'RaceObiInstructionText.brctr.json5'),
 
         # Teams
         os.path.join('button', 'ctrl', 'TeamConfirmOK.brctr.json5'),
