@@ -72,14 +72,18 @@ void SettingsNumberOptionsPage::onInit() {
 
 void SettingsNumberOptionsPage::onActivate() {
     // TODO: Select the current option
-    m_options[0].selectDefault(0);
+    // m_options[0].selectDefault(0);
     auto *settingsPage = SectionManager::Instance()->currentSection()->page<PageId::MenuSettings>();
     auto categoryInfo = settingsPage->getCategoryInfo();
+
     u32 settingIndexLocal = settingsPage->getSelectedSetting();
     u32 settingIndex = categoryInfo.settingIndex + settingIndexLocal;
     const SP::ClientSettings::Entry &entry = SP::ClientSettings::entries[settingIndex];
+    u32 chosen = System::SaveManager::Instance()->getSetting(settingIndex) - entry.valueOffset;
+    m_options[chosen].selectDefault(0);
     m_settingTitleText.setMessageAll(entry.messageId);
     m_instructionText.setVisible(true);
+
     if (entry.valueCount <= 30) {
         m_arrowLeft.setVisible(false);
         m_arrowRight.setVisible(false);
