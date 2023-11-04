@@ -299,6 +299,13 @@ void SettingsPage::clearMessageLists() {
     m_selected = 2;
 }
 
+void SettingsPage::setMiddleButton(s32 messageId) {
+    // TODO: Needs testing
+    *m_settingOptionIds[2] = messageId;
+    m_settingButtons[2].setMessage("current_option", messageId);
+    // TODO: Need to set the explanation
+}
+
 void SettingsPage::setButtons() {
     u32 categoryId =
             SP::ClientSettings::categoryMessageIds[static_cast<u32>(m_categoryInfo.categoryIndex)];

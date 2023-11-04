@@ -96,7 +96,13 @@ void SettingsOptionsPage::onOptionButtonFront(PushButton *button, u32 /* localPl
     u32 localSettingIndex = settingsPage->getSelectedSetting();
     auto *saveManager = System::SaveManager::Instance();
     u32 settingIndex = categoryInfo.settingIndex + localSettingIndex;
+
     saveManager->setSetting(settingIndex, button->m_index);
+    const SP::ClientSettings::Entry &entry = SP::ClientSettings::entries[settingIndex];
+    u32 chosen = System::SaveManager::Instance()->getSetting(settingIndex) - entry.valueOffset;
+
+    settingsPage->setMiddleButton(entry.valueMessageIds[chosen]);
+    // TODO: We should have an animation here
 }
 
 } // namespace UI
