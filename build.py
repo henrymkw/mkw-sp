@@ -818,7 +818,7 @@ asset_in_files = {
         #test, delete eventually
         os.path.join('bg', 'blyt', 'obi_top_nocurve.brlyt.json5'),
         os.path.join('bg', 'ctrl', 'MenuObiTopNoCurve.brctr.json5'),
-        os.path.join('bg', 'blyt', 'MenuObiInstructionText.brctr.json5'),
+        os.path.join('bg', 'ctrl', 'MenuObiInstructionText.brctr.json5'),
         os.path.join('bg', 'timg', 'tt_obi_check_000.tpl'),
         os.path.join('bg', 'timg', 'tt_obi_top_curve_000.tpl'),
         os.path.join('bg', 'timg', 'tt_obi_top_left_000.tpl'),
