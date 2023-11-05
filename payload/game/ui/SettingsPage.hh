@@ -47,7 +47,6 @@ public:
     void onActivate() override;
 
     void setReplacement(PageId pageId);
-    // LayoutUIControl *getInstructionText();
 
     struct CategoryInfo {
         u32 categoryIndex;
@@ -88,10 +87,6 @@ private:
     void setMessages(u32 buttonIndex);
     void setInstructionText();
 
-    // CategoryInfo getCategoryInfo(u32 sheetIndex) const;
-
-    // void setCategoryValues(u32 categoryIndex);
-
     template <typename T>
     using H = typename T::template Handler<SettingsPage>;
 
@@ -115,7 +110,6 @@ private:
     u32 m_settingIndex;
     PushButton m_settingButtons[5];
 
-    // TODO: Add the real index to these fields since we can pull the entry from there
     SP::CircularBuffer<u32, 20> m_settingNameIds;
     SP::CircularBuffer<optionId, 20> m_settingOptionIds;
 
