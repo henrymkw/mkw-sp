@@ -13,12 +13,14 @@ SettingsPage::SettingsPage() = default;
 SettingsPage::~SettingsPage() = default;
 
 void SettingsPage::onInit() {
+    auto sectionId = SectionManager::Instance()->currentSection()->id();
+    bool isRace = Section::GetSceneId(sectionId) == System::SceneId::Race;
     SP_LOG("Sizeof SettingsPage: %d", sizeof(SettingsPage));
     m_inputManager.init(0x1, false);
     setInputManager(&m_inputManager);
     m_inputManager.setWrappingMode(MultiControlInputManager::WrappingMode::Y);
 
-    initChildren(8 + std::size(m_settingButtons) + !!blackBack());
+    initChildren(7 + std::size(m_settingButtons) + !!blackBack() + !isRace);
     insertChild(0, &m_pageTitleText, 0);
     insertChild(1, instructionText(), 0);
     insertChild(2, &m_backButton, 0);
@@ -26,24 +28,23 @@ void SettingsPage::onInit() {
     insertChild(4, &m_arrowDown, 0);
     insertChild(5, &m_categorySwap, 0);
     insertChild(6, &m_categorySwapPlusIcon, 0);
-    insertChild(7, &m_menuObiTopNoCurve, 0);
-
-    if (blackBack()) {
-        insertChild(8, blackBack(), 0);
-    }
-
     for (u32 i = 0; i < std::size(m_settingButtons); i++) {
-        insertChild(8 + i + !!blackBack(), &m_settingButtons[i], 0);
+        insertChild(7 + i, &m_settingButtons[i], 0);
+    }
+    if (!isRace) {
+        insertChild(7 + std::size(m_settingButtons), &m_menuObiTopNoCurve, 0);
+    }
+    if (blackBack()) {
+        insertChild(7 + std::size(m_settingButtons) + !isRace, blackBack(), 0);
     }
 
-    auto sectionId = SectionManager::Instance()->currentSection()->id();
     m_pageTitleText.load(false);
 
     if (blackBack()) {
         instructionText()->load("bg", "ObiInstructionTextPopup", "ObiInstructionTextPopup",
                 nullptr);
         m_backButton.load("button", "Back", "ButtonBackPopup", 0x1, false, true);
-    } else if (Section::GetSceneId(sectionId) == System::SceneId::Race) {
+    } else if (isRace) {
         m_backButton.load("message_window", "Back", "ButtonBack", 0x1, false, true);
         instructionText()->load("bg", "RaceObiInstructionText", "RaceObiInstructionText", nullptr);
     } else {
@@ -72,8 +73,9 @@ void SettingsPage::onInit() {
     m_arrowDown.load("button", "ArrowUpDown", "ArrowDown", 0x1, false, true);
     m_categorySwap.load("button", "CategorySwapButton", "CategorySwapButton", 0x1, false, true);
     m_categorySwapPlusIcon.load("control", "ClassChange", "ClassChange", nullptr);
-    m_menuObiTopNoCurve.load("bg", "MenuObiTopNoCurve", "MenuObiTopNoCurve", nullptr);
-
+    if (!isRace) {
+        m_menuObiTopNoCurve.load("bg", "MenuObiTopNoCurve", "MenuObiTopNoCurve", nullptr);
+    }
     // u32 flags = RegisteredPadManager_getFlags(&s_sectionManager->registeredPadManager, 0);
     // u32 padType = REGISTERED_PAD_FLAGS_GET_TYPE(flags);
     // u32 messageId = padType == REGISTERED_PAD_TYPE_GC ? 2306 : 2305;
@@ -98,7 +100,7 @@ void SettingsPage::onInit() {
         m_settingButtons[i].setDeselectHandler(&m_onSettingsWheelButtonDeselect, false);
         m_settingButtons[i].setVisible(true);
         m_settingButtons[i].setMessage("setting_name", *m_settingNameIds[i]);
-        m_settingButtons[i].setMessage("current_option", *m_settingOptionIds[i]);
+        m_settingButtons[i].setMessage("current_option", (*m_settingOptionIds[i]).messageId);
         m_settingButtons[i].m_index = i;
     }
 
@@ -183,12 +185,12 @@ void SettingsPage::onUp(u32 /* localPlayerId */) {
     u32 temp = *m_settingNameIds[0];
     m_settingNameIds.pop_front();
     m_settingNameIds.push_back(static_cast<const u32 &&>(temp));
-    u32 temp2 = *m_settingOptionIds[0];
+    auto temp2 = *m_settingOptionIds[0];
     m_settingOptionIds.pop_front();
-    m_settingOptionIds.push_back(static_cast<const u32 &&>(temp2));
+    m_settingOptionIds.push_back(static_cast<const optionId &&>(temp2));
     for (u32 i = 0; i < std::size(m_settingButtons); i++) {
         m_settingButtons[i].setMessage("setting_name", *m_settingNameIds[i]);
-        m_settingButtons[i].setMessage("current_option", *m_settingOptionIds[i]);
+        m_settingButtons[i].setMessage("current_option", (*m_settingOptionIds[i]).messageId);
     }
     if (m_selected == m_settingNameIds.count() - 1) {
         m_selected = 0;
@@ -212,12 +214,12 @@ void SettingsPage::onDown(u32 /* localPlayerId */) {
     u32 temp = *m_settingNameIds[m_settingNameIds.count() - 1];
     m_settingNameIds.pop_back();
     m_settingNameIds.push_front(static_cast<const u32 &&>(temp));
-    u32 temp2 = *m_settingOptionIds[m_settingOptionIds.count() - 1];
+    auto temp2 = (*m_settingOptionIds[m_settingOptionIds.count() - 1]);
     m_settingOptionIds.pop_back();
-    m_settingOptionIds.push_front(static_cast<const u32 &&>(temp2));
+    m_settingOptionIds.push_front(static_cast<const optionId &&>(temp2));
     for (u32 i = 0; i < std::size(m_settingButtons); i++) {
         m_settingButtons[i].setMessage("setting_name", *m_settingNameIds[i]);
-        m_settingButtons[i].setMessage("current_option", *m_settingOptionIds[i]);
+        m_settingButtons[i].setMessage("current_option", (*m_settingOptionIds[i]).messageId);
     }
     if (m_selected == 0) {
         m_selected = m_settingNameIds.count() - 1;
@@ -282,12 +284,21 @@ void SettingsPage::setCategoryValues(u32 categoryIndex) {
 
         if (entry.valueNames) {
             // instructionText()->setMessageAll(0);
-            m_settingOptionIds.push_back(entry.valueMessageIds[chosen]);
+            optionId option;
+            option.messageId = entry.valueMessageIds[chosen];
+            option.valueChosen = -1;
+            m_settingOptionIds.push_back(static_cast<const optionId &&>(option));
         } else {
             // MessageInfo info{};
             // info.intVals[0] = i + entry.valueOffset;
             // m_options[i].setMessageAll(entry.valueMessageIds[0], &info);
-            m_settingOptionIds.push_back(entry.valueMessageIds[0]);
+
+            optionId option;
+            option.messageId = entry.valueMessageIds[0];
+            // MessageInfo info{};
+            option.valueChosen = entry.valueOffset;
+            // option.valueChosen =
+            m_settingOptionIds.push_back(static_cast<const optionId &&>(option));
         }
         m_settingNameIds.push_back(static_cast<const u32 &&>(entry.messageId));
     }
@@ -303,7 +314,7 @@ void SettingsPage::setMiddleButton(u32 settingIndex) {
     const SP::ClientSettings::Entry &entry = SP::ClientSettings::entries[settingIndex];
     u32 chosen = System::SaveManager::Instance()->getSetting(settingIndex) - entry.valueOffset;
     u32 messageId = entry.valueMessageIds[chosen];
-    *m_settingOptionIds[2] = messageId;
+    (*m_settingOptionIds[2]).messageId = messageId;
     m_settingButtons[2].setMessage("current_option", messageId);
     instructionText()->setMessageAll(entry.valueExplanationMessageIds[chosen]);
 }
@@ -316,7 +327,11 @@ void SettingsPage::setButtons() {
         // TODO: Shot myself in the foot for this one. Need to get the buttons entry for
         // !entry.valueNames
         m_settingButtons[i].setMessage("setting_name", *m_settingNameIds[i]);
-        m_settingButtons[i].setMessage("current_option", *m_settingOptionIds[i]);
+        MessageInfo info{};
+        // TODO: What does i do?
+        // SP_LOG("i: %d  valueChosen: %u", i, (*m_settingOptionIds[i]).valueChosen);
+        info.intVals[0] = i + ((*m_settingOptionIds[i]).valueChosen);
+        m_settingButtons[i].setMessage("current_option", (*m_settingOptionIds[i]).messageId, &info);
     }
 }
 

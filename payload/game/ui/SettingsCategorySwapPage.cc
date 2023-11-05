@@ -45,10 +45,17 @@ void SettingsCategorySwapPage::onInit() {
 
     m_blackBackControl.load("control", "RankingBlackBack", "RankingBlackBack");
     m_blackBackControl.m_zIndex = -150.0f;
-
+    auto sectionId = SectionManager::Instance()->currentSection()->id();
+    bool isRace = Section::GetSceneId(sectionId) == System::SceneId::Race;
     m_arrowLeft.load("button", "NumberMenuArrowLeft", "ButtonArrowLeft", 0x1, false, true);
     m_arrowRight.load("button", "NumberMenuArrowRight", "ButtonArrowRight", 0x1, false, true);
-    m_instructionText.load("bg", "MenuObiInstructionText", "MenuObiInstructionText", nullptr);
+    if (isRace) {
+        // m_instructionText.load("bg", "MenuObiInstructionText", "MenuObiInstructionText",
+        // nullptr);
+        m_instructionText.load("bg", "RaceObiInstructionText", "RaceObiInstructionText", nullptr);
+    } else {
+        m_instructionText.load("bg", "MenuObiInstructionText", "MenuObiInstructionText", nullptr);
+    }
     m_inputManager.setHandler(MenuInputManager::InputId::Back, &m_onBack, false, false);
 
     for (u8 i = 0; i < 10; i++) {
