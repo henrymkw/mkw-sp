@@ -812,18 +812,7 @@ asset_in_files = {
         os.path.join('control', 'blyt', 'common_w105_close_text.brlyt.json5'),
         os.path.join('button', 'blyt', 'SubMenuSettingTitle.brlyt.json5'),
         os.path.join('button', 'ctrl', 'SubMenuSettingTitle.brctr.json5'),
-        # os.path.join('bg', 'blyt', 'obi_top_nocurve.brlyt.json5'),
-        # os.path.join('bg', 'ctrl', 'MenuObiTopNoCurve.brctr.json5'), Not needed here
         os.path.join('button', 'anim', 'common_w097_license_screen_menu_select_noloop.brlan.json5'),
-        #test, delete eventually
-        # os.path.join('bg', 'blyt', 'obi_top_nocurve.brlyt.json5'),
-        # os.path.join('bg', 'ctrl', 'MenuObiTopNoCurve.brctr.json5'),
-        # os.path.join('bg', 'ctrl', 'MenuObiInstructionText.brctr.json5'),
-        # os.path.join('bg', 'timg', 'tt_obi_check_000.tpl'),
-        # os.path.join('bg', 'timg', 'tt_obi_top_curve_000.tpl'),
-        # os.path.join('bg', 'timg', 'tt_obi_top_left_000.tpl'),
-        # os.path.join('bg', 'timg', 'tt_obi_top_right_000.tpl'),
-        #test end
         # HUD
         os.path.join('game_image', 'anim', 'battle_total_point_off.brlan.json5'),
         os.path.join('game_image', 'anim', 'battle_total_point_on.brlan.json5'),
