@@ -527,6 +527,7 @@ asset_in_files = {
         os.path.join('bg', 'ctrl', 'MenuObiTopNoCurve.brctr.json5'),
         os.path.join('button', 'anim', 'common_w097_license_screen_menu_select_noloop.brlan.json5'),
         os.path.join('bg', 'ctrl', 'RaceObiInstructionText.brctr.json5'),
+        os.path.join('button', 'timg', 'checkmark-64.tpl'),
         
 
     ],

@@ -68,6 +68,7 @@ void SettingsOptionsPage::onActivate() {
     const SP::ClientSettings::Entry &entry = SP::ClientSettings::entries[settingIndex];
     u32 chosen = System::SaveManager::Instance()->getSetting(settingIndex) - entry.valueOffset;
     m_options[chosen].selectDefault(0);
+    m_options[chosen].setPaneVisible("checkmark", true);
     m_settingTitleText.setMessageAll(entry.messageId);
 
     for (u8 j = 0; j != 5; j++) {
