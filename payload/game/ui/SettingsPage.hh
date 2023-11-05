@@ -69,7 +69,6 @@ public:
     void clearMessageLists();
     void setButtons();
     void setMiddleButton(u32 settingIndex);
-    void setValueMessage(u32 settingIndex, s32 value);
 
 protected:
     virtual LayoutUIControl *instructionText() = 0;
@@ -85,6 +84,9 @@ private:
     void onSettingsWheelButtonFront(PushButton *button, u32 localPlayerId);
     void onSettingsWheelButtonSelect(PushButton *button, u32 localPlayerId);
     void onSettingsWheelButtonDeselect(PushButton *button, u32 localPlayerId);
+
+    void setMessages(u32 buttonIndex);
+    void setInstructionText();
 
     // CategoryInfo getCategoryInfo(u32 sheetIndex) const;
 
@@ -109,8 +111,8 @@ private:
 
     CategoryInfo m_categoryInfo;
 
-    s32 m_buttonIndex;
     u32 m_selected;
+    u32 m_settingIndex;
     PushButton m_settingButtons[5];
 
     // TODO: Add the real index to these fields since we can pull the entry from there
