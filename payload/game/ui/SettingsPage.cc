@@ -176,8 +176,7 @@ void SettingsPage::onSettingsWheelButtonFront(PushButton *button, u32 /* localPl
     } else if (button->m_index == m_categorySwap.m_index) {
         push(PageId::SettingsCategorySwap, Anim::Next);
     } else {
-        const SP::ClientSettings::Entry &entry =
-                SP::ClientSettings::entries[m_settingIndex];
+        const SP::ClientSettings::Entry &entry = SP::ClientSettings::entries[m_settingIndex];
         // TODO: make one of these for each menuType
         if (entry.menuType == SP::Settings::MenuType::Number) {
             push(PageId::SettingsNumberOptions, Anim::Next);
@@ -197,11 +196,12 @@ void SettingsPage::setMessages(u32 buttonIndex) {
         const SP::ClientSettings::Entry &entry =
                 SP::ClientSettings::entries[(*m_settingOptionIds[buttonIndex]).settingIndex];
         MessageInfo info{};
-        info.intVals[0] =
-                saveManager->getSetting((*m_settingOptionIds[buttonIndex]).settingIndex) - entry.valueOffset;
+        info.intVals[0] = saveManager->getSetting((*m_settingOptionIds[buttonIndex]).settingIndex) -
+                entry.valueOffset;
         m_settingButtons[buttonIndex].setMessage("current_option", entry.valueMessageIds[0], &info);
     } else {
-        m_settingButtons[buttonIndex].setMessage("current_option", (*m_settingOptionIds[buttonIndex]).messageId);
+        m_settingButtons[buttonIndex].setMessage("current_option",
+                (*m_settingOptionIds[buttonIndex]).messageId);
     }
 }
 
