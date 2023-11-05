@@ -28,6 +28,7 @@
 #include "game/ui/ServicePackToolsPage.hh"
 #include "game/ui/ServicePackTopPage.hh"
 #include "game/ui/SettingsCategorySwapPage.hh"
+#include "game/ui/SettingsLargeOptionsPage.hh"
 #include "game/ui/SettingsNumberOptionsPage.hh"
 #include "game/ui/SettingsOptionsPage.hh"
 #include "game/ui/SettingsPage.hh"
@@ -599,6 +600,7 @@ void Section::addPages(SectionId id) {
             {SectionId::LicenseSettings, PageId::SettingsOptions},
             {SectionId::LicenseSettings, PageId::SettingsNumberOptions},
             {SectionId::LicenseSettings, PageId::SettingsCategorySwap},
+            {SectionId::LicenseSettings, PageId::SettingsLargeOptions},
     };
     for (const auto &addition : additions) {
         if (addition.first == id) {
@@ -719,6 +721,8 @@ Page *Section::CreatePage(PageId pageId) {
         return new SettingsNumberOptionsPage;
     case PageId::SettingsCategorySwap:
         return new SettingsCategorySwapPage;
+    case PageId::SettingsLargeOptions:
+        return new SettingsLargeOptionsPage;
     case PageId::WU8Library:
         return new WU8LibraryPage;
     case PageId::ServicePackChannel:

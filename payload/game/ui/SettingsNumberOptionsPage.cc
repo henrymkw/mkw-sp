@@ -97,6 +97,8 @@ void SettingsNumberOptionsPage::onActivate() {
         // TODO: set buttons with index greater than num of options to non visible
         MessageInfo info{};
         info.intVals[0] = i + entry.valueOffset;
+        SP_LOG("i: %d\ninfo.intVals[0]: %d", i, info.intVals[0]);
+
         m_options[i].setMessageAll(entry.valueMessageIds[0], &info);
     }
 }

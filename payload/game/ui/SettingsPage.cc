@@ -176,6 +176,8 @@ void SettingsPage::onSettingsWheelButtonFront(PushButton *button, u32 /* localPl
             push(PageId::SettingsNumberOptions, Anim::Next);
         } else if (entry.menuType == SP::Settings::MenuType::OptionAndDescription) {
             push(PageId::SettingsOptions, Anim::Next);
+        } else if (entry.menuType == SP::Settings::MenuType::LargeOption) {
+            push(PageId::SettingsLargeOptions, Anim::Next);
         }
     }
     // TODO: set the arrows to be visible again after b is pressed
