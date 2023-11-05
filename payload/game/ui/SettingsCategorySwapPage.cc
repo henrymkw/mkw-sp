@@ -113,7 +113,7 @@ void SettingsCategorySwapPage::onButtonFront(PushButton *button, u32 /*localPlay
     }
     auto *settingsPage = SectionManager::Instance()->currentSection()->page<PageId::MenuSettings>();
     settingsPage->clearMessageLists();
-    settingsPage->getCategoryInfo2(button->m_index);
+    settingsPage->setCategoryInfo(button->m_index);
     settingsPage->setCategoryValues(button->m_index);
     settingsPage->setButtons();
     onBack(0);

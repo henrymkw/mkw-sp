@@ -57,17 +57,19 @@ public:
 
     struct optionId {
         s32 messageId;
-        u32 valueChosen; // Literally for number type settings
+        s32 valueChosen; // Literally for number type settings
+        u32 settingIndex;
     };
 
     CategoryInfo getCategoryInfoGetter();
     u32 getSelectedSetting();
 
     void setCategoryValues(u32 categoryIndex);
-    void getCategoryInfo2(u32 sheetIndex);
+    void setCategoryInfo(u32 categoryIndex);
     void clearMessageLists();
     void setButtons();
     void setMiddleButton(u32 settingIndex);
+    void setValueMessage(u32 settingIndex, s32 value);
 
 protected:
     virtual LayoutUIControl *instructionText() = 0;
@@ -110,6 +112,8 @@ private:
     s32 m_buttonIndex;
     u32 m_selected;
     PushButton m_settingButtons[5];
+
+    // TODO: Add the real index to these fields since we can pull the entry from there
     SP::CircularBuffer<u32, 20> m_settingNameIds;
     SP::CircularBuffer<optionId, 20> m_settingOptionIds;
 

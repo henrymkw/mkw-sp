@@ -97,7 +97,6 @@ void SettingsNumberOptionsPage::onActivate() {
         // TODO: set buttons with index greater than num of options to non visible
         MessageInfo info{};
         info.intVals[0] = i + entry.valueOffset;
-        SP_LOG("i: %d\ninfo.intVals[0]: %d", i, info.intVals[0]);
 
         m_options[i].setMessageAll(entry.valueMessageIds[0], &info);
     }
@@ -123,6 +122,7 @@ void SettingsNumberOptionsPage::onOptionButtonFront(PushButton *button, u32 /* l
         auto *saveManager = System::SaveManager::Instance();
         u32 settingIndex = categoryInfo.settingIndex + localSettingIndex;
         saveManager->setSetting(settingIndex, button->m_index);
+        settingsPage->setMiddleButton(settingIndex);
     } else if (button->m_index == m_backButton.m_index) {
         // Back button
         // TODO: Do I need this?
