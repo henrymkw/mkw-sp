@@ -293,6 +293,7 @@ asset_in_files = {
         os.path.join('button', 'timg', 'checkmark-64.tpl'),
         os.path.join('button', 'ctrl', 'OptionsMenuLarge.brctr.json5'),
         os.path.join('button', 'blyt', 'LargeOptionsMenuButton.brlyt.json5'),
+        os.path.join('button', 'blyt', 'CategorySwapButton.brlyt.json5'), #Only needed to fix nintendo z-axis error... other its common_w097
         # Teams
         os.path.join('button', 'anim', 'online_team_select_light_01_ok.brlan.json5'),
         os.path.join('button', 'anim', 'online_team_select_light_01_stop.brlan.json5'),
@@ -442,6 +443,7 @@ asset_in_files = {
         os.path.join('button', 'timg', 'checkmark-64.tpl'),
         os.path.join('button', 'ctrl', 'OptionsMenuLarge.brctr.json5'),
         os.path.join('button', 'blyt', 'LargeOptionsMenuButton.brlyt.json5'),
+        os.path.join('button', 'blyt', 'CategorySwapButton.brlyt.json5'), #Only needed to fix nintendo z-axis error... other its common_w097
         # Teams
         os.path.join('button', 'ctrl', 'TeamConfirmOK.brctr.json5'),
         os.path.join('control', 'anim', 'common_w204_team_position.brlan.json5'),
@@ -536,6 +538,7 @@ asset_in_files = {
         os.path.join('button', 'timg', 'checkmark-64.tpl'),
         os.path.join('button', 'ctrl', 'OptionsMenuLarge.brctr.json5'),
         os.path.join('button', 'blyt', 'LargeOptionsMenuButton.brlyt.json5'),
+        os.path.join('button', 'blyt', 'CategorySwapButton.brlyt.json5'), #Only needed to fix nintendo z-axis error... other its common_w097
         
 
     ],
@@ -662,6 +665,7 @@ asset_in_files = {
         os.path.join('button', 'timg', 'checkmark-64.tpl'),
         os.path.join('button', 'ctrl', 'OptionsMenuLarge.brctr.json5'),
         os.path.join('button', 'blyt', 'LargeOptionsMenuButton.brlyt.json5'),
+        os.path.join('button', 'blyt', 'CategorySwapButton.brlyt.json5'), #Only needed to fix nintendo z-axis error... other its common_w097
 
         # Teams
         os.path.join('button', 'ctrl', 'TeamConfirmOK.brctr.json5'),
@@ -828,6 +832,7 @@ asset_in_files = {
         os.path.join('button', 'timg', 'checkmark-64.tpl'),
         os.path.join('button', 'ctrl', 'OptionsMenuLarge.brctr.json5'),
         os.path.join('button', 'blyt', 'LargeOptionsMenuButton.brlyt.json5'),
+        os.path.join('button', 'blyt', 'CategorySwapButton.brlyt.json5'), #Only needed to fix nintendo z-axis error... other its common_w097
         # HUD
         os.path.join('game_image', 'anim', 'battle_total_point_off.brlan.json5'),
         os.path.join('game_image', 'anim', 'battle_total_point_on.brlan.json5'),

@@ -1,5 +1,5 @@
 {
-    "main brlyt": "common_w097_license_screen_menu",
+    "main brlyt": "CategorySwapButton",
     "bmg": "Menu",
     "picture source brlyt": "",
     "groups": [
@@ -101,12 +101,12 @@
             "animation delay": 0.0,
             "translation x 4:3": 30.0,
             "translation y 4:3": 200.0,
-            "translation z 4:3": 20.0,
+            "translation z 4:3": 50.0,
             "scale x 4:3": 0.8,
             "scale y 4:3": 0.8,
             "translation x 16:9": 30.0,
             "translation y 16:9": 200.0,
-            "translation z 16:9": 20.0,
+            "translation z 16:9": 50.0,
             "scale x 16:9": 0.8,
             "scale y 16:9": 0.8,
             "first message": 0,
