@@ -33,7 +33,7 @@ void SettingsLargeOptionsPage::onInit() {
         for (u8 j = 0; j < 2; j++) {
             char variant[18];
             snprintf(variant, sizeof(variant), "CategoryButton%hhu_%hhu", i, j);
-            m_buttons[buttonId].load("button", "CategorySwapPage", variant, 0x1, false, false);
+            m_buttons[buttonId].load("button", "OptionsMenuLarge", variant, 0x1, false, false);
             buttonId++;
         }
     }
@@ -81,6 +81,7 @@ void SettingsLargeOptionsPage::onActivate() {
     u32 chosen = System::SaveManager::Instance()->getSetting(settingIndex) - entry.valueOffset;
     m_settingTitleText.setMessageAll(entry.messageId);
     m_buttons[chosen].selectDefault(0);
+    m_buttons[chosen].setPaneVisible("checkmark", true);
 
     if (entry.valueCount <= std::size(m_buttons)) {
         m_arrowLeft.setVisible(false);
