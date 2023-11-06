@@ -17,7 +17,7 @@ void SettingsLargeOptionsPage::onInit() {
     setInputManager(&m_inputManager);
     m_inputManager.setWrappingMode(MultiControlInputManager::WrappingMode::Y);
 
-    initChildren(15);
+    initChildren(16);
     for (u8 i = 0; i < 10; i++) {
         insertChild(i, &m_buttons[i], 0);
     }
@@ -27,7 +27,7 @@ void SettingsLargeOptionsPage::onInit() {
     insertChild(12, &m_arrowLeft, 0);
     insertChild(13, &m_arrowRight, 0);
     insertChild(14, &m_instructionText, 0);
-
+    insertChild(15, &m_settingTitleText, 0);
     u8 buttonId = 0;
     for (u8 i = 0; i < 5; i++) {
         for (u8 j = 0; j < 2; j++) {
@@ -52,6 +52,8 @@ void SettingsLargeOptionsPage::onInit() {
     } else {
         m_instructionText.load("bg", "MenuObiInstructionText", "MenuObiInstructionText", nullptr);
     }
+    m_settingTitleText.load("button", "SubMenuSettingTitle", "SettingTitleTop", nullptr);
+
     m_inputManager.setHandler(MenuInputManager::InputId::Back, &m_onBack, false, false);
 
     for (u8 i = 0; i < 10; i++) {
@@ -77,7 +79,7 @@ void SettingsLargeOptionsPage::onActivate() {
     u32 settingIndex = categoryInfo.settingIndex + settingIndexLocal;
     const SP::ClientSettings::Entry &entry = SP::ClientSettings::entries[settingIndex];
     u32 chosen = System::SaveManager::Instance()->getSetting(settingIndex) - entry.valueOffset;
-
+    m_settingTitleText.setMessageAll(entry.messageId);
     m_buttons[chosen].selectDefault(0);
     m_buttons[chosen].setPaneVisible("checkmark", true);
 
