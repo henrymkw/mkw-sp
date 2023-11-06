@@ -75,6 +75,7 @@ void SettingsPage::onInit() {
     m_categorySwapPlusIcon.load("control", "ClassChange", "ClassChange", nullptr);
     if (!isRace) {
         m_menuObiTopNoCurve.load("bg", "MenuObiTopNoCurve", "MenuObiTopNoCurve", nullptr);
+        m_menuObiTopNoCurve.m_zIndex = -10.0f;
     }
     // u32 flags = RegisteredPadManager_getFlags(&s_sectionManager->registeredPadManager, 0);
     // u32 padType = REGISTERED_PAD_FLAGS_GET_TYPE(flags);

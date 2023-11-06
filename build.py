@@ -539,6 +539,7 @@ asset_in_files = {
         os.path.join('button', 'ctrl', 'OptionsMenuLarge.brctr.json5'),
         os.path.join('button', 'blyt', 'LargeOptionsMenuButton.brlyt.json5'),
         os.path.join('button', 'blyt', 'CategorySwapButton.brlyt.json5'), #Only needed to fix nintendo z-axis error... other its common_w097
+        os.path.join('button', 'anim', 'common_w097_license_screen_menu_free_alphafix.brlan.json5'),
         
 
     ],

@@ -38,7 +38,7 @@
         },
         {
             "name": "Free",
-            "brlan": "common_w097_license_screen_menu_select_noloop.brlan",
+            "brlan": "common_w097_license_screen_menu_select.brlan",
             "next": "",
             "reversed": false,
             "speed": 1.0,
@@ -59,7 +59,7 @@
         },
         {
             "name": "SelectToFree",
-            "brlan": "common_w097_license_screen_menu_select_noloop.brlan",
+            "brlan": "common_w097_license_screen_menu_select.brlan",
             "next": "Free",
             "reversed": false,
             "speed": 1.0,
