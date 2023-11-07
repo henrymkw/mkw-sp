@@ -75,6 +75,7 @@ void SettingsPage::onInit() {
     m_categorySwapPlusIcon.load("control", "ClassChange", "ClassChange", nullptr);
     if (!isRace) {
         m_menuObiTopNoCurve.load("bg", "MenuObiTopNoCurve", "MenuObiTopNoCurve", nullptr);
+        m_menuObiTopNoCurve.m_zIndex = -10.0f;
     }
 
     auto *sectionManager = UI::SectionManager::Instance();
