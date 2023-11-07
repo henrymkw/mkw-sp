@@ -2,7 +2,7 @@
 
 #include <Common.hh>
 
-// #include "game/system/SaveManager.hh"
+#include "game/system/SaveManager.hh"
 // #include "game/ui/SectionManager.hh"
 #include "game/ui/SettingsPage.hh"
 // #include "game/ui/ctrl/CtrlMenuInstructionText.hh"
@@ -77,6 +77,14 @@ void SettingsCategorySwapPage::onInit() {
 void SettingsCategorySwapPage::onActivate() {
     // TODO: Fix this hardcode of 9 categories, make a const cast of the category array or something
     // to fix
+    auto *settingsPage = SectionManager::Instance()->currentSection()->page<PageId::MenuSettings>();
+    auto categoryInfo = settingsPage->getCategoryInfo();
+    u32 settingIndexLocal = settingsPage->getSelectedSetting();
+    u32 settingIndex = categoryInfo.settingIndex + settingIndexLocal;
+    const auto &entry = SP::ClientSettings::entries[settingIndex];
+    u32 chosen = System::SaveManager::Instance()->getSetting(settingIndex) - entry.valueOffset;
+    m_categories[chosen].selectDefault(0);
+
     if (9 < std::size(m_categories)) {
         m_arrowLeft.setVisible(false);
         m_arrowRight.setVisible(false);

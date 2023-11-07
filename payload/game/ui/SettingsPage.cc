@@ -76,6 +76,15 @@ void SettingsPage::onInit() {
     if (!isRace) {
         m_menuObiTopNoCurve.load("bg", "MenuObiTopNoCurve", "MenuObiTopNoCurve", nullptr);
     }
+
+    auto *sectionManager = UI::SectionManager::Instance();
+    auto &registeredPadManager = sectionManager->registeredPadManager();
+    u32 flags = registeredPadManager.getFlags(0);
+    u32 padType = REGISTERED_PAD_FLAGS_GET_TYPE(flags);
+    u32 messageId = padType == REGISTERED_PAD_TYPE_GC ? 2306 : 2305;
+    MessageInfo info = {};
+    info.messageIds[0] = messageId;
+    m_categorySwapPlusIcon.setMessageAll(3012, &info);
     // u32 flags = RegisteredPadManager_getFlags(&s_sectionManager->registeredPadManager, 0);
     // u32 padType = REGISTERED_PAD_FLAGS_GET_TYPE(flags);
     // u32 messageId = padType == REGISTERED_PAD_TYPE_GC ? 2306 : 2305;
