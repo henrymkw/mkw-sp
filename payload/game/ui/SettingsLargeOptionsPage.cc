@@ -18,7 +18,7 @@ void SettingsLargeOptionsPage::onInit() {
     m_inputManager.setWrappingMode(MultiControlInputManager::WrappingMode::Y);
 
     initChildren(16);
-    for (u8 i = 0; i < 10; i++) {
+    for (u8 i = 0; i < std::size(m_buttons); i++) {
         insertChild(i, &m_buttons[i], 0);
     }
 
@@ -56,18 +56,18 @@ void SettingsLargeOptionsPage::onInit() {
 
     m_inputManager.setHandler(MenuInputManager::InputId::Back, &m_onBack, false, false);
 
-    for (u8 i = 0; i < 10; i++) {
+    for (u8 i = 0; i < std::size(m_buttons); i++) {
         m_buttons[i].setFrontHandler(&m_onButtonFront, false);
         m_buttons[i].m_index = i;
     }
 
     m_backButton.setFrontHandler(&m_onBackButtonFront, false);
-    m_backButton.m_index = 10;
+    m_backButton.m_index = std::size(m_buttons);
 
     m_arrowLeft.setFrontHandler(&m_onButtonFront, false);
     m_arrowRight.setFrontHandler(&m_onButtonFront, false);
-    m_arrowLeft.m_index = 11;
-    m_arrowRight.m_index = 12;
+    m_arrowLeft.m_index = m_backButton.m_index + 1;
+    m_arrowRight.m_index = m_arrowLeft.m_index + 1;
 
     m_buttons[0].selectDefault(0);
 }

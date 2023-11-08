@@ -19,7 +19,7 @@ void SettingsNumberOptionsPage::onInit() {
     m_inputManager.setWrappingMode(MultiControlInputManager::WrappingMode::Y);
 
     initChildren(36);
-    for (u8 i = 0; i < 30; i++) {
+    for (u8 i = 0; i < std::size(m_options); i++) {
         insertChild(i, &m_options[i], 0);
     }
 
@@ -57,17 +57,17 @@ void SettingsNumberOptionsPage::onInit() {
 
     m_inputManager.setHandler(MenuInputManager::InputId::Back, &m_onBack, false, false);
 
-    for (u8 i = 0; i < 30; i++) {
+    for (u8 i = 0; i < std::size(m_options); i++) {
         m_options[i].setFrontHandler(&m_onOptionButtonFront, false);
         m_options[i].m_index = i;
     }
-    // TODO: Don't hard code indicies
+
     m_backButton.setFrontHandler(&m_onBackButtonFront, false);
     m_arrowLeft.setFrontHandler(&m_onOptionButtonFront, false);
     m_arrowRight.setFrontHandler(&m_onOptionButtonFront, false);
-    m_backButton.m_index = 30;
-    m_arrowLeft.m_index = 31;
-    m_arrowRight.m_index = 32;
+    m_backButton.m_index = std::size(m_options);
+    m_arrowLeft.m_index = m_backButton.m_index + 1;
+    m_arrowRight.m_index = m_arrowLeft.m_index + 1;
     m_chosen = 0;
 }
 
@@ -80,12 +80,15 @@ void SettingsNumberOptionsPage::onActivate() {
     m_settingTitleText.setMessageAll(entry.messageId);
     m_instructionText.setVisible(true);
 
-    if (entry.valueCount <= 30) {
+    if (entry.valueCount <= std::size(m_options)) {
         m_arrowLeft.setVisible(false);
         m_arrowRight.setVisible(false);
     }
 
-    for (u8 i = 0; i < 30; i++) {
+    // TODO: Take the offset into consideration. For example,
+    // the number of player tags ranges from 0-11 but
+    // the number of races is 1-32.
+    for (u8 i = 0; i < std::size(m_options); i++) {
         if (i >= entry.valueCount - 1) {
             m_options[i].setVisible(false);
             m_options[i].setPlayerFlags(0);

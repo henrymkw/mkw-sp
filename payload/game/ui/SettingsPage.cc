@@ -121,30 +121,14 @@ void SettingsPage::onInit() {
     m_settingButtons[4].setPaneVisible("pause_w_fade_n", false);
 
     m_selected = 2;
-    m_settingIndex = m_categoryInfo.settingIndex + m_selected;
 }
 
 void SettingsPage::onActivate() {
-    auto *saveManager = System::SaveManager::Instance();
-    u32 settingIndex = m_categoryInfo.settingIndex + m_selected;
-    const auto &entry = SP::ClientSettings::entries[settingIndex];
-
-    // TODO Replace with the helper function
-    if (entry.valueNames) {
-        instructionText()->setMessageAll(
-                entry.valueExplanationMessageIds[saveManager->getSetting(settingIndex)]);
-    } else {
-        u32 chosen = saveManager->getSetting(settingIndex) - entry.valueOffset;
-        (*m_settingOptionIds[2]).valueChosen = chosen;
-        MessageInfo info{};
-        info.intVals[0] = chosen;
-        instructionText()->setMessageAll(entry.valueExplanationMessageIds[0], &info);
-    }
-
+    m_settingIndex = m_categoryInfo.settingIndex + m_selected;
+    setInstructionText();
     u32 categoryId =
             SP::ClientSettings::categoryMessageIds[static_cast<u32>(m_categoryInfo.categoryIndex)];
     m_categorySwap.setMessageAll(categoryId);
-
     m_settingButtons[2].selectDefault(0);
 }
 
@@ -174,12 +158,6 @@ void SettingsPage::onBackButtonFront(PushButton *button, u32 /* localPlayerId */
 }
 
 void SettingsPage::onSettingsWheelButtonFront(PushButton *button, u32 /* localPlayerId */) {
-    // Can sort of see the arrows when SettingsOptionsPage is the active page. Commented out until
-    // theres a way to get them visible after returning
-
-    // m_arrowUp.setVisible(false);
-    // m_arrowDown.setVisible(false);
-
     if (button->m_index == m_arrowUp.m_index) {
         onDown(0);
     } else if (button->m_index == m_arrowDown.m_index) {
@@ -197,7 +175,6 @@ void SettingsPage::onSettingsWheelButtonFront(PushButton *button, u32 /* localPl
             push(PageId::SettingsLargeOptions, Anim::Next);
         }
     }
-    // TODO: set the arrows to be visible again after b is pressed
 }
 
 void SettingsPage::setMessages(u32 buttonIndex) {

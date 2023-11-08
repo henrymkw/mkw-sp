@@ -19,7 +19,6 @@ void SettingsOptionsPage::onInit() {
     m_inputManager.setWrappingMode(MultiControlInputManager::WrappingMode::Y);
 
     initChildren(4 + std::size(m_options));
-
     insertChild(0, &m_blackBackControl, 0);
     insertChild(1, &m_backButton, 0);
     insertChild(2, &m_instructionText, 0);
@@ -34,12 +33,10 @@ void SettingsOptionsPage::onInit() {
         snprintf(variant, sizeof(variant), "Button4_%hhu", i);
         m_options[i].load("button", "SettingsOptionAndDescription", variant, 0x1, false, false);
     }
-
     m_blackBackControl.load("control", "RankingBlackBack", "RankingBlackBack");
     m_blackBackControl.m_zIndex = -150.0f;
 
     auto sectionId = SectionManager::Instance()->currentSection()->id();
-
     if (Section::GetSceneId(sectionId) == System::SceneId::Race) {
         m_backButton.load("message_window", "Back", "ButtonBack", 0x1, false, true);
         m_instructionText.load("bg", "RaceObiInstructionText", "RaceObiInstructionText", nullptr);
@@ -47,17 +44,15 @@ void SettingsOptionsPage::onInit() {
         m_instructionText.load("bg", "MenuObiInstructionText", "MenuObiInstructionText", nullptr);
         m_backButton.load("button", "Back", "ButtonBackPopup", 0x1, false, true);
     }
-
     m_settingTitleText.load("button", "SubMenuSettingTitle", "SettingTitleTop", nullptr);
 
-    m_options[0].selectDefault(0);
     m_inputManager.setHandler(MenuInputManager::InputId::Back, &m_onBack, false, false);
     m_backButton.setFrontHandler(&m_onBackButtonFront, false);
-
     for (u32 i = 0; i < 5; i++) {
         m_options[i].setFrontHandler(&m_onOptionButtonFront, false);
         m_options[i].m_index = i;
     }
+    m_options[0].selectDefault(0);
 }
 
 void SettingsOptionsPage::onActivate() {
@@ -68,7 +63,7 @@ void SettingsOptionsPage::onActivate() {
     m_options[m_chosen].selectDefault(0);
     m_settingTitleText.setMessageAll(entry.messageId);
 
-    for (u8 i = 0; i < 5; i++) {
+    for (u8 i = 0; i < std::size(m_options); i++) {
         if (i >= entry.valueCount) {
             m_options[i].setVisible(false);
             m_options[i].setPlayerFlags(0);

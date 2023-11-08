@@ -74,22 +74,20 @@ void SettingsCategorySwapPage::onInit() {
 }
 
 void SettingsCategorySwapPage::onActivate() {
-    // TODO: Fix this hardcode of 9 categories, make a const cast of the category array or something
-    // to fix
     auto *settingsPage = SectionManager::Instance()->currentSection()->page<PageId::MenuSettings>();
     u32 settingIndex = settingsPage->getSettingIndex();
     const auto &entry = SP::ClientSettings::entries[settingIndex];
     m_chosen = System::SaveManager::Instance()->getSetting(settingIndex) - entry.valueOffset;
     m_categories[m_chosen].selectDefault(0);
     // m_categories[m_chosen].setPaneVisible("checkmark", true);
-    if (9 < std::size(m_categories)) {
+    if (std::size(m_categories) > magic_enum::enum_count<SP::ClientSettings::Category>()) {
         m_arrowLeft.setVisible(false);
         m_arrowRight.setVisible(false);
     }
 
     for (u8 i = 0; i < std::size(m_categories); i++) {
         // TODO: Fix hardcode
-        if (i >= 9) {
+        if (i >= magic_enum::enum_count<SP::ClientSettings::Category>()) {
             m_categories[i].setVisible(false);
             m_categories[i].setPlayerFlags(0);
             m_categories[i].setMessageAll(6602);
