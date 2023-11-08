@@ -44,11 +44,10 @@ void SettingsNumberOptionsPage::onInit() {
 
     if (Section::GetSceneId(sectionId) == System::SceneId::Race) {
         m_backButton.load("message_window", "Back", "ButtonBack", 0x1, false, true);
-        m_instructionText.load("bg", "RaceObiInstructionText", "RaceObiInstructionText", nullptr);
     } else {
-        m_instructionText.load("bg", "MenuObiInstructionText", "MenuObiInstructionText", nullptr);
         m_backButton.load("button", "Back", "ButtonBackPopup", 0x1, false, true);
     }
+    m_instructionText.load("bg", "RaceObiInstructionText", "RaceObiInstructionText", nullptr);
 
     m_arrowLeft.load("button", "NumberMenuArrowLeft", "ButtonArrowLeft", 0x1, false, true);
     m_arrowRight.load("button", "NumberMenuArrowRight", "ButtonArrowRight", 0x1, false, true);
@@ -59,6 +58,7 @@ void SettingsNumberOptionsPage::onInit() {
 
     for (u8 i = 0; i < std::size(m_options); i++) {
         m_options[i].setFrontHandler(&m_onOptionButtonFront, false);
+        m_options[i].setSelectHandler(&m_onOptionButtonSelect, false);
         m_options[i].m_index = i;
     }
 
@@ -79,6 +79,9 @@ void SettingsNumberOptionsPage::onActivate() {
     m_options[m_chosen].selectDefault(0);
     m_settingTitleText.setMessageAll(entry.messageId);
     m_instructionText.setVisible(true);
+    MessageInfo info{};
+    info.intVals[0] = m_chosen;
+    m_instructionText.setMessageAll(entry.valueExplanationMessageIds[0], &info);
 
     if (entry.valueCount <= std::size(m_options)) {
         m_arrowLeft.setVisible(false);
@@ -113,6 +116,18 @@ void SettingsNumberOptionsPage::onBackButtonFront(PushButton *button, u32 /* loc
     startReplace(Anim::Prev, delay);
 }
 
+void SettingsNumberOptionsPage::onOptionButtonSelect(PushButton * /* button */,
+        u32 /* localPlayerId */) {
+    auto *settingsPage = SectionManager::Instance()->currentSection()->page<PageId::MenuSettings>();
+    u32 settingIndex = settingsPage->getSettingIndex();
+    auto *saveManager = System::SaveManager::Instance();
+    const auto &entry = SP::ClientSettings::entries[settingIndex];
+    u32 chosen = saveManager->getSetting(settingIndex) - entry.valueOffset;
+    MessageInfo info{};
+    info.intVals[0] = chosen;
+    m_instructionText.setMessageAll(entry.valueExplanationMessageIds[0], &info);
+}
+
 void SettingsNumberOptionsPage::onOptionButtonFront(PushButton *button, u32 /* localPlayerId */) {
     if (button->m_index < 30) {
         // Get the setting and set its value
@@ -125,6 +140,10 @@ void SettingsNumberOptionsPage::onOptionButtonFront(PushButton *button, u32 /* l
         m_options[m_chosen].setPaneVisible("checkmark", false);
         m_chosen = button->m_index;
         m_options[m_chosen].setPaneVisible("checkmark", true);
+        const auto &entry = SP::ClientSettings::entries[settingIndex];
+        MessageInfo info{};
+        info.intVals[0] = m_chosen;
+        m_instructionText.setMessageAll(entry.valueExplanationMessageIds[0], &info);
     } else if (button->m_index == m_arrowLeft.m_index) {
         // Left arrow
         // TODO: Implement a sheet system, something like this

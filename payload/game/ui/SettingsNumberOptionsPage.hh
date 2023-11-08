@@ -21,6 +21,7 @@ private:
     void onBack(u32 localPlayerId);
     void onBackButtonFront(PushButton *button, u32 localPlayerId);
     void onOptionButtonFront(PushButton *button, u32 localPlayerId);
+    void onOptionButtonSelect(PushButton *button, u32 localPlayerId);
 
     MultiControlInputManager m_inputManager;
 
@@ -42,6 +43,7 @@ private:
     H<MultiControlInputManager> m_onBack{this, &SettingsNumberOptionsPage::onBack};
     H<PushButton> m_onBackButtonFront{this, &SettingsNumberOptionsPage::onBackButtonFront};
     H<PushButton> m_onOptionButtonFront{this, &SettingsNumberOptionsPage::onOptionButtonFront};
+    H<PushButton> m_onOptionButtonSelect{this, &SettingsNumberOptionsPage::onOptionButtonSelect};
 };
 
 } // namespace UI
