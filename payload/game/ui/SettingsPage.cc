@@ -147,6 +147,10 @@ void SettingsPage::onActivate() {
     m_settingButtons[2].selectDefault(0);
 }
 
+u32 SettingsPage::getSettingIndex() {
+    return m_settingIndex;
+}
+
 BlackBackControl *SettingsPage::blackBack() {
     return nullptr;
 }

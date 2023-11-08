@@ -62,7 +62,7 @@ public:
 
     CategoryInfo getCategoryInfoGetter();
     u32 getSelectedSetting();
-
+    u32 getSettingIndex();
     void setCategoryValues(u32 categoryIndex);
     void setCategoryInfo(u32 categoryIndex);
     void clearMessageLists();

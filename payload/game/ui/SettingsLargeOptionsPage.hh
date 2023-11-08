@@ -30,6 +30,7 @@ private:
 
     PushButton m_buttons[10];
 
+    u32 m_chosen;
     // TODO: Find out if we need this
     PushButton m_arrowLeft;
     PushButton m_arrowRight;

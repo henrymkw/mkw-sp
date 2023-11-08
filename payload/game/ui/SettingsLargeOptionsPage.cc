@@ -74,14 +74,11 @@ void SettingsLargeOptionsPage::onInit() {
 
 void SettingsLargeOptionsPage::onActivate() {
     auto *settingsPage = SectionManager::Instance()->currentSection()->page<PageId::MenuSettings>();
-    auto categoryInfo = settingsPage->getCategoryInfo();
-    u32 settingIndexLocal = settingsPage->getSelectedSetting();
-    u32 settingIndex = categoryInfo.settingIndex + settingIndexLocal;
-    const SP::ClientSettings::Entry &entry = SP::ClientSettings::entries[settingIndex];
-    u32 chosen = System::SaveManager::Instance()->getSetting(settingIndex) - entry.valueOffset;
+    u32 settingIndex = settingsPage->getSettingIndex();
+    const auto &entry = SP::ClientSettings::entries[settingIndex];
+    m_chosen = System::SaveManager::Instance()->getSetting(settingIndex) - entry.valueOffset;
     m_settingTitleText.setMessageAll(entry.messageId);
-    m_buttons[chosen].selectDefault(0);
-    m_buttons[chosen].setPaneVisible("checkmark", true);
+    m_buttons[m_chosen].selectDefault(0);
 
     if (entry.valueCount <= std::size(m_buttons)) {
         m_arrowLeft.setVisible(false);
@@ -93,9 +90,11 @@ void SettingsLargeOptionsPage::onActivate() {
             m_buttons[j].setVisible(false);
             continue;
         }
+        m_buttons[j].setPaneVisible("checkmark", false);
         m_buttons[j].setVisible(true);
         m_buttons[j].setMessageAll(entry.valueMessageIds[j]);
     }
+    m_buttons[m_chosen].setPaneVisible("checkmark", true);
 }
 
 void SettingsLargeOptionsPage::onBack(u32 /* localPlayerId */) {
@@ -109,14 +108,12 @@ void SettingsLargeOptionsPage::onBackButtonFront(PushButton *button, u32 /*local
 
 void SettingsLargeOptionsPage::onButtonFront(PushButton *button, u32 /*localPlayerId*/) {
     auto *settingsPage = SectionManager::Instance()->currentSection()->page<PageId::MenuSettings>();
-    auto categoryInfo = settingsPage->getCategoryInfo();
-    u32 settingIndexLocal = settingsPage->getSelectedSetting();
-
-    auto *saveManager = System::SaveManager::Instance();
-    u32 settingIndex = categoryInfo.settingIndex + settingIndexLocal;
-
-    saveManager->setSetting(settingIndex, button->m_index);
+    u32 settingIndex = settingsPage->getSettingIndex();
+    System::SaveManager::Instance()->setSetting(settingIndex, button->m_index);
     settingsPage->setMiddleButton(settingIndex);
+    m_buttons[m_chosen].setPaneVisible("checkmark", false);
+    m_chosen = button->m_index;
+    m_buttons[m_chosen].setPaneVisible("checkmark", true);
 }
 
 } // namespace UI

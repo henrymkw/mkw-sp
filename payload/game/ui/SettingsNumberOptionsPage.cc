@@ -68,20 +68,16 @@ void SettingsNumberOptionsPage::onInit() {
     m_backButton.m_index = 30;
     m_arrowLeft.m_index = 31;
     m_arrowRight.m_index = 32;
+    m_chosen = 0;
 }
 
 void SettingsNumberOptionsPage::onActivate() {
-    // TODO: Select the current option
-    // m_options[0].selectDefault(0);
     auto *settingsPage = SectionManager::Instance()->currentSection()->page<PageId::MenuSettings>();
-    auto categoryInfo = settingsPage->getCategoryInfo();
+    u32 settingIndex = settingsPage->getSettingIndex();
+    const auto &entry = SP::ClientSettings::entries[settingIndex];
+    m_chosen = System::SaveManager::Instance()->getSetting(settingIndex) - entry.valueOffset;
+    m_options[m_chosen].selectDefault(0);
 
-    u32 settingIndexLocal = settingsPage->getSelectedSetting();
-    u32 settingIndex = categoryInfo.settingIndex + settingIndexLocal;
-    const SP::ClientSettings::Entry &entry = SP::ClientSettings::entries[settingIndex];
-    u32 chosen = System::SaveManager::Instance()->getSetting(settingIndex) - entry.valueOffset;
-    m_options[chosen].selectDefault(0);
-    m_options[chosen].setPaneVisible("checkmark", true);
     m_settingTitleText.setMessageAll(entry.messageId);
     m_instructionText.setVisible(true);
 
@@ -95,12 +91,13 @@ void SettingsNumberOptionsPage::onActivate() {
             m_options[i].setVisible(false);
             continue;
         }
-        // TODO: set buttons with index greater than num of options to non visible
+        m_options[i].setPaneVisible("checkmark", false);
+
         MessageInfo info{};
         info.intVals[0] = i + entry.valueOffset;
-
         m_options[i].setMessageAll(entry.valueMessageIds[0], &info);
     }
+    m_options[m_chosen].setPaneVisible("checkmark", true);
 }
 
 void SettingsNumberOptionsPage::onBack(u32 /* localPlayerId */) {
@@ -118,15 +115,12 @@ void SettingsNumberOptionsPage::onOptionButtonFront(PushButton *button, u32 /* l
         // TODO: Implement category switch to actually test this thing
         auto *settingsPage =
                 SectionManager::Instance()->currentSection()->page<PageId::MenuSettings>();
-        auto categoryInfo = settingsPage->getCategoryInfo();
-        u32 localSettingIndex = settingsPage->getSelectedSetting();
-        auto *saveManager = System::SaveManager::Instance();
-        u32 settingIndex = categoryInfo.settingIndex + localSettingIndex;
-        saveManager->setSetting(settingIndex, button->m_index);
+        u32 settingIndex = settingsPage->getSettingIndex();
+        System::SaveManager::Instance()->setSetting(settingIndex, button->m_index);
         settingsPage->setMiddleButton(settingIndex);
-    } else if (button->m_index == m_backButton.m_index) {
-        // Back button
-        // TODO: Do I need this?
+        m_options[m_chosen].setPaneVisible("checkmark", false);
+        m_chosen = button->m_index;
+        m_options[m_chosen].setPaneVisible("checkmark", true);
     } else if (button->m_index == m_arrowLeft.m_index) {
         // Left arrow
         // TODO: Implement a sheet system, something like this

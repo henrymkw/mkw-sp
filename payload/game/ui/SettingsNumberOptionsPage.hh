@@ -32,6 +32,8 @@ private:
     PushButton m_arrowLeft;
     PushButton m_arrowRight;
 
+    u32 m_chosen;
+
     CtrlMenuBackButton m_backButton;
 
     template <typename T>

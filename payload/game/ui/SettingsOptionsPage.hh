@@ -28,6 +28,7 @@ private:
     LayoutUIControl m_instructionText;
     LayoutUIControl m_settingTitleText;
 
+    u32 m_chosen;
     // CtrlMenuInstructionText m_instructionText;
     //  UI Elements
     PushButton m_options[5];

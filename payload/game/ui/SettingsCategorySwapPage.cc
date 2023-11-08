@@ -3,9 +3,8 @@
 #include <Common.hh>
 
 #include "game/system/SaveManager.hh"
-// #include "game/ui/SectionManager.hh"
 #include "game/ui/SettingsPage.hh"
-// #include "game/ui/ctrl/CtrlMenuInstructionText.hh"
+
 #include "sp/settings/ClientSettings.hh"
 
 #include <cstdio>
@@ -78,13 +77,11 @@ void SettingsCategorySwapPage::onActivate() {
     // TODO: Fix this hardcode of 9 categories, make a const cast of the category array or something
     // to fix
     auto *settingsPage = SectionManager::Instance()->currentSection()->page<PageId::MenuSettings>();
-    auto categoryInfo = settingsPage->getCategoryInfo();
-    u32 settingIndexLocal = settingsPage->getSelectedSetting();
-    u32 settingIndex = categoryInfo.settingIndex + settingIndexLocal;
+    u32 settingIndex = settingsPage->getSettingIndex();
     const auto &entry = SP::ClientSettings::entries[settingIndex];
-    u32 chosen = System::SaveManager::Instance()->getSetting(settingIndex) - entry.valueOffset;
-    m_categories[chosen].selectDefault(0);
-
+    m_chosen = System::SaveManager::Instance()->getSetting(settingIndex) - entry.valueOffset;
+    m_categories[m_chosen].selectDefault(0);
+    // m_categories[m_chosen].setPaneVisible("checkmark", true);
     if (9 < std::size(m_categories)) {
         m_arrowLeft.setVisible(false);
         m_arrowRight.setVisible(false);
@@ -120,11 +117,15 @@ void SettingsCategorySwapPage::onButtonFront(PushButton *button, u32 /*localPlay
         return;
     }
     auto *settingsPage = SectionManager::Instance()->currentSection()->page<PageId::MenuSettings>();
+    // clear messages, change fields of SettingsPage, and fall to prev page
     settingsPage->clearMessageLists();
     settingsPage->setCategoryInfo(button->m_index);
     settingsPage->setCategoryValues(button->m_index);
     settingsPage->setButtons();
     onBack(0);
+    // m_categories[m_chosen].setPaneVisible("checkmark", false);
+    // m_chosen = button->m_index;
+    // m_categories[m_chosen].setPaneVisible("checkmark", true);
 }
 
 } // namespace UI
