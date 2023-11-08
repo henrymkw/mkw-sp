@@ -11,7 +11,7 @@
             "magic": "txl1",
             "tpls": [
                 {
-                    "name": "checkmark-64.tpl",
+                    "name": "tt_item_star.tpl",
                 },
                 {
                     "name": "tt_pattern_chek_bokashi_32x32.tpl",
@@ -2968,7 +2968,7 @@
                                             "user data": "",
                                             "translation x": 46.622341,
                                             "translation y": 18.52018,
-                                            "translation z": 31.0,
+                                            "translation z": 40.0,
                                             "rotation x": 0.0,
                                             "rotation y": 0.0,
                                             "rotation z": 0.0,
