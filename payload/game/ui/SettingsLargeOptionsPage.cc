@@ -43,7 +43,7 @@ void SettingsLargeOptionsPage::onInit() {
     m_blackBackControl.m_zIndex = -150.0f;
     m_arrowLeft.load("button", "NumberMenuArrowLeft", "ButtonArrowLeft", 0x1, false, true);
     m_arrowRight.load("button", "NumberMenuArrowRight", "ButtonArrowRight", 0x1, false, true);
-    m_instructionText.load("bg", "RaceObiInstructionText", "RaceObiInstructionText", nullptr);
+    m_instructionText.load("bg", "BlackBackObiInstructionText", "RaceObiInstructionText", nullptr);
     m_settingTitleText.load("button", "SubMenuSettingTitle", "SettingTitleTop", nullptr);
 
     m_inputManager.setHandler(MenuInputManager::InputId::Back, &m_onBack, false, false);

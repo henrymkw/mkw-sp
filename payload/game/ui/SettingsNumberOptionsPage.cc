@@ -47,7 +47,7 @@ void SettingsNumberOptionsPage::onInit() {
     } else {
         m_backButton.load("button", "Back", "ButtonBackPopup", 0x1, false, true);
     }
-    m_instructionText.load("bg", "RaceObiInstructionText", "RaceObiInstructionText", nullptr);
+    m_instructionText.load("bg", "BlackBackObiInstructionText", "RaceObiInstructionText", nullptr);
 
     m_arrowLeft.load("button", "NumberMenuArrowLeft", "ButtonArrowLeft", 0x1, false, true);
     m_arrowRight.load("button", "NumberMenuArrowRight", "ButtonArrowRight", 0x1, false, true);
