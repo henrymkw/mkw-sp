@@ -91,10 +91,12 @@ void SettingsCategorySwapPage::onActivate() {
         // TODO: Fix hardcode
         if (i >= 9) {
             m_categories[i].setVisible(false);
+            m_categories[i].setPlayerFlags(0);
             m_categories[i].setMessageAll(6602);
             continue;
         }
-        m_categories->setVisible(true);
+        m_categories[i].setVisible(true);
+        m_categories[i].setPlayerFlags(1);
         m_categories[i].setMessageAll(SP::ClientSettings::categoryMessageIds[i]);
     }
 }

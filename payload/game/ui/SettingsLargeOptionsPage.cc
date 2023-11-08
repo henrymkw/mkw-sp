@@ -85,14 +85,16 @@ void SettingsLargeOptionsPage::onActivate() {
         m_arrowRight.setVisible(false);
     }
 
-    for (u8 j = 0; j < std::size(m_buttons); j++) {
-        if (j >= entry.valueCount) {
-            m_buttons[j].setVisible(false);
+    for (u8 i = 0; i < std::size(m_buttons); i++) {
+        if (i >= entry.valueCount) {
+            m_buttons[i].setVisible(false);
+            m_buttons[i].setPlayerFlags(0);
             continue;
         }
-        m_buttons[j].setPaneVisible("checkmark", false);
-        m_buttons[j].setVisible(true);
-        m_buttons[j].setMessageAll(entry.valueMessageIds[j]);
+        m_buttons[i].setPaneVisible("checkmark", false);
+        m_buttons[i].setPlayerFlags(1);
+        m_buttons[i].setVisible(true);
+        m_buttons[i].setMessageAll(entry.valueMessageIds[i]);
     }
     m_buttons[m_chosen].setPaneVisible("checkmark", true);
 }

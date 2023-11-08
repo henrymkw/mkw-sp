@@ -127,17 +127,18 @@ void SettingsPage::onInit() {
 void SettingsPage::onActivate() {
     auto *saveManager = System::SaveManager::Instance();
     u32 settingIndex = m_categoryInfo.settingIndex + m_selected;
-    auto &e = SP::ClientSettings::entries[settingIndex];
+    const auto &entry = SP::ClientSettings::entries[settingIndex];
 
-    if (e.valueNames) {
+    // TODO Replace with the helper function
+    if (entry.valueNames) {
         instructionText()->setMessageAll(
-                e.valueExplanationMessageIds[saveManager->getSetting(settingIndex)]);
+                entry.valueExplanationMessageIds[saveManager->getSetting(settingIndex)]);
     } else {
-        u32 chosen = saveManager->getSetting(settingIndex) - e.valueOffset;
+        u32 chosen = saveManager->getSetting(settingIndex) - entry.valueOffset;
         (*m_settingOptionIds[2]).valueChosen = chosen;
         MessageInfo info{};
         info.intVals[0] = chosen;
-        instructionText()->setMessageAll(e.valueExplanationMessageIds[0], &info);
+        instructionText()->setMessageAll(entry.valueExplanationMessageIds[0], &info);
     }
 
     u32 categoryId =
@@ -186,7 +187,7 @@ void SettingsPage::onSettingsWheelButtonFront(PushButton *button, u32 /* localPl
     } else if (button->m_index == m_categorySwap.m_index) {
         push(PageId::SettingsCategorySwap, Anim::Next);
     } else {
-        const SP::ClientSettings::Entry &entry = SP::ClientSettings::entries[m_settingIndex];
+        const auto &entry = SP::ClientSettings::entries[m_settingIndex];
         // TODO: make one of these for each menuType
         if (entry.menuType == SP::Settings::MenuType::Number) {
             push(PageId::SettingsNumberOptions, Anim::Next);
@@ -203,7 +204,7 @@ void SettingsPage::setMessages(u32 buttonIndex) {
     auto *saveManager = System::SaveManager::Instance();
     m_settingButtons[buttonIndex].setMessage("setting_name", *m_settingNameIds[buttonIndex]);
     if ((*m_settingOptionIds[buttonIndex]).valueChosen != -1) {
-        const SP::ClientSettings::Entry &entry =
+        const auto &entry =
                 SP::ClientSettings::entries[(*m_settingOptionIds[buttonIndex]).settingIndex];
         MessageInfo info{};
         info.intVals[0] = saveManager->getSetting((*m_settingOptionIds[buttonIndex]).settingIndex) -
@@ -216,17 +217,17 @@ void SettingsPage::setMessages(u32 buttonIndex) {
 }
 
 void SettingsPage::setInstructionText() {
-    const auto &e = SP::ClientSettings::entries[m_settingIndex];
+    const auto &entry = SP::ClientSettings::entries[m_settingIndex];
     auto *saveManager = System::SaveManager::Instance();
-    if (e.valueNames) {
+    if (entry.valueNames) {
         instructionText()->setMessageAll(
-                e.valueExplanationMessageIds[saveManager->getSetting(m_settingIndex)]);
+                entry.valueExplanationMessageIds[saveManager->getSetting(m_settingIndex)]);
     } else {
-        u32 chosen = saveManager->getSetting(m_settingIndex) - e.valueOffset;
+        u32 chosen = saveManager->getSetting(m_settingIndex) - entry.valueOffset;
         (*m_settingOptionIds[2]).valueChosen = chosen;
         MessageInfo info{};
         info.intVals[0] = chosen;
-        instructionText()->setMessageAll(e.valueExplanationMessageIds[0], &info);
+        instructionText()->setMessageAll(entry.valueExplanationMessageIds[0], &info);
     }
 }
 
@@ -288,13 +289,14 @@ void SettingsPage::setCategoryInfo(u32 categoryIndex) {
     info.categoryIndex = categoryIndex;
     bool seenYet = false;
     for (u32 i = 0; i < magic_enum::enum_count<SP::ClientSettings::Setting>(); i++) {
-        if (static_cast<u32>(SP::ClientSettings::entries[i].category) != categoryIndex) {
+        const auto &entry = SP::ClientSettings::entries[i];
+        if (static_cast<u32>(entry.category) != categoryIndex) {
             continue;
         }
-        if (SP::ClientSettings::entries[i].hidden) {
+        if (entry.hidden) {
             continue;
         }
-        if (SP::ClientSettings::entries[i].valueCount == 0) {
+        if (entry.valueCount == 0) {
             continue;
         }
         if (!seenYet) {
@@ -312,25 +314,28 @@ void SettingsPage::setCategoryInfo(u32 categoryIndex) {
 void SettingsPage::setCategoryValues(u32 categoryIndex) {
     auto *saveManager = System::SaveManager::Instance();
     for (u32 i = 0; i < SP::ClientSettings::entryCount; i++) {
-        const SP::ClientSettings::Entry &entry = SP::ClientSettings::entries[i];
-        if (entry.category != static_cast<SP::ClientSettings::Category>(categoryIndex) ||
-                entry.valueCount == 0 || entry.hidden) {
+        const auto &entry = SP::ClientSettings::entries[i];
+        if (entry.category != static_cast<SP::ClientSettings::Category>(categoryIndex)) {
+            continue;
+        }
+        if (entry.valueCount == 0) {
+            continue;
+        }
+        if (entry.hidden) {
             continue;
         }
         u32 chosen = saveManager->getSetting(i) - entry.valueOffset;
+        optionId option;
+        option.settingIndex = i;
         if (entry.valueNames) {
-            optionId option;
             option.messageId = entry.valueMessageIds[chosen];
+            // We set this to -1 to indicate this setting isn't a number
             option.valueChosen = -1;
-            option.settingIndex = i;
-            m_settingOptionIds.push_back(static_cast<const optionId &&>(option));
         } else {
-            optionId option;
             option.messageId = entry.valueMessageIds[0];
             option.valueChosen = chosen;
-            option.settingIndex = i;
-            m_settingOptionIds.push_back(static_cast<const optionId &&>(option));
         }
+        m_settingOptionIds.push_back(static_cast<const optionId &&>(option));
         m_settingNameIds.push_back(static_cast<const u32 &&>(entry.messageId));
     }
 }
@@ -371,10 +376,12 @@ void SettingsPage::setButtons() {
 }
 
 SettingsPage::CategoryInfo SettingsPage::getCategoryInfoGetter() {
+    // TODO: Remove
     return m_categoryInfo;
 }
 
 u32 SettingsPage::getSelectedSetting() {
+    // TODO: Remove
     return m_selected;
 }
 

@@ -68,15 +68,17 @@ void SettingsOptionsPage::onActivate() {
     m_options[m_chosen].selectDefault(0);
     m_settingTitleText.setMessageAll(entry.messageId);
 
-    for (u8 j = 0; j != 5; j++) {
-        if (j >= entry.valueCount) {
-            m_options[j].setVisible(false);
+    for (u8 i = 0; i < 5; i++) {
+        if (i >= entry.valueCount) {
+            m_options[i].setVisible(false);
+            m_options[i].setPlayerFlags(0);
             continue;
         }
-        m_options[j].setPaneVisible("checkmark", false);
-        m_options[j].setVisible(true);
-        m_options[j].setMessage("text", entry.valueMessageIds[j]);
-        m_options[j].setMessage("text_00", entry.valueExplanationMessageIds[j]);
+        m_options[i].setPaneVisible("checkmark", false);
+        m_options[i].setVisible(true);
+        m_options[i].setPlayerFlags(1);
+        m_options[i].setMessage("text", entry.valueMessageIds[i]);
+        m_options[i].setMessage("text_00", entry.valueExplanationMessageIds[i]);
     }
     m_options[m_chosen].setPaneVisible("checkmark", true);
 }

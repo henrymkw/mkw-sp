@@ -77,7 +77,6 @@ void SettingsNumberOptionsPage::onActivate() {
     const auto &entry = SP::ClientSettings::entries[settingIndex];
     m_chosen = System::SaveManager::Instance()->getSetting(settingIndex) - entry.valueOffset;
     m_options[m_chosen].selectDefault(0);
-
     m_settingTitleText.setMessageAll(entry.messageId);
     m_instructionText.setVisible(true);
 
@@ -89,10 +88,12 @@ void SettingsNumberOptionsPage::onActivate() {
     for (u8 i = 0; i < 30; i++) {
         if (i >= entry.valueCount - 1) {
             m_options[i].setVisible(false);
+            m_options[i].setPlayerFlags(0);
             continue;
         }
         m_options[i].setPaneVisible("checkmark", false);
-
+        m_options[i].setVisible(true);
+        m_options[i].setPlayerFlags(1);
         MessageInfo info{};
         info.intVals[0] = i + entry.valueOffset;
         m_options[i].setMessageAll(entry.valueMessageIds[0], &info);
