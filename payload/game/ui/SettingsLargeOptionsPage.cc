@@ -103,15 +103,12 @@ void SettingsLargeOptionsPage::onBackButtonFront(PushButton *button, u32 /*local
     startReplace(Anim::Prev, delay);
 }
 
-void SettingsLargeOptionsPage::onOptionButtonSelect(PushButton * /* button */,
-        u32 /* localPlayerId */) {
+void SettingsLargeOptionsPage::onOptionButtonSelect(PushButton *button, u32 /* localPlayerId */) {
     auto *settingsPage = SectionManager::Instance()->currentSection()->page<PageId::MenuSettings>();
     u32 settingIndex = settingsPage->getSettingIndex();
     const auto &entry = SP::ClientSettings::entries[settingIndex];
     m_instructionText.setMessageAll(
-            entry.valueExplanationMessageIds[System::SaveManager::Instance()->getSetting(
-                                                     settingIndex) -
-                    entry.valueOffset]);
+            entry.valueExplanationMessageIds[button->m_index - entry.valueOffset]);
 }
 
 void SettingsLargeOptionsPage::onButtonFront(PushButton *button, u32 /*localPlayerId*/) {

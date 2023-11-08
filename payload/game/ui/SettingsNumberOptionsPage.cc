@@ -116,15 +116,12 @@ void SettingsNumberOptionsPage::onBackButtonFront(PushButton *button, u32 /* loc
     startReplace(Anim::Prev, delay);
 }
 
-void SettingsNumberOptionsPage::onOptionButtonSelect(PushButton * /* button */,
-        u32 /* localPlayerId */) {
+void SettingsNumberOptionsPage::onOptionButtonSelect(PushButton *button, u32 /* localPlayerId */) {
     auto *settingsPage = SectionManager::Instance()->currentSection()->page<PageId::MenuSettings>();
     u32 settingIndex = settingsPage->getSettingIndex();
-    auto *saveManager = System::SaveManager::Instance();
     const auto &entry = SP::ClientSettings::entries[settingIndex];
-    u32 chosen = saveManager->getSetting(settingIndex) - entry.valueOffset;
     MessageInfo info{};
-    info.intVals[0] = chosen;
+    info.intVals[0] = button->m_index - entry.valueOffset;
     m_instructionText.setMessageAll(entry.valueExplanationMessageIds[0], &info);
 }
 
