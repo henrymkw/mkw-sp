@@ -72,7 +72,7 @@ void SettingsPage::onInit() {
     m_arrowUp.load("button", "ArrowUpDown", "ArrowUp", 0x1, false, true);
     m_arrowDown.load("button", "ArrowUpDown", "ArrowDown", 0x1, false, true);
     m_categorySwap.load("button", "CategorySwapButton", "CategorySwapButton", 0x1, false, true);
-    m_categorySwapPlusIcon.load("control", "ClassChange", "ClassChange", nullptr);
+    m_categorySwapPlusIcon.load("control", "CategorySwapButtonPlusIcon", "ClassChange", nullptr);
     if (!isRace) {
         m_menuObiTopNoCurve.load("bg", "MenuObiTopNoCurve", "MenuObiTopNoCurve", nullptr);
         m_menuObiTopNoCurve.m_zIndex = -10.0f;
@@ -85,13 +85,8 @@ void SettingsPage::onInit() {
     u32 messageId = padType == REGISTERED_PAD_TYPE_GC ? 2306 : 2305;
     MessageInfo info = {};
     info.messageIds[0] = messageId;
-    m_categorySwapPlusIcon.setMessageAll(3012, &info);
-    // u32 flags = RegisteredPadManager_getFlags(&s_sectionManager->registeredPadManager, 0);
-    // u32 padType = REGISTERED_PAD_FLAGS_GET_TYPE(flags);
-    // u32 messageId = padType == REGISTERED_PAD_TYPE_GC ? 2306 : 2305;
-    // MessageInfo info = {};
-    // info.messageIds[0] = messageId;
-    // m_categorySwapPlusIcon.setMessageAll(3012, &info);
+    m_categorySwapPlusIcon.setMessageAll(10428, &info);
+    m_categorySwapPlusIcon.m_zIndex = 10.0f;
 
     m_inputManager.setHandler(MenuInputManager::InputId::Back, &m_onBack, false, false);
     m_inputManager.setHandler(MenuInputManager::InputId::Down, &m_onUp, false, false);
