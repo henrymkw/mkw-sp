@@ -77,6 +77,7 @@ private:
     void onBack(u32 localPlayerId);
     void onUp(u32 localPlayerId);
     void onDown(u32 localPlayerId);
+    void onCategorySwap(u32 localPlayerId);
 
     void onBackButtonFront(PushButton *button, u32 localPlayerId);
 
@@ -116,6 +117,7 @@ private:
     H<MultiControlInputManager> m_onBack{this, &SettingsPage::onBack};
     H<MultiControlInputManager> m_onUp{this, &SettingsPage::onUp};
     H<MultiControlInputManager> m_onDown{this, &SettingsPage::onDown};
+    H<MultiControlInputManager> m_onCategorySwap{this, &SettingsPage::onCategorySwap};
 
     H<PushButton> m_onBackButtonFront{this, &SettingsPage::onBackButtonFront};
 

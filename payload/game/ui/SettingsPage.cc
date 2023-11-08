@@ -91,6 +91,7 @@ void SettingsPage::onInit() {
     m_inputManager.setHandler(MenuInputManager::InputId::Back, &m_onBack, false, false);
     m_inputManager.setHandler(MenuInputManager::InputId::Down, &m_onUp, false, false);
     m_inputManager.setHandler(MenuInputManager::InputId::Up, &m_onDown, false, false);
+    m_inputManager.setHandler(MenuInputManager::InputId::Option, &m_onCategorySwap, false, false);
     m_arrowUp.setFrontHandler(&m_onSettingsWheelButtonFront, false);
     m_arrowDown.setFrontHandler(&m_onSettingsWheelButtonFront, false);
     m_categorySwap.setFrontHandler(&m_onSettingsWheelButtonFront, true);
@@ -223,6 +224,10 @@ void SettingsPage::setInstructionText() {
         info.intVals[0] = chosen;
         instructionText()->setMessageAll(e.valueExplanationMessageIds[0], &info);
     }
+}
+
+void SettingsPage::onCategorySwap(u32 /*localPlayerId*/) {
+    push(PageId::SettingsCategorySwap, Anim::Next);
 }
 
 void SettingsPage::onUp(u32 /* localPlayerId */) {
