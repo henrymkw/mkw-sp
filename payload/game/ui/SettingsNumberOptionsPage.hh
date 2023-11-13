@@ -34,6 +34,9 @@ private:
     PushButton m_arrowRight;
 
     u32 m_chosen;
+    u32 m_numPages;
+    u32 m_currPage;
+    u32 m_numSettings; // Might not be needed
 
     CtrlMenuBackButton m_backButton;
 

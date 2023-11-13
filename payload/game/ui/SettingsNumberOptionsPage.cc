@@ -80,7 +80,7 @@ void SettingsNumberOptionsPage::onActivate() {
     m_settingTitleText.setMessageAll(entry.messageId);
     m_instructionText.setVisible(true);
     MessageInfo info{};
-    info.intVals[0] = m_chosen;
+    info.intVals[0] = m_chosen + entry.valueOffset;
     m_instructionText.setMessageAll(entry.valueExplanationMessageIds[0], &info);
 
     if (entry.valueCount <= std::size(m_options)) {
@@ -121,7 +121,7 @@ void SettingsNumberOptionsPage::onOptionButtonSelect(PushButton *button, u32 /* 
     u32 settingIndex = settingsPage->getSettingIndex();
     const auto &entry = SP::ClientSettings::entries[settingIndex];
     MessageInfo info{};
-    info.intVals[0] = button->m_index - entry.valueOffset;
+    info.intVals[0] = button->m_index + entry.valueOffset;
     m_instructionText.setMessageAll(entry.valueExplanationMessageIds[0], &info);
 }
 
@@ -132,14 +132,15 @@ void SettingsNumberOptionsPage::onOptionButtonFront(PushButton *button, u32 /* l
         auto *settingsPage =
                 SectionManager::Instance()->currentSection()->page<PageId::MenuSettings>();
         u32 settingIndex = settingsPage->getSettingIndex();
-        System::SaveManager::Instance()->setSetting(settingIndex, button->m_index);
+        const auto &entry = SP::ClientSettings::entries[settingIndex];
+        System::SaveManager::Instance()->setSetting(settingIndex,
+                button->m_index + entry.valueOffset);
         settingsPage->setMiddleButton(settingIndex);
         m_options[m_chosen].setPaneVisible("checkmark", false);
         m_chosen = button->m_index;
         m_options[m_chosen].setPaneVisible("checkmark", true);
-        const auto &entry = SP::ClientSettings::entries[settingIndex];
         MessageInfo info{};
-        info.intVals[0] = m_chosen;
+        info.intVals[0] = m_chosen + entry.valueOffset;
         m_instructionText.setMessageAll(entry.valueExplanationMessageIds[0], &info);
     } else if (button->m_index == m_arrowLeft.m_index) {
         // Left arrow

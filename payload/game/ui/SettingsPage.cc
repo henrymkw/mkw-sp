@@ -105,7 +105,7 @@ void SettingsPage::onInit() {
         m_settingButtons[i].setSelectHandler(&m_onSettingsWheelButtonSelect, false);
         m_settingButtons[i].setDeselectHandler(&m_onSettingsWheelButtonDeselect, false);
         m_settingButtons[i].setVisible(true);
-        setMessages(i);
+        // setMessages(i);
         m_settingButtons[i].m_index = i;
     }
 
@@ -126,6 +126,9 @@ void SettingsPage::onInit() {
 void SettingsPage::onActivate() {
     m_settingIndex = m_categoryInfo.settingIndex + m_selected;
     setInstructionText();
+    for (u8 i = 0; i < std::size(m_settingButtons); i++) {
+        setMessages(i);
+    }
     u32 categoryId =
             SP::ClientSettings::categoryMessageIds[static_cast<u32>(m_categoryInfo.categoryIndex)];
     m_categorySwap.setMessageAll(categoryId);
@@ -184,8 +187,7 @@ void SettingsPage::setMessages(u32 buttonIndex) {
         const auto &entry =
                 SP::ClientSettings::entries[(*m_settingOptionIds[buttonIndex]).settingIndex];
         MessageInfo info{};
-        info.intVals[0] = saveManager->getSetting((*m_settingOptionIds[buttonIndex]).settingIndex) -
-                entry.valueOffset;
+        info.intVals[0] = saveManager->getSetting((*m_settingOptionIds[buttonIndex]).settingIndex);
         m_settingButtons[buttonIndex].setMessage("current_option", entry.valueMessageIds[0], &info);
     } else {
         m_settingButtons[buttonIndex].setMessage("current_option",
@@ -200,7 +202,7 @@ void SettingsPage::setInstructionText() {
         instructionText()->setMessageAll(
                 entry.valueExplanationMessageIds[saveManager->getSetting(m_settingIndex)]);
     } else {
-        u32 chosen = saveManager->getSetting(m_settingIndex) - entry.valueOffset;
+        u32 chosen = saveManager->getSetting(m_settingIndex);
         (*m_settingOptionIds[2]).valueChosen = chosen;
         MessageInfo info{};
         info.intVals[0] = chosen;
@@ -325,7 +327,7 @@ void SettingsPage::clearMessageLists() {
 
 void SettingsPage::setMiddleButton(u32 settingIndex) {
     const auto &entry = SP::ClientSettings::entries[settingIndex];
-    u32 chosen = System::SaveManager::Instance()->getSetting(settingIndex) - entry.valueOffset;
+    u32 chosen = System::SaveManager::Instance()->getSetting(settingIndex);
     (*m_settingOptionIds[2]).messageId = entry.valueMessageIds[chosen];
 
     if (entry.valueNames) {
