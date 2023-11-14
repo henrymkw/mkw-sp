@@ -68,43 +68,38 @@ void SettingsNumberOptionsPage::onInit() {
     m_backButton.m_index = std::size(m_options);
     m_arrowLeft.m_index = m_backButton.m_index + 1;
     m_arrowRight.m_index = m_arrowLeft.m_index + 1;
-    m_chosen = 0;
+    m_selectedIndex = 0;
 }
 
 void SettingsNumberOptionsPage::onActivate() {
     auto *settingsPage = SectionManager::Instance()->currentSection()->page<PageId::MenuSettings>();
     u32 settingIndex = settingsPage->getSettingIndex();
     const auto &entry = SP::ClientSettings::entries[settingIndex];
-    m_chosen = System::SaveManager::Instance()->getSetting(settingIndex) - entry.valueOffset;
-    m_options[m_chosen].selectDefault(0);
+    // Index of the button thats chosen
+    m_selectedValue = System::SaveManager::Instance()->getSetting(settingIndex) - entry.valueOffset;
+    m_selectedIndex = m_selectedValue % std::size(m_options);
+    // This is the actual number of the selected setting
+    m_options[m_selectedIndex].selectDefault(0);
     m_settingTitleText.setMessageAll(entry.messageId);
     m_instructionText.setVisible(true);
+    m_numSheets = 1;
+    m_currSheet = (System::SaveManager::Instance()->getSetting(settingIndex) - entry.valueOffset) /
+            std::size(m_options);
+    while (entry.valueCount > m_numSheets * std::size(m_options)) {
+        m_numSheets++;
+    }
     MessageInfo info{};
-    info.intVals[0] = m_chosen + entry.valueOffset;
+    info.intVals[0] = m_selectedIndex + entry.valueOffset + (m_currSheet * std::size(m_options));
     m_instructionText.setMessageAll(entry.valueExplanationMessageIds[0], &info);
 
     if (entry.valueCount <= std::size(m_options)) {
         m_arrowLeft.setVisible(false);
         m_arrowRight.setVisible(false);
+    } else {
+        m_arrowLeft.setVisible(true);
+        m_arrowRight.setVisible(true);
     }
-
-    // TODO: Take the offset into consideration. For example,
-    // the number of player tags ranges from 0-11 but
-    // the number of races is 1-32.
-    for (u8 i = 0; i < std::size(m_options); i++) {
-        if (i >= entry.valueCount - 1) {
-            m_options[i].setVisible(false);
-            m_options[i].setPlayerFlags(0);
-            continue;
-        }
-        m_options[i].setPaneVisible("checkmark", false);
-        m_options[i].setVisible(true);
-        m_options[i].setPlayerFlags(1);
-        MessageInfo info{};
-        info.intVals[0] = i + entry.valueOffset;
-        m_options[i].setMessageAll(entry.valueMessageIds[0], &info);
-    }
-    m_options[m_chosen].setPaneVisible("checkmark", true);
+    refresh();
 }
 
 void SettingsNumberOptionsPage::onBack(u32 /* localPlayerId */) {
@@ -121,8 +116,34 @@ void SettingsNumberOptionsPage::onOptionButtonSelect(PushButton *button, u32 /* 
     u32 settingIndex = settingsPage->getSettingIndex();
     const auto &entry = SP::ClientSettings::entries[settingIndex];
     MessageInfo info{};
-    info.intVals[0] = button->m_index + entry.valueOffset;
+    info.intVals[0] = button->m_index + entry.valueOffset + (30 * m_currSheet);
     m_instructionText.setMessageAll(entry.valueExplanationMessageIds[0], &info);
+}
+
+void SettingsNumberOptionsPage::refresh() {
+    auto *settingsPage = SectionManager::Instance()->currentSection()->page<PageId::MenuSettings>();
+    u32 settingIndex = settingsPage->getSettingIndex();
+    const auto &entry = SP::ClientSettings::entries[settingIndex];
+
+    u32 offset = (m_currSheet)*std::size(m_options);
+    for (u8 i = 0; i < std::size(m_options); i++) {
+        if (i + offset >= entry.valueCount - (entry.valueOffset == 0)) {
+            m_options[i].setVisible(false);
+            m_options[i].setPlayerFlags(0);
+            continue;
+        }
+        if (i + offset == m_selectedValue) {
+            m_options[i].setPaneVisible("checkmark", true);
+        } else {
+            m_options[i].setPaneVisible("checkmark", false);
+        }
+        m_options[i].setVisible(true);
+        m_options[i].setPlayerFlags(1);
+        MessageInfo info{};
+        info.intVals[0] = offset + i + !(entry.valueOffset == 0);
+        m_options[i].setMessageAll(entry.valueMessageIds[0], &info);
+    }
+    m_options[m_selectedIndex].selectDefault(0);
 }
 
 void SettingsNumberOptionsPage::onOptionButtonFront(PushButton *button, u32 /* localPlayerId */) {
@@ -133,31 +154,31 @@ void SettingsNumberOptionsPage::onOptionButtonFront(PushButton *button, u32 /* l
                 SectionManager::Instance()->currentSection()->page<PageId::MenuSettings>();
         u32 settingIndex = settingsPage->getSettingIndex();
         const auto &entry = SP::ClientSettings::entries[settingIndex];
-        System::SaveManager::Instance()->setSetting(settingIndex,
-                button->m_index + entry.valueOffset);
+        m_selectedValue = button->m_index + entry.valueOffset + (30 * m_currSheet);
+        System::SaveManager::Instance()->setSetting(settingIndex, m_selectedValue);
         settingsPage->setMiddleButton(settingIndex);
-        m_options[m_chosen].setPaneVisible("checkmark", false);
-        m_chosen = button->m_index;
-        m_options[m_chosen].setPaneVisible("checkmark", true);
+        for (u8 i = 0; i < 30; i++) {
+            m_options[m_selectedIndex].setPaneVisible("checkmark", false);
+        }
+        m_selectedIndex = button->m_index;
+        m_options[m_selectedIndex].setPaneVisible("checkmark", true);
         MessageInfo info{};
-        info.intVals[0] = m_chosen + entry.valueOffset;
+        info.intVals[0] = m_selectedValue;
         m_instructionText.setMessageAll(entry.valueExplanationMessageIds[0], &info);
-    } else if (button->m_index == m_arrowLeft.m_index) {
-        // Left arrow
-        // TODO: Implement a sheet system, something like this
-        // numSheets = entry.valueCount / 30 + (entry.valueCount % 30 != 0)
-        // m_currSheet-- % numSheets (but if --results in a negative reset it back to numSheets)
-        // MessageInfo info{}
-        // info.intVals[0] = m_currSheet * 30 + entry.valueOffset
-        // m_options[i].setMessageAll(entry.valueMessageIds[0], &info)
     } else if (button->m_index == m_arrowRight.m_index) {
-        // Right arrow
-        // TODO: Implement a sheet system, something like this
-        // numSheets = entry.valueCount / 30 + (entry.valueCount % 30 != 0)
-        // m_currSheet++ % numSheets
-        // MessageInfo info{}
-        // info.intVals[0] = m_currSheet * 30 + entry.valueOffset
-        // m_options[i].setMessageAll(entry.valueMessageIds[0], &info)
+        if (m_currSheet == m_numSheets - 1) {
+            m_currSheet = 0;
+        } else {
+            m_currSheet++;
+        }
+        refresh();
+    } else if (button->m_index == m_arrowLeft.m_index) {
+        if (m_currSheet == 0) {
+            m_currSheet = m_numSheets - 1;
+        } else {
+            m_currSheet--;
+        }
+        refresh();
     }
 }
 

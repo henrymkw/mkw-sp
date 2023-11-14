@@ -105,7 +105,7 @@ void SettingsPage::onInit() {
         m_settingButtons[i].setSelectHandler(&m_onSettingsWheelButtonSelect, false);
         m_settingButtons[i].setDeselectHandler(&m_onSettingsWheelButtonDeselect, false);
         m_settingButtons[i].setVisible(true);
-        // setMessages(i);
+        setMessages(i);
         m_settingButtons[i].m_index = i;
     }
 
@@ -126,9 +126,6 @@ void SettingsPage::onInit() {
 void SettingsPage::onActivate() {
     m_settingIndex = m_categoryInfo.settingIndex + m_selected;
     setInstructionText();
-    for (u8 i = 0; i < std::size(m_settingButtons); i++) {
-        setMessages(i);
-    }
     u32 categoryId =
             SP::ClientSettings::categoryMessageIds[static_cast<u32>(m_categoryInfo.categoryIndex)];
     m_categorySwap.setMessageAll(categoryId);
@@ -183,15 +180,15 @@ void SettingsPage::onSettingsWheelButtonFront(PushButton *button, u32 /* localPl
 void SettingsPage::setMessages(u32 buttonIndex) {
     auto *saveManager = System::SaveManager::Instance();
     m_settingButtons[buttonIndex].setMessage("setting_name", *m_settingNameIds[buttonIndex]);
-    if ((*m_settingOptionIds[buttonIndex]).valueChosen != -1) {
+    if ((*m_settingOptionIds[buttonIndex]).valueChosen == -1) {
+        m_settingButtons[buttonIndex].setMessage("current_option",
+                (*m_settingOptionIds[buttonIndex]).messageId);
+    } else {
         const auto &entry =
                 SP::ClientSettings::entries[(*m_settingOptionIds[buttonIndex]).settingIndex];
         MessageInfo info{};
         info.intVals[0] = saveManager->getSetting((*m_settingOptionIds[buttonIndex]).settingIndex);
         m_settingButtons[buttonIndex].setMessage("current_option", entry.valueMessageIds[0], &info);
-    } else {
-        m_settingButtons[buttonIndex].setMessage("current_option",
-                (*m_settingOptionIds[buttonIndex]).messageId);
     }
 }
 
@@ -312,7 +309,7 @@ void SettingsPage::setCategoryValues(u32 categoryIndex) {
             option.valueChosen = -1;
         } else {
             option.messageId = entry.valueMessageIds[0];
-            option.valueChosen = chosen;
+            option.valueChosen = chosen + entry.valueOffset;
         }
         m_settingOptionIds.push_back(static_cast<const optionId &&>(option));
         m_settingNameIds.push_back(static_cast<const u32 &&>(entry.messageId));

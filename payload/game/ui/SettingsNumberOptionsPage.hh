@@ -22,6 +22,7 @@ private:
     void onBackButtonFront(PushButton *button, u32 localPlayerId);
     void onOptionButtonFront(PushButton *button, u32 localPlayerId);
     void onOptionButtonSelect(PushButton *button, u32 localPlayerId);
+    void refresh();
 
     MultiControlInputManager m_inputManager;
 
@@ -33,10 +34,12 @@ private:
     PushButton m_arrowLeft;
     PushButton m_arrowRight;
 
-    u32 m_chosen;
-    u32 m_numPages;
-    u32 m_currPage;
-    u32 m_numSettings; // Might not be needed
+    // m_selectedValue is the selected setting by its value
+    u32 m_selectedValue;
+    // m_selectedIndex is the index of m_selectedValue in m_options
+    u32 m_selectedIndex;
+    u32 m_numSheets;
+    u32 m_currSheet;
 
     CtrlMenuBackButton m_backButton;
 
