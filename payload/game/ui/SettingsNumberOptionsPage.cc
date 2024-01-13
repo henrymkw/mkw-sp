@@ -140,7 +140,8 @@ void SettingsNumberOptionsPage::refresh() {
         m_options[i].setVisible(true);
         m_options[i].setPlayerFlags(1);
         MessageInfo info{};
-        info.intVals[0] = offset + i + !(entry.valueOffset == 0);
+
+        info.intVals[0] = offset + i + entry.valueOffset;
         m_options[i].setMessageAll(entry.valueMessageIds[0], &info);
     }
     m_options[m_selectedIndex].selectDefault(0);
