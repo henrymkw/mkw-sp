@@ -75,10 +75,8 @@ void SettingsCategorySwapPage::onInit() {
 
 void SettingsCategorySwapPage::onActivate() {
     auto *settingsPage = SectionManager::Instance()->currentSection()->page<PageId::MenuSettings>();
-    u32 settingIndex = settingsPage->getSettingIndex();
-    const auto &entry = SP::ClientSettings::entries[settingIndex];
-    m_chosen = System::SaveManager::Instance()->getSetting(settingIndex) - entry.valueOffset;
-    m_categories[m_chosen].selectDefault(0);
+    u32 categoryIndex = settingsPage->getCategoryInfoGetter().categoryIndex;
+    m_categories[categoryIndex].selectDefault(0);
     // m_categories[m_chosen].setPaneVisible("checkmark", true);
     if (std::size(m_categories) > magic_enum::enum_count<SP::ClientSettings::Category>()) {
         m_arrowLeft.setVisible(false);
