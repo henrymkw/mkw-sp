@@ -295,6 +295,8 @@ asset_in_files = {
         os.path.join('button', 'blyt', 'LargeOptionsMenuButton.brlyt.json5'),
         os.path.join('button', 'blyt', 'CategorySwapButton.brlyt.json5'), #Only needed to fix nintendo z-axis error... other its common_w097
         os.path.join('button', 'timg', 'tt_item_star.tpl'),
+        os.path.join('button', 'blyt', 'SliderPageNumberDisplay.brlyt.json5'),
+        os.path.join('button', 'ctrl', 'SliderPageNumberDisplay.brctr.json5'),
         # Teams
         os.path.join('button', 'anim', 'online_team_select_light_01_ok.brlan.json5'),
         os.path.join('button', 'anim', 'online_team_select_light_01_stop.brlan.json5'),
@@ -447,6 +449,8 @@ asset_in_files = {
         os.path.join('button', 'blyt', 'LargeOptionsMenuButton.brlyt.json5'),
         os.path.join('button', 'blyt', 'CategorySwapButton.brlyt.json5'), #Only needed to fix nintendo z-axis error... other its common_w097
         os.path.join('button', 'timg', 'tt_item_star.tpl'),
+        os.path.join('button', 'blyt', 'SliderPageNumberDisplay.brlyt.json5'),
+        os.path.join('button', 'ctrl', 'SliderPageNumberDisplay.brctr.json5'),
         # Teams
         os.path.join('button', 'ctrl', 'TeamConfirmOK.brctr.json5'),
         os.path.join('control', 'anim', 'common_w204_team_position.brlan.json5'),
@@ -545,6 +549,10 @@ asset_in_files = {
         os.path.join('button', 'blyt', 'CategorySwapButton.brlyt.json5'), #Only needed to fix nintendo z-axis error... other its common_w097
         os.path.join('button', 'anim', 'common_w097_license_screen_menu_free_alphafix.brlan.json5'),
         os.path.join('button', 'timg', 'tt_item_star.tpl'),
+        os.path.join('button', 'blyt', 'SliderPageNumberDisplay.brlyt.json5'),
+        os.path.join('button', 'ctrl', 'SliderPageNumberDisplay.brctr.json5'),
+        os.path.join('button', 'blyt', 'course_select_scroll_bar.brlyt.json5'),
+        os.path.join('button', 'ctrl', 'CourseSelectScrollBar.brctr.json5'),
 
         
 
@@ -675,6 +683,8 @@ asset_in_files = {
         os.path.join('button', 'blyt', 'LargeOptionsMenuButton.brlyt.json5'),
         os.path.join('button', 'blyt', 'CategorySwapButton.brlyt.json5'), #Only needed to fix nintendo z-axis error... other its common_w097
         os.path.join('button', 'timg', 'tt_item_star.tpl'),
+        os.path.join('button', 'blyt', 'SliderPageNumberDisplay.brlyt.json5'),
+        os.path.join('button', 'ctrl', 'SliderPageNumberDisplay.brctr.json5'),
 
         # Teams
         os.path.join('button', 'ctrl', 'TeamConfirmOK.brctr.json5'),
@@ -841,6 +851,10 @@ asset_in_files = {
         os.path.join('button', 'blyt', 'LargeOptionsMenuButton.brlyt.json5'),
         os.path.join('button', 'blyt', 'CategorySwapButton.brlyt.json5'), #Only needed to fix nintendo z-axis error... other its common_w097
         os.path.join('button', 'timg', 'tt_item_star.tpl'), #file already exists in vanilla but in wrong folder...
+        os.path.join('button', 'blyt', 'SliderPageNumberDisplay.brlyt.json5'),
+        os.path.join('button', 'ctrl', 'SliderPageNumberDisplay.brctr.json5'),
+        os.path.join('button', 'blyt', 'course_select_scroll_bar.brlyt.json5'),
+        os.path.join('button', 'ctrl', 'CourseSelectScrollBar.brctr.json5'),
         # HUD
         os.path.join('game_image', 'anim', 'battle_total_point_off.brlan.json5'),
         os.path.join('game_image', 'anim', 'battle_total_point_on.brlan.json5'),
