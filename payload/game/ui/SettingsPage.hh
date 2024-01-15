@@ -65,15 +65,15 @@ public:
     u32 getSettingIndex();
     void setCategoryValues(u32 categoryIndex);
     void setCategoryInfo(u32 categoryIndex);
-    void clearMessageLists();
-    void setButtons();
     void setMiddleButton(u32 settingIndex);
+    void changeCategory(u32 categoryIndex);
 
 protected:
     virtual LayoutUIControl *instructionText() = 0;
     virtual BlackBackControl *blackBack() = 0;
 
 private:
+    void refreshMessages();
     void onBack(u32 localPlayerId);
     void onUp(u32 localPlayerId);
     void onDown(u32 localPlayerId);
@@ -85,7 +85,6 @@ private:
     void onSettingsWheelButtonSelect(PushButton *button, u32 localPlayerId);
     void onSettingsWheelButtonDeselect(PushButton *button, u32 localPlayerId);
 
-    void setMessages(u32 buttonIndex);
     void setInstructionText();
 
     template <typename T>
@@ -113,6 +112,9 @@ private:
 
     SP::CircularBuffer<u32, 20> m_settingNameIds;
     SP::CircularBuffer<optionId, 20> m_settingOptionIds;
+
+    std::array<u32, 20> m_settingNameMessageIds;
+    std::array<optionId, 20> m_settingOptionInfo;
 
     H<MultiControlInputManager> m_onBack{this, &SettingsPage::onBack};
     H<MultiControlInputManager> m_onUp{this, &SettingsPage::onUp};

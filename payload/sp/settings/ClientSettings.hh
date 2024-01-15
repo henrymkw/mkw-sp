@@ -79,14 +79,14 @@ enum class Setting {
     // License
     MiiAvatar,
     MiiClient,
-    ColorPalette,
     LoadingScreenColor,
+    ColorPalette,
     GCPadRumble,
     PageTransitions,
-    PerfOverlay,
     RegionFlagDisplay,
 
     // DebugOverlay
+    PerfOverlay,
     DebugCheckpoints,
     DebugPanel,
     DebugKCL,
@@ -323,12 +323,12 @@ enum class PageTransitions {
     Enable,
 };
 
-enum class PerfOverlay {
+enum class RegionFlagDisplay {
     Disable,
     Enable,
 };
 
-enum class RegionFlagDisplay {
+enum class PerfOverlay {
     Disable,
     Enable,
 };
@@ -647,13 +647,13 @@ struct Helper<ClientSettings::Setting, ClientSettings::Setting::MiiClient> {
 };
 
 template <>
-struct Helper<ClientSettings::Setting, ClientSettings::Setting::ColorPalette> {
-    using type = SP::ClientSettings::ColorPalette;
+struct Helper<ClientSettings::Setting, ClientSettings::Setting::LoadingScreenColor> {
+    using type = u32;
 };
 
 template <>
-struct Helper<ClientSettings::Setting, ClientSettings::Setting::LoadingScreenColor> {
-    using type = u32;
+struct Helper<ClientSettings::Setting, ClientSettings::Setting::ColorPalette> {
+    using type = SP::ClientSettings::ColorPalette;
 };
 
 template <>
@@ -667,13 +667,13 @@ struct Helper<ClientSettings::Setting, ClientSettings::Setting::PageTransitions>
 };
 
 template <>
-struct Helper<ClientSettings::Setting, ClientSettings::Setting::PerfOverlay> {
-    using type = SP::ClientSettings::PerfOverlay;
+struct Helper<ClientSettings::Setting, ClientSettings::Setting::RegionFlagDisplay> {
+    using type = SP::ClientSettings::RegionFlagDisplay;
 };
 
 template <>
-struct Helper<ClientSettings::Setting, ClientSettings::Setting::RegionFlagDisplay> {
-    using type = SP::ClientSettings::RegionFlagDisplay;
+struct Helper<ClientSettings::Setting, ClientSettings::Setting::PerfOverlay> {
+    using type = SP::ClientSettings::PerfOverlay;
 };
 
 template <>

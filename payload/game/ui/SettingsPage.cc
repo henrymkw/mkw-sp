@@ -15,7 +15,6 @@ SettingsPage::~SettingsPage() = default;
 void SettingsPage::onInit() {
     auto sectionId = SectionManager::Instance()->currentSection()->id();
     bool isRace = Section::GetSceneId(sectionId) == System::SceneId::Race;
-    SP_LOG("Sizeof SettingsPage: %d", sizeof(SettingsPage));
     m_inputManager.init(0x1, false);
     setInputManager(&m_inputManager);
     m_inputManager.setWrappingMode(MultiControlInputManager::WrappingMode::Y);
@@ -104,8 +103,8 @@ void SettingsPage::onInit() {
         m_settingButtons[i].setFrontHandler(&m_onSettingsWheelButtonFront, false);
         m_settingButtons[i].setSelectHandler(&m_onSettingsWheelButtonSelect, false);
         m_settingButtons[i].setDeselectHandler(&m_onSettingsWheelButtonDeselect, false);
-        m_settingButtons[i].setVisible(true);
-        setMessages(i);
+        // m_settingButtons[i].setVisible(true);
+        // setMessages(i);
         m_settingButtons[i].m_index = i;
     }
 
@@ -125,11 +124,42 @@ void SettingsPage::onInit() {
 
 void SettingsPage::onActivate() {
     m_settingIndex = m_categoryInfo.settingIndex + m_selected;
-    setInstructionText();
+    // setInstructionText();
     u32 categoryId =
             SP::ClientSettings::categoryMessageIds[static_cast<u32>(m_categoryInfo.categoryIndex)];
     m_categorySwap.setMessageAll(categoryId);
     m_settingButtons[2].selectDefault(0);
+    SP_LOG("currCategory: %d", m_categoryInfo.categoryIndex);
+    refreshMessages();
+}
+
+void SettingsPage::refreshMessages() {
+    s32 settingIndex = m_selected - 2;
+    auto *saveManager = System::SaveManager::Instance();
+    for (u8 i = 0; i < std::size(m_settingButtons); i++) {
+        s32 idx = settingIndex + i;
+        if (idx < 0) {
+            m_settingButtons[i].setVisible(false);
+            continue;
+        }
+        if (idx > (s32)(m_categoryInfo.settingCount - 1)) {
+            m_settingButtons[i].setVisible(false);
+            continue;
+        }
+
+        m_settingButtons[i].setMessage("setting_name", m_settingNameMessageIds[idx]);
+        if (m_settingOptionInfo[idx].valueChosen == -1) {
+            m_settingButtons[i].setMessage("current_option", m_settingOptionInfo[idx].messageId);
+        } else {
+            const auto &entry = SP::ClientSettings::entries[m_settingOptionInfo[idx].settingIndex];
+            MessageInfo info{};
+            info.intVals[0] = saveManager->getSetting(m_settingOptionInfo[idx].settingIndex);
+            m_settingButtons[i].setMessage("current_option", entry.valueMessageIds[0], &info);
+        }
+
+        m_settingButtons[i].setVisible(true);
+    }
+    setInstructionText();
 }
 
 u32 SettingsPage::getSettingIndex() {
@@ -177,21 +207,6 @@ void SettingsPage::onSettingsWheelButtonFront(PushButton *button, u32 /* localPl
     }
 }
 
-void SettingsPage::setMessages(u32 buttonIndex) {
-    auto *saveManager = System::SaveManager::Instance();
-    m_settingButtons[buttonIndex].setMessage("setting_name", *m_settingNameIds[buttonIndex]);
-    if ((*m_settingOptionIds[buttonIndex]).valueChosen == -1) {
-        m_settingButtons[buttonIndex].setMessage("current_option",
-                (*m_settingOptionIds[buttonIndex]).messageId);
-    } else {
-        const auto &entry =
-                SP::ClientSettings::entries[(*m_settingOptionIds[buttonIndex]).settingIndex];
-        MessageInfo info{};
-        info.intVals[0] = saveManager->getSetting((*m_settingOptionIds[buttonIndex]).settingIndex);
-        m_settingButtons[buttonIndex].setMessage("current_option", entry.valueMessageIds[0], &info);
-    }
-}
-
 void SettingsPage::setInstructionText() {
     const auto &entry = SP::ClientSettings::entries[m_settingIndex];
     auto *saveManager = System::SaveManager::Instance();
@@ -200,7 +215,7 @@ void SettingsPage::setInstructionText() {
                 entry.valueExplanationMessageIds[saveManager->getSetting(m_settingIndex)]);
     } else {
         u32 chosen = saveManager->getSetting(m_settingIndex);
-        (*m_settingOptionIds[2]).valueChosen = chosen;
+        m_settingOptionInfo[2].valueChosen = chosen;
         MessageInfo info{};
         info.intVals[0] = chosen;
         instructionText()->setMessageAll(entry.valueExplanationMessageIds[0], &info);
@@ -212,42 +227,21 @@ void SettingsPage::onCategorySwap(u32 /*localPlayerId*/) {
 }
 
 void SettingsPage::onUp(u32 /* localPlayerId */) {
-    u32 tempMessageId = *m_settingNameIds[0];
-    m_settingNameIds.pop_front();
-    m_settingNameIds.push_back(static_cast<const u32 &&>(tempMessageId));
-    auto tempOptionId = *m_settingOptionIds[0];
-    m_settingOptionIds.pop_front();
-    m_settingOptionIds.push_back(static_cast<const optionId &&>(tempOptionId));
-    for (u32 i = 0; i < std::size(m_settingButtons); i++) {
-        setMessages(i);
+    if (m_selected == m_categoryInfo.settingCount - 1) {
+        return;
     }
-    // TODO: Can we use a modulo operation to make this more efficient?
-    if (m_selected == m_settingNameIds.count() - 1) {
-        m_selected = 0;
-    } else {
-        m_selected++;
-    }
+    m_selected++;
+    refreshMessages();
     m_settingIndex = m_categoryInfo.settingIndex + m_selected;
     setInstructionText();
 }
 
 void SettingsPage::onDown(u32 /* localPlayerId */) {
-    u32 tempMessageId = *m_settingNameIds[m_settingNameIds.count() - 1];
-    m_settingNameIds.pop_back();
-    m_settingNameIds.push_front(static_cast<const u32 &&>(tempMessageId));
-    auto tempOptionId = (*m_settingOptionIds[m_settingOptionIds.count() - 1]);
-    m_settingOptionIds.pop_back();
-    m_settingOptionIds.push_front(static_cast<const optionId &&>(tempOptionId));
-    for (u32 i = 0; i < std::size(m_settingButtons); i++) {
-        setMessages(i);
-    }
-    // TODO: Can we use a modulo operation to make this more efficient?
     if (m_selected == 0) {
-        m_selected = m_settingNameIds.count() - 1;
-
-    } else {
-        m_selected--;
+        return;
     }
+    m_selected--;
+    refreshMessages();
     m_settingIndex = m_categoryInfo.settingIndex + m_selected;
     setInstructionText();
 }
@@ -289,6 +283,7 @@ void SettingsPage::setCategoryInfo(u32 categoryIndex) {
 
 void SettingsPage::setCategoryValues(u32 categoryIndex) {
     auto *saveManager = System::SaveManager::Instance();
+    u32 j = 0;
     for (u32 i = 0; i < SP::ClientSettings::entryCount; i++) {
         const auto &entry = SP::ClientSettings::entries[i];
         if (entry.category != static_cast<SP::ClientSettings::Category>(categoryIndex)) {
@@ -311,42 +306,37 @@ void SettingsPage::setCategoryValues(u32 categoryIndex) {
             option.messageId = entry.valueMessageIds[0];
             option.valueChosen = chosen + entry.valueOffset;
         }
-        m_settingOptionIds.push_back(static_cast<const optionId &&>(option));
-        m_settingNameIds.push_back(static_cast<const u32 &&>(entry.messageId));
+        // TODO: Remove the circular buffer code
+        m_settingNameMessageIds[j] = entry.messageId;
+        m_settingOptionInfo[j] = option;
+        j++;
     }
 }
 
-void SettingsPage::clearMessageLists() {
-    m_settingNameIds.reset();
-    m_settingOptionIds.reset();
+void SettingsPage::changeCategory(u32 categoryIndex) {
     m_selected = 2;
+
+    setCategoryInfo(categoryIndex);
+    setCategoryValues(categoryIndex);
+    refreshMessages();
+    u32 categoryId =
+            SP::ClientSettings::categoryMessageIds[static_cast<u32>(m_categoryInfo.categoryIndex)];
+    m_categorySwap.setMessageAll(categoryId);
+    m_settingButtons[2].selectDefault(0);
 }
 
 void SettingsPage::setMiddleButton(u32 settingIndex) {
     const auto &entry = SP::ClientSettings::entries[settingIndex];
     u32 chosen = System::SaveManager::Instance()->getSetting(settingIndex);
-    (*m_settingOptionIds[2]).messageId = entry.valueMessageIds[chosen];
+    m_settingOptionInfo[2].messageId = entry.valueMessageIds[chosen];
 
     if (entry.valueNames) {
-        m_settingButtons[2].setMessage("current_option", (*m_settingOptionIds[2]).messageId);
+        m_settingButtons[2].setMessage("current_option", m_settingOptionInfo[2].messageId);
     } else {
-        (*m_settingOptionIds[2]).valueChosen = chosen;
+        m_settingOptionInfo[2].valueChosen = chosen;
         MessageInfo info{};
         info.intVals[0] = chosen;
         m_settingButtons[2].setMessage("current_option", entry.valueMessageIds[0], &info);
-    }
-    setInstructionText();
-}
-
-void SettingsPage::setButtons() {
-    u32 categoryId =
-            SP::ClientSettings::categoryMessageIds[static_cast<u32>(m_categoryInfo.categoryIndex)];
-    m_categorySwap.setMessageAll(categoryId);
-    for (u32 i = 0; i < std::size(m_settingButtons); i++) {
-        m_settingButtons[i].setMessage("setting_name", *m_settingNameIds[i]);
-        MessageInfo info{};
-        info.intVals[0] = (*m_settingOptionIds[i]).valueChosen;
-        m_settingButtons[i].setMessage("current_option", (*m_settingOptionIds[i]).messageId, &info);
     }
     setInstructionText();
 }
