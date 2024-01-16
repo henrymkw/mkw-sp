@@ -8,7 +8,6 @@
 #include "game/ui/ctrl/CtrlMenuInstructionText.hh"
 #include "game/ui/ctrl/CtrlMenuPageTitleText.hh"
 
-
 namespace UI {
 
 class SettingsSliderPage : public Page {
