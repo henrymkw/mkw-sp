@@ -553,6 +553,11 @@ asset_in_files = {
         os.path.join('button', 'ctrl', 'SliderPageNumberDisplay.brctr.json5'),
         os.path.join('button', 'blyt', 'course_select_scroll_bar.brlyt.json5'),
         os.path.join('button', 'ctrl', 'CourseSelectScrollBar.brctr.json5'),
+        os.path.join('button', 'anim', 'course_select_button_free.brlan.json5'),
+        os.path.join('button', 'anim', 'course_select_button_free_to_select.brlan.json5'),
+        os.path.join('button', 'anim', 'course_select_button_select.brlan.json5'),
+        os.path.join('button', 'anim', 'course_select_button_select_to_free.brlan.json5'),
+        os.path.join('button', 'anim', 'common_w010_cup_fuchi_check_loop.brlan.json5'),
 
         
 
@@ -855,6 +860,11 @@ asset_in_files = {
         os.path.join('button', 'ctrl', 'SliderPageNumberDisplay.brctr.json5'),
         os.path.join('button', 'blyt', 'course_select_scroll_bar.brlyt.json5'),
         os.path.join('button', 'ctrl', 'CourseSelectScrollBar.brctr.json5'),
+        os.path.join('button', 'anim', 'course_select_button_free.brlan.json5'),
+        os.path.join('button', 'anim', 'course_select_button_free_to_select.brlan.json5'),
+        os.path.join('button', 'anim', 'course_select_button_select.brlan.json5'),
+        os.path.join('button', 'anim', 'course_select_button_select_to_free.brlan.json5'),
+        os.path.join('button', 'anim', 'common_w010_cup_fuchi_check_loop.brlan.json5'),
         # HUD
         os.path.join('game_image', 'anim', 'battle_total_point_off.brlan.json5'),
         os.path.join('game_image', 'anim', 'battle_total_point_on.brlan.json5'),
