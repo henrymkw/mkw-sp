@@ -2,11 +2,12 @@
 
 #include "game/ui/BlackBackControl.hh"
 #include "game/ui/Page.hh"
+#include "game/ui/ScrollBar.hh"
+#include "game/ui/SectionManager.hh"
+#include "game/ui/ctrl/CtrlMenuBackButton.hh"
 #include "game/ui/ctrl/CtrlMenuInstructionText.hh"
 #include "game/ui/ctrl/CtrlMenuPageTitleText.hh"
-#include "game/ui/ctrl/CtrlMenuBackButton.hh"
-#include "game/ui/SectionManager.hh"
-#include "game/ui/ScrollBar.hh"
+
 
 namespace UI {
 
