@@ -118,10 +118,10 @@ void SettingsCategorySwapPage::onButtonFront(PushButton *button, u32 /*localPlay
     auto *settingsPage = SectionManager::Instance()->currentSection()->page<PageId::MenuSettings>();
     // clear messages, change fields of SettingsPage, and fall to prev page
     settingsPage->changeCategory(button->m_index);
-    //settingsPage->clearMessageLists();
-    //settingsPage->setCategoryInfo(button->m_index);
-    //settingsPage->setCategoryValues(button->m_index);
-    //settingsPage->setButtons();
+    // settingsPage->clearMessageLists();
+    // settingsPage->setCategoryInfo(button->m_index);
+    // settingsPage->setCategoryValues(button->m_index);
+    // settingsPage->setButtons();
     onBack(0);
     // m_categories[m_chosen].setPaneVisible("checkmark", false);
     // m_chosen = button->m_index;
