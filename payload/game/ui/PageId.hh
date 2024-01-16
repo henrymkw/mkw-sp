@@ -226,6 +226,7 @@ enum class PageId {
     SettingsNumberOptions,
     SettingsCategorySwap,
     SettingsLargeOptions,
+    SettingsSlider,
     // }
 
     Ext_MaxExclusive__,
