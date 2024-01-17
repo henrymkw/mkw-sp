@@ -88,8 +88,8 @@ void SettingsPage::onInit() {
     m_categorySwapPlusIcon.m_zIndex = 10.0f;
 
     m_inputManager.setHandler(MenuInputManager::InputId::Back, &m_onBack, false, false);
-    m_inputManager.setHandler(MenuInputManager::InputId::Down, &m_onUp, false, false);
-    m_inputManager.setHandler(MenuInputManager::InputId::Up, &m_onDown, false, false);
+    m_inputManager.setHandler(MenuInputManager::InputId::Down, &m_onUp, true, false);
+    m_inputManager.setHandler(MenuInputManager::InputId::Up, &m_onDown, true, false);
     m_inputManager.setHandler(MenuInputManager::InputId::Option, &m_onCategorySwap, false, false);
     m_arrowUp.setFrontHandler(&m_onSettingsWheelButtonFront, false);
     m_arrowDown.setFrontHandler(&m_onSettingsWheelButtonFront, false);
