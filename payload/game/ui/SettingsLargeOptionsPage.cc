@@ -1,6 +1,7 @@
 #include "SettingsLargeOptionsPage.hh"
 
 #include "game/system/SaveManager.hh"
+#include "game/ui/SectionManager.hh"
 #include "game/ui/SettingsPage.hh"
 #include "sp/settings/ClientSettings.hh"
 #include <Common.hh>
@@ -43,7 +44,15 @@ void SettingsLargeOptionsPage::onInit() {
     m_blackBackControl.m_zIndex = -150.0f;
     m_arrowLeft.load("button", "NumberMenuArrowLeft", "ButtonArrowLeft", 0x1, false, true);
     m_arrowRight.load("button", "NumberMenuArrowRight", "ButtonArrowRight", 0x1, false, true);
-    m_instructionText.load("bg", "BlackBackObiInstructionText", "RaceObiInstructionText", nullptr);
+
+    auto sectionId = SectionManager::Instance()->currentSection()->id();
+
+    if (Section::GetSceneId(sectionId) == System::SceneId::Race) {
+        m_instructionText.load("bg", "RaceObiInstructionText", "RaceObiInstructionText", nullptr);
+    } else {
+        m_instructionText.load("bg", "BlackBackObiInstructionText", "RaceObiInstructionText",
+                nullptr);
+    }
     m_settingTitleText.load("button", "SubMenuSettingTitle", "SettingTitleTop", nullptr);
 
     m_inputManager.setHandler(MenuInputManager::InputId::Back, &m_onBack, false, false);

@@ -30,13 +30,16 @@ void SettingsSliderPage::onInit() {
     auto sectionId = SectionManager::Instance()->currentSection()->id();
     if (Section::GetSceneId(sectionId) == System::SceneId::Race) {
         m_backButton.load("message_window", "Back", "ButtonBack", 0x1, false, true);
+        m_instructionText.load("bg", "RaceObiInstructionText", "RaceObiInstructionText", nullptr);
     } else {
         m_backButton.load("button", "Back", "ButtonBackPopup", 0x1, false, true);
+        m_instructionText.load("bg", "BlackBackObiInstructionText", "RaceObiInstructionText",
+                nullptr);
     }
 
     m_blackBackControl.load("control", "RankingBlackBack", "RankingBlackBack");
     m_blackBackControl.m_zIndex = -150.0f;
-    m_instructionText.load("bg", "BlackBackObiInstructionText", "RaceObiInstructionText", nullptr);
+
     m_settingTitleText.load("button", "SubMenuSettingTitle", "SettingTitleTop", nullptr);
     m_option.load("button", "SliderPageNumberDisplay", "NumberDisplay", NULL);
     m_scrollBar.load(m_numOptions, m_chosen, "button", "CourseSelectScrollBar",
@@ -65,6 +68,9 @@ void SettingsSliderPage::onActivate() {
     info.intVals[0] = m_chosen;
     info.intVals[1] = m_numOptions - 1;
     m_option.setMessageAll(2009, &info);
+
+    m_instructionText.setVisible(true);
+    m_instructionText.setMessageAll(entry.valueExplanationMessageIds[0], &info);
 }
 
 void SettingsSliderPage::onBack(u32 /* localPlayerId */) {
@@ -90,6 +96,8 @@ void SettingsSliderPage::onScrollBarChange(ScrollBar * /* scrollBar */, u32 /* l
     info.intVals[0] = m_chosen;
     info.intVals[1] = m_numOptions - 1;
     m_option.setMessageAll(2009, &info);
+    const auto &entry = SP::ClientSettings::entries[settingIndex];
+    m_instructionText.setMessageAll(entry.valueExplanationMessageIds[0], &info);
 }
 
 } // namespace UI

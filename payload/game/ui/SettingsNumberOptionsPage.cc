@@ -44,10 +44,12 @@ void SettingsNumberOptionsPage::onInit() {
 
     if (Section::GetSceneId(sectionId) == System::SceneId::Race) {
         m_backButton.load("message_window", "Back", "ButtonBack", 0x1, false, true);
+        m_instructionText.load("bg", "RaceObiInstructionText", "RaceObiInstructionText", nullptr);
     } else {
+        m_instructionText.load("bg", "BlackBackObiInstructionText", "RaceObiInstructionText",
+                nullptr);
         m_backButton.load("button", "Back", "ButtonBackPopup", 0x1, false, true);
     }
-    m_instructionText.load("bg", "BlackBackObiInstructionText", "RaceObiInstructionText", nullptr);
 
     m_arrowLeft.load("button", "NumberMenuArrowLeft", "ButtonArrowLeft", 0x1, false, true);
     m_arrowRight.load("button", "NumberMenuArrowRight", "ButtonArrowRight", 0x1, false, true);

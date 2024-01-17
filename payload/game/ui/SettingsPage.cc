@@ -119,7 +119,8 @@ void SettingsPage::onInit() {
     m_settingButtons[3].setPaneVisible("pause_w_fade_n", false);
     m_settingButtons[4].setPaneVisible("pause_w_fade_n", false);
 
-    m_selected = 2;
+    // m_selected = 2;
+    m_selected = 0;
 }
 
 void SettingsPage::onActivate() {
