@@ -203,6 +203,8 @@ void SettingsPage::onSettingsWheelButtonFront(PushButton *button, u32 /* localPl
             push(PageId::SettingsOptions, Anim::Next);
         } else if (entry.menuType == SP::Settings::MenuType::LargeOption) {
             push(PageId::SettingsLargeOptions, Anim::Next);
+        } else if (entry.menuType == SP::Settings::MenuType::Slider) {
+            push(PageId::SettingsSlider, Anim::Next);
         }
     }
 }
