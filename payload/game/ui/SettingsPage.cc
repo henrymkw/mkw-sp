@@ -27,7 +27,7 @@ void SettingsPage::onInit() {
     insertChild(4, &m_arrowDown, 0);
     insertChild(5, &m_categorySwap, 0);
     insertChild(6, &m_categorySwapPlusIcon, 0);
-    for (u32 i = 0; i < std::size(m_settingButtons); i++) {
+    for (u8 i = 0; i < std::size(m_settingButtons); i++) {
         insertChild(7 + i, &m_settingButtons[i], 0);
     }
     if (!isRace) {
@@ -99,12 +99,10 @@ void SettingsPage::onInit() {
 
     m_backButton.setFrontHandler(&m_onBackButtonFront, false);
 
-    for (u32 i = 0; i < std::size(m_settingButtons); i++) {
+    for (u8 i = 0; i < std::size(m_settingButtons); i++) {
         m_settingButtons[i].setFrontHandler(&m_onSettingsWheelButtonFront, false);
         m_settingButtons[i].setSelectHandler(&m_onSettingsWheelButtonSelect, false);
         m_settingButtons[i].setDeselectHandler(&m_onSettingsWheelButtonDeselect, false);
-        // m_settingButtons[i].setVisible(true);
-        // setMessages(i);
         m_settingButtons[i].m_index = i;
     }
 
@@ -119,18 +117,15 @@ void SettingsPage::onInit() {
     m_settingButtons[3].setPaneVisible("pause_w_fade_n", false);
     m_settingButtons[4].setPaneVisible("pause_w_fade_n", false);
 
-    // m_selected = 2;
     m_selected = 0;
 }
 
 void SettingsPage::onActivate() {
     m_settingIndex = m_categoryInfo.settingIndex + m_selected;
-    // setInstructionText();
     u32 categoryId =
             SP::ClientSettings::categoryMessageIds[static_cast<u32>(m_categoryInfo.categoryIndex)];
     m_categorySwap.setMessageAll(categoryId);
     m_settingButtons[2].selectDefault(0);
-    SP_LOG("currCategory: %d", m_categoryInfo.categoryIndex);
     refreshMessages();
 }
 
@@ -143,6 +138,7 @@ void SettingsPage::refreshMessages() {
             m_settingButtons[i].setVisible(false);
             continue;
         }
+        // TODO: Fix C cast
         if (idx > (s32)(m_categoryInfo.settingCount - 1)) {
             m_settingButtons[i].setVisible(false);
             continue;
@@ -197,7 +193,6 @@ void SettingsPage::onSettingsWheelButtonFront(PushButton *button, u32 /* localPl
         push(PageId::SettingsCategorySwap, Anim::Next);
     } else {
         const auto &entry = SP::ClientSettings::entries[m_settingIndex];
-        // TODO: make one of these for each menuType
         if (entry.menuType == SP::Settings::MenuType::Number) {
             push(PageId::SettingsNumberOptions, Anim::Next);
         } else if (entry.menuType == SP::Settings::MenuType::OptionAndDescription) {
@@ -309,7 +304,6 @@ void SettingsPage::setCategoryValues(u32 categoryIndex) {
             option.messageId = entry.valueMessageIds[0];
             option.valueChosen = chosen + entry.valueOffset;
         }
-        // TODO: Remove the circular buffer code
         m_settingNameMessageIds[j] = entry.messageId;
         m_settingOptionInfo[j] = option;
         j++;

@@ -6,7 +6,6 @@
 #include "game/ui/ctrl/CtrlMenuBackButton.hh"
 #include "game/ui/ctrl/CtrlMenuInstructionText.hh"
 #include "game/ui/ctrl/CtrlMenuPageTitleText.hh"
-#include "sp/CircularBuffer.hh"
 
 namespace UI {
 
@@ -109,9 +108,6 @@ private:
     u32 m_selected;
     u32 m_settingIndex;
     PushButton m_settingButtons[5];
-
-    SP::CircularBuffer<u32, 20> m_settingNameIds;
-    SP::CircularBuffer<optionId, 20> m_settingOptionIds;
 
     std::array<u32, 20> m_settingNameMessageIds;
     std::array<optionId, 20> m_settingOptionInfo;

@@ -18,6 +18,8 @@ private:
     void onBack(u32 localPlayerId);
     void onBackButtonFront(PushButton *button, u32 localPlayerId);
     void onButtonFront(PushButton *button, u32 localPlayerId);
+    // This is for when you press start. Same functino as onBack, different button
+    void onClose(u32 localPlayerId);
 
     MultiControlInputManager m_inputManager;
 
@@ -36,6 +38,7 @@ private:
     using H = typename T::template Handler<SettingsCategorySwapPage>;
 
     H<MultiControlInputManager> m_onBack{this, &SettingsCategorySwapPage::onBack};
+    H<MultiControlInputManager> m_onClose{this, &SettingsCategorySwapPage::onClose};
     H<PushButton> m_onBackButtonFront{this, &SettingsCategorySwapPage::onBackButtonFront};
     H<PushButton> m_onButtonFront{this, &SettingsCategorySwapPage::onButtonFront};
 };

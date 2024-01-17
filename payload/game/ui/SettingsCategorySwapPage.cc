@@ -56,7 +56,7 @@ void SettingsCategorySwapPage::onInit() {
         m_instructionText.load("bg", "MenuObiInstructionText", "MenuObiInstructionText", nullptr);
     }
     m_inputManager.setHandler(MenuInputManager::InputId::Back, &m_onBack, false, false);
-
+    m_inputManager.setHandler(MenuInputManager::InputId::Option, &m_onClose, false, false);
     for (u8 i = 0; i < 10; i++) {
         m_categories[i].setFrontHandler(&m_onButtonFront, false);
         m_categories[i].m_index = i;
@@ -104,6 +104,10 @@ void SettingsCategorySwapPage::onBack(u32 /* localPlayerId */) {
 void SettingsCategorySwapPage::onBackButtonFront(PushButton *button, u32 /*localPlayerId*/) {
     f32 delay = button->getDelay();
     startReplace(Anim::Prev, delay);
+}
+
+void SettingsCategorySwapPage::onClose(u32 /* localPlayerId */) {
+    startReplace(Anim::Prev, 0.0f);
 }
 
 void SettingsCategorySwapPage::onButtonFront(PushButton *button, u32 /*localPlayerId*/) {
