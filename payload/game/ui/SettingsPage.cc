@@ -213,7 +213,7 @@ void SettingsPage::setInstructionText() {
                 entry.valueExplanationMessageIds[saveManager->getSetting(m_settingIndex)]);
     } else {
         u32 chosen = saveManager->getSetting(m_settingIndex);
-        m_settingOptionInfo[2].valueChosen = chosen;
+        m_settingOptionInfo[m_selected].valueChosen = chosen;
         MessageInfo info{};
         info.intVals[0] = chosen;
         instructionText()->setMessageAll(entry.valueExplanationMessageIds[0], &info);
@@ -325,12 +325,13 @@ void SettingsPage::changeCategory(u32 categoryIndex) {
 void SettingsPage::setMiddleButton(u32 settingIndex) {
     const auto &entry = SP::ClientSettings::entries[settingIndex];
     u32 chosen = System::SaveManager::Instance()->getSetting(settingIndex);
-    m_settingOptionInfo[2].messageId = entry.valueMessageIds[chosen];
+    // SP_LOG("setMiddleButton(): settingIndex: %d | m_selected: %d", settingIndex, m_selected);
+    m_settingOptionInfo[m_selected].messageId = entry.valueMessageIds[chosen];
 
     if (entry.valueNames) {
-        m_settingButtons[2].setMessage("current_option", m_settingOptionInfo[2].messageId);
+        m_settingButtons[2].setMessage("current_option", m_settingOptionInfo[m_selected].messageId);
     } else {
-        m_settingOptionInfo[2].valueChosen = chosen;
+        m_settingOptionInfo[m_selected].valueChosen = chosen;
         MessageInfo info{};
         info.intVals[0] = chosen;
         m_settingButtons[2].setMessage("current_option", entry.valueMessageIds[0], &info);
