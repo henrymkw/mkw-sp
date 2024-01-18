@@ -2,6 +2,7 @@
 
 #include "game/host_system/Scene.hh"
 #include "game/system/SaveManager.hh"
+#include "game/ui/MessagePage.hh"
 #include "game/ui/SectionManager.hh"
 #include "game/ui/SettingsCategorySwapPage.hh"
 #include "game/ui/page/RaceMenuPage.hh"
@@ -193,6 +194,24 @@ void SettingsPage::onSettingsWheelButtonFront(PushButton *button, u32 /* localPl
         push(PageId::SettingsCategorySwap, Anim::Next);
     } else {
         const auto &entry = SP::ClientSettings::entries[m_settingIndex];
+        auto *saveManager = System::SaveManager::Instance();
+
+        // Can probably write this more clean but it will do for now
+        // Informs the user that vanilla mode must be turned off to change certain settings
+        if (entry.vanillaValue) {
+            auto setting = saveManager->getSetting<SP::ClientSettings::Setting::VanillaMode>();
+            if (setting == SP::ClientSettings::VanillaMode::Enable) {
+                auto section = SectionManager::Instance()->currentSection();
+                auto messagePopup = section->page<PageId::MessagePopup>();
+
+                messagePopup->reset();
+                messagePopup->setWindowMessage(20048);
+
+                push(PageId::MessagePopup, Anim::None);
+                return;
+            }
+        }
+
         if (entry.menuType == SP::Settings::MenuType::Number) {
             push(PageId::SettingsNumberOptions, Anim::Next);
         } else if (entry.menuType == SP::Settings::MenuType::OptionAndDescription) {
@@ -311,7 +330,7 @@ void SettingsPage::setCategoryValues(u32 categoryIndex) {
 }
 
 void SettingsPage::changeCategory(u32 categoryIndex) {
-    m_selected = 2;
+    m_selected = 0;
 
     setCategoryInfo(categoryIndex);
     setCategoryValues(categoryIndex);
