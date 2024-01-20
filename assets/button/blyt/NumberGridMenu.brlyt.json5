@@ -1226,7 +1226,7 @@
                     "flags": {
                         "visible": true,
                         "influenced alpha": true,
-                        "location adjust": false,
+                        "location adjust": true,
                     },
                     "base position": "center",
                     "opacity": 255,
