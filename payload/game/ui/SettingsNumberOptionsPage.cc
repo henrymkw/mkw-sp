@@ -105,8 +105,8 @@ void SettingsNumberOptionsPage::onActivate() {
     } else {
         m_arrowLeft.setVisible(true);
         m_arrowRight.setVisible(true);
-  	m_arrowLeft.setPlayerFlags(0);
-	m_arrowRight.setPlayerFlags(0);
+  	m_arrowLeft.setPlayerFlags(1);
+	m_arrowRight.setPlayerFlags(1);
     }
     refresh();
 }
