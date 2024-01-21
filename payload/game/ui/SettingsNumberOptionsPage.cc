@@ -100,9 +100,13 @@ void SettingsNumberOptionsPage::onActivate() {
     if (entry.valueCount <= std::size(m_options)) {
         m_arrowLeft.setVisible(false);
         m_arrowRight.setVisible(false);
+	m_arrowLeft.setPlayerFlags(0);
+	m_arrowRight.setPlayerFlags(0);
     } else {
         m_arrowLeft.setVisible(true);
         m_arrowRight.setVisible(true);
+  	m_arrowLeft.setPlayerFlags(0);
+	m_arrowRight.setPlayerFlags(0);
     }
     refresh();
 }
@@ -117,6 +121,7 @@ void SettingsNumberOptionsPage::onBackButtonFront(PushButton *button, u32 /* loc
 }
 
 void SettingsNumberOptionsPage::onOptionButtonSelect(PushButton *button, u32 /* localPlayerId */) {
+    SP_LOG("onOptionButtonSelect(): button->m_index: %d", button->m_index);
     if (button->m_index == m_arrowRight.m_index || button->m_index == m_arrowLeft.m_index) {
         m_instructionText.setVisible(false);
         return;
@@ -144,7 +149,8 @@ void SettingsNumberOptionsPage::refresh() {
         }
         if (i + offset == m_selectedValue) {
             m_options[i].setPaneVisible("checkmark", true);
-        } else {
+            SP_LOG("setting option %d as marked", i);
+	} else {
             m_options[i].setPaneVisible("checkmark", false);
         }
         m_options[i].setVisible(true);
@@ -158,6 +164,7 @@ void SettingsNumberOptionsPage::refresh() {
 }
 
 void SettingsNumberOptionsPage::onOptionButtonFront(PushButton *button, u32 /* localPlayerId */) {
+    SP_LOG("onOptionButtonFront(): button->m_index: %d", button->m_index);
     if (button->m_index < 30) {
         // Get the setting and set its value
         // TODO: Implement category switch to actually test this thing
