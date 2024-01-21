@@ -67,10 +67,14 @@ void SettingsNumberOptionsPage::onInit() {
     m_backButton.setFrontHandler(&m_onBackButtonFront, false);
     m_arrowLeft.setFrontHandler(&m_onOptionButtonFront, false);
     m_arrowRight.setFrontHandler(&m_onOptionButtonFront, false);
+    m_arrowLeft.setSelectHandler(&m_onOptionButtonSelect, false);
+    m_arrowRight.setSelectHandler(&m_onOptionButtonSelect, false);
     m_backButton.m_index = std::size(m_options);
     m_arrowLeft.m_index = m_backButton.m_index + 1;
     m_arrowRight.m_index = m_arrowLeft.m_index + 1;
     m_selectedIndex = 0;
+    m_arrowLeft.setPointerOnly(false);
+    m_arrowRight.setPointerOnly(false);
 }
 
 void SettingsNumberOptionsPage::onActivate() {
@@ -93,7 +97,6 @@ void SettingsNumberOptionsPage::onActivate() {
     MessageInfo info{};
     info.intVals[0] = m_selectedIndex + entry.valueOffset + (m_currSheet * std::size(m_options));
     m_instructionText.setMessageAll(entry.valueExplanationMessageIds[0], &info);
-
     if (entry.valueCount <= std::size(m_options)) {
         m_arrowLeft.setVisible(false);
         m_arrowRight.setVisible(false);
@@ -114,12 +117,17 @@ void SettingsNumberOptionsPage::onBackButtonFront(PushButton *button, u32 /* loc
 }
 
 void SettingsNumberOptionsPage::onOptionButtonSelect(PushButton *button, u32 /* localPlayerId */) {
+    if (button->m_index == m_arrowRight.m_index || button->m_index == m_arrowLeft.m_index) {
+        m_instructionText.setVisible(false);
+        return;
+    }
     auto *settingsPage = SectionManager::Instance()->currentSection()->page<PageId::MenuSettings>();
     u32 settingIndex = settingsPage->getSettingIndex();
     const auto &entry = SP::ClientSettings::entries[settingIndex];
     MessageInfo info{};
     info.intVals[0] = button->m_index + entry.valueOffset + (30 * m_currSheet);
     m_instructionText.setMessageAll(entry.valueExplanationMessageIds[0], &info);
+    m_instructionText.setVisible(true);
 }
 
 void SettingsNumberOptionsPage::refresh() {
@@ -175,6 +183,7 @@ void SettingsNumberOptionsPage::onOptionButtonFront(PushButton *button, u32 /* l
             m_currSheet++;
         }
         refresh();
+        m_arrowRight.selectDefault(0);
     } else if (button->m_index == m_arrowLeft.m_index) {
         if (m_currSheet == 0) {
             m_currSheet = m_numSheets - 1;
@@ -182,6 +191,7 @@ void SettingsNumberOptionsPage::onOptionButtonFront(PushButton *button, u32 /* l
             m_currSheet--;
         }
         refresh();
+        m_arrowLeft.selectDefault(0);
     }
 }
 
