@@ -94,19 +94,20 @@ void SettingsNumberOptionsPage::onActivate() {
     while (entry.valueCount > m_numSheets * std::size(m_options)) {
         m_numSheets++;
     }
+    m_selectedSheet = m_currSheet;
     MessageInfo info{};
     info.intVals[0] = m_selectedIndex + entry.valueOffset + (m_currSheet * std::size(m_options));
     m_instructionText.setMessageAll(entry.valueExplanationMessageIds[0], &info);
     if (entry.valueCount <= std::size(m_options)) {
         m_arrowLeft.setVisible(false);
         m_arrowRight.setVisible(false);
-	m_arrowLeft.setPlayerFlags(0);
-	m_arrowRight.setPlayerFlags(0);
+        m_arrowLeft.setPlayerFlags(0);
+        m_arrowRight.setPlayerFlags(0);
     } else {
         m_arrowLeft.setVisible(true);
         m_arrowRight.setVisible(true);
-  	m_arrowLeft.setPlayerFlags(1);
-	m_arrowRight.setPlayerFlags(1);
+        m_arrowLeft.setPlayerFlags(1);
+        m_arrowRight.setPlayerFlags(1);
     }
     refresh();
 }
@@ -121,7 +122,6 @@ void SettingsNumberOptionsPage::onBackButtonFront(PushButton *button, u32 /* loc
 }
 
 void SettingsNumberOptionsPage::onOptionButtonSelect(PushButton *button, u32 /* localPlayerId */) {
-    SP_LOG("onOptionButtonSelect(): button->m_index: %d", button->m_index);
     if (button->m_index == m_arrowRight.m_index || button->m_index == m_arrowLeft.m_index) {
         m_instructionText.setVisible(false);
         return;
@@ -147,10 +147,9 @@ void SettingsNumberOptionsPage::refresh() {
             m_options[i].setPlayerFlags(0);
             continue;
         }
-        if (i + offset == m_selectedValue) {
+        if (i == m_selectedIndex && m_currSheet == m_selectedSheet) {
             m_options[i].setPaneVisible("checkmark", true);
-            SP_LOG("setting option %d as marked", i);
-	} else {
+        } else {
             m_options[i].setPaneVisible("checkmark", false);
         }
         m_options[i].setVisible(true);
@@ -164,7 +163,6 @@ void SettingsNumberOptionsPage::refresh() {
 }
 
 void SettingsNumberOptionsPage::onOptionButtonFront(PushButton *button, u32 /* localPlayerId */) {
-    SP_LOG("onOptionButtonFront(): button->m_index: %d", button->m_index);
     if (button->m_index < 30) {
         // Get the setting and set its value
         // TODO: Implement category switch to actually test this thing
@@ -179,6 +177,7 @@ void SettingsNumberOptionsPage::onOptionButtonFront(PushButton *button, u32 /* l
             m_options[m_selectedIndex].setPaneVisible("checkmark", false);
         }
         m_selectedIndex = button->m_index;
+        m_selectedSheet = m_currSheet;
         m_options[m_selectedIndex].setPaneVisible("checkmark", true);
         MessageInfo info{};
         info.intVals[0] = m_selectedValue;

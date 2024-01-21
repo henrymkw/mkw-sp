@@ -38,6 +38,7 @@ private:
     u32 m_selectedValue;
     // m_selectedIndex is the index of m_selectedValue in m_options
     u32 m_selectedIndex;
+    u32 m_selectedSheet;
     u32 m_numSheets;
     u32 m_currSheet;
 
