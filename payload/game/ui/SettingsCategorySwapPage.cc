@@ -111,7 +111,6 @@ void SettingsCategorySwapPage::onClose(u32 /* localPlayerId */) {
 }
 
 void SettingsCategorySwapPage::onButtonFront(PushButton *button, u32 /*localPlayerId*/) {
-    SP_LOG("newCategory: %d", button->m_index);
     if (button->m_index == m_arrowLeft.m_index) {
         // TODO: Implement sheet system
         return;
