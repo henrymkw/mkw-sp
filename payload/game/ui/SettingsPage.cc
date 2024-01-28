@@ -344,7 +344,6 @@ void SettingsPage::changeCategory(u32 categoryIndex) {
 void SettingsPage::setMiddleButton(u32 settingIndex) {
     const auto &entry = SP::ClientSettings::entries[settingIndex];
     u32 chosen = System::SaveManager::Instance()->getSetting(settingIndex);
-    // SP_LOG("setMiddleButton(): settingIndex: %d | m_selected: %d", settingIndex, m_selected);
     m_settingOptionInfo[m_selected].messageId = entry.valueMessageIds[chosen];
 
     if (entry.valueNames) {
