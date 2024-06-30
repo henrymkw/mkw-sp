@@ -337,7 +337,7 @@ void Section::addActivePage(PageId pageId) {
             {SectionId::SingleSelectBTCourse, PageId::BattleCupSelect},
             {SectionId::SingleSelectBTCourse, PageId::BattleCourseSelect},
 
-            {SectionId::OnlineSingle, PageId::DirectConnection},
+            //{SectionId::OnlineSingle, PageId::DirectConnection},
 
             {SectionId::OnlineMulti, PageId::OnlineTeamSelect},
             {SectionId::OnlineMulti, PageId::GhostManager},
@@ -538,7 +538,7 @@ void Section::addActivePages(SectionId id) {
             // Pack Select
             {SectionId::Single, PageId::PackSelect},
 
-            {SectionId::OnlineSingle, PageId::OnlineTop},
+            //{SectionId::OnlineSingle, PageId::WifiTop},
 
             {SectionId::OnlineMulti, PageId::OnlineTop},
 
