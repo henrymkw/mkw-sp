@@ -1219,6 +1219,8 @@ code_in_files = {
         os.path.join('vendor', 'nanopb', 'pb_decode.c'),
         os.path.join('vendor', 'nanopb', 'pb_encode.c'),
         os.path.join('vendor', 'tjpgd', 'tjpgd.c'),
+        os.path.join('vendor', 'rsa', 'rsa.c'),
+        os.path.join('vendor', 'sha256', 'sha265.c'),
         *sorted(glob.glob("vendor/bzip2/*.c")),
         *sorted(glob.glob("payload/**/*.cc", recursive=True)),
         *sorted(glob.glob("payload/**/*.c", recursive=True)),
