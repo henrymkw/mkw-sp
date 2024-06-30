@@ -145,7 +145,7 @@ enum class PageId {
     WifiFirstPlay = 0x85,
     WifiDataConsent = 0x86,
     WifiDisconnect = 0x87,          // "Disconnects you"
-    OnlineConnectionManager = 0x88, // Replaces unknown page
+    UnknownPage = 0x88, // Replaces unknown page
     WifiConnectionFailed = 0x89,
     WifiMultiConfirm = 0x8A,
     WifiTop = 0x8B,        // Replaces WifiTop
@@ -224,6 +224,7 @@ enum class PageId {
     SPRankingTopTenDownload,
     OnlineTop,
     DirectConnection,
+    OnlineConnectionManager,
     // }
 
     Ext_MaxExclusive__,
