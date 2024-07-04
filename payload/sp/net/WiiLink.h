@@ -1,7 +1,7 @@
 #include <Common.h>
 
-#include <vendor/rsa/RSA.h>
-#include <vendor/sha256/SHA256.h>
+#include <vendor/rsa/rsa.h>
+#include <vendor/sha256/sha256.h>
 
 #define WWFC_DOMAIN "wiilink24.com"
 
