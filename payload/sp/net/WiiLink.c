@@ -21,7 +21,7 @@ extern s32 s_auth_error;
 extern s32 *s_auth_work;
 
 static void my_DWCi_Auth_SendRequest(
-    int param_1, wchar_t *param_2, char *param_3, int param_4, int param_5, int param_6)
+    int /* param_1 */, wchar_t * /* param_2 */, char * /* param_3 */, int /* param_4 */, int /* param_5 */, int /* param_6 */)
 {
     
     // clang-format off
@@ -126,7 +126,7 @@ s32 HandleResponse(void *block)
     return entryFunction(payload);
 }
 
-void OnPayloadReceived(NHTTPError result, NHTTPResponseHandle response, void *userdata)
+void OnPayloadReceived(NHTTPError result, NHTTPResponseHandle response, void * /*userdata */)
 {
     if (response == NULL)
     {
