@@ -139,6 +139,7 @@ public:
 
     ControlInputManager();
     ~ControlInputManager();
+    void dt(s32 type);
     void init(u32 childCount, bool isMultiPlayer, bool pointerOnly);
     void setHandler(MenuInputManager::InputId inputId, IHandler *handler, bool repeat);
     void getFuchiPatternColors(GXColorS10 *color0, GXColorS10 *color1) const;
