@@ -988,6 +988,7 @@ common_cflags = [
     '-Wall',
     '-Wextra',
     '-Wno-packed-bitfield-compat',
+    '-g3',
 ]
 common_ccflags = [
     '-DREVOLUTION',
@@ -1007,6 +1008,7 @@ common_ccflags = [
     '-Wno-delete-non-virtual-dtor',
     '-Wno-packed-bitfield-compat',
     '-Wsuggest-override',
+    '-g3',
 ]
 if args.gdb_compatible:
     common_cflags += ['-DGDB_COMPATIBLE=1']
@@ -1656,7 +1658,6 @@ n.build(
     ],
 )
 n.newline()
-n.default(["test"])
 
 if args.dry:
     with open('build.ninja', 'w') as out_file:
