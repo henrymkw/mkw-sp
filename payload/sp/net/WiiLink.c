@@ -1,5 +1,6 @@
 #include "WiiLink.h"
 
+#include <revolution.h>
 #include <revolutionex/nhttp.h>
 #include <revolution/ios.h>
 #include <revolution/dvd.h>
@@ -13,25 +14,8 @@ static void *s_payload = NULL;
 static bool s_payloadReady = false;
 static u8 s_saltHash[SHA256_DIGEST_SIZE];
 
-
-extern void Real_DWCi_Auth_SendRequest(
-        int param_1, int param_2, int param_3, int param_4, int param_5, int param_6);
-
 extern s32 s_auth_error;
 extern s32 *s_auth_work;
-
-static void my_DWCi_Auth_SendRequest(
-    int /* param_1 */, wchar_t * /* param_2 */, char * /* param_3 */, int /* param_4 */, int /* param_5 */, int /* param_6 */)
-{
-    
-    // clang-format off
-    // asm("nofralloc");
-
-    asm("stwu %r1, -0x1B0(%r1)");
-    asm("b Real_DWCi_Auth_SendRequest");
-    // clang-format on
-}
-// PATCH_B(DWCi_Auth_SendRequest, my_DWCi_Auth_SendRequest);
 
 bool GenerateRandomSalt(u8 *out)
 {
@@ -71,7 +55,7 @@ bool GenerateRandomSalt(u8 *out)
     return true;
 }
 
-s32 HandleResponse(void *block)
+s32 HandleResponse(u8 *block)
 {
     register wwfc_payload *__restrict payload =
         (wwfc_payload *)block;
@@ -95,7 +79,7 @@ s32 HandleResponse(void *block)
     SHA256Context ctx;
     SHA256Init(&ctx);
     SHA256Update(
-        &ctx, (u8 *)payload + sizeof(wwfc_payload_header),
+        &ctx, (const u8 *)payload + sizeof(wwfc_payload_header),
         payload->header.total_size - sizeof(wwfc_payload_header));
     u8 *hash = SHA256Final(&ctx);
 
@@ -120,6 +104,25 @@ s32 HandleResponse(void *block)
         );
     }
 
+    // Disable unnecessary patches
+    u32 patchMask = WWFC_PATCH_LEVEL_CRITICAL | WWFC_PATCH_LEVEL_BUGFIX |
+                    WWFC_PATCH_LEVEL_SUPPORT;
+    for (wwfc_patch *patch = (wwfc_patch*)(
+                        block + payload->info.patch_list_offset
+                    ),
+                    *end = (wwfc_patch*)(
+                        block + payload->info.patch_list_end
+                    );
+         patch < end; patch++) {
+        if (patch->level == WWFC_PATCH_LEVEL_CRITICAL ||
+            (patch->level & patchMask)) {
+            continue;
+        }
+
+        // Otherwise disable the patch
+        patch->level |= WWFC_PATCH_LEVEL_DISABLED;
+    }
+
     s32 (*entryFunction)(wwfc_payload *) =
         (s32 (*)(wwfc_payload *))((u8 *)payload + payload->info.entry_point);
 
@@ -140,7 +143,8 @@ void OnPayloadReceived(NHTTPError result, NHTTPResponseHandle response, void * /
         return;
     }
 
-    s32 error = HandleResponse(s_payload);
+    s32 error = HandleResponse((u8 *) s_payload);
+
     if (error != 0)
     {
         s_auth_error = error;
@@ -151,14 +155,13 @@ void OnPayloadReceived(NHTTPError result, NHTTPResponseHandle response, void * /
     s_auth_error = -1; // This error code will retry auth
 }
 
-void do_work(
-    int param_1, int param_2, int param_3, int param_4,
+REPLACE void DWCi_Auth_SendRequest(
+    int param_1, wchar_t *param_2, char *param_3, int param_4,
     int param_5, int param_6)
 {
     if (s_payloadReady)
     {
-        my_DWCi_Auth_SendRequest(
-            param_1, (wchar_t *)param_2, (char *)param_3, param_4, param_5, param_6);
+        REPLACED(DWCi_Auth_SendRequest)(param_1, param_2, param_3, param_4, param_5, param_6);
         return;
     }
 
@@ -170,7 +173,6 @@ void do_work(
     {
         s_auth_error = WL_ERROR_PAYLOAD_STAGE1_MAKE_REQUEST;
     }
-
     static const char *hexConv = "0123456789abcdef";
     char saltHex[SHA256_DIGEST_SIZE * 2 + 1];
     for (int i = 0; i < SHA256_DIGEST_SIZE; i++)
@@ -194,8 +196,10 @@ void do_work(
         url, 0x100 , "http://nas.%s/%s&h=%02x%02x%02x%02x", WWFC_DOMAIN, uri,
         s_saltHash[0], s_saltHash[1], s_saltHash[2], s_saltHash[3]);
 
+
     void *request = NHTTPCreateRequest(
         url, 0, s_payload, PAYLOAD_BLOCK_SIZE, OnPayloadReceived, 0);
+    SP_LOG("payload: %s", (char *)s_payload);
 
     if (request == NULL)
     {

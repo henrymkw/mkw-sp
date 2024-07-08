@@ -9,6 +9,11 @@
 
 extern u32 WWFC_CUSTOM_REGION; // 0x80005EFC
 
+void my_DWCi_Auth_SendRequest(int param_1, wchar_t * param_2, char * param_3, int param_4, int param_5, int param_6);
+
+void REPLACED(DWCi_Auth_SendRequest)(int param_1, wchar_t * param_2, char * param_3, int param_4, int param_5, int param_6);
+REPLACE void DWCi_Auth_SendRequest(int param_1, wchar_t * param_2, char * param_3, int param_4, int param_5, int param_6);
+
 typedef struct {
     char magic[0xC]; // Always "WWFC/Payload"
     u32 total_size;

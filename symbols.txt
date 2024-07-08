@@ -20,7 +20,7 @@
 0x8000b188 _ZN6System13SystemManager12returnToMenuEv
 0x8000b1bc _ZN6System13SystemManager7restartEv
 0x8000b5c8 _ZN6System13SystemManager11RipFromDiscEPKcPN3EGG4HeapEbPj
-0x800ed6ec Real_DWCi_Auth_SendRequest
+0x800ed6e8 DWCi_Auth_SendRequest
 
 0x8000f1f0 memmove
 0x8000F2BC memchr
