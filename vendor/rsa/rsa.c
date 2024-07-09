@@ -189,13 +189,11 @@ bool RSAVerify(const RSAPublicKey* key, u8* signature, const u8* sha)
     result |= memcmp(signature + i, sha256Tail, sizeof(sha256Tail));
 
     if (result != 0) {
-        SP_LOG("RSAVerify: PKCS#1 padding check failed\n");
         return false;
     }
 
     // Check the digest
     if (memcmp(signature + PKCS_PAD_SIZE, sha, SHA256_DIGEST_SIZE) != 0) {
-        SP_LOG("RSAVerify: digest check failed\n");
         return false;
     }
 

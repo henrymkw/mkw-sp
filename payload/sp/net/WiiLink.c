@@ -1,5 +1,8 @@
 #include "WiiLink.h"
 
+#ifndef _WIILINK_
+#define _WIILINK_
+
 #include <revolution.h>
 #include <revolutionex/nhttp.h>
 #include <revolution/ios.h>
@@ -13,6 +16,9 @@ static u8 s_payloadBlock[PAYLOAD_BLOCK_SIZE + 0x20];
 static void *s_payload = NULL;
 static bool s_payloadReady = false;
 static u8 s_saltHash[SHA256_DIGEST_SIZE];
+
+typedef s32 (*EntryFunction)(wwfc_payload *);
+static EntryFunction entry = NULL;
 
 extern s32 s_auth_error;
 extern s32 *s_auth_work;
@@ -90,8 +96,8 @@ s32 HandleResponse(u8 *block)
         return WL_ERROR_PAYLOAD_STAGE1_SIGNATURE_INVALID;
     }
 
-    u32 payload_addr = (u32)payload;
-    for (u32 i = 0; i < 0x20000; i += 0x20)
+    
+    for (register u32 i = 0; i < 0x20000; i += 0x20)
     {
         __asm__ __volatile__ (
             "dcbf %0, %1\n\t"
@@ -99,7 +105,7 @@ s32 HandleResponse(u8 *block)
             "icbi %0, %1\n\t"
             "isync\n\t"
             : 
-            : "r"(i), "r"(payload_addr)
+            : "r"(i), "r"(payload)
             : "memory"
         );
     }
@@ -123,10 +129,11 @@ s32 HandleResponse(u8 *block)
         patch->level |= WWFC_PATCH_LEVEL_DISABLED;
     }
 
-    s32 (*entryFunction)(wwfc_payload *) =
-        (s32 (*)(wwfc_payload *))((u8 *)payload + payload->info.entry_point);
-
-    return entryFunction(payload);
+    entry =
+        (EntryFunction)(
+            (u8 *)payload + payload->info.entry_point);
+    assert(entry != NULL);
+    return entry(payload);
 }
 
 void OnPayloadReceived(NHTTPError result, NHTTPResponseHandle response, void * /*userdata */)
@@ -144,7 +151,6 @@ void OnPayloadReceived(NHTTPError result, NHTTPResponseHandle response, void * /
     }
 
     s32 error = HandleResponse((u8 *) s_payload);
-
     if (error != 0)
     {
         s_auth_error = error;
@@ -183,7 +189,7 @@ REPLACE void DWCi_Auth_SendRequest(
     saltHex[SHA256_DIGEST_SIZE * 2] = 0;
 
     char uri[0x100];
-    snprintf(uri, 0x100, "payload?g=RMC%cD00&s=%s", *(char *)0x80000003, saltHex);
+    sprintf(uri, "payload?g=RMC%cD00&s=%s", *(char *)0x80000003, saltHex);
 
     // Generate salt hash
     SHA256Context ctx;
@@ -192,21 +198,20 @@ REPLACE void DWCi_Auth_SendRequest(
     memcpy(s_saltHash, SHA256Final(&ctx), SHA256_DIGEST_SIZE);
 
     char url[0x100];
-    snprintf(
-        url, 0x100 , "http://nas.%s/%s&h=%02x%02x%02x%02x", WWFC_DOMAIN, uri,
+    sprintf(
+        url, "http://nas.%s/%s&h=%02x%02x%02x%02x", WWFC_DOMAIN, uri,
         s_saltHash[0], s_saltHash[1], s_saltHash[2], s_saltHash[3]);
 
 
     void *request = NHTTPCreateRequest(
         url, 0, s_payload, PAYLOAD_BLOCK_SIZE, OnPayloadReceived, 0);
-    SP_LOG("payload: %s", (char *)s_payload);
 
     if (request == NULL)
     {
         s_auth_error = WL_ERROR_PAYLOAD_STAGE1_MAKE_REQUEST;
         return;
     }
-
     s_auth_work[0x59E0 / 4] = NHTTPSendRequestAsync(request);
 }
 
+#endif

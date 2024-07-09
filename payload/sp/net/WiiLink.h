@@ -3,7 +3,21 @@
 #include <vendor/rsa/rsa.h>
 #include <vendor/sha256/sha256.h>
 
-#define WWFC_DOMAIN "wiilink24.com"
+#ifndef _WIILINK_TYPES_
+#  define _WIILINK_TYPES_
+
+#  define PROD
+
+#  ifndef WWFC_DOMAIN
+
+#    ifdef PROD
+#      define WWFC_DOMAIN "wiilink24.com"
+#    else
+#      define WWFC_DOMAIN "nwfc.wiinoma.com" // Points to localhost
+#    endif
+
+#  endif
+
 
 #define PAYLOAD_BLOCK_SIZE 0x20000
 
@@ -263,5 +277,7 @@ static const unsigned char PayloadPublicKey[] = {
     0xe6, 0x61, 0xdd, 0xbb, 0x11, 0x18, 0x7c, 0xfb, 0x8f, 0x43, 0x71, 0x6b,
     0x6a, 0xa2, 0x0a, 0xd3, 0xc6, 0x98, 0x94, 0xd8, 0x63, 0xb0, 0x49, 0xf5,
 };
+
+  #endif
 
 #endif
