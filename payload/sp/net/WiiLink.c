@@ -7,7 +7,6 @@
 #include <revolutionex/nhttp.h>
 #include <revolution/ios.h>
 #include <revolution/dvd.h>
-#include <revolution/dwc/dwc.h>
 
 #include "string.h"
 #include <stdio.h>

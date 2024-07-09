@@ -3,6 +3,8 @@
 #include <vendor/rsa/rsa.h>
 #include <vendor/sha256/sha256.h>
 
+#include <revolutionex/nhttp.h>
+
 #ifndef _WIILINK_TYPES_
 #  define _WIILINK_TYPES_
 
@@ -23,8 +25,10 @@
 
 extern u32 WWFC_CUSTOM_REGION; // 0x80005EFC
 
-void my_DWCi_Auth_SendRequest(int param_1, wchar_t * param_2, char * param_3, int param_4, int param_5, int param_6);
 
+bool GenerateRandomSalt(u8 *out);
+s32 HandleResponse(u8 *block);
+void OnPayloadReceived(NHTTPError result, NHTTPResponseHandle response, void *userdata);
 void REPLACED(DWCi_Auth_SendRequest)(int param_1, wchar_t * param_2, char * param_3, int param_4, int param_5, int param_6);
 REPLACE void DWCi_Auth_SendRequest(int param_1, wchar_t * param_2, char * param_3, int param_4, int param_5, int param_6);
 
