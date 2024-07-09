@@ -10,6 +10,10 @@ PageInputManager::~PageInputManager() {
     dt(-1);
 }
 
+ControlInputManager::~ControlInputManager() {
+    dt(-1);
+}
+
 MultiControlInputManager::~MultiControlInputManager() {
     dt(-1);
 }

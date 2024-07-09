@@ -323,7 +323,7 @@ void Section::addPage(PageId pageId) {
         }
     }
 
-    SP_LOG("addPage %u", static_cast<u32>(pageId));
+    SP_LOG("addPage 0x%X", static_cast<u32>(pageId));
 
     REPLACED(addPage)(pageId);
 }
@@ -337,7 +337,7 @@ void Section::addActivePage(PageId pageId) {
             {SectionId::SingleSelectBTCourse, PageId::BattleCupSelect},
             {SectionId::SingleSelectBTCourse, PageId::BattleCourseSelect},
 
-            {SectionId::OnlineSingle, PageId::DirectConnection},
+            //{SectionId::OnlineSingle, PageId::DirectConnection},
 
             {SectionId::OnlineMulti, PageId::OnlineTeamSelect},
             {SectionId::OnlineMulti, PageId::GhostManager},
@@ -356,13 +356,13 @@ void Section::addActivePage(PageId pageId) {
         }
     }
 
-    SP_LOG("addActivePage %u", static_cast<u32>(pageId));
+    SP_LOG("addActivePage 0x%x", static_cast<u32>(pageId));
 
     REPLACED(addActivePage)(pageId);
 }
 
 void Section::addPages(SectionId id) {
-    SP_LOG("&7DEBUG: Constructing section %u (0x%x)", static_cast<u32>(id), static_cast<u32>(id));
+    SP_LOG("&7DEBUG: Constructing section 0x%x (0x%x)", static_cast<u32>(id), static_cast<u32>(id));
 
     REPLACED(addPages)(id);
 
@@ -538,7 +538,7 @@ void Section::addActivePages(SectionId id) {
             // Pack Select
             {SectionId::Single, PageId::PackSelect},
 
-            {SectionId::OnlineSingle, PageId::OnlineTop},
+            //{SectionId::OnlineSingle, PageId::WifiTop},
 
             {SectionId::OnlineMulti, PageId::OnlineTop},
 

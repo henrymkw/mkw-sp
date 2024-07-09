@@ -141,14 +141,14 @@ enum class PageId {
     MultiVehicleSelect = 0x81,
     MultiDriftSelect = 0x82,
     MultiTeamSelect = 0x83,
-    DirectConnection = 0x84, // Replaces WifiConnect (or something)
+    WifiConnect = 0x84, // Replaces WifiConnect (or something)
     WifiFirstPlay = 0x85,
     WifiDataConsent = 0x86,
     WifiDisconnect = 0x87,          // "Disconnects you"
-    OnlineConnectionManager = 0x88, // Replaces unknown page
+    UnknownPage = 0x88, // Replaces unknown page
     WifiConnectionFailed = 0x89,
     WifiMultiConfirm = 0x8A,
-    OnlineTop = 0x8B,        // Replaces WifiTop
+    WifiTop = 0x8B,        // Replaces WifiTop
     OnlineModeSelect = 0x8C, // Replaces OnlineModeSelect
     WifiFriendMenu = 0x8D,
     OnlineTeamSelect = 0x8E, // Replaces MkChannelFriendMenu
@@ -222,6 +222,9 @@ enum class PageId {
     ServicePackChannel,
     SPRankingGhostDownload,
     SPRankingTopTenDownload,
+    OnlineTop,
+    DirectConnection,
+    OnlineConnectionManager,
     // }
 
     Ext_MaxExclusive__,
