@@ -988,6 +988,7 @@ common_cflags = [
     '-Wall',
     '-Wextra',
     '-Wno-packed-bitfield-compat',
+    '-g3',
 ]
 common_ccflags = [
     '-DREVOLUTION',
@@ -1007,6 +1008,7 @@ common_ccflags = [
     '-Wno-delete-non-virtual-dtor',
     '-Wno-packed-bitfield-compat',
     '-Wsuggest-override',
+    '-g3',
 ]
 if args.gdb_compatible:
     common_cflags += ['-DGDB_COMPATIBLE=1']
@@ -1219,6 +1221,8 @@ code_in_files = {
         os.path.join('vendor', 'nanopb', 'pb_decode.c'),
         os.path.join('vendor', 'nanopb', 'pb_encode.c'),
         os.path.join('vendor', 'tjpgd', 'tjpgd.c'),
+        os.path.join('vendor', 'rsa', 'rsa.c'),
+        os.path.join('vendor', 'sha256', 'sha256.c'),
         *sorted(glob.glob("vendor/bzip2/*.c")),
         *sorted(glob.glob("payload/**/*.cc", recursive=True)),
         *sorted(glob.glob("payload/**/*.c", recursive=True)),
@@ -1654,7 +1658,6 @@ n.build(
     ],
 )
 n.newline()
-n.default(["test"])
 
 if args.dry:
     with open('build.ninja', 'w') as out_file:

@@ -20,6 +20,7 @@
 0x8000b188 _ZN6System13SystemManager12returnToMenuEv
 0x8000b1bc _ZN6System13SystemManager7restartEv
 0x8000b5c8 _ZN6System13SystemManager11RipFromDiscEPKcPN3EGG4HeapEbPj
+0x800ed6e8 DWCi_Auth_SendRequest
 
 0x8000f1f0 memmove
 0x8000F2BC memchr
@@ -27,6 +28,7 @@
 0x800117b0 vprintf
 0x8001182C vsnprintf
 0x80011938 snprintf
+0x80011a2c sprintf
 0x80011b00 qsort
 0x80013040 sscanf
 0x800131e0 strncpy
@@ -509,6 +511,7 @@
 0x802A4080 sRKSystem
 0x802A4080 _ZN3EGG7TSystem10s_instanceE
 0x802A70B8 _ZN4nw4r2db14sExceptionInfoE
+0x802f1cB8 s_auth_error
 
 0x80343680 Ecb
 0x803505C0 RDSTHandler
@@ -518,6 +521,7 @@
 0x80385908 es_fd
 0x80386000 s_systemManager
 0x80386000 _ZN6System13SystemManager10s_instanceE
+0x8038633c s_auth_work
 0x80386638 MaxEntryNum
 0x8038663c FstStringStart
 0x80386640 FstStart
@@ -900,7 +904,7 @@
 0x805ef688 _ZN2UI16PageInputManager5vf_24Ev
 0x805ef768 _ZN2UI16PageInputManager10setHandlerENS_16MenuInputManager7InputIdEPNS1_8IHandlerEb
 0x805efaf8 _ZN2UI19ControlInputManagerC1Ev
-0x805efbd4 _ZN2UI19ControlInputManagerD1Ev
+0x805efbd4 _ZN2UI19ControlInputManager2dtEi
 0x805efc48 _ZN2UI19ControlInputManager4initEjbb
 0x805efcf8 _ZN2UI19ControlInputManager10setHandlerENS_16MenuInputManager7InputIdEPNS0_8IHandlerEb
 0x805f03dc _ZNK2UI19ControlInputManager21getFuchiPatternColorsEP10GXColorS10S2_
