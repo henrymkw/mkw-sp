@@ -2,7 +2,6 @@
 
 #include "game/system/RaceConfig.hh"
 #include "game/ui/FriendRoomBackPage.hh"
-#include "game/ui/OnlineConnectionManagerPage.hh"
 #include "game/ui/SectionManager.hh"
 
 #include <sp/cs/RoomClient.hh>
@@ -27,23 +26,11 @@ void RandomMatchingPage::onInit() {
 }
 
 void RandomMatchingPage::onActivate() {
-    auto section = SectionManager::Instance()->currentSection();
-    auto onlineManager = section->page<PageId::OnlineConnectionManager>();
-
-    onlineManager->startSearch();
-
+    SP_LOG("RandonMatchingPage::onActivate");
     push(PageId::CharacterSelect, Anim::None);
 }
 
 void RandomMatchingPage::onRefocus() {
-    auto section = SectionManager::Instance()->currentSection();
-    auto onlineManager = section->page<PageId::OnlineConnectionManager>();
-
-    if (onlineManager->isCustomTrackpack()) {
-        m_title.setMessage(4001);
-    } else {
-        m_title.setMessage(4000);
-    }
 }
 
 void RandomMatchingPage::afterCalc() {
@@ -58,29 +45,6 @@ void RandomMatchingPage::afterCalc() {
     if (roomClient) {
         assert(roomClient->calc(m_handler));
         return;
-    }
-
-    auto onlineManager = section->page<PageId::OnlineConnectionManager>();
-    auto foundMatchOpt = onlineManager->takeMatchResponse();
-
-    if (foundMatchOpt.has_value()) {
-        SP_LOG("RandomMatchingPage: Found match!");
-        auto foundMatch = *foundMatchOpt;
-
-        auto &menuScenario = System::RaceConfig::Instance()->menuScenario();
-        if (onlineManager->m_gamemode == 0) {
-            menuScenario.gameMode = System::RaceConfig::GameMode::OfflineVS;
-        } else if (onlineManager->m_gamemode == 1) {
-            menuScenario.gameMode = System::RaceConfig::GameMode::OfflineBT;
-        } else {
-            panic("Unknown gamemode response!");
-        }
-
-        auto port = 21330;
-        auto ip = foundMatch.room_ip;
-        auto loginInfo = foundMatch.login_info;
-
-        SP::RoomClient::CreateInstance(1, ip, port, loginInfo);
     }
 }
 

@@ -1,7 +1,6 @@
 #include "OnlineTopPage.hh"
 
 #include "game/ui/MessagePage.hh"
-#include "game/ui/OnlineConnectionManagerPage.hh"
 #include "game/ui/SectionManager.hh"
 #include "game/ui/SettingsPage.hh"
 #include "game/ui/YesNoPage.hh"
@@ -72,6 +71,7 @@ void OnlineTopPage::onInit() {
 }
 
 void OnlineTopPage::onActivate() {
+    SP_LOG("OnlineTopPage::onActivate()");
     m_replacement = PageId::None;
     m_worldwideButton.selectDefault(0);
     m_instructionText.setMessage(4310);
@@ -94,9 +94,7 @@ void OnlineTopPage::onButtonSelect(PushButton *button, u32 /* localPlayerId */) 
 
 void OnlineTopPage::onWorldwideButtonFront(PushButton *button, u32 /* localPlayerId */) {
     auto section = SectionManager::Instance()->currentSection();
-    auto connectionManager = section->page<PageId::OnlineConnectionManager>();
-    connectionManager->setTrackpack(0);
-
+    
     m_replacement = PageId::OnlineModeSelect;
     startReplace(Anim::Next, button->getDelay());
 }

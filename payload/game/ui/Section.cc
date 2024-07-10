@@ -13,7 +13,6 @@
 #include "game/ui/ModelRenderPage.hh"
 #include "game/ui/MultiTeamSelectPage.hh"
 #include "game/ui/MultiTopPage.hh"
-#include "game/ui/OnlineConnectionManagerPage.hh"
 #include "game/ui/OnlineModeSelectPage.hh"
 #include "game/ui/OnlineTeamSelectPage.hh"
 #include "game/ui/OnlineTopPage.hh"
@@ -303,13 +302,11 @@ void Section::addPage(PageId pageId) {
             {SectionId::Voting1PVS, PageId::ConnectingNintendoWfc},
             {SectionId::Voting1PVS, PageId::MenuMessage},
             {SectionId::Voting1PVS, PageId::RaceCourseSelect},
-            {SectionId::Voting1PVS, PageId::OnlineConnectionManager},
             {SectionId::Voting1PVS, PageId::WifiPlayerList},
 
             {SectionId::OnlineFriend1PVS, PageId::Unknown44},
             {SectionId::OnlineFriend1PVS, PageId::OnlinePleaseWait},
             {SectionId::OnlineFriend1PVS, PageId::OnlineTeamSelect},
-            {SectionId::OnlineFriend1PVS, PageId::OnlineConnectionManager},
 
             // The channel section is repurposed into the Service Pack section. Remove some pages
             // that aren't needed anymore.
@@ -339,11 +336,8 @@ void Section::addActivePage(PageId pageId) {
             {SectionId::OnlineMulti, PageId::GhostManager},
             {SectionId::OnlineMulti, PageId::ModelRender},
             {SectionId::OnlineMulti, PageId::DirectConnection},
-
-            {SectionId::Voting1PVS, PageId::OnlineConnectionManager},
             {SectionId::Voting1PVS, PageId::OnlineTeamSelect},
 
-            {SectionId::OnlineFriend1PVS, PageId::OnlineConnectionManager},
             {SectionId::OnlineFriend1PVS, PageId::OnlineTeamSelect},
     };
     for (const auto &deletion : deletions) {
@@ -533,7 +527,6 @@ void Section::addActivePages(SectionId id) {
             {SectionId::OnlineMulti, PageId::OnlineTop},
 
             {SectionId::Voting1PVS, PageId::CourseSelect},
-            {SectionId::Voting1PVS, PageId::OnlineConnectionManager},
 
             // Extended sections define their active pages here!
             {SectionId::WU8Library, PageId::LineBackgroundWhite},
@@ -574,8 +567,6 @@ Page *Section::CreatePage(PageId pageId) {
         return new MultiTeamSelectPage;
     case PageId::DirectConnection:
         return new DirectConnectionPage;
-    case PageId::OnlineConnectionManager:
-        return new OnlineConnectionManagerPage;
     case PageId::OnlineTeamSelect:
         return new OnlineTeamSelectPage;
     case PageId::OnlineTop:
