@@ -13,7 +13,6 @@
 #include "game/ui/ModelRenderPage.hh"
 #include "game/ui/MultiTeamSelectPage.hh"
 #include "game/ui/MultiTopPage.hh"
-#include "game/ui/OnlineTeamSelectPage.hh"
 #include "game/ui/PackSelectPage.hh"
 #include "game/ui/RankingPage.hh"
 #include "game/ui/RoulettePage.hh"
@@ -563,8 +562,6 @@ Page *Section::CreatePage(PageId pageId) {
         return new MultiTeamSelectPage;
     case PageId::DirectConnection:
         return new DirectConnectionPage;
-    case PageId::OnlineTeamSelect:
-        return new OnlineTeamSelectPage;
     case PageId::OnlineTop:
         return new VotingBackPage;
     case PageId::Roulette:

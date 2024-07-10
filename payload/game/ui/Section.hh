@@ -203,11 +203,6 @@ struct Section::PageIdHelper<PageId::ModelRender> {
 };
 
 template <>
-struct Section::PageIdHelper<PageId::OnlineTeamSelect> {
-    using type = OnlineTeamSelectPage;
-};
-
-template <>
 struct Section::PageIdHelper<PageId::VotingBack> {
     using type = VotingBackPage;
 };

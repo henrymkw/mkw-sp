@@ -4,7 +4,6 @@
 #include "game/ui/FriendRoomBackPage.hh"
 #include "game/ui/GlobePage.hh"
 #include "game/ui/MessagePage.hh"
-#include "game/ui/OnlineTeamSelectPage.hh"
 #include "game/ui/SectionManager.hh"
 #include "game/ui/page/DriftSelectPage.hh"
 
@@ -205,9 +204,6 @@ void FriendMatchingPage::Handler::onSettingsChange(
 }
 
 void FriendMatchingPage::Handler::onReceiveTeamSelect(u32 playerId, u32 teamId) {
-    Section *section = SectionManager::Instance()->currentSection();
-    auto *onlineTeamSelectPage = section->page<PageId::OnlineTeamSelect>();
-    onlineTeamSelectPage->onReceiveTeamSelect(playerId, teamId);
 }
 
 void FriendMatchingPage::Handler::onError(u32 errorCode) {
