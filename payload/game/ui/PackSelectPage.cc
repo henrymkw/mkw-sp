@@ -90,9 +90,8 @@ void PackSelectPage::onActivate() {
 
 void PackSelectPage::onBack(u32 /* localPlayerId */) {
     auto sectionId = SectionManager::Instance()->currentSection()->id();
-    if (Section::HasOnlineManager(sectionId)) {
-        m_replacement = PageId::OnlineTop;
-    } else if (sectionId == SectionId::Multi) {
+    
+    if (sectionId == SectionId::Multi) {
         m_replacement = PageId::PlayerPad;
     } else {
         changeSection(SectionId::TitleFromMenu, Anim::Prev, 0.0f);

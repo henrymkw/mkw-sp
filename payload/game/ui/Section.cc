@@ -9,7 +9,6 @@
 #include "game/ui/MultiTopPage.hh"
 #include "game/ui/PackSelectPage.hh"
 #include "game/ui/RankingPage.hh"
-#include "game/ui/RoulettePage.hh"
 #include "game/ui/SPRankingGhostDownloadPage.hh"
 #include "game/ui/SPRankingTopTenDownloadPage.hh"
 #include "game/ui/SectionManager.hh"
@@ -22,7 +21,6 @@
 #include "game/ui/TeamConfirmPage.hh"
 #include "game/ui/TimeAttackGhostListPage.hh"
 #include "game/ui/UpdatePage.hh"
-#include "game/ui/VotingBackPage.hh"
 #include "game/ui/page/BattleModeSelectPage.hh"
 #include "game/ui/page/CourseDebugPage.hh"
 #include "game/ui/page/DriftSelectPage.hh"
@@ -290,11 +288,6 @@ void Section::addActivePage(PageId pageId) {
             {SectionId::SingleSelectBTCourse, PageId::BattleCupSelect},
             {SectionId::SingleSelectBTCourse, PageId::BattleCourseSelect},
 
-            {SectionId::OnlineMulti, PageId::OnlineTeamSelect},
-            {SectionId::OnlineMulti, PageId::GhostManager},
-            {SectionId::OnlineMulti, PageId::ModelRender},
-            {SectionId::OnlineMulti, PageId::DirectConnection},
-
     };
     for (const auto &deletion : deletions) {
         if (deletion.first == m_id && deletion.second == pageId) {
@@ -514,10 +507,6 @@ Page *Section::CreatePage(PageId pageId) {
         return new MultiTopPage;
     case PageId::MultiTeamSelect:
         return new MultiTeamSelectPage;
-    case PageId::OnlineTop:
-        return new VotingBackPage;
-    case PageId::Roulette:
-        return new RoulettePage;
     case PageId::ServicePackTop:
         return new ServicePackTopPage;
     case PageId::StorageBenchmark:

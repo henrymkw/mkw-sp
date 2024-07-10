@@ -40,7 +40,6 @@ class SPRankingTopTenDownloadPage;
 class SettingsPagePopup;
 class TeamConfirmPage;
 class TimeAttackGhostListPage;
-class VotingBackPage;
 class YesNoPagePopup;
 
 class Section {
@@ -201,12 +200,6 @@ template <>
 struct Section::PageIdHelper<PageId::ModelRender> {
     using type = ModelRenderPage;
 };
-
-template <>
-struct Section::PageIdHelper<PageId::VotingBack> {
-    using type = VotingBackPage;
-};
-
 template <>
 struct Section::PageIdHelper<PageId::Roulette> {
     using type = RoulettePage;
