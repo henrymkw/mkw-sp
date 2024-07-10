@@ -13,7 +13,6 @@
 #include "game/ui/ModelRenderPage.hh"
 #include "game/ui/MultiTeamSelectPage.hh"
 #include "game/ui/MultiTopPage.hh"
-#include "game/ui/OnlineModeSelectPage.hh"
 #include "game/ui/OnlineTeamSelectPage.hh"
 #include "game/ui/OnlineTopPage.hh"
 #include "game/ui/PackSelectPage.hh"
@@ -289,7 +288,6 @@ void Section::addPage(PageId pageId) {
             {SectionId::OnlineMulti, PageId::WifiDataConsent},
             {SectionId::OnlineMulti, PageId::WifiDisconnect},
             {SectionId::OnlineMulti, PageId::WifiConnectionFailed},
-            {SectionId::OnlineMulti, PageId::OnlineModeSelect},
             {SectionId::OnlineMulti, PageId::WifiFriendMenu},
             {SectionId::OnlineMulti, PageId::WifiFriendRoster},
             {SectionId::OnlineMulti, PageId::WifiNoFriendsPopup},
@@ -571,8 +569,6 @@ Page *Section::CreatePage(PageId pageId) {
         return new OnlineTeamSelectPage;
     case PageId::OnlineTop:
         return new OnlineTopPage;
-    case PageId::OnlineModeSelect:
-        return new OnlineModeSelectPage;
     case PageId::RandomMatching:
         return new RandomMatchingPage;
     case PageId::VotingBack:

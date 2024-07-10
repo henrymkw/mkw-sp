@@ -29,8 +29,6 @@ class MessagePagePopup;
 class MissionInstructionPage;
 class ModelPage;
 class ModelRenderPage;
-class OnlineConnectionManagerPage;
-class OnlineModeSelectPage;
 class OnlineTeamSelectPage;
 class OptionExplanationPage;
 class OptionSelectPage;
@@ -225,11 +223,6 @@ struct Section::PageIdHelper<PageId::Globe> {
 };
 
 template <>
-struct Section::PageIdHelper<PageId::OnlineConnectionManager> {
-    using type = OnlineConnectionManagerPage;
-};
-
-template <>
 struct Section::PageIdHelper<PageId::FriendMatching> {
     using type = FriendMatchingPage;
 };
@@ -302,11 +295,6 @@ struct Section::PageIdHelper<PageId::SettingsPopup> {
 template <>
 struct Section::PageIdHelper<PageId::BattleModeSelect> {
     using type = BattleModeSelectPage;
-};
-
-template <>
-struct Section::PageIdHelper<PageId::OnlineModeSelect> {
-    using type = OnlineModeSelectPage;
 };
 
 template <>
