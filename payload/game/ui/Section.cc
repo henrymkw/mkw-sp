@@ -14,7 +14,6 @@
 #include "game/ui/MultiTeamSelectPage.hh"
 #include "game/ui/MultiTopPage.hh"
 #include "game/ui/OnlineTeamSelectPage.hh"
-#include "game/ui/OnlineTopPage.hh"
 #include "game/ui/PackSelectPage.hh"
 #include "game/ui/RankingPage.hh"
 #include "game/ui/RoulettePage.hh"
@@ -567,8 +566,6 @@ Page *Section::CreatePage(PageId pageId) {
     case PageId::OnlineTeamSelect:
         return new OnlineTeamSelectPage;
     case PageId::OnlineTop:
-        return new OnlineTopPage;
-    case PageId::VotingBack:
         return new VotingBackPage;
     case PageId::Roulette:
         return new RoulettePage;
