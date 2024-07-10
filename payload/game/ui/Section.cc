@@ -3,7 +3,6 @@
 #include "game/ui/AwardPage.hh"
 #include "game/ui/ChannelPage.hh"
 #include "game/ui/CourseSelectPage.hh"
-#include "game/ui/DirectConnectionPage.hh"
 #include "game/ui/FriendMatchingPage.hh"
 #include "game/ui/FriendRoomBackPage.hh"
 #include "game/ui/FriendRoomMessageSelectPage.hh"
@@ -560,8 +559,6 @@ Page *Section::CreatePage(PageId pageId) {
         return new MultiTopPage;
     case PageId::MultiTeamSelect:
         return new MultiTeamSelectPage;
-    case PageId::DirectConnection:
-        return new DirectConnectionPage;
     case PageId::OnlineTop:
         return new VotingBackPage;
     case PageId::Roulette:
