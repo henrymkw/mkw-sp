@@ -15,7 +15,6 @@ extern "C" {
 extern "C" {
 #include "sp/keyboard/SIKeyboard.h"
 }
-#include "sp/net/Net.hh"
 #include "sp/security/Function.hh"
 #include "sp/security/Heap.hh"
 #include "sp/security/Memory.hh"
@@ -103,10 +102,6 @@ static void Init() {
     Console::Print("Initializing USB...");
     bool usbWasInit = Usb_init();
     assert(usbWasInit);
-    Console::Print(" done.\n");
-
-    Console::Print("Initializing network...");
-    Net::Init();
     Console::Print(" done.\n");
 
     Console::Print("Initializing RNG...");
