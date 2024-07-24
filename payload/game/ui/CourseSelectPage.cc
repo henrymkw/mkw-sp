@@ -6,7 +6,6 @@
 #include "game/ui/RaceConfirmPage.hh"
 #include "game/ui/RankingPage.hh"
 #include "game/ui/SectionManager.hh"
-#include "game/ui/VotingBackPage.hh"
 #include "game/ui/model/MenuModelManager.hh"
 
 #include <sp/ScopeLock.hh>
@@ -279,12 +278,8 @@ void CourseSelectPage::onButtonFront(PushButton *button, u32 /* localPlayerId */
     auto *section = sectionManager->currentSection();
     auto sectionId = section->id();
 
-    if (Section::HasRoomClient(sectionId)) {
-        auto *votingBackPage = section->page<PageId::VotingBack>();
-        votingBackPage->setLocalVote(entry.courseId);
-        votingBackPage->setSubmitted(true);
-        startReplace(Anim::Next, button->getDelay());
-    } else if (sectionId == SectionId::ServicePackRankings) {
+
+    if (sectionId == SectionId::ServicePackRankings) {
         s32 courseButtonIndex = GetButtonIndexFromCourse(entry.courseId);
 
         auto *rankingPage = section->page<PageId::Ranking>();

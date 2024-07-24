@@ -29,8 +29,6 @@ class MessagePagePopup;
 class MissionInstructionPage;
 class ModelPage;
 class ModelRenderPage;
-class OnlineConnectionManagerPage;
-class OnlineModeSelectPage;
 class OnlineTeamSelectPage;
 class OptionExplanationPage;
 class OptionSelectPage;
@@ -42,7 +40,6 @@ class SPRankingTopTenDownloadPage;
 class SettingsPagePopup;
 class TeamConfirmPage;
 class TimeAttackGhostListPage;
-class VotingBackPage;
 class YesNoPagePopup;
 
 class Section {
@@ -203,17 +200,6 @@ template <>
 struct Section::PageIdHelper<PageId::ModelRender> {
     using type = ModelRenderPage;
 };
-
-template <>
-struct Section::PageIdHelper<PageId::OnlineTeamSelect> {
-    using type = OnlineTeamSelectPage;
-};
-
-template <>
-struct Section::PageIdHelper<PageId::VotingBack> {
-    using type = VotingBackPage;
-};
-
 template <>
 struct Section::PageIdHelper<PageId::Roulette> {
     using type = RoulettePage;
@@ -222,11 +208,6 @@ struct Section::PageIdHelper<PageId::Roulette> {
 template <>
 struct Section::PageIdHelper<PageId::Globe> {
     using type = GlobePage;
-};
-
-template <>
-struct Section::PageIdHelper<PageId::OnlineConnectionManager> {
-    using type = OnlineConnectionManagerPage;
 };
 
 template <>
@@ -302,11 +283,6 @@ struct Section::PageIdHelper<PageId::SettingsPopup> {
 template <>
 struct Section::PageIdHelper<PageId::BattleModeSelect> {
     using type = BattleModeSelectPage;
-};
-
-template <>
-struct Section::PageIdHelper<PageId::OnlineModeSelect> {
-    using type = OnlineModeSelectPage;
 };
 
 template <>

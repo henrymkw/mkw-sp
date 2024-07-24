@@ -3,24 +3,12 @@
 #include "game/ui/AwardPage.hh"
 #include "game/ui/ChannelPage.hh"
 #include "game/ui/CourseSelectPage.hh"
-#include "game/ui/DirectConnectionPage.hh"
-#include "game/ui/FriendMatchingPage.hh"
-#include "game/ui/FriendRoomBackPage.hh"
-#include "game/ui/FriendRoomMessageSelectPage.hh"
-#include "game/ui/FriendRoomPage.hh"
-#include "game/ui/FriendRoomRulesPage.hh"
 #include "game/ui/LicenseSelectPage.hh"
 #include "game/ui/ModelRenderPage.hh"
 #include "game/ui/MultiTeamSelectPage.hh"
 #include "game/ui/MultiTopPage.hh"
-#include "game/ui/OnlineConnectionManagerPage.hh"
-#include "game/ui/OnlineModeSelectPage.hh"
-#include "game/ui/OnlineTeamSelectPage.hh"
-#include "game/ui/OnlineTopPage.hh"
 #include "game/ui/PackSelectPage.hh"
-#include "game/ui/RandomMatchingPage.hh"
 #include "game/ui/RankingPage.hh"
-#include "game/ui/RoulettePage.hh"
 #include "game/ui/SPRankingGhostDownloadPage.hh"
 #include "game/ui/SPRankingTopTenDownloadPage.hh"
 #include "game/ui/SectionManager.hh"
@@ -33,7 +21,6 @@
 #include "game/ui/TeamConfirmPage.hh"
 #include "game/ui/TimeAttackGhostListPage.hh"
 #include "game/ui/UpdatePage.hh"
-#include "game/ui/VotingBackPage.hh"
 #include "game/ui/page/BattleModeSelectPage.hh"
 #include "game/ui/page/CourseDebugPage.hh"
 #include "game/ui/page/DriftSelectPage.hh"
@@ -277,42 +264,6 @@ void Section::addPage(PageId pageId) {
             {SectionId::Multi, PageId::BattleCupSelect},
             {SectionId::Multi, PageId::BattleCourseSelect},
 
-            {SectionId::OnlineSingle, PageId::WifiFriendMenu},
-
-            {SectionId::OnlineMulti, PageId::ConfirmWifiQuit},
-            {SectionId::OnlineMulti, PageId::SpinnerAwait},
-            {SectionId::OnlineMulti, PageId::ConnectingNintendoWfc},
-            {SectionId::OnlineMulti, PageId::Confirm},
-            {SectionId::OnlineMulti, PageId::CharacterSelect},
-            {SectionId::OnlineMulti, PageId::BattleVehicleSelect},
-            {SectionId::OnlineMulti, PageId::ModelRender},
-            {SectionId::OnlineMulti, PageId::MultiVehicleSelect},
-            {SectionId::OnlineMulti, PageId::MultiDriftSelect},
-            {SectionId::OnlineMulti, PageId::WifiFirstPlay},
-            {SectionId::OnlineMulti, PageId::WifiDataConsent},
-            {SectionId::OnlineMulti, PageId::WifiDisconnect},
-            {SectionId::OnlineMulti, PageId::WifiConnectionFailed},
-            {SectionId::OnlineMulti, PageId::OnlineModeSelect},
-            {SectionId::OnlineMulti, PageId::WifiFriendMenu},
-            {SectionId::OnlineMulti, PageId::WifiFriendRoster},
-            {SectionId::OnlineMulti, PageId::WifiNoFriendsPopup},
-            {SectionId::OnlineMulti, PageId::WifiFriendRemoveConfirm},
-            {SectionId::OnlineMulti, PageId::WifiFriendRemoving},
-            {SectionId::OnlineMulti, PageId::UnknownA5},
-            {SectionId::OnlineMulti, PageId::EnterFriendCode},
-            {SectionId::OnlineMulti, PageId::GhostManager},
-
-            {SectionId::Voting1PVS, PageId::ConnectingNintendoWfc},
-            {SectionId::Voting1PVS, PageId::MenuMessage},
-            {SectionId::Voting1PVS, PageId::RaceCourseSelect},
-            {SectionId::Voting1PVS, PageId::OnlineConnectionManager},
-            {SectionId::Voting1PVS, PageId::WifiPlayerList},
-
-            {SectionId::OnlineFriend1PVS, PageId::Unknown44},
-            {SectionId::OnlineFriend1PVS, PageId::OnlinePleaseWait},
-            {SectionId::OnlineFriend1PVS, PageId::OnlineTeamSelect},
-            {SectionId::OnlineFriend1PVS, PageId::OnlineConnectionManager},
-
             // The channel section is repurposed into the Service Pack section. Remove some pages
             // that aren't needed anymore.
             {SectionId::ServicePack, PageId::TimeAttackTop},
@@ -337,18 +288,6 @@ void Section::addActivePage(PageId pageId) {
             {SectionId::SingleSelectBTCourse, PageId::BattleCupSelect},
             {SectionId::SingleSelectBTCourse, PageId::BattleCourseSelect},
 
-            //{SectionId::OnlineSingle, PageId::DirectConnection},
-
-            {SectionId::OnlineMulti, PageId::OnlineTeamSelect},
-            {SectionId::OnlineMulti, PageId::GhostManager},
-            {SectionId::OnlineMulti, PageId::ModelRender},
-            {SectionId::OnlineMulti, PageId::DirectConnection},
-
-            {SectionId::Voting1PVS, PageId::OnlineConnectionManager},
-            {SectionId::Voting1PVS, PageId::OnlineTeamSelect},
-
-            {SectionId::OnlineFriend1PVS, PageId::OnlineConnectionManager},
-            {SectionId::OnlineFriend1PVS, PageId::OnlineTeamSelect},
     };
     for (const auto &deletion : deletions) {
         if (deletion.first == m_id && deletion.second == pageId) {
@@ -477,15 +416,6 @@ void Section::addPages(SectionId id) {
             {SectionId::Multi, PageId::MenuSettings},
             {SectionId::Multi, PageId::PackSelect},
 
-            {SectionId::OnlineSingle, PageId::PackSelect},
-            {SectionId::OnlineSingle, PageId::FriendRoomRules},
-            {SectionId::OnlineSingle, PageId::MenuSettings},
-            {SectionId::OnlineSingle, PageId::SettingsPopup},
-            {SectionId::OnlineMulti, PageId::PackSelect},
-            {SectionId::OnlineMulti, PageId::FriendRoomRules},
-            {SectionId::OnlineMulti, PageId::MenuSettings},
-            {SectionId::OnlineMulti, PageId::SettingsPopup},
-
             // The channel section is repurposed into the Service Pack section. Add some additional
             // pages we need.
             {SectionId::ServicePack, PageId::OptionExplanation},
@@ -538,12 +468,7 @@ void Section::addActivePages(SectionId id) {
             // Pack Select
             {SectionId::Single, PageId::PackSelect},
 
-            //{SectionId::OnlineSingle, PageId::WifiTop},
-
-            {SectionId::OnlineMulti, PageId::OnlineTop},
-
             {SectionId::Voting1PVS, PageId::CourseSelect},
-            {SectionId::Voting1PVS, PageId::OnlineConnectionManager},
 
             // Extended sections define their active pages here!
             {SectionId::WU8Library, PageId::LineBackgroundWhite},
@@ -582,32 +507,6 @@ Page *Section::CreatePage(PageId pageId) {
         return new MultiTopPage;
     case PageId::MultiTeamSelect:
         return new MultiTeamSelectPage;
-    case PageId::DirectConnection:
-        return new DirectConnectionPage;
-    case PageId::OnlineConnectionManager:
-        return new OnlineConnectionManagerPage;
-    case PageId::OnlineTeamSelect:
-        return new OnlineTeamSelectPage;
-    case PageId::OnlineTop:
-        return new OnlineTopPage;
-    case PageId::OnlineModeSelect:
-        return new OnlineModeSelectPage;
-    case PageId::RandomMatching:
-        return new RandomMatchingPage;
-    case PageId::VotingBack:
-        return new VotingBackPage;
-    case PageId::Roulette:
-        return new RoulettePage;
-    case PageId::FriendRoomRules:
-        return new FriendRoomRulesPage;
-    case PageId::FriendMatching:
-        return new FriendMatchingPage;
-    case PageId::FriendRoomBack:
-        return new FriendRoomBackPage;
-    case PageId::FriendRoom:
-        return new FriendRoomPage;
-    case PageId::FriendRoomMessageSelect:
-        return new FriendRoomMessageSelectPage;
     case PageId::ServicePackTop:
         return new ServicePackTopPage;
     case PageId::StorageBenchmark:

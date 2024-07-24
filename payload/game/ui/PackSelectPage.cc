@@ -10,7 +10,6 @@
 #include "game/ui/CourseSelectPage.hh"
 #include "game/ui/MessagePage.hh"
 #include "game/ui/ModelPage.hh"
-#include "game/ui/OnlineConnectionManagerPage.hh"
 #include "game/ui/SectionManager.hh"
 
 #include "game/system/RaceConfig.hh"
@@ -87,20 +86,12 @@ void PackSelectPage::onInit() {
 void PackSelectPage::onActivate() {
     m_replacement = PageId::None;
     m_scrollBar.reconfigure(m_sheetCount, m_sheetIndex, m_sheetCount >= 2 ? 0x1 : 0x0);
-
-    auto *section = SectionManager::Instance()->currentSection();
-    auto *connManager = section->page<PageId::OnlineConnectionManager>();
-    if (connManager == nullptr) {
-        auto *modelPage = section->page<PageId::Model>();
-        modelPage->modelControl().setModel(-1);
-    }
 }
 
 void PackSelectPage::onBack(u32 /* localPlayerId */) {
     auto sectionId = SectionManager::Instance()->currentSection()->id();
-    if (Section::HasOnlineManager(sectionId)) {
-        m_replacement = PageId::OnlineTop;
-    } else if (sectionId == SectionId::Multi) {
+    
+    if (sectionId == SectionId::Multi) {
         m_replacement = PageId::PlayerPad;
     } else {
         changeSection(SectionId::TitleFromMenu, Anim::Prev, 0.0f);
@@ -112,26 +103,17 @@ void PackSelectPage::onBack(u32 /* localPlayerId */) {
 
 void PackSelectPage::onButtonFront(PushButton *button, u32 /* localPlayerId */) {
     auto *section = SectionManager::Instance()->currentSection();
-    auto *connManager = section->page<PageId::OnlineConnectionManager>();
-
     auto buttonIndex = m_sheetIndex * m_buttons.size() + button->m_index;
-    if (connManager != nullptr) {
-        // TODO(GnomedDev): Track Pack support, needs consistent IDs
-        connManager->setTrackpack(buttonIndex + 1);
-        m_replacement = PageId::OnlineModeSelect;
-    } else {
-        if (!s_lastPackFront.has_value() || *s_lastPackFront != buttonIndex) {
-            SP::CourseDatabase::Instance().resetSelection();
-        }
-
-        s_lastPackFront = buttonIndex;
-        if (section->id() == SectionId::Multi) {
-            m_replacement = PageId::MultiTop;
-        } else {
-            m_replacement = PageId::SingleTop;
-        }
+    if (!s_lastPackFront.has_value() || *s_lastPackFront != buttonIndex) {
+        SP::CourseDatabase::Instance().resetSelection();
     }
 
+    s_lastPackFront = buttonIndex;
+    if (section->id() == SectionId::Multi) {
+        m_replacement = PageId::MultiTop;
+    } else {
+        m_replacement = PageId::SingleTop;
+    }
     startReplace(Anim::Next, button->getDelay());
 }
 

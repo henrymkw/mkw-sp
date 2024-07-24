@@ -222,9 +222,6 @@ enum class PageId {
     ServicePackChannel,
     SPRankingGhostDownload,
     SPRankingTopTenDownload,
-    OnlineTop,
-    DirectConnection,
-    OnlineConnectionManager,
     // }
 
     Ext_MaxExclusive__,
