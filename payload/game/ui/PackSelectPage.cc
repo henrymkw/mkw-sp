@@ -7,7 +7,6 @@
 
 #include "PackSelectPage.hh"
 
-#include "game/ui/CourseSelectPage.hh"
 #include "game/ui/MessagePage.hh"
 #include "game/ui/ModelPage.hh"
 #include "game/ui/SectionManager.hh"

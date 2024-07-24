@@ -31,29 +31,32 @@ extern bool unk_809c2f3c;
 }
 
 void RaceScene::calcSubsystems() {
-    s32 drift = 0;
+    REPLACED(calcSubsystems)();
+    // s32 drift = 0;
 
-    if (auto *raceClient = SP::RaceClient::Instance()) {
+    /*if (auto *raceClient = SP::RaceClient::Instance()) {
         raceClient->calcRead();
-        /*drift = raceClient->drift();
-        raceClient->adjustDrift();*/
-    }
+        drift = raceClient->drift();
+        raceClient->adjustDrift();
+    }*/
 
-    calcSubsystems(drift);
+    // calcSubsystems(drift);
     /*if (drift < 0) {
         calcSubsystems(0);
     }*/
 
-    if (auto *cameraManager = Graphics::CameraManager::Instance();
+    /*if (auto *cameraManager = Graphics::CameraManager::Instance();
             cameraManager && cameraManager->isReady()) {
         if (auto *raceClient = SP::RaceClient::Instance()) {
             raceClient->calcWrite();
         }
-    }
+    }*/
 }
 
 void RaceScene::calcSubsystems(s32 drift) {
-    if (m_isPaused) {
+    // REPLACED(calcSubsystems)(drift);
+
+    /*if (m_isPaused) {
         unk_809c19a0 = true;
         unk_809c1874 |= 1;
         if (!unk_8078ddb4()) {
@@ -74,7 +77,7 @@ void RaceScene::calcSubsystems(s32 drift) {
             raceManager->calc();
 
             if (SP::RaceClient::Instance()) {
-                System::InputManager::Instance()->calcRollbacks();
+                // System::InputManager::Instance()->calcRollbacks();
             }
 
             if (!SP::RoomManager::Instance() ||
@@ -110,7 +113,7 @@ void RaceScene::calcSubsystems(s32 drift) {
                 coinManager->calcScreens();
             }
         }
-    }
+    }*/
 }
 
 void RaceScene::destroySubsystems() {

@@ -2,7 +2,6 @@
 
 #include "game/ui/AwardPage.hh"
 #include "game/ui/ChannelPage.hh"
-#include "game/ui/CourseSelectPage.hh"
 #include "game/ui/LicenseSelectPage.hh"
 #include "game/ui/ModelRenderPage.hh"
 #include "game/ui/MultiTeamSelectPage.hh"
@@ -274,7 +273,7 @@ void Section::addPage(PageId pageId) {
         }
     }
 
-    SP_LOG("addPage 0x%X", static_cast<u32>(pageId));
+    // SP_LOG("addPage 0x%X", static_cast<u32>(pageId));
 
     REPLACED(addPage)(pageId);
 }
@@ -295,13 +294,13 @@ void Section::addActivePage(PageId pageId) {
         }
     }
 
-    SP_LOG("addActivePage 0x%x", static_cast<u32>(pageId));
+    // SP_LOG("addActivePage 0x%x", static_cast<u32>(pageId));
 
     REPLACED(addActivePage)(pageId);
 }
 
 void Section::addPages(SectionId id) {
-    SP_LOG("&7DEBUG: Constructing section 0x%x (0x%x)", static_cast<u32>(id), static_cast<u32>(id));
+    // SP_LOG("&7DEBUG: Constructing section 0x%x (0x%x)", static_cast<u32>(id), static_cast<u32>(id));
 
     REPLACED(addPages)(id);
 
@@ -497,8 +496,6 @@ Page *Section::CreatePage(PageId pageId) {
         return new LicenseSelectPage;
     case PageId::SingleTop:
         return new SingleTopPage;
-    case PageId::CourseSelect:
-        return new CourseSelectPage;
     case PageId::TimeAttackGhostList:
         return new TimeAttackGhostListPage;
     case PageId::TeamConfirm:

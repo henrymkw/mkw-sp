@@ -2,7 +2,6 @@
 
 #include "game/system/RaceConfig.hh"
 #include "game/system/SaveManager.hh"
-#include "game/ui/CourseSelectPage.hh"
 #include "game/ui/ModelPage.hh"
 #include "game/ui/SectionManager.hh"
 #include "game/ui/SettingsPage.hh"
@@ -122,8 +121,6 @@ void MultiTopPage::onVSButtonFront(PushButton *button, u32 /* localPlayerId */) 
     raceConfig->applyEngineClass();
 
     Section *section = SectionManager::Instance()->currentSection();
-    auto *courseSelectPage = section->page<PageId::CourseSelect>();
-    courseSelectPage->filter();
 
     auto *characterSelectPage = section->page(PageId::CharacterSelect)->downcast<MenuPage>();
     assert(characterSelectPage);
@@ -159,8 +156,6 @@ void MultiTopPage::onBTButtonFront(PushButton *button, u32 /* localPlayerId */) 
     raceConfig->applyEngineClass();
 
     Section *section = SectionManager::Instance()->currentSection();
-    auto *courseSelectPage = section->page<PageId::CourseSelect>();
-    courseSelectPage->filter();
 
     auto *battleModeSelectPage = section->page<PageId::BattleModeSelect>();
     assert(battleModeSelectPage);

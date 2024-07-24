@@ -9,27 +9,29 @@ namespace Kart {
 void KartObject::init() {
     REPLACED(init)();
 
-    if (SP::RoomClient::Instance()) {
+    /*if (SP::RoomClient::Instance()) {
         m_accessor.rollback = new KartRollback;
     } else {
         m_accessor.rollback = nullptr;
-    }
+    }*/
 }
 
 void KartObject::calcEarly() {
-    if (SP::RoomClient::Instance()) {
+    REPLACED(calcEarly)();
+    /*(if (SP::RoomClient::Instance()) {
         m_accessor.rollback->calcEarly();
-    }
+    }*
 
     m_sub->calcEarly();
+    */
 }
 
 void KartObject::calcLate() {
     REPLACED(calcLate)();
 
-    if (SP::RoomClient::Instance()) {
+    /*if (SP::RoomClient::Instance()) {
         m_accessor.rollback->calcLate();
-    }
+    }*/
 }
 
 } // namespace Kart

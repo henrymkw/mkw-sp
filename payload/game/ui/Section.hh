@@ -13,7 +13,6 @@ namespace UI {
 
 class BattleModeSelectPage;
 class ConfirmPage;
-class CourseSelectPage;
 class DriftSelectPage;
 class FriendMatchingPage;
 class FriendRoomBackPage;
@@ -174,11 +173,6 @@ struct Section::PageIdHelper<PageId::Model> {
 template <>
 struct Section::PageIdHelper<PageId::DriftSelect> {
     using type = DriftSelectPage;
-};
-
-template <>
-struct Section::PageIdHelper<PageId::CourseSelect> {
-    using type = CourseSelectPage;
 };
 
 template <>

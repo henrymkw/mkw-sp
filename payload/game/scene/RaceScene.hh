@@ -11,6 +11,7 @@ public:
     void vf_28() override;
     void vf_2c() override;
     REPLACE void calcSubsystems() override;
+    void REPLACED(calcSubsystems)();
     void REPLACED(destroySubsystems)();
     REPLACE void destroySubsystems() override;
     void vf_38() override;

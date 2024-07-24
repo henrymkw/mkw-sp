@@ -3,7 +3,6 @@
 extern "C" {
 #include "game/system/GhostFile.h"
 }
-#include "game/ui/CourseSelectPage.hh"
 #include "game/ui/SectionManager.hh"
 
 namespace UI {
@@ -16,16 +15,10 @@ void RankingPage::onInit() {
     Section *section = SectionManager::Instance()->currentSection();
     section->loadFriendListManager();
 
-    auto *courseSelectPage = section->page<PageId::CourseSelect>();
-    courseSelectPage->filter({true, false});
-
     REPLACED(onInit)();
 }
 
 void RankingPage::onCourseChange(UpDownControl *upDownControl, u32 localPlayerId, s32 index) {
-    Section *section = SectionManager::Instance()->currentSection();
-    auto *courseSelectPage = section->page<PageId::CourseSelect>();
-    courseSelectPage->refreshSelection(index);
 
     REPLACED(onCourseChange)(upDownControl, localPlayerId, index);
 }

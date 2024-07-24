@@ -20,6 +20,8 @@
 0x8000b188 _ZN6System13SystemManager12returnToMenuEv
 0x8000b1bc _ZN6System13SystemManager7restartEv
 0x8000b5c8 _ZN6System13SystemManager11RipFromDiscEPKcPN3EGG4HeapEbPj
+0x800ebf6c DWCi_Acc_IsAuthentic
+0x800ebfd4 DWC_CheckUserData
 0x800ed6e8 DWCi_Auth_SendRequest
 
 0x8000f1f0 memmove
@@ -521,6 +523,7 @@
 0x80385908 es_fd
 0x80386000 s_systemManager
 0x80386000 _ZN6System13SystemManager10s_instanceE
+0x803862e8 s_DWCLoginContext 
 0x8038633c s_auth_work
 0x80386638 MaxEntryNum
 0x8038663c FstStringStart
@@ -617,6 +620,10 @@
 0x8052b84c NandHelper_getType
 0x8052bdf4 NandManager_createInstance
 0x8052bff8 NandManager_init
+0x8052c0b0 _ZN6System11NandManager12readSaveDataEPvjji
+0x8052c168 _ZN6System11NandManager8readFileEPcjji
+0x8052c2d0 _ZN6System11NandManager13writeSaveDataEPvjji
+0x8052c428 _ZN6System11NandManager9writeFileEPcjji
 0x8052e950 FUN_8052e950
 0x8052f4e8 _ZN6System10RaceConfig16ConfigurePlayersERNS0_8ScenarioEj
 0x8052fe58 _ZN6System10RaceConfig14CreateInstanceEv
@@ -654,6 +661,7 @@
 0x80541b58 _ZN6System15ResourceManager11CourseCache4loadEj
 0x805422cc _ZN6System15ResourceManager15createMenuHeapsEji
 0x805425d0 _ZN6System15ResourceManager13LoadGlobeTaskEPv
+0x80543db0 SaveManager_CreateInstance 
 0x80543db0 _ZN6System11SaveManager14CreateInstanceEv
 0x80543f10 _ZN6System11SaveManagerC1Ev
 0x80544a38 _ZN6System11SaveManager9initAsyncEv
@@ -1226,6 +1234,7 @@
 0x80652604 _ZN2UI9YesNoPage15configureButtonEjjPNS_11MessageInfoENS_4Page4AnimEPNS0_8IHandlerE
 0x80655b24 NetManager_createInstance
 0x80658B9C NetManager_connect
+0x80658B9C _ZN6System10NetManager7ConnectEv
 0x806561a8 NetManager_806561a8
 0x80656a30 NetManager_80656a30
 0x80656d9c NetManager_80656d9c
@@ -1569,6 +1578,7 @@
 0x809bd6f8 _ZN6System10HBMManager10s_instanceE
 0x809bd70c s_inputManager
 0x809bd70c _ZN6System12InputManager10s_instanceE
+0x809bd720 _ZN6System11NandManager10s_instanceE
 0x809bd728 s_raceConfig
 0x809bd728 _ZN6System10RaceConfig10s_instanceE
 0x809bd730 s_raceManager
@@ -1586,6 +1596,7 @@
 0x809c19b8 _ZN8Graphics13CameraManager10s_instanceE
 0x809c1e38 s_sectionManager
 0x809c1e38 _ZN2UI14SectionManager10s_instanceE
+0x809c2110 _ZN5RKNet13FriendManager10s_instanceE
 0x809c21d0 s_effectManager
 0x809c21d0 _ZN6Effect13EffectManager10s_instanceE
 0x809c21d8 unk_809c21d8

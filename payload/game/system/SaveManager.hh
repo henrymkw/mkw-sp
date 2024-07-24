@@ -8,6 +8,10 @@
 #include <sp/settings/ClientSettings.hh>
 #include <sp/storage/Storage.hh>
 
+extern "C" {
+    #include <revolution/dwc/dwc.h>
+}
+
 namespace System {
 
 class SaveManager {
@@ -15,9 +19,11 @@ private:
     struct RawLicense {
         REPLACE void reset();
 
-        u8 _0000[0x0030 - 0x0000];
+        u8 _0000[0x0014 - 0x0000];
+        wchar_t m_miiName[10];
+        MiiId m_miiId;
         u32 unlockFlags[4];
-        u8 _0040[0x0080 - 0x0040];
+        DWCUserData dwcUserData;
         u16 rules[4];
         u8 _0088[0x00b0 - 0x0088];
         u16 vr;
@@ -29,10 +35,11 @@ private:
     static_assert(sizeof(RawLicense) == 0x8cc0);
 
     struct RawSave {
-        u8 _00000[0x2330c - 0x00000];
-        u32 globalSettings : 30;
-        bool m_flagDisplay : 1;
-        bool m_rumble : 1;
+        u8 _00000[0x0008 - 0x0000];
+        RawLicense rawLicenses[4];
+        u32 globalSettings;
+        bool m_flagDisplay;
+        bool m_rumble;
         u8 _23310[0x28000 - 0x23310];
     };
     static_assert(sizeof(RawSave) == 0x28000);
@@ -47,11 +54,14 @@ private:
 public:
     SaveManager();
     REPLACE void initAsync();
+    void REPLACED(initAsync)();
     REPLACE void resetAsync();
     bool isBusy() const;
     bool saveGhostResult() const;
 
     REPLACE void saveLicensesAsync();
+    void REPLACED(saveLicensesAsync)();
+
     void eraseLicense(u32 licenseId);
     void createLicense(u32 licenseId, const MiiId *miiId, const wchar_t *miiName);
     REPLACE void selectLicense(u32 licenseId);
@@ -65,6 +75,8 @@ public:
 
     u32 getSetting(u32 setting) const;
     void setSetting(u32 setting, u32 value);
+
+    DWCUserData *getDWCUserData() const;
 
     template <SP::ClientSettings::Setting S>
     SP::ClientSettings::Helper<S>::type getSetting() const {
@@ -119,6 +131,7 @@ public:
     void getLongitude(u16 *longitude) const;
 
     static REPLACE SaveManager *CreateInstance();
+    static SaveManager* REPLACED(CreateInstance)();
     static SaveManager *Instance();
 
 private:

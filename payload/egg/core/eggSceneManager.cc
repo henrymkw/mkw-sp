@@ -105,8 +105,7 @@ void SceneManager::createScene(s32 sceneId, Scene *parent) {
         PushDolphinSpeed(800);
     }
     System::ResourceManager::OnCreateScene(static_cast<System::SceneId>(sceneId));
-    SP::RoomManager::OnCreateScene();
-    SP::RaceManager::OnCreateScene();
+
     REPLACED(createScene)(sceneId, parent);
     if (InitDolphinSpeed()) {
         PopDolphinSpeed();
@@ -118,8 +117,7 @@ void SceneManager::destroyScene(Scene *scene) {
         PushDolphinSpeed(800);
     }
     REPLACED(destroyScene)(scene);
-    SP::RaceManager::OnDestroyScene();
-    SP::RoomManager::OnDestroyScene();
+
     if (InitDolphinSpeed()) {
         PopDolphinSpeed();
     }

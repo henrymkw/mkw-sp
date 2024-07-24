@@ -10,6 +10,7 @@ public:
     void REPLACED(init)();
     REPLACE void init();
     REPLACE void calcEarly();
+    void REPLACED(calcEarly)();
     void REPLACED(calcLate)();
     REPLACE void calcLate();
 

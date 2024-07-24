@@ -11,10 +11,15 @@
 #include <bit>
 #include <cstring>
 
+extern "C" {
+#include <revolution.h>
+#include <revolution/dwc/dwc.h>
+}
+
 namespace System {
 
 void SaveManager::RawLicense::reset() {
-    *this = {};
+    // *this = {};
     unlockFlags[0] = 0xffffffff;
     unlockFlags[1] = 0x31ffffc;
     rules[0] = 0x5008;
@@ -28,9 +33,10 @@ void SaveManager::RawLicense::reset() {
 }
 
 SaveManager *SaveManager::CreateInstance() {
+    s_instance = REPLACED(CreateInstance)();
     auto *heap = RootScene::Instance()->m_heapCollection.mem1;
 
-    s_instance = new (heap, 0x4) SaveManager;
+    // s_instance = new (heap, 0x4) SaveManager;
     assert(s_instance);
 
     s_instance->m_ghostCount = 0;
@@ -52,6 +58,8 @@ SaveManager *SaveManager::CreateInstance() {
 void SaveManager::initAsync() {
     m_isBusy = true;
     m_taskThread->request(InitTask, nullptr, nullptr);
+
+    REPLACED(initAsync)();
 }
 
 void SaveManager::InitTask(void * /* arg */) {
@@ -63,7 +71,7 @@ void SaveManager::init() {
     m_isValid = true;
     m_canSave = false;
 
-    m_otherRawSave = m_rawSave;
+    // m_otherRawSave = m_rawSave;
 
     initSPSave();
     initCourseSHA1s();
@@ -230,6 +238,8 @@ void SaveManager::saveLicensesAsync() {
 
     m_isBusy = true;
     m_taskThread->request(SaveSPSaveTask, nullptr, nullptr);
+
+    // REPLACED(saveLicensesAsync)();
 }
 
 void SaveManager::SaveSPSaveTask(void * /* arg */) {
@@ -270,6 +280,10 @@ void SaveManager::saveSPSave() {
 
     m_isBusy = false;
     m_result = NandResult::Ok;
+}
+
+DWCUserData *SaveManager::getDWCUserData() const {
+    return &m_rawSave->rawLicenses->dwcUserData;
 }
 
 void SaveManager::selectLicense(u32 licenseId) {
