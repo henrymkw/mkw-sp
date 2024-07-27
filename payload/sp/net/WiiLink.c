@@ -187,7 +187,7 @@ REPLACE void DWCi_Auth_SendRequest(
     }
     saltHex[SHA256_DIGEST_SIZE * 2] = 0;
 
-    char uri[0x124];
+    char uri[0x100];
     sprintf(uri, "payload?g=RMC%cD00&s=%s", *(char *)0x80000003, saltHex);
 
     // Generate salt hash
@@ -196,7 +196,7 @@ REPLACE void DWCi_Auth_SendRequest(
     SHA256Update(&ctx, uri, strlen(uri));
     memcpy(s_saltHash, SHA256Final(&ctx), SHA256_DIGEST_SIZE);
 
-    char url[0x100];
+    char url[0x124];
     sprintf(
         url, "http://nas.%s/%s&h=%02x%02x%02x%02x", WWFC_DOMAIN, uri,
         s_saltHash[0], s_saltHash[1], s_saltHash[2], s_saltHash[3]);
