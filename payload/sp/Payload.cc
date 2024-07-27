@@ -73,10 +73,10 @@ static void Init() {
 
     Console::Print("Applying security patches...");
 #ifndef GDB_COMPATIBLE
+
+#endif
     PageTable::Init();
     Memory::InvalidateAllIBATs();
-#endif
-
     OSSetMEM1ArenaLo(Payload_getEnd());
 
     Heap::RandomizeMEM1Heaps();
@@ -190,8 +190,8 @@ static void Run() {
     }
     StackCanary_Init();
 #ifndef GDB_COMPATIBLE
-    StackCanary::AddLinkRegisterPatches(reinterpret_cast<u32 *>(Dol_getTextSectionStart()),
-            reinterpret_cast<u32 *>(Dol_getTextSectionEnd()));
+    //StackCanary::AddLinkRegisterPatches(reinterpret_cast<u32 *>(Dol_getTextSectionStart()),
+    //        reinterpret_cast<u32 *>(Dol_getTextSectionEnd()));
 #endif
     Patcher_patch(PATCHER_BINARY_DOL);
 }
