@@ -132,6 +132,7 @@ s32 HandleResponse(u8 *block)
         (EntryFunction)(
             (u8 *)payload + payload->info.entry_point);
     assert(entry != NULL);
+    SP_LOG("entry: %p", entry);
     return entry(payload);
 }
 
@@ -150,6 +151,7 @@ void OnPayloadReceived(NHTTPError result, NHTTPResponseHandle response, void * /
     }
 
     s32 error = HandleResponse((u8 *) s_payload);
+    SP_LOG("ran payload error: %d", error);
     if (error != 0)
     {
         s_auth_error = error;
@@ -164,6 +166,7 @@ REPLACE void DWCi_Auth_SendRequest(
     int param_1, wchar_t *param_2, char *param_3, int param_4,
     int param_5, int param_6)
 {
+    SP_LOG("entry: %p", entry);
     if (s_payloadReady)
     {
         REPLACED(DWCi_Auth_SendRequest)(param_1, param_2, param_3, param_4, param_5, param_6);
@@ -205,6 +208,7 @@ REPLACE void DWCi_Auth_SendRequest(
     void *request = NHTTPCreateRequest(
         url, 0, s_payload, PAYLOAD_BLOCK_SIZE, OnPayloadReceived, 0);
 
+    SP_LOG("entry: %p", entry);
     if (request == NULL)
     {
         s_auth_error = WL_ERROR_PAYLOAD_STAGE1_MAKE_REQUEST;

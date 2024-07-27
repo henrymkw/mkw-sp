@@ -102,11 +102,7 @@ void LicenseSelectPage::onLicenseButtonFront(PushButton *button, u32 /* localPla
         saveManager->selectSPLicense(index);
         globalContext->onChangeLicense();
         const System::Mii *mii = m_miiGroup.get(index);
-        if (mii == nullptr) {
-            SP_LOG("LicenseSelectPage::onLicenseButtonFront: mii is nullptr\n");
-        }
         if (mii) {
-            SP_LOG("creating license");
             saveManager->createLicense(0, mii->id(), mii->name());
             saveManager->selectLicense(0);
             globalContext->m_localPlayerMiis.copy(&m_miiGroup, index, 0);

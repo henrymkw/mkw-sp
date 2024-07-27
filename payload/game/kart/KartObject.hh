@@ -7,12 +7,11 @@ namespace Kart {
 
 class KartObject : public KartObjectProxy {
 public:
-    void REPLACED(init)();
-    REPLACE void init();
-    REPLACE void calcEarly();
-    void REPLACED(calcEarly)();
-    void REPLACED(calcLate)();
-    REPLACE void calcLate();
+    void init(); // 0x8058e22c
+
+    void calcEarly(); // 0x8058eeb4
+
+    void calcLate(); // 0x8058eebc
 
 private:
     u8 _0x0c[0x10 - 0x0c];

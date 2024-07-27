@@ -41,7 +41,6 @@ void RaceClient::adjustDrift() {
 }*/
 
 void RaceClient::calcWrite() {
-    SP_LOG("ran");
     if (!m_frame) {
         u8 buffer[RaceClientPing_size];
         pb_ostream_t stream = pb_ostream_from_buffer(buffer, sizeof(buffer));
@@ -95,7 +94,6 @@ void RaceClient::calcWrite() {
 }
 
 void RaceClient::calcRead() {
-    SP_LOG("ran");
     ConnectionGroup connectionGroup(*this);
 
     while (true) {
@@ -158,9 +156,8 @@ RaceClient *RaceClient::Instance() {
 }
 
 RaceClient::RaceClient(RoomClient &roomClient)
-    : m_roomClient(roomClient),
-      m_socket("race    ", {}), m_connection{roomClient.ip(), roomClient.port(),
-                                        roomClient.keypair()} {}
+    : m_roomClient(roomClient), m_socket("race    ", {}),
+      m_connection{roomClient.ip(), roomClient.port(), roomClient.keypair()} {}
 
 RaceClient::~RaceClient() {
     hydro_memzero(&m_connection, sizeof(m_connection));

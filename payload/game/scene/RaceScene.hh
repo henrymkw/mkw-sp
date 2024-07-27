@@ -10,15 +10,19 @@ public:
     ~RaceScene() override;
     void vf_28() override;
     void vf_2c() override;
-    REPLACE void calcSubsystems() override;
-    void REPLACED(calcSubsystems)();
-    void REPLACED(destroySubsystems)();
+
+    void calcSubsystems() override; // 0x80554e6c
+
+    void REPLACED(destroySubsystems)(); // 0x805549b0
     REPLACE void destroySubsystems() override;
+
     void vf_38() override;
     void vf_3c() override;
     void vf_40() override;
-    void REPLACED(createSubsystems)();
+
+    void REPLACED(createSubsystems)(); // 0x80554208
     REPLACE void createSubsystems() override;
+    
     void vf_48() override;
     void vf_4c() override;
     void vf_50() override;

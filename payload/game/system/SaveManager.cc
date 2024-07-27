@@ -19,13 +19,21 @@ extern "C" {
 namespace System {
 
 void SaveManager::RawLicense::reset() {
-    // *this = {};
+    // SP uses *this = {}, which resets all fields to 0. This had to be removed for WWFC support
+    // since it clears the DWCUserData necessary for connection. Need to understand the origional
+    // function better.
+
+    // unlock all characters, vehicles, etc
     unlockFlags[0] = 0xffffffff;
     unlockFlags[1] = 0x31ffffc;
+
+    // I am not sure what these flags set
     rules[0] = 0x5008;
     rules[1] = 0x1000;
     rules[2] = 0x5008;
     rules[3] = 0x1000;
+
+    // TODO: Remove
     vr = 5000;
     br = 5000;
     auto value = SaveManager::Instance()->getSetting<SP::ClientSettings::Setting::DriftMode>();
@@ -33,10 +41,9 @@ void SaveManager::RawLicense::reset() {
 }
 
 SaveManager *SaveManager::CreateInstance() {
-    s_instance = REPLACED(CreateInstance)();
     auto *heap = RootScene::Instance()->m_heapCollection.mem1;
 
-    // s_instance = new (heap, 0x4) SaveManager;
+    s_instance = new (heap, 0x4) SaveManager;
     assert(s_instance);
 
     s_instance->m_ghostCount = 0;
@@ -59,6 +66,7 @@ void SaveManager::initAsync() {
     m_isBusy = true;
     m_taskThread->request(InitTask, nullptr, nullptr);
 
+    // Original function, added for testing. However, removing it now crashes the game...
     REPLACED(initAsync)();
 }
 
@@ -238,8 +246,6 @@ void SaveManager::saveLicensesAsync() {
 
     m_isBusy = true;
     m_taskThread->request(SaveSPSaveTask, nullptr, nullptr);
-
-    // REPLACED(saveLicensesAsync)();
 }
 
 void SaveManager::SaveSPSaveTask(void * /* arg */) {

@@ -18,8 +18,7 @@ typedef struct DWCUserData {
 PRAGMA("pack(pop)")
 static_assert(sizeof(DWCUserData) == 0x40);
 
-// 0x1c is likely a pointer to user data
-//
+// Needs further investigation/documentation
 typedef struct DWCLoginContext {
     u8 _000[0x01c - 0x000];
     DWCUserData *userData;
@@ -40,13 +39,10 @@ void DWCi_Acc_SetPlayerId(void *unk, u32 id);
 void DWCi_Acc_SetUserId(void *unk, u64 id);
 
 // DWCLoginContext + 0x1c is passed in, 
-REPLACE bool DWCi_Acc_IsAuthentic(u32 unk);
-bool REPLACED(DWCi_Acc_IsAuthentic)(u32 unk);
+bool DWCi_Acc_IsAuthentic(u32 unk);
 
 bool DWCi_Acc_IsValidLoginId(void *unk);
 
-REPLACE bool DWC_CheckUserData(DWCUserData *unk);
-bool REPLACED(DWC_CheckUserData)(DWCUserData *unk);
-
+bool DWC_CheckUserData(DWCUserData *unk);
 
 extern DWCLoginContext *s_DWCLoginContext;

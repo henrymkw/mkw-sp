@@ -137,15 +137,15 @@ private:
         }
         if (!setting) {
             if (section.data()) {
-                // SP_LOG("Unknown key %.*s::%.*s", section.length(), section.data(), key.length(),
-                      //  key.data());
+                SP_LOG("Unknown key %.*s::%.*s", section.length(), section.data(), key.length(),
+                      key.data());
             } else {
-                // SP_LOG("Unknown key *::%.*s", key.length(), key.data());
+                SP_LOG("Unknown key *::%.*s", key.length(), key.data());
             }
             if (verbose) {
-                // SP_LOG("Expected one of:");
+                SP_LOG("Expected one of:");
                 for (u32 i = 0; i < G.entryCount; i++) {
-                    // SP_LOG("%.*s", G.entries[i].name.length(), G.entries[i].name.data());
+                    SP_LOG("%.*s", G.entries[i].name.length(), G.entries[i].name.data());
                 }
             }
             return;
@@ -165,8 +165,8 @@ private:
                         entry.name.data());
                 return;
             }
-            // SP_LOG("Setting %.*s::%.*s to %08x (%i)", categoryName.length(), categoryName.data(),
-                    // entry.name.length(), entry.name.data(), v, v);
+            SP_LOG("Setting %.*s::%.*s to %08x (%i)", categoryName.length(), categoryName.data(),
+                    entry.name.length(), entry.name.data(), v, v);
             m_values[*setting] = v;
             return;
         }
@@ -185,8 +185,8 @@ private:
                         entry.name.data());
                 return;
             }
-            // SP_LOG("Setting %.*s::%.*s to %u (%i)", categoryName.length(), categoryName.data(),
-                    // entry.name.length(), entry.name.data(), v, v);
+            SP_LOG("Setting %.*s::%.*s to %u (%i)", categoryName.length(), categoryName.data(),
+                    entry.name.length(), entry.name.data(), v, v);
             m_values[*setting] = v;
             return;
         }
@@ -210,8 +210,8 @@ private:
             return;
         }
         auto valueName = entry.valueNames[*v];
-        // SP_LOG("Setting %.*s::%.*s to %.*s (%i)", categoryName.length(), categoryName.data(),
-                // entry.name.length(), entry.name.data(), valueName.length(), valueName.data(), *v);
+        SP_LOG("Setting %.*s::%.*s to %.*s (%i)", categoryName.length(), categoryName.data(),
+                entry.name.length(), entry.name.data(), valueName.length(), valueName.data(), *v);
         m_values[*setting] = *v;
     }
 

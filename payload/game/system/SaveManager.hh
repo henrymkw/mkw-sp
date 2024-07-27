@@ -9,7 +9,7 @@
 #include <sp/storage/Storage.hh>
 
 extern "C" {
-    #include <revolution/dwc/dwc.h>
+#include <revolution/dwc/dwc.h>
 }
 
 namespace System {
@@ -24,7 +24,7 @@ private:
         MiiId m_miiId;
         u32 unlockFlags[4];
         DWCUserData dwcUserData;
-        u16 rules[4];
+        u16 rules[4]; // TODO: What are these rules for?
         u8 _0088[0x00b0 - 0x0088];
         u16 vr;
         u16 br;
@@ -60,7 +60,6 @@ public:
     bool saveGhostResult() const;
 
     REPLACE void saveLicensesAsync();
-    void REPLACED(saveLicensesAsync)();
 
     void eraseLicense(u32 licenseId);
     void createLicense(u32 licenseId, const MiiId *miiId, const wchar_t *miiName);
@@ -73,10 +72,16 @@ public:
     void selectSPLicense(u32 licenseId);
     void unselectSPLicense();
 
+    /**
+     * @brief Gets DWCUserData. This currently just returns the DWCUserData of the first license,
+     * should be changed to return a passed in licenseIdx's DWCUserData.
+     *
+     * @return DWCUserData*
+     */
+    DWCUserData *getDWCUserData() const;
+
     u32 getSetting(u32 setting) const;
     void setSetting(u32 setting, u32 value);
-
-    DWCUserData *getDWCUserData() const;
 
     template <SP::ClientSettings::Setting S>
     SP::ClientSettings::Helper<S>::type getSetting() const {
@@ -130,8 +135,7 @@ public:
     void getLatitude(u16 *latitude) const;
     void getLongitude(u16 *longitude) const;
 
-    static REPLACE SaveManager *CreateInstance();
-    static SaveManager* REPLACED(CreateInstance)();
+    static REPLACE SaveManager *CreateInstance(); // 0x80543db0
     static SaveManager *Instance();
 
 private:

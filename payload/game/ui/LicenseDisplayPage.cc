@@ -17,14 +17,12 @@ void LicenseDisplayPage::onActivate() {
     auto sectionId = sectionManager->currentSection()->id();
     if (sectionId == SectionId::MiiSelectCreate) {
         auto *mii = m_miiGroup.get(0);
-        SP_LOG("creating license");
         saveManager->createLicense(0, mii->id(), mii->name());
         saveManager->selectLicense(0);
         globalContext->m_localPlayerMiis.insertFromId(0, mii->id());
         saveManager->createSPLicense(mii->id());
     } else if (sectionId == SectionId::MiiSelectChange || sectionId == SectionId::LicenseSettings) {
         auto *mii = m_miiGroup.get(0);
-        SP_LOG("creating license");
         saveManager->createLicense(0, mii->id(), mii->name());
         saveManager->selectLicense(0);
         globalContext->m_localPlayerMiis.insertFromId(0, mii->id());

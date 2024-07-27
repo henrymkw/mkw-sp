@@ -8,8 +8,8 @@ namespace Kart {
 // TODO this cannot be the actual name, even if it fits, right?
 class KartSub {
 public:
-    void REPLACED(createComponents)(KartSettings *settings);
-    REPLACE void createComponents(KartSettings *settings);
+    void createComponents(KartSettings *settings); // 0x80595d48
+    
     void calcEarly();
 
 private:
