@@ -132,7 +132,6 @@ s32 HandleResponse(u8 *block)
         (EntryFunction)(
             (u8 *)payload + payload->info.entry_point);
     assert(entry != NULL);
-    SP_LOG("entry: %p", entry);
     return entry(payload);
 }
 
@@ -151,7 +150,6 @@ void OnPayloadReceived(NHTTPError result, NHTTPResponseHandle response, void * /
     }
 
     s32 error = HandleResponse((u8 *) s_payload);
-    SP_LOG("ran payload error: %d", error);
     if (error != 0)
     {
         s_auth_error = error;
@@ -166,7 +164,6 @@ REPLACE void DWCi_Auth_SendRequest(
     int param_1, wchar_t *param_2, char *param_3, int param_4,
     int param_5, int param_6)
 {
-    SP_LOG("entry: %p", entry);
     if (s_payloadReady)
     {
         REPLACED(DWCi_Auth_SendRequest)(param_1, param_2, param_3, param_4, param_5, param_6);
@@ -190,7 +187,7 @@ REPLACE void DWCi_Auth_SendRequest(
     }
     saltHex[SHA256_DIGEST_SIZE * 2] = 0;
 
-    char uri[0x100];
+    char uri[0x124];
     sprintf(uri, "payload?g=RMC%cD00&s=%s", *(char *)0x80000003, saltHex);
 
     // Generate salt hash
@@ -204,11 +201,9 @@ REPLACE void DWCi_Auth_SendRequest(
         url, "http://nas.%s/%s&h=%02x%02x%02x%02x", WWFC_DOMAIN, uri,
         s_saltHash[0], s_saltHash[1], s_saltHash[2], s_saltHash[3]);
 
-
     void *request = NHTTPCreateRequest(
         url, 0, s_payload, PAYLOAD_BLOCK_SIZE, OnPayloadReceived, 0);
 
-    SP_LOG("entry: %p", entry);
     if (request == NULL)
     {
         s_auth_error = WL_ERROR_PAYLOAD_STAGE1_MAKE_REQUEST;
