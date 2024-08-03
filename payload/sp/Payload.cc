@@ -73,10 +73,9 @@ static void Init() {
 
     Console::Print("Applying security patches...");
 #ifndef GDB_COMPATIBLE
-
-#endif
     PageTable::Init();
     Memory::InvalidateAllIBATs();
+#endif
     OSSetMEM1ArenaLo(Payload_getEnd());
 
     Heap::RandomizeMEM1Heaps();
@@ -190,7 +189,10 @@ static void Run() {
     }
     StackCanary_Init();
 #ifndef GDB_COMPATIBLE
-    // StackCanary::AddLinkRegisterPatches(reinterpret_cast<u32 *>(Dol_getTextSectionStart()),
+    // TODO: Commenting this line out is a temporary hack to jump to the wwfc payload. This should
+    // be better understood and a propper patch should be made to get the wwfc payload to run.
+    
+    // StackCanary::AddLinkRegisterPatches(reinterpret_cast<u32*>(Dol_getTextSectionStart()),
     //         reinterpret_cast<u32 *>(Dol_getTextSectionEnd()));
 #endif
     Patcher_patch(PATCHER_BINARY_DOL);

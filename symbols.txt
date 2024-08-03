@@ -23,6 +23,7 @@
 0x800ebf6c DWCi_Acc_IsAuthentic
 0x800ebfd4 DWC_CheckUserData
 0x800ed6e8 DWCi_Auth_SendRequest
+0x800ed6e8 _ZN3Net21DWCi_Auth_SendRequestEiPwPciii
 
 0x8000f1f0 memmove
 0x8000F2BC memchr
@@ -523,7 +524,6 @@
 0x80385908 es_fd
 0x80386000 s_systemManager
 0x80386000 _ZN6System13SystemManager10s_instanceE
-0x803862e8 s_DWCLoginContext 
 0x8038633c s_auth_work
 0x80386638 MaxEntryNum
 0x8038663c FstStringStart
