@@ -2,6 +2,17 @@
 
 Mario Kart Wii - Service Pack is an experimental, open-source, cross-platform mod for MKW aiming to provide a variety of features and improvements over the base game. More details on the [website](https://mkw-sp.com).
 
+## About this Branch
+
+The goal of this branch is to add WWFC. I (hnery) made this branch for two reasons:
+
+- WWFC (or Wiimmfi, but I choose WWFC) is a prerequisite to another project I am working on.
+- I wanted to document and and be able to modify the online code.
+
+Other than adding WWFC, I am also looking to add more documentation. This includes explaining non-obvious code, adding more types and functions from the base game (even if sp isn't using it), adding doxygen comments, etc.
+
+I nuked a lot of sp's code; some of these changes could be seen as invasive. As a result, I don't plan to PR this into the main branch. Feel free to use this, but be careful to ensure your settings are compatible so you don't get banned from WWFC.
+
 ## Building
 
 You need:
@@ -16,6 +27,7 @@ You need:
 - protobuf (the Python package)
 
 Compile the project by running `build.py`:
+
 ```bash
 ./build.py
 ```
