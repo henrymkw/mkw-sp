@@ -234,7 +234,6 @@ void Section::addPage(PageId pageId) {
             {SectionId::Single, PageId::VSSelect},
             {SectionId::Single, PageId::VSSetting},
             {SectionId::Single, PageId::BattleSetting},
-            {SectionId::Single, PageId::RaceCourseSelect},
             {SectionId::Single, PageId::BattleCupSelect},
             {SectionId::Single, PageId::BattleCourseSelect},
             {SectionId::SingleSelectVSCourse, PageId::RaceCourseSelect},
