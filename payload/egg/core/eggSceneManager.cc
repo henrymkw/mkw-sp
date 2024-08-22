@@ -115,7 +115,7 @@ void SceneManager::destroyScene(Scene *scene) {
     if (InitDolphinSpeed()) {
         PushDolphinSpeed(800);
     }
-    
+
     REPLACED(destroyScene)(scene);
 
     if (InitDolphinSpeed()) {

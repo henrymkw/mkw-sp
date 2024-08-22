@@ -18,11 +18,6 @@ void RankingPage::onInit() {
     REPLACED(onInit)();
 }
 
-void RankingPage::onCourseChange(UpDownControl *upDownControl, u32 localPlayerId, s32 index) {
-
-    REPLACED(onCourseChange)(upDownControl, localPlayerId, index);
-}
-
 void RankingPage::onBack(PushButton *pushButton, u32 /* localPlayerId */) {
     changeSection(SectionId::ServicePackChannel, Anim::Prev, pushButton->getDelay());
 }

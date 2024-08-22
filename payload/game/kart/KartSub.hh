@@ -9,7 +9,7 @@ namespace Kart {
 class KartSub {
 public:
     void createComponents(KartSettings *settings); // 0x80595d48
-    
+
     void calcEarly();
 
 private:

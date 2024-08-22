@@ -191,7 +191,7 @@ static void Run() {
 #ifndef GDB_COMPATIBLE
     // TODO: Commenting this line out is a temporary hack to jump to the wwfc payload. This should
     // be better understood and a propper patch should be made to get the wwfc payload to run.
-    
+
     // StackCanary::AddLinkRegisterPatches(reinterpret_cast<u32*>(Dol_getTextSectionStart()),
     //         reinterpret_cast<u32 *>(Dol_getTextSectionEnd()));
 #endif

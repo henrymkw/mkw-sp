@@ -27,11 +27,11 @@ private:
      * @param unk unknown, always seems to be 1
      * @return NandResult Result of the operation
      */
-    NandResult readSaveData(void *buffer, u32 len, u32 offset, s32 unk);  // 0x8052c0b0
+    NandResult readSaveData(void *buffer, u32 len, u32 offset, s32 unk); // 0x8052c0b0
 
     /**
      * @brief Writes n bytes to rksys.dat starting at a passed in offset. Likely public.
-     * 
+     *
      * @param buffer Of type RawSave. Need to figure out the public/private organization.
      * @param len num q
      * @param offset offset to write to
@@ -39,29 +39,29 @@ private:
      * @return NandResult Result of the operation
      */
     NandResult writeSaveData(void *buffer, u32 len, u32 offset, s32 unk); // 0x8052c2d0
-    
+
     /**
      * @brief TODO: Document this function
-     * 
-     * @param rawFile 
-     * @param len 
-     * @param offset 
-     * @param unk 
-     * @return NandResult 
+     *
+     * @param rawFile
+     * @param len
+     * @param offset
+     * @param unk
+     * @return NandResult
      */
-    NandResult readFile(char *rawFile, u32 len, u32 offset, s32 unk);     // 0x8052c168
-    
+    NandResult readFile(char *rawFile, u32 len, u32 offset, s32 unk); // 0x8052c168
+
     /**
      * @brief TODO: Document this function
-     * 
-     * @param rawFile 
-     * @param len 
-     * @param offset 
-     * @param unk 
-     * @return NandResult 
+     *
+     * @param rawFile
+     * @param len
+     * @param offset
+     * @param unk
+     * @return NandResult
      */
-    NandResult writeFile(char *rawFile, u32 len, u32 offset, s32 unk);    // 0x8052c428
-    
+    NandResult writeFile(char *rawFile, u32 len, u32 offset, s32 unk); // 0x8052c428
+
     // private data
     u8 _00[0x28 - 0x00];
 

@@ -89,7 +89,7 @@ void PackSelectPage::onActivate() {
 
 void PackSelectPage::onBack(u32 /* localPlayerId */) {
     auto sectionId = SectionManager::Instance()->currentSection()->id();
-    
+
     if (sectionId == SectionId::Multi) {
         m_replacement = PageId::PlayerPad;
     } else {

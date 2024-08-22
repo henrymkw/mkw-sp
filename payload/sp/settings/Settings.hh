@@ -138,7 +138,7 @@ private:
         if (!setting) {
             if (section.data()) {
                 SP_LOG("Unknown key %.*s::%.*s", section.length(), section.data(), key.length(),
-                      key.data());
+                        key.data());
             } else {
                 SP_LOG("Unknown key *::%.*s", key.length(), key.data());
             }

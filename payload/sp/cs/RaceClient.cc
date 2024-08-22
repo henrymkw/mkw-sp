@@ -156,8 +156,9 @@ RaceClient *RaceClient::Instance() {
 }
 
 RaceClient::RaceClient(RoomClient &roomClient)
-    : m_roomClient(roomClient), m_socket("race    ", {}),
-      m_connection{roomClient.ip(), roomClient.port(), roomClient.keypair()} {}
+    : m_roomClient(roomClient),
+      m_socket("race    ", {}), m_connection{roomClient.ip(), roomClient.port(),
+                                        roomClient.keypair()} {}
 
 RaceClient::~RaceClient() {
     hydro_memzero(&m_connection, sizeof(m_connection));

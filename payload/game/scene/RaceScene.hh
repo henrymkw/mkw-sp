@@ -22,7 +22,7 @@ public:
 
     void REPLACED(createSubsystems)(); // 0x80554208
     REPLACE void createSubsystems() override;
-    
+
     void vf_48() override;
     void vf_4c() override;
     void vf_50() override;
