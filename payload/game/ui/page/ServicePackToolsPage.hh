@@ -1,6 +1,6 @@
 #pragma once
 
-#include "game/ui/MessagePage.hh"
+#include "game/ui/page/MessagePage.hh"
 #include "game/ui/ctrl/CtrlMenuBackButton.hh"
 #include "game/ui/ctrl/CtrlMenuPageTitleText.hh"
 

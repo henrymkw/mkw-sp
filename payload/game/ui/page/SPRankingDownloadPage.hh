@@ -1,6 +1,6 @@
 #pragma once
 
-#include "game/ui/RankingPage.hh"
+#include "game/ui/page/RankingPage.hh"
 #include "game/util/Registry.hh"
 
 extern "C" {

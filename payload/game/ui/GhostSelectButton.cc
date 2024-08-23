@@ -1,6 +1,6 @@
 #include "GhostSelectButton.hh"
 
-#include "game/ui/TimeAttackGhostListPage.hh"
+#include "game/ui/page/TimeAttackGhostListPage.hh"
 extern "C" {
 #include "game/util/Registry.h"
 }

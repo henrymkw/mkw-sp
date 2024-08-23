@@ -2,9 +2,9 @@
 
 #include "game/system/RaceConfig.hh"
 #include "game/system/SaveManager.hh"
-#include "game/ui/ModelPage.hh"
+#include "game/ui/page/ModelPage.hh"
 #include "game/ui/SectionManager.hh"
-#include "game/ui/SettingsPage.hh"
+#include "game/ui/page/SettingsPage.hh"
 #include "game/ui/page/BattleModeSelectPage.hh"
 #include "game/ui/page/MenuPage.hh"
 

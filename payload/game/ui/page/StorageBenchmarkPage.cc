@@ -1,7 +1,7 @@
 #include "StorageBenchmarkPage.hh"
 
-#include "game/ui/AwaitPage.hh"
-#include "game/ui/MessagePage.hh"
+#include "game/ui/page/AwaitPage.hh"
+#include "game/ui/page/MessagePage.hh"
 #include "game/ui/Option.hh"
 #include "game/ui/SectionManager.hh"
 

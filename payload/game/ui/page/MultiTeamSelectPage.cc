@@ -3,7 +3,7 @@
 #include "game/sound/DriverSoundManager.hh"
 #include "game/system/RaceConfig.hh"
 #include "game/system/SaveManager.hh"
-#include "game/ui/MessagePage.hh"
+#include "game/ui/page/MessagePage.hh"
 #include "game/ui/SectionManager.hh"
 #include "game/ui/model/MenuModelManager.hh"
 

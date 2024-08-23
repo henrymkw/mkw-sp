@@ -1,6 +1,6 @@
 #pragma once
 
-#include "game/ui/SPRankingDownloadPage.hh"
+#include "game/ui/page/SPRankingDownloadPage.hh"
 
 namespace UI {
 

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "game/ui/GhostManagerPage.hh"
+#include "game/ui/page/GhostManagerPage.hh"
 #include "game/ui/GhostSelectControl.hh"
 #include "game/ui/MessageWindowControl.hh"
 #include "game/ui/Page.hh"

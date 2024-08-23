@@ -7,8 +7,8 @@
 
 #include "PackSelectPage.hh"
 
-#include "game/ui/MessagePage.hh"
-#include "game/ui/ModelPage.hh"
+#include "game/ui/page/MessagePage.hh"
+#include "game/ui/page/ModelPage.hh"
 #include "game/ui/SectionManager.hh"
 
 #include "game/system/RaceConfig.hh"

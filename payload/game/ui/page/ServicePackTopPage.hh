@@ -1,6 +1,6 @@
 #pragma once
 
-#include "game/ui/ConfirmPage.hh"
+#include "game/ui/page/ConfirmPage.hh"
 #include "game/ui/ctrl/CtrlMenuBackButton.hh"
 #include "game/ui/ctrl/CtrlMenuPageTitleText.hh"
 

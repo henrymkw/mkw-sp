@@ -9,7 +9,7 @@ public:
     BlackBackControl();
     ~BlackBackControl() override;
 
-    void vf_20() override;
+    void solveAnim(double currFrame, Element *element) override;
     void vf_28() override;
     const char *getTypeName() override;
 

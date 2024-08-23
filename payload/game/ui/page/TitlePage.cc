@@ -1,6 +1,6 @@
 #include "TitlePage.hh"
 
-#include "game/ui/MessagePage.hh"
+#include "game/ui/page/MessagePage.hh"
 #include "game/ui/SectionManager.hh"
 
 extern "C" {

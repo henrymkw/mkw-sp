@@ -1,7 +1,7 @@
 #include "WU8LibraryPage.hh"
 
 #include "game/system/GameScene.hh"
-#include "game/ui/AwaitPage.hh"
+#include "game/ui/page/AwaitPage.hh"
 #include "game/ui/SectionManager.hh"
 
 #include <egg/core/eggSceneManager.hh>

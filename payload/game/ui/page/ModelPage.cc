@@ -1,6 +1,6 @@
 #include "ModelPage.hh"
 
-#include "SectionManager.hh"
+#include "game/ui/SectionManager.hh"
 
 namespace UI {
 

@@ -1,5 +1,5 @@
 #include "GhostSelectControl.hh"
-#include "TimeAttackGhostListPage.hh"
+#include "page/TimeAttackGhostListPage.hh"
 
 namespace UI {
 
