@@ -3,8 +3,8 @@
 #include "game/ui/MenuModelControl.hh"
 #include "game/ui/Page.hh"
 #include "game/ui/UpDownControl.hh"
-#include "game/ui/ctrl/CtrlMenuBackButton.hh"
-#include "game/ui/ctrl/CtrlMenuPageTitleText.hh"
+#include "game/ui/ctrl/menu/CtrlMenuBackButton.hh"
+#include "game/ui/ctrl/menu/CtrlMenuPageTitleText.hh"
 
 namespace UI {
 

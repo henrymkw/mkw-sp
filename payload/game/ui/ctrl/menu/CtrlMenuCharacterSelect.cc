@@ -1,4 +1,4 @@
-#include "game/ui/ctrl/CtrlMenuCharacterSelect.hh"
+#include "game/ui/ctrl/menu/CtrlMenuCharacterSelect.hh"
 
 namespace UI {
 

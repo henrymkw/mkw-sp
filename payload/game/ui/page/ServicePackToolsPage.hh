@@ -1,8 +1,8 @@
 #pragma once
 
 #include "game/ui/page/MessagePage.hh"
-#include "game/ui/ctrl/CtrlMenuBackButton.hh"
-#include "game/ui/ctrl/CtrlMenuPageTitleText.hh"
+#include "game/ui/ctrl/menu/CtrlMenuBackButton.hh"
+#include "game/ui/ctrl/menu/CtrlMenuPageTitleText.hh"
 
 namespace UI {
 

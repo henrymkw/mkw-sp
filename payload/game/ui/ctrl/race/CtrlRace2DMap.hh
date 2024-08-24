@@ -1,7 +1,7 @@
 #pragma once
 
 #include "game/kart/KartObject.hh"
-#include "game/ui/ctrl/CtrlRaceBase.hh"
+#include "game/ui/ctrl/race/CtrlRaceBase.hh"
 
 namespace UI {
 

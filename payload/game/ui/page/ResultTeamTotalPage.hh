@@ -1,7 +1,7 @@
 #pragma once
 
-#include "game/ui/ctrl/CtrlRaceResultTeam.hh"
-#include "game/ui/ctrl/CtrlRaceResultTeamPoint.hh"
+#include "game/ui/ctrl/race/CtrlRaceResultTeam.hh"
+#include "game/ui/ctrl/race/CtrlRaceResultTeamPoint.hh"
 #include "game/ui/page/ResultPage.hh"
 
 #include <array>

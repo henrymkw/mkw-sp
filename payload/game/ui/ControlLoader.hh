@@ -14,6 +14,7 @@ public:
     void load(const char *dir, const char *file, const char *variant, const char *const *groups);
 
 private:
+    // you are dumb and redefined this (henry to himself)
     LayoutUIControl *m_control;
 
     u8 _04[0x28 - 0x04];

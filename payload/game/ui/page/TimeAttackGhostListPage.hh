@@ -5,8 +5,8 @@
 #include "game/ui/MessageWindowControl.hh"
 #include "game/ui/Page.hh"
 #include "game/ui/SheetSelectControl.hh"
-#include "game/ui/ctrl/CtrlMenuBackButton.hh"
-#include "game/ui/ctrl/CtrlMenuPageTitleText.hh"
+#include "game/ui/ctrl/menu/CtrlMenuBackButton.hh"
+#include "game/ui/ctrl/menu/CtrlMenuPageTitleText.hh"
 
 #include <sp/settings/ClientSettings.hh>
 

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "game/ui/ctrl/CtrlRaceBase.hh"
+#include "game/ui/ctrl/race/CtrlRaceBase.hh"
 
 #include <vendor/magic_enum/magic_enum.hpp>
 

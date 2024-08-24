@@ -3,7 +3,7 @@
 #include "game/ui/Page.hh"
 
 #include "game/ui/ctrl/CtrlBusySymbol.hh"
-#include "game/ui/ctrl/CtrlMenuPageTitleText.hh"
+#include "game/ui/ctrl/menu/CtrlMenuPageTitleText.hh"
 
 namespace UI {
 

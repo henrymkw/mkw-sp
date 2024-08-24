@@ -3,14 +3,14 @@
 #include "game/system/RaceConfig.hh"
 #include "game/system/SaveManager.hh"
 #include "game/ui/SectionManager.hh"
-#include "game/ui/ctrl/CtrlRaceBattleAddPoint.hh"
-#include "game/ui/ctrl/CtrlRaceBattlePoint.hh"
-#include "game/ui/ctrl/CtrlRaceBattleTotalPoint.hh"
-#include "game/ui/ctrl/CtrlRaceDebugPanel.hh"
-#include "game/ui/ctrl/CtrlRaceInputDisplay.hh"
-#include "game/ui/ctrl/CtrlRaceLap.hh"
-#include "game/ui/ctrl/CtrlRaceSpeed.hh"
-#include "game/ui/ctrl/CtrlRaceWaitSymbol.hh"
+#include "game/ui/ctrl/race/CtrlRaceBattleAddPoint.hh"
+#include "game/ui/ctrl/race/CtrlRaceBattlePoint.hh"
+#include "game/ui/ctrl/race/CtrlRaceBattleTotalPoint.hh"
+#include "game/ui/ctrl/race/CtrlRaceDebugPanel.hh"
+#include "game/ui/ctrl/race/CtrlRaceInputDisplay.hh"
+#include "game/ui/ctrl/race/CtrlRaceLap.hh"
+#include "game/ui/ctrl/race/CtrlRaceSpeed.hh"
+#include "game/ui/ctrl/race/CtrlRaceWaitSymbol.hh"
 
 #include <sp/cs/RaceManager.hh>
 

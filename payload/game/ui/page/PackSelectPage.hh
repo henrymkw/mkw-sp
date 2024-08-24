@@ -3,8 +3,8 @@
 #include "game/ui/Page.hh"
 #include "game/ui/ScrollBar.hh"
 #include "game/ui/SheetSelectControl.hh"
-#include "game/ui/ctrl/CtrlMenuBackButton.hh"
-#include "game/ui/ctrl/CtrlMenuPageTitleText.hh"
+#include "game/ui/ctrl/menu/CtrlMenuBackButton.hh"
+#include "game/ui/ctrl/menu/CtrlMenuPageTitleText.hh"
 
 namespace UI {
 

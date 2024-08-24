@@ -1,8 +1,8 @@
 #pragma once
 
 #include "game/ui/Page.hh"
-#include "game/ui/ctrl/CtrlRaceWifiFinishMessage.hh"
-#include "game/ui/ctrl/CtrlRaceWifiStartMessage.hh"
+#include "game/ui/ctrl/race/CtrlRaceWifiFinishMessage.hh"
+#include "game/ui/ctrl/race/CtrlRaceWifiStartMessage.hh"
 
 namespace UI {
 

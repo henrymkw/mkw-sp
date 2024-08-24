@@ -1,13 +1,13 @@
 #pragma once
 
-#include "game/ui/ctrl/CtrlRaceBase.hh"
+#include "game/ui/ctrl/race/CtrlRaceBase.hh"
 
 namespace UI {
 
-class CtrlRaceWifiStartMessage : public CtrlRaceBase {
+class CtrlRaceWaitSymbol : public CtrlRaceBase {
 public:
-    CtrlRaceWifiStartMessage();
-    ~CtrlRaceWifiStartMessage() override;
+    CtrlRaceWaitSymbol();
+    ~CtrlRaceWaitSymbol() override;
     void calcSelf() override;
     void vf_28() override;
     const char *getTypeName() override;
@@ -21,6 +21,6 @@ public:
 private:
     u8 _198[0x19c - 0x198];
 };
-static_assert(sizeof(CtrlRaceWifiStartMessage) == 0x19c);
+static_assert(sizeof(CtrlRaceWaitSymbol) == 0x19c);
 
 } // namespace UI
