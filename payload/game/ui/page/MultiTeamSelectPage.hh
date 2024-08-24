@@ -8,6 +8,10 @@
 
 namespace UI {
 
+/**
+ * @brief PageId: 0x83. Selecting teams in multiplayer mode, orig size is  0x6cc
+ *
+ */
 class MultiTeamSelectPage : public Page {
 public:
     MultiTeamSelectPage();
@@ -36,7 +40,7 @@ private:
 
     MultiControlInputManager m_inputManager;
     CtrlMenuPageTitleText m_pageTitleText;
-    DriverModelControl m_driverModels[4];
+DriverModelControl m_driverModels[4];
     LayoutUIControl m_nullControls[4];
     UpDownControl m_teamControls[4];
     TextUpDownValueControl m_teamValues[4];

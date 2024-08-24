@@ -7,6 +7,11 @@
 
 namespace UI {
 
+/**
+ * @brief PageId: 0x74, page after selecting characters in vs teams or battle mode. its size in the
+ * base game is 0x1b2c. Was modified to support more than 2 teams/
+ *
+ */
 class TeamConfirmPage : public Page {
 public:
     TeamConfirmPage();

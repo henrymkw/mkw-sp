@@ -7,6 +7,10 @@
 
 namespace UI {
 
+/**
+ * @brief PageId: 0x80, orig size is 0x6c4
+ *
+ */
 class MultiTopPage : public Page {
 public:
     MultiTopPage();

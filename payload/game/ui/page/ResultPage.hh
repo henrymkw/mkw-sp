@@ -4,6 +4,10 @@
 
 namespace UI {
 
+/**
+ * @brief Not sure of the PageId atm (not at main computer)
+ *
+ */
 class ResultPage : public Page {
 public:
     ResultPage();

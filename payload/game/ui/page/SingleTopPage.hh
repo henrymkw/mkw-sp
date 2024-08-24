@@ -9,6 +9,10 @@
 
 namespace UI {
 
+/**
+ * @brief PageId: 0x69, original size is 0x6c4
+ *
+ */
 class SingleTopPage : public Page {
 public:
     SingleTopPage();

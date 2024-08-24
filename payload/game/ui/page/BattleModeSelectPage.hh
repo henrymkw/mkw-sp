@@ -4,6 +4,10 @@
 
 namespace UI {
 
+/**
+ * @brief PageID: 0x75, selecting between baloon and coin runners
+ *
+ */
 class BattleModeSelectPage : public MenuPage {
 private:
     BattleModeSelectPage();
@@ -12,7 +16,7 @@ private:
     void REPLACED(onInit)();
     REPLACE void onInit() override;
     REPLACE void onButtonFront(const PushButton *button);
-    u8 _0[0x6c4 - 0x430];
+    u8 _000[0x6c4 - 0x430];
 };
 static_assert(sizeof(BattleModeSelectPage) == 0x6c4);
 

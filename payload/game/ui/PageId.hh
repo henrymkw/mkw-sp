@@ -77,9 +77,10 @@ enum class PageId {
     Unknown45 = 0x45, // "Dummy? Seems to immediately load 0x46"
     AfterWifiMenu = 0x46,
     ConfirmWifiQuit = 0x47,
-    OnlinePleaseWait = 0x48,
-    Unknown49 = 0x49, // "Live VS view interface"
-    Unknown4A = 0x4A, // "Live Battle view interface"
+    OnlinePleaseWait = 0x48, // Pulsar suggests this isnt correct, unless this was used at some
+                             // point in SP's development
+    Unknown49 = 0x49,        // "Live VS view interface"
+    Unknown4A = 0x4A,        // "Live Battle view interface"
     RaceConfirm = 0x4B,
     SpinnerMessagePopup = 0x4C,
     MessagePopup = 0x4D,
@@ -99,7 +100,9 @@ enum class PageId {
     Unknown5B = 0x5B, // "Behind unlocks?"
     Model = 0x5C,
     LineBackgroundWhite = 0x5D,
-    Obi = 0x5E,
+    Obi = 0x5E, // Not sure what to take from this; Pulsar says the following "//ID 0x5e but also
+                // 0xcc simply a MenuPage in its simplest form with no actions etc.". This makes me
+                // feel uncertan about 0xcc's name.
     PressA = 0x5F,
     SelectMii = 0x60,
     PlayerPad = 0x61, // Activates ControllerRegister when activated
@@ -201,7 +204,7 @@ enum class PageId {
     Channel = 0xCA, // Replaces ChannelExplanation
     Update = 0xCB,  // Replaces ChannelConfirm
     OptionsBackground = 0xCC,
-
+    Unlock = 0xCD,
     MenuSettings = 0xCE,  // Replaces LicenseRecordsOverall
     SettingsPopup = 0xCF, // Replaces LicenseRecordsFavorites
     // Disabled {

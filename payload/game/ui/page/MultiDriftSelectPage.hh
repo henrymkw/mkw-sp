@@ -4,6 +4,10 @@
 
 namespace UI {
 
+/**
+ * @brief PageId: 0x82, selecting drifts in multiplayer
+ *
+ */
 class MultiDriftSelectPage : public MenuPage {
 public:
     MultiDriftSelectPage();
