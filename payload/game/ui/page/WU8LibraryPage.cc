@@ -1,8 +1,8 @@
 #include "WU8LibraryPage.hh"
 
 #include "game/system/GameScene.hh"
-#include "game/ui/page/AwaitPage.hh"
 #include "game/ui/SectionManager.hh"
+#include "game/ui/page/AwaitPage.hh"
 
 #include <egg/core/eggSceneManager.hh>
 #include <sp/IOSDolphin.hh>

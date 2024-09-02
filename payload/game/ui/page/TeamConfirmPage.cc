@@ -2,8 +2,9 @@
 
 #include "game/system/RaceConfig.hh"
 #include "game/ui/SectionManager.hh"
-#include "game/ui/page/SettingsPage.hh"
 #include "game/ui/page/MenuPage.hh"
+#include "game/ui/page/SettingsPage.hh"
+
 
 extern "C" {
 #include <vendor/libhydrogen/hydrogen.h>

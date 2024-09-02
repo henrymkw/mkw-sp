@@ -1,8 +1,9 @@
 #include "CharacterSelectPage.hh"
 
-#include "game/ui/page/ModelRenderPage.hh"
 #include "game/ui/SectionManager.hh"
 #include "game/ui/model/MenuModelManager.hh"
+#include "game/ui/page/ModelRenderPage.hh"
+
 
 namespace UI {
 

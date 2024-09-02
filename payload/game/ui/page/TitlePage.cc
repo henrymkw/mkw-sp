@@ -1,7 +1,7 @@
 #include "TitlePage.hh"
 
-#include "game/ui/page/MessagePage.hh"
 #include "game/ui/SectionManager.hh"
+#include "game/ui/page/MessagePage.hh"
 
 extern "C" {
 #include <sp/Host.h>

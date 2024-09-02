@@ -75,7 +75,6 @@ public:
      */
     void load(const char *name); // 0x805f8b90
 
-
 private:
     BMGHeader *m_header;
     BMGInfo *m_info;

@@ -40,7 +40,7 @@ private:
 
     MultiControlInputManager m_inputManager;
     CtrlMenuPageTitleText m_pageTitleText;
-DriverModelControl m_driverModels[4];
+    DriverModelControl m_driverModels[4];
     LayoutUIControl m_nullControls[4];
     UpDownControl m_teamControls[4];
     TextUpDownValueControl m_teamValues[4];

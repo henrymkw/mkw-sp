@@ -72,7 +72,7 @@ private:
     bool m_isHidden;
     u8 _7d[0x80 - 0x7d];
     u32 m_drawPass;
-    bool m_animated; 
+    bool m_animated;
     u8 _85[0x88 - 0x85]; // padding
     float m_animStartFrame;
     u32 m_onShowSfxId;

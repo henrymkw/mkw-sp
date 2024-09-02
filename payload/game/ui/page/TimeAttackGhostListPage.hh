@@ -1,12 +1,12 @@
 #pragma once
 
-#include "game/ui/page/GhostManagerPage.hh"
 #include "game/ui/GhostSelectControl.hh"
 #include "game/ui/MessageWindowControl.hh"
 #include "game/ui/Page.hh"
 #include "game/ui/SheetSelectControl.hh"
 #include "game/ui/ctrl/menu/CtrlMenuBackButton.hh"
 #include "game/ui/ctrl/menu/CtrlMenuPageTitleText.hh"
+#include "game/ui/page/GhostManagerPage.hh"
 
 #include <sp/settings/ClientSettings.hh>
 

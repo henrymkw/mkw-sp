@@ -33,7 +33,6 @@ private:
 };
 static_assert(sizeof(MainLayout) == 0x9c);
 
-
 // Added for documentation purposes, credit to Pulsar
 class PictureLayout : public Layout {
 public:

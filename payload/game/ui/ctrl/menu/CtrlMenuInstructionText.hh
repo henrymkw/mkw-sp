@@ -8,7 +8,7 @@ class CtrlMenuInstructionText : public LayoutUIControl {
 public:
     CtrlMenuInstructionText();
     ~CtrlMenuInstructionText() override;
-    void solveAnim(double currFrame, Element *element) override; 
+    void solveAnim(double currFrame, Element *element) override;
     void vf_28() override;
     const char *getTypeName() override;
 

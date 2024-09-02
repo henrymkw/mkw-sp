@@ -1,8 +1,8 @@
 #include "UpdatePage.hh"
 
-#include "game/ui/page/AwaitPage.hh"
 #include "game/ui/Option.hh"
 #include "game/ui/SectionManager.hh"
+#include "game/ui/page/AwaitPage.hh"
 
 #include <sp/Update.hh>
 

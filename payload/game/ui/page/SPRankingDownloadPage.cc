@@ -3,9 +3,9 @@
 #include "game/host_system/SystemManager.hh"
 #include "game/system/GameScene.hh"
 #include "game/system/SaveManager.hh"
+#include "game/ui/SectionManager.hh"
 #include "game/ui/page/AwaitPage.hh"
 #include "game/ui/page/MessagePage.hh"
-#include "game/ui/SectionManager.hh"
 
 #include <egg/core/eggExpHeap.hh>
 #include <sp/settings/RegionLineColor.hh>
