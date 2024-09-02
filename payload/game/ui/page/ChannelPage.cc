@@ -7,7 +7,6 @@
 #include "game/ui/page/ConfirmPage.hh"
 #include "game/ui/page/MessagePage.hh"
 
-
 #include <sp/Channel.hh>
 
 #include <new>

@@ -102,14 +102,20 @@ static bool IsClean(const void *rel, u32 roundedRelSize) {
 }
 
 std::expected<void, const char *> Load() {
+    // Open the REL
     auto file = Storage::OpenRO("/rel/StaticR.rel");
     if (!file) {
         return std::unexpected("Failed to find StaticR.rel");
     }
 
 #ifndef GDB_COMPATIBLE
-    void *src = OSGetMEM1ArenaLo();
 
+    // MKW-SP moves the REL closer to the DOL to save some memory. This makes addresses
+    // different from vanilla, which isn't convenient for debugging. This patch doesn't apply to
+    // gdb-compatible builds for that reason.
+
+    // Read in the REL, check if it has been modified.
+    void *src = OSGetMEM1ArenaLo();
     if (!file->read(src, file->size(), 0)) {
         return std::unexpected("Failed to read StaticR.rel from disc.");
     }
@@ -117,19 +123,29 @@ std::expected<void, const char *> Load() {
         return std::unexpected("StaticR.rel has been modified.");
     }
 
+    // Get the new rel address, this is defined in build.py
     void *dst = Rel_getStart();
+    SP_LOG("Rel address: %p\n", dst);
+
+    // Cast the source REL address to get the orignal REL header, copy it to the new location
     auto *srcHeader = reinterpret_cast<OSModuleHeader *>(src);
     memcpy(dst, src, srcHeader->fixSize);
-    ICInvalidateRange(dst, srcHeader->fixSize);
-    auto *dstHeader = reinterpret_cast<OSModuleHeader *>(dst);
 
+    // Invalidate the cache for the copied data
+    ICInvalidateRange(dst, srcHeader->fixSize);
+
+    // Set the bss address to the next 32-byte aligned address after the code, and zero it out
     void *bss = reinterpret_cast<void *>(
             AlignUp(reinterpret_cast<size_t>(dst) + srcHeader->fixSize, 0x20));
     memset(bss, 0, srcHeader->bssSize);
 
+    auto *dstHeader = reinterpret_cast<OSModuleHeader *>(dst);
+    // Offsets contain addresses, but aren't actually pointers. I am not sure why it is like this.
     dstHeader->info.sectionInfoOffset += reinterpret_cast<u32>(dst);
     auto *dstSectionInfo = reinterpret_cast<OSSectionInfo *>(dstHeader->info.sectionInfoOffset);
     for (u32 i = 1; i < dstHeader->info.numSections; i++) {
+        // Loop over the sections, set offsets (non-zero offsets are non-bss, non-zero sizes are
+        // bss)
         if (dstSectionInfo[i].offset != 0) {
             dstSectionInfo[i].offset += reinterpret_cast<u32>(dst);
         } else if (dstSectionInfo[i].size != 0) {
@@ -137,15 +153,19 @@ std::expected<void, const char *> Load() {
         }
     }
 
+    // Correct the offsets in the import table
     dstHeader->impOffset += reinterpret_cast<u32>(src);
-    auto *importInfo = reinterpret_cast<OSImportInfo *>(dstHeader->impOffset);
     for (u32 i = 0; i < dstHeader->impSize / sizeof(OSImportInfo); i++) {
+        auto *importInfo = reinterpret_cast<OSImportInfo *>(dstHeader->impOffset);
         importInfo[i].offset += reinterpret_cast<u32>(src);
     }
 
+    // This function isn't exposed in the API, but relocates the REL
+    // I am not sure why NULL is passed in, and why the header is passed in twice in one call.
     Relocate(NULL, dstHeader);
     Relocate(dstHeader, dstHeader);
 
+    // Set the entry to be after the prolog
     OSSectionInfo *prologSectionInfo = dstSectionInfo + dstHeader->prologSection;
     entry = reinterpret_cast<EntryFunction>(prologSectionInfo->offset + dstHeader->prolog);
     return {};

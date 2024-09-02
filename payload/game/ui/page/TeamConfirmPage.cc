@@ -5,7 +5,6 @@
 #include "game/ui/page/MenuPage.hh"
 #include "game/ui/page/SettingsPage.hh"
 
-
 extern "C" {
 #include <vendor/libhydrogen/hydrogen.h>
 }

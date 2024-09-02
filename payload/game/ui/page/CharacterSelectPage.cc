@@ -4,7 +4,6 @@
 #include "game/ui/model/MenuModelManager.hh"
 #include "game/ui/page/ModelRenderPage.hh"
 
-
 namespace UI {
 
 void CharacterSelectPage::onBack(u32 localPlayerId) {

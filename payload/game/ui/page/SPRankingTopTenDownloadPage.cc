@@ -1,8 +1,8 @@
 #include "SPRankingTopTenDownloadPage.hh"
 
+#include "game/ui/SectionManager.hh"
 #include "game/ui/page/AwaitPage.hh"
 #include "game/ui/page/MessagePage.hh"
-#include "game/ui/SectionManager.hh"
 
 #include <cstdio>
 

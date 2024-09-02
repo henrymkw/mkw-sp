@@ -150,7 +150,7 @@ static bool AddEntryToPageTable(const void *physicalAddress, const void *effecti
     return true;
 }
 
-static const std::array<PageTableEntryInfo, 4> pteInfoArray = {
+static const std::array<PageTableEntryInfo, 3> pteInfoArray = {
         PageTableEntryInfo{
                 reinterpret_cast<const void *>(VIRTUAL_TO_PHYSICAL(Dol_getInitSectionStart())),
                 Dol_getInitSectionStart(),
@@ -175,15 +175,6 @@ static const std::array<PageTableEntryInfo, 4> pteInfoArray = {
                         reinterpret_cast<u32>(Payload_getTextSectionStart()),
                 WIMG_NONE,
                 PP_FULL_READ_ONLY,
-                GetSR<8>(),
-        },
-        PageTableEntryInfo{
-                reinterpret_cast<const void *>(VIRTUAL_TO_PHYSICAL(Payload_getDataSectionStart())),
-                Payload_getDataSectionStart(),
-                reinterpret_cast<u32>(Payload_getDataSectionEnd()) -
-                        reinterpret_cast<u32>(Payload_getDataSectionStart()),
-                WIMG_NONE,
-                PP_READ_WRITE,
                 GetSR<8>(),
         },
 };

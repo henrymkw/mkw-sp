@@ -8,10 +8,20 @@ extern u8 rel_text_start[];
 extern u8 rel_text_end[];
 extern u8 rel_rodata_end[];
 
+/**
+ * @brief The new rel address
+ *
+ * @return void* start of the rel
+ */
 static inline void *Rel_getStart(void) {
     return rel_start;
 }
 
+/**
+ * @brief New rel end address.
+ *
+ * @return void*
+ */
 static inline void *Rel_getEnd(void) {
     return rel_end;
 }

@@ -9,7 +9,6 @@
 #include "game/ui/page/SettingsPage.hh"
 #include <sp/settings/ClientSettings.hh>
 
-
 extern "C" {
 #include <vendor/libhydrogen/hydrogen.h>
 }
