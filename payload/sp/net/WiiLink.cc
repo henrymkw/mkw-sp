@@ -125,8 +125,7 @@ void DWCi_Auth_SendRequest(int param_1, wchar_t *param_2, char *param_3, int par
         return;
     }
     // Align the payload block to a 32-byte boundary
-    s_payload = reinterpret_cast<WWFCPayload *>(
-            (reinterpret_cast<u32>(reinterpret_cast<u32 *>(s_payloadBlock)) + 31) & ~31);
+    s_payload = reinterpret_cast<WWFCPayload *>((reinterpret_cast<u32>(s_payloadBlock) + 31) & ~31);
     memset(s_payload, 0, PAYLOAD_BLOCK_SIZE);
 
     u8 salt[SHA256_DIGEST_SIZE];
