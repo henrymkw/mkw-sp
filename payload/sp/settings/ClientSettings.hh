@@ -45,6 +45,7 @@ enum class Setting {
     TAGhostTagContent,
     TASolidGhosts,
     TAGhostSound,
+    TAItemBoxes,
 
     // VS
     VSTeamSize,
@@ -290,6 +291,11 @@ enum class TAGhostSound {
     All,
 };
 
+enum class TAItemBoxes {
+    Disable,
+    Enable,
+};
+
 enum class RoomTeamSelection {
     Random,
     Host,
@@ -514,6 +520,11 @@ struct Helper<ClientSettings::Setting, ClientSettings::Setting::TASolidGhosts> {
 template <>
 struct Helper<ClientSettings::Setting, ClientSettings::Setting::TAGhostSound> {
     using type = SP::ClientSettings::TAGhostSound;
+};
+
+template <>
+struct Helper<ClientSettings::Setting, ClientSettings::Setting::TAItemBoxes> {
+    using type = SP::ClientSettings::TAItemBoxes;
 };
 
 template <>
