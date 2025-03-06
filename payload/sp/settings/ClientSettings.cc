@@ -335,6 +335,17 @@ const Entry entries[] = {
         .valueExplanationMessageIds = (u32[]) { 10067, 10068, 10069 },
         .vanillaValue = static_cast<u32>(TAGhostSound::Watched),
     },
+    [static_cast<u32>(Setting::TAItemBoxes)] = {
+        .category = Category::TA,
+        .name = magic_enum::enum_name(Setting::TAItemBoxes),
+        .messageId = 10454,
+        .defaultValue = static_cast<u32>(TAItemBoxes::Disable),
+        .valueCount = magic_enum::enum_count<TAItemBoxes>(),
+        .valueNames = magic_enum::enum_names<TAItemBoxes>().data(),
+        .valueMessageIds = (u32[]) { 10455, 10456 },
+        .valueExplanationMessageIds = (u32[]) { 10457, 10458 },
+        .vanillaValue = static_cast<u32>(TAItemBoxes::Disable),
+    },
     [static_cast<u32>(Setting::VSTeamSize)] = {
         .category = Category::VS,
         .name = magic_enum::enum_name(Setting::VSTeamSize),

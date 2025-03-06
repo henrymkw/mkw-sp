@@ -543,7 +543,8 @@ void SaveManager::saveGhost(GhostFile *file) {
     if (miiName[0] == L'\0') {
         miiName = L"Player";
     }
-    offset += swprintf(path + offset, 255 + 1 - offset, L"%ls", miiName);
+    offset += swprintf(path + offset, 255 + 1 - offset, L"%.*ls",
+            sizeof(RawMii::name) / sizeof(RawMii::name[0]), miiName);
     swprintf(path + offset, 255 + 1 - offset, L".rkg");
 
     if (!SP::Storage::WriteFile(path, m_rawGhostFile, *size, false)) {
@@ -712,4 +713,11 @@ u32 SaveManager_GetTAGhostTagVisibility(void) {
     auto value = saveManager->getSetting<SP::ClientSettings::Setting::TAGhostTagVisibility>();
     return static_cast<u32>(value);
 }
+
+u32 SaveManager_GetTAItemBoxes(void) {
+    auto *saveManager = System::SaveManager::Instance();
+    auto value = saveManager->getSetting<SP::ClientSettings::Setting::TAItemBoxes>();
+    return static_cast<u32>(value);
+}
+
 }
