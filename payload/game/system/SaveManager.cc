@@ -719,5 +719,4 @@ u32 SaveManager_GetTAItemBoxes(void) {
     auto value = saveManager->getSetting<SP::ClientSettings::Setting::TAItemBoxes>();
     return static_cast<u32>(value);
 }
-
 }
