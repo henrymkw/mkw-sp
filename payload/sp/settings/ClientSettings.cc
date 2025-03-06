@@ -338,12 +338,12 @@ const Entry entries[] = {
     [static_cast<u32>(Setting::TAItemBoxes)] = {
         .category = Category::TA,
         .name = magic_enum::enum_name(Setting::TAItemBoxes),
-        .messageId = 10454,
+        .messageId = 10459,
         .defaultValue = static_cast<u32>(TAItemBoxes::Disable),
         .valueCount = magic_enum::enum_count<TAItemBoxes>(),
         .valueNames = magic_enum::enum_names<TAItemBoxes>().data(),
-        .valueMessageIds = (u32[]) { 10455, 10456 },
-        .valueExplanationMessageIds = (u32[]) { 10457, 10458 },
+        .valueMessageIds = (u32[]) { 10460, 10461 },
+        .valueExplanationMessageIds = (u32[]) { 10462, 10463 },
         .vanillaValue = static_cast<u32>(TAItemBoxes::Disable),
     },
     [static_cast<u32>(Setting::VSTeamSize)] = {
