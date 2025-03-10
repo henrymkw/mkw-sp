@@ -88,3 +88,27 @@ PATCH_BL_START(KartMove_calcSpeed, 0x65c)
     lwz r0, 0x4 (r3) // Original instruction again
     b KartMove_calcSpeed + 0x660
 PATCH_BL_END(KartMove_calcSpeed, 0x65c)
+
+PATCH_B_START(KartMove_activateTcLightning, 0x2c)
+    // original instruction
+    li r4, 0x264
+
+    // Save r3 in r26
+    mr r26, r3
+
+    bl SaveManager_GetTALongerTCs
+    cmpwi r3, 0x1
+    bne jump_back
+    li r4, 0x7fff
+
+    // Restore r3 from r26
+    mr r3, r26
+
+    b KartMove_activateTcLightning + 0x30
+
+jump_back:
+    // Restore r3 from r26
+    mr r3, r26
+
+    b KartMove_activateTcLightning + 0x30
+PATCH_B_END(KartMove_activateTcLightning, 0x2c)

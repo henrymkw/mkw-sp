@@ -719,4 +719,10 @@ u32 SaveManager_GetTAItemBoxes(void) {
     auto value = saveManager->getSetting<SP::ClientSettings::Setting::TAItemBoxes>();
     return static_cast<u32>(value);
 }
+
+u32 SaveManager_GetTALongerTCs(void) {
+    auto *saveManager = System::SaveManager::Instance();
+    auto value = saveManager->getSetting<SP::ClientSettings::Setting::TALongerTCs>();
+    return static_cast<u32>(value);
+}
 }

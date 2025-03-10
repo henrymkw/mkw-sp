@@ -46,6 +46,7 @@ enum class Setting {
     TASolidGhosts,
     TAGhostSound,
     TAItemBoxes,
+    TALongerTCs,
 
     // VS
     VSTeamSize,
@@ -368,6 +369,11 @@ enum class YButton {
     ItemWheel,
 };
 
+enum class TALongerTCs {
+    Disable,
+    Enable,
+};
+
 typedef Settings::Group<Category> Group;
 typedef Settings::Entry<Category> Entry;
 template <Setting S>
@@ -531,6 +537,11 @@ struct Helper<ClientSettings::Setting, ClientSettings::Setting::TAGhostSound> {
 template <>
 struct Helper<ClientSettings::Setting, ClientSettings::Setting::TAItemBoxes> {
     using type = SP::ClientSettings::TAItemBoxes;
+};
+
+template <>
+struct Helper<ClientSettings::Setting, ClientSettings::Setting::TALongerTCs> {
+    using type = SP::ClientSettings::TALongerTCs;
 };
 
 template <>

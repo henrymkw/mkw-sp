@@ -346,6 +346,16 @@ const Entry entries[] = {
         .valueExplanationMessageIds = (u32[]) { 10462, 10463 },
         .vanillaValue = static_cast<u32>(TAItemBoxes::Disable),
     },
+    [static_cast<u32>(Setting::TALongerTCs)] = {
+        .category = Category::TA,
+        .name = magic_enum::enum_name(Setting::TALongerTCs),
+        .messageId = 10464,
+        .defaultValue = static_cast<u32>(TALongerTCs::Disable),
+        .valueCount = magic_enum::enum_count<TALongerTCs>(),
+        .valueNames = magic_enum::enum_names<TALongerTCs>().data(),
+        .valueMessageIds = (u32[]) { 10465, 10466 },
+        .valueExplanationMessageIds = (u32[]) { 10467, 10468 },
+    },
     [static_cast<u32>(Setting::VSTeamSize)] = {
         .category = Category::VS,
         .name = magic_enum::enum_name(Setting::VSTeamSize),
@@ -729,6 +739,7 @@ const Entry entries[] = {
         .valueMessageIds = (u32[]) { 10433, 10435, 10450},
         .valueExplanationMessageIds = (u32[]) { 10434, 10436, 10451 },
     },
+
 };
 // clang-format on
 
