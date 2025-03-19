@@ -1,6 +1,7 @@
 #include "KartMove.hh"
 
 #include "game/kart/KartObjectManager.hh"
+#include "game/system/RaceConfig.hh"
 #include "game/system/SaveManager.hh"
 
 #include <sp/ThumbnailManager.hh>
@@ -46,6 +47,20 @@ bool KartMove::activateTcLightning() {
     }
 
     return REPLACED(activateTcLightning)();
+}
+
+bool KartMove::applyLightningEffect(s32 timer, s32 r5, s32 r6) {
+    auto *saveManager = System::SaveManager::Instance();
+    auto setting = saveManager->getSetting<SP::ClientSettings::Setting::TALongerTCs>();
+    auto gameMode = System::RaceConfig::Instance()->raceScenario().gameMode;
+    // since this setting is intended to used in TTs and can affect other modes, we check current mode
+    if (gameMode == System::RaceConfig::GameMode::TimeAttack && setting == SP::ClientSettings::TALongerTCs::Enable) {
+        // About 54 times longer duration.
+        return REPLACED(applyLightningEffect)(0x7FFF, r5, r6);
+    }
+    else {
+        return REPLACED(applyLightningEffect)(timer, r5, r6);
+    }
 }
 
 } // namespace Kart

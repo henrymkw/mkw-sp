@@ -31,6 +31,9 @@ public:
     bool REPLACED(activateTcLightning)();
     REPLACE bool activateTcLightning();
 
+    bool REPLACED(applyLightningEffect)(s32 timer, s32 r5, s32 r6);
+    REPLACE bool applyLightningEffect(s32 timer, s32 r5, s32 r6);
+
 private:
     u8 _010[0x020 - 0x010];
     f32 m_internalSpeed;
