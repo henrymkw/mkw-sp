@@ -373,6 +373,7 @@ const Entry entries[] = {
         .valueMessageIds = (u32[]) { 10460, 10461 },
         .valueExplanationMessageIds = (u32[]) { 10462, 10463 },
         .vanillaValue = static_cast<u32>(TAItemBoxes::Disable),
+        .menuType = SP::Settings::MenuType::OptionAndDescription,
     },
     [static_cast<u32>(Setting::TALongerTCs)] = {
         .category = Category::TA,
@@ -383,6 +384,8 @@ const Entry entries[] = {
         .valueNames = magic_enum::enum_names<TALongerTCs>().data(),
         .valueMessageIds = (u32[]) { 10465, 10466 },
         .valueExplanationMessageIds = (u32[]) { 10467, 10468 },
+        .vanillaValue = static_cast<u32>(TALongerTCs::Disable),
+        .menuType = SP::Settings::MenuType::OptionAndDescription,
     },
     [static_cast<u32>(Setting::VSTeamSize)] = {
         .category = Category::VS,
@@ -801,6 +804,7 @@ const Entry entries[] = {
         .valueNames = magic_enum::enum_names<YButton>().data(),
         .valueMessageIds = (u32[]) { 10433, 10435, 10450},
         .valueExplanationMessageIds = (u32[]) { 10434, 10436, 10451 },
+        .menuType = SP::Settings::MenuType::OptionAndDescription,
     },
 
 };

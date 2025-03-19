@@ -93,7 +93,10 @@ void SettingsPage::onInit() {
     m_inputManager.setHandler(MenuInputManager::InputId::Up, &m_onDown, true, false);
     m_inputManager.setHandler(MenuInputManager::InputId::Option, &m_onCategorySwap, false, false);
     m_arrowUp.setFrontHandler(&m_onSettingsWheelButtonFront, false);
+    m_arrowUp.setMessageAll(10469);
+
     m_arrowDown.setFrontHandler(&m_onSettingsWheelButtonFront, false);
+    m_arrowDown.setMessageAll(10470);
     m_categorySwap.setFrontHandler(&m_onSettingsWheelButtonFront, true);
     m_categorySwap.setDeselectHandler(&m_onSettingsWheelButtonDeselect, true);
     m_categorySwap.setSelectHandler(&m_onSettingsWheelButtonSelect, true);
