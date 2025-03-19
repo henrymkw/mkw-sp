@@ -31,6 +31,9 @@ public:
     bool REPLACED(activateTcLightning)();
     REPLACE bool activateTcLightning();
 
+    bool REPLACED(applyLightningEffect)(s32 timer, s32 r5, s32 r6);
+    REPLACE bool applyLightningEffect(s32 timer, s32 r5, s32 r6);
+
 private:
     u8 _010[0x020 - 0x010];
     f32 m_internalSpeed;
@@ -39,7 +42,9 @@ private:
     u8 _030[0x038 - 0x030];
     Vec3 m_up;
     Vec3 m_rawUp;
-    u8 _050[0x074 - 0x050];
+    u8 _050[0x05c - 0x050];
+    Vec3 m_dir;
+    u8 _068[0x074 - 0x068];
     Vec3 m_internalVelDir;
     u8 _080[0x108 - 0x080];
     KartBoost m_boost;

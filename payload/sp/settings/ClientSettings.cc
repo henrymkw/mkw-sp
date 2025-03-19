@@ -363,6 +363,27 @@ const Entry entries[] = {
         .vanillaValue = static_cast<u32>(TAGhostSound::Watched),
         .menuType = SP::Settings::MenuType::OptionAndDescription,
     },
+    [static_cast<u32>(Setting::TAItemBoxes)] = {
+        .category = Category::TA,
+        .name = magic_enum::enum_name(Setting::TAItemBoxes),
+        .messageId = 10459,
+        .defaultValue = static_cast<u32>(TAItemBoxes::Disable),
+        .valueCount = magic_enum::enum_count<TAItemBoxes>(),
+        .valueNames = magic_enum::enum_names<TAItemBoxes>().data(),
+        .valueMessageIds = (u32[]) { 10460, 10461 },
+        .valueExplanationMessageIds = (u32[]) { 10462, 10463 },
+        .vanillaValue = static_cast<u32>(TAItemBoxes::Disable),
+    },
+    [static_cast<u32>(Setting::TALongerTCs)] = {
+        .category = Category::TA,
+        .name = magic_enum::enum_name(Setting::TALongerTCs),
+        .messageId = 10464,
+        .defaultValue = static_cast<u32>(TALongerTCs::Disable),
+        .valueCount = magic_enum::enum_count<TALongerTCs>(),
+        .valueNames = magic_enum::enum_names<TALongerTCs>().data(),
+        .valueMessageIds = (u32[]) { 10465, 10466 },
+        .valueExplanationMessageIds = (u32[]) { 10467, 10468 },
+    },
     [static_cast<u32>(Setting::VSTeamSize)] = {
         .category = Category::VS,
         .name = magic_enum::enum_name(Setting::VSTeamSize),
@@ -463,6 +484,16 @@ const Entry entries[] = {
         .valueMessageIds = (u32[]) { 20038, 20039 },
         .valueExplanationMessageIds = (u32[]) { 20036, 20037 },
         .menuType = SP::Settings::MenuType::OptionAndDescription,
+    },
+    [static_cast<u32>(Setting::HopDodgePractice)] = {
+        .category = Category::VS,
+        .name = magic_enum::enum_name(Setting::HopDodgePractice),
+        .messageId = 10454,
+        .defaultValue = static_cast<u32>(HopDodgePractice::Disable),
+        .valueCount = magic_enum::enum_count<HopDodgePractice>(),
+        .valueNames = magic_enum::enum_names<HopDodgePractice>().data(),
+        .valueMessageIds = (u32[]) { 10455, 10456 },
+        .valueExplanationMessageIds = (u32[]) { 10457, 10458 },
     },
     [static_cast<u32>(Setting::BTTeamSize)] = {
         .category = Category::BT,
@@ -771,6 +802,7 @@ const Entry entries[] = {
         .valueMessageIds = (u32[]) { 10433, 10435, 10450},
         .valueExplanationMessageIds = (u32[]) { 10434, 10436, 10451 },
     },
+
 };
 // clang-format on
 

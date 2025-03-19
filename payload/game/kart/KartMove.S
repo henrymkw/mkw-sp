@@ -88,3 +88,4 @@ PATCH_BL_START(KartMove_calcSpeed, 0x65c)
     lwz r0, 0x4 (r3) // Original instruction again
     b KartMove_calcSpeed + 0x660
 PATCH_BL_END(KartMove_calcSpeed, 0x65c)
+

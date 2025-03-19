@@ -45,6 +45,8 @@ enum class Setting {
     TAGhostTagContent,
     TASolidGhosts,
     TAGhostSound,
+    TAItemBoxes,
+    TALongerTCs,
 
     // VS
     VSTeamSize,
@@ -56,6 +58,7 @@ enum class Setting {
     VSVehicles,
     VSItemFrequency,
     VSMegaClouds,
+    HopDodgePractice,
 
     // Battle
     BTTeamSize,
@@ -290,6 +293,11 @@ enum class TAGhostSound {
     All,
 };
 
+enum class TAItemBoxes {
+    Disable,
+    Enable,
+};
+
 enum class RoomTeamSelection {
     Random,
     Host,
@@ -304,6 +312,11 @@ enum class RoomCourseSelection {
 };
 
 enum class VSMegaClouds {
+    Disable,
+    Enable,
+};
+
+enum class HopDodgePractice {
     Disable,
     Enable,
 };
@@ -354,6 +367,11 @@ enum class YButton {
     Disabled,
     Screenshot,
     ItemWheel,
+};
+
+enum class TALongerTCs {
+    Disable,
+    Enable,
 };
 
 typedef Settings::Group<Category> Group;
@@ -517,6 +535,16 @@ struct Helper<ClientSettings::Setting, ClientSettings::Setting::TAGhostSound> {
 };
 
 template <>
+struct Helper<ClientSettings::Setting, ClientSettings::Setting::TAItemBoxes> {
+    using type = SP::ClientSettings::TAItemBoxes;
+};
+
+template <>
+struct Helper<ClientSettings::Setting, ClientSettings::Setting::TALongerTCs> {
+    using type = SP::ClientSettings::TALongerTCs;
+};
+
+template <>
 struct Helper<ClientSettings::Setting, ClientSettings::Setting::VSTeamSize> {
     using type = SP::ClientSettings::TeamSize;
 };
@@ -624,6 +652,11 @@ struct Helper<ClientSettings::Setting, ClientSettings::Setting::RoomVehicles> {
 template <>
 struct Helper<ClientSettings::Setting, ClientSettings::Setting::VSMegaClouds> {
     using type = SP::ClientSettings::VSMegaClouds;
+};
+
+template <>
+struct Helper<ClientSettings::Setting, ClientSettings::Setting::HopDodgePractice> {
+    using type = SP::ClientSettings::HopDodgePractice;
 };
 
 template <>
