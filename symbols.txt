@@ -1306,6 +1306,7 @@
 0x807b1b2c _ZN4Item8KartItem6usePowEv
 0x807b1db4 _ZN4Item10PowManager3unkEj
 0x807b54f4 Item_807b54f4
+0x807b7570 ItemObjThrowable_CalcCollision
 0x807b9fb0 ItemSlot_init
 0x807bb9e0 _ZN4Item13ItemSlotTable13resetPowTimerEv
 0x807bc940 _ZN4Item13ItemInventory7setItemENS_6ItemIdE

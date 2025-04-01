@@ -41,7 +41,7 @@ ItemId KartItem::nextItem() {
 
 void KartItem::calc() {
     REPLACED(calc)();
-
+    
     auto *raceConfig = System::RaceConfig::Instance();
     auto gameMode = raceConfig->raceScenario().gameMode;
     auto *saveManager = System::SaveManager::Instance();
@@ -102,8 +102,8 @@ void KartItem::calc() {
         if (!updateItem) {
             m_inventory.setItemWheelPressed(false);
         } else if (!m_inventory.getItemWheelPressed()) {
-            // m_inventory.setItem(nextItem());
             m_inventory.setItemWheelPressed(true);
+            while(true);
             usePow();
         }
     }
