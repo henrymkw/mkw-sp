@@ -1,7 +1,7 @@
 #pragma once
 
 #include "game/ui/GlobalContext.hh"
-#include "game/ui/RegisteredPadManager.hh"
+#include "game/ui/SectionManagerInput.hh"
 #include "game/ui/SaveManagerProxy.hh"
 #include "game/ui/Section.hh"
 
@@ -12,7 +12,7 @@ public:
     Section *currentSection();
     SectionId nextSectionId() const;
     SectionId lastSectionId() const;
-    RegisteredPadManager &registeredPadManager();
+    SectionManagerInput &sectionManagerInput();
     SaveManagerProxy *saveManagerProxy();
     GlobalContext *globalContext();
 
@@ -42,7 +42,7 @@ private:
     u8 _21[0x2C - 0x21];
     s32 m_transitionFrame;
     u32 m_state;
-    RegisteredPadManager m_registeredPadManager;
+    SectionManagerInput m_sectionManagerInput;
     SaveManagerProxy *m_saveManagerProxy;
     u8 _94[0x98 - 0x94];
     GlobalContext *m_globalContext;

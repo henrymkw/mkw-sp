@@ -1,9 +1,16 @@
 #include "RaceManager.hh"
 
 #include "game/gfx/CameraManager.hh"
+#include "game/system/InputManager.hh"
 #include "game/system/RaceConfig.hh"
 #include "game/ui/SectionManager.hh"
+#include <game/util/Registry.hh>
 
+extern "C" {
+#include <revolution/kpad.h>
+}
+
+#include <sp/SaveStateManager.hh>
 #include <sp/ThumbnailManager.hh>
 #include <sp/cs/RaceManager.hh>
 
@@ -22,7 +29,7 @@ u8 RaceManager::Player::maxLap() const {
 }
 
 bool RaceManager::Player::hasFinished() const {
-    return m_hasFinished;
+    return (static_cast<u32>(flags) & static_cast<u32>(RaceInfoPlayerFlags::FINISHED)) != 0;
 }
 
 PadProxy *RaceManager::Player::padProxy() {
@@ -31,6 +38,44 @@ PadProxy *RaceManager::Player::padProxy() {
 
 void RaceManager::Player::setExtraGhostPadProxy() {
     m_padProxy = InputManager::Instance()->extraGhostProxy(m_playerId);
+}
+
+void RaceManager::Player::calc() {
+    REPLACED(calc)();
+
+    if (m_playerId != 0) {
+        return;
+    }
+
+    if (auto *saveStateManager = SP::SaveStateManager::Instance()) {
+        auto controllerType = m_padProxy->controllerType();
+        u16 rawButtons = m_padProxy->currentRaceInputState().rawButtons;
+
+        bool isLoadButtonPressed = false;
+        bool isSaveButtonPressed = false;
+        switch (controllerType) {
+        case Registry::Controller::WiiRemoteAndNunchuck:
+            isLoadButtonPressed = rawButtons & WPAD_CL_BUTTON_HOME;
+            isSaveButtonPressed = rawButtons & WPAD_CL_BUTTON_LEFT;
+            break;
+        case Registry::Controller::GameCube:
+            isLoadButtonPressed = rawButtons & PAD_BUTTON_Y;
+            isSaveButtonPressed = rawButtons & PAD_BUTTON_LEFT;
+            break;
+        case Registry::Controller::WiiWheel:
+            isLoadButtonPressed = rawButtons & WPAD_CL_BUTTON_HOME;
+            isSaveButtonPressed = rawButtons & WPAD_CL_BUTTON_A;
+            break;
+        case Registry::Controller::Classic:
+            isLoadButtonPressed = rawButtons & KPAD_CL_TRIGGER_ZL;
+            isSaveButtonPressed = rawButtons & WPAD_CL_BUTTON_LEFT;
+            break;
+        default:
+            break;
+        }
+
+        saveStateManager->processInput(isLoadButtonPressed, isSaveButtonPressed);
+    }
 }
 
 Util::Random *RaceManager::dynamicRandom() {

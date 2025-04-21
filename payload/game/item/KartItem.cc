@@ -66,7 +66,7 @@ void KartItem::calc() {
         case Registry::Controller::GameCube:
             updateItem = (buttons & PAD_BUTTON_Y) == PAD_BUTTON_Y;
             break;
-        case Registry::Controller::None:
+        default:
             return;
         }
         if (!updateItem) {
@@ -96,6 +96,8 @@ void KartItem::calc() {
         case Registry::Controller::GameCube:
             updateItem = (buttons & PAD_BUTTON_Y) == PAD_BUTTON_Y;
             break;
+        case Registry::Controller::AI:
+        case Registry::Controller::Ghost:
         case Registry::Controller::None:
             return;
         }

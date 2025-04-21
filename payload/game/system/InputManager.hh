@@ -193,12 +193,36 @@ public:
     const RaceInputState &currentRaceInputState() const;
     void setPad(Pad *pad, Pad *r5);
 
+    Registry::Controller controllerType() const;
+
 private:
+    struct ControllerInfo {
+        Registry::Controller m_controllerType;
+        u8 m_wiimoteAddress[6];
+        u8 _0a[0x0c - 0x0a];
+        s32 m_channel;
+    };
+
     Pad *m_pad;
-    u8 _08[0x28 - 0x08];
+    Pad *m_uiController;
+    Pad *m_unkController;
+    s32 m_rumbleDataIndex;
+    s8 m_rumbleDuration;
+    u8 _15[0x18 - 0x15];
+    void *m_unkPointer;
+    u8 _1c[0x20 - 0x1c];
+    void *m_rumbleManager;
+    void *m_rumbleManager2;
     RaceInputState m_currentRaceInputState;
     RaceInputState m_lastRaceInputState;
-    u8 _58[0xd8 - 0x58];
+    UIInputState m_currentUIInputState;
+    UIInputState m_lastUIInputState;
+    u8 _c0[0xc2 - 0xc0];
+    u16 m_numFramesRaceInputIdle;
+    u16 m_numFramesDisconnected;
+    u8 _c6[0xc8 - 0xc6];
+    ControllerInfo m_controllerInfo;
+    //u8 _58[0xd8 - 0x58];
 };
 static_assert(sizeof(PadProxy) == 0xd8);
 

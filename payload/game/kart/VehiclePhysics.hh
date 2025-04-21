@@ -9,13 +9,18 @@ class VehiclePhysics {
     friend class KartObjectProxy;
     friend class KartRollback;
     friend class KartSaveState;
-
+    friend class SaveStateManager;
 public:
     const Vec3 *externalVel() const;
     const Vec3 *internalVel() const;
     const Vec3 *movingRoadVel() const;
     const Vec3 *movingWaterVel() const;
-
+    const Vec3 *pos() const;
+    const Quat *mainRot() const;
+    void setPos(Vec3 pos);
+    void setExternalVel(Vec3 vel);
+    void setInternalVel(Vec3 vel);
+    void setMainRot(Quat rot);
 private:
     u8 _000[0x068 - 0x000];
     Vec3 m_pos;

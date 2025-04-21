@@ -1,6 +1,7 @@
 #pragma once
 
 #include "game/system/CourseMap.hh"
+#include "game/system/GhostFile.hh"
 #include "game/system/InputManager.hh"
 #include "game/util/Random.hh"
 
@@ -10,6 +11,15 @@ namespace System {
 
 class RaceManager {
 public:
+    enum class RaceInfoPlayerFlags {
+        IN_RACE = 0x1,
+        FINISHED = 0x2,
+        DRIVING_WRONG_WAY = 0x4,
+        FINISHED_REMOTE = 0x8,
+        DISCONNECTED = 0x10,
+        STOPPED = 0x20,
+        COMING_LAST_ANIMATION = 0x40,
+    };
     class Player {
     public:
         u8 rank() const;
@@ -20,21 +30,39 @@ public:
         void setExtraGhostPadProxy();
 
     private:
-        u8 _00[0x08 - 0x00];
-        u8 m_playerId;
-        u8 _09[0x20 - 0x09];
-        u8 m_rank;
-        u8 _21[0x22 - 0x21];
-        u16 m_battleScore;
-        u8 _24[0x26 - 0x24];
-        u8 m_maxLap;
-        u8 _27[0x38 - 0x27];
-        u32 _pad0 : 30;
-        bool m_hasFinished : 1;
-        u32 _pad1 : 1;
-        u8 _3c[0x48 - 0x3c];
-        PadProxy *m_padProxy;
-        u8 _4c[0x54 - 0x4c];
+        REPLACE void calc();
+        void REPLACED(calc)();
+
+        void *vtable;
+        u8 _04[0x08 - 0x04];
+        u8 m_playerId; // idx
+        u8 _09;
+        u16 checkpointId;
+        f32 raceCompletion;
+        f32 raceCompletionMax;
+        f32 checkpointFactor;
+        f32 checkpointStartLapCompletion;
+        f32 lapCompletion;
+        u8 m_rank; // position
+        u8 respawn;
+        u16 m_battleScore; // battleScore
+        s16 currentLap;
+        u8 m_maxLap; // maxLap
+        u8 currentKcp;
+        u8 maxKcp;
+        u8 _29[0x2b - 0x29];
+        u32 frameCounter;
+        u32 framesInFirstPlace;
+        s32 _34;
+        RaceInfoPlayerFlags flags;
+        Time *lapFinishTimes;
+        Time *raceFinishTime;
+        u32 somethingRaceEndMessageOnline;
+        PadProxy *m_padProxy; // input
+        u8 _4c[0x4f - 0x4c];
+        u16 playersAheadFlags;
+        u8 _52;
+        u8 finishingPosition;
     };
     static_assert(sizeof(Player) == 0x54);
 

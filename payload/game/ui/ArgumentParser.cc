@@ -12,7 +12,7 @@ SectionId ArgumentParser::parse() {
         return SectionId::TitleFromBoot;
     }
 
-    SectionManager::Instance()->registeredPadManager().setFlags(0, 0x124 /* 1st GCN controller */);
+    SectionManager::Instance()->sectionManagerInput().setFlags(0, 0x124 /* 1st GCN controller */);
 
     return static_cast<SectionId>(sectionId);
 }

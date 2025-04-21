@@ -23,7 +23,7 @@ void MultiDriftSelectPage::onButtonFront(PushButton *button, u32 localPlayerId) 
     assert(localPlayerId == static_cast<u32>(buttonIdx / 2));
     u8 selection = buttonIdx % 2 == 0 ? 1 : 0;
 
-    sectionManager->registeredPadManager().setDriftIsAuto(localPlayerId, selection);
+    sectionManager->sectionManagerInput().setDriftIsAuto(localPlayerId, selection);
     globalContext->m_driftModes[localPlayerId] = selection + 1;
 
     // Hide non-selected button

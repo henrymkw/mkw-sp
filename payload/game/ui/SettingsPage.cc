@@ -79,7 +79,7 @@ void SettingsPage::onInit() {
     }
 
     auto *sectionManager = UI::SectionManager::Instance();
-    auto &registeredPadManager = sectionManager->registeredPadManager();
+    auto &registeredPadManager = sectionManager->sectionManagerInput();
     u32 flags = registeredPadManager.getFlags(0);
     u32 padType = REGISTERED_PAD_FLAGS_GET_TYPE(flags);
     u32 messageId = padType == REGISTERED_PAD_TYPE_GC ? 2306 : 2305;

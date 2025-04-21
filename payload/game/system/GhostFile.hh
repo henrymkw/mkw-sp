@@ -137,7 +137,8 @@ struct Time {
     u16 minutes;
     u8 seconds;
     u16 milliseconds;
-    u8 _a[0xc - 0xa];
+    u8 isValid;
+    u8 _b;
 };
 static_assert(sizeof(Time) == 0xc);
 

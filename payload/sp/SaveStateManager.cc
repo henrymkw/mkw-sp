@@ -3,7 +3,6 @@
 extern "C" {
 #include "revolution.h"
 }
-#include <tuple>
 
 namespace SP {
 
@@ -38,36 +37,42 @@ auto SaveStateManager::GetKartState() {
 
 void SaveStateManager::save() {
     auto [accessor, physics, item] = GetKartState();
-    m_kartSaveState.emplace(accessor, physics, item);
+    m_kartSaveState = Kart::KartSaveState(accessor, physics, item);
 }
 
 void SaveStateManager::reload() {
-    if (m_kartSaveState.has_value()) {
+    if (m_kartSaveState->doesSaveStateExist()) {
         auto [accessor, physics, item] = GetKartState();
-        (*m_kartSaveState).reload(accessor, physics, item);
+        m_kartSaveState->reload(accessor, physics, item);
     } else {
-        SP_LOG("SaveStateManager: Reload requested without save!");
+        // SP_LOG("SaveStateManager: Reload requested without save!");
     }
 }
 
-void SaveStateManager::processInput(bool isPressed) {
-    if (!isPressed) {
-        if (m_framesHeld == 0) {
-            return;
-        }
-
-        if (m_framesHeld <= 60) {
-            SP_LOG("Reloading!");
-            reload();
-        } else {
-            SP_LOG("Saved!");
-            save();
-        };
-
-        m_framesHeld = 0;
-    } else if (m_framesHeld != 255) {
-        m_framesHeld += 1;
+void SaveStateManager::processInput(bool isLoadButtonPressed, bool isSaveButtonPressed) {
+    // If the load state button is pressed, we rewind the frame.
+    // If a save state exists but the button isn't pressed, we add the current frame to the buffer. 
+    
+    if (isSaveButtonPressed) {
+        save();
+        return;
     }
+    
+    if (isLoadButtonPressed && m_kartSaveState->doesSaveStateExist()) {
+        auto [accessor, physics, item] = GetKartState();    
+        m_kartSaveState->rewindFrame(accessor, physics);
+    } else if (!isLoadButtonPressed && m_kartSaveState->doesSaveStateExist()) {
+        auto [accessor, physics, item] = GetKartState();
+        
+        /* SP_LOG("SaveStateManager: Adding frame to buffer. Current position: %f, %f, %f. Size after pushing head: %d",
+            physics->pos()->x,
+            physics->pos()->y, 
+            physics->pos()->z, 
+            m_kartSaveState->getBufferSize()
+        ); */
+        m_kartSaveState->addFrameToBuffer(accessor, physics);
+    }
+
 }
 
 } // namespace SP

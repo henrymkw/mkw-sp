@@ -29,7 +29,7 @@ void DriftSelectPage::onButtonFront(PushButton *button, u32 /* localPlayerId */)
     switch (button->m_index) {
     case 0:
     case 1:
-        sectionManager->registeredPadManager().setDriftIsAuto(0, button->m_index);
+        sectionManager->sectionManagerInput().setDriftIsAuto(0, button->m_index);
         globalContext->m_driftModes[0] = button->m_index + 1;
         if (Section::GetSceneId(sectionId) == System::SceneId::Globe) {
             if (m_replacementSection == SectionId::None) {

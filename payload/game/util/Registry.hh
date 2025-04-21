@@ -99,6 +99,8 @@ enum class Controller {
     WiiRemoteAndNunchuck = 0x1,
     Classic = 0x2,
     GameCube = 0x3,
+    Ghost = 0x4,
+    AI = 0x5,
 };
 
 enum class Course {

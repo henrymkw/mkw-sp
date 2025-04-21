@@ -20,8 +20,8 @@ SectionId SectionManager::lastSectionId() const {
     return m_lastSectionId;
 }
 
-RegisteredPadManager &SectionManager::registeredPadManager() {
-    return m_registeredPadManager;
+SectionManagerInput &SectionManager::sectionManagerInput() {
+    return m_sectionManagerInput;
 }
 
 SaveManagerProxy *SectionManager::saveManagerProxy() {
@@ -42,7 +42,7 @@ void SectionManager::init() {
 
 void SectionManager::createSection() {
     if (m_firstLoad && System::SystemManager::Instance()->launchType() == 1) {
-        m_registeredPadManager._8061B5A4();
+        m_sectionManagerInput._8061B5A4();
     }
     auto nextId = m_nextSectionId;
     m_currentAnimDir = m_nextAnimDir;
@@ -52,7 +52,7 @@ void SectionManager::createSection() {
     m_transitionFrame = -1;
     m_state = 0;
     bool race = Section::GetSceneId(nextId) == System::SceneId::Race;
-    m_registeredPadManager.onCreateSection(!race);
+    m_sectionManagerInput.onCreateSection(!race);
     m_currentSection = new Section;
     m_currentSection->init(nextId);
     System::RichPresenceManager::Instance().onSectionChange(m_currentSection->id());
