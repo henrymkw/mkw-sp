@@ -61,6 +61,8 @@ public:
     void REPLACED(endPlayerRace)(u32 playerId);
     REPLACE void endPlayerRace(u32 playerId);
 
+    bool getIfPlayerHopped();
+
     static REPLACE RaceManager *CreateInstance();
     static RaceManager *Instance();
     static u8 GetLapCount();

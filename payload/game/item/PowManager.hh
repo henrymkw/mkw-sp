@@ -8,6 +8,8 @@ class PowManager {
 public:
     static PowManager *Instance();
 
+    u32 getPowTimer() const;
+
     REPLACE void beginPow(u32 playerIndex);
 
     void REPLACED(beginPow)(u32 playerIndex);
@@ -25,4 +27,5 @@ private:
     static PowManager *s_instance;
 };
 static_assert(sizeof(PowManager) == 0x28);
+
 } // namespace Item

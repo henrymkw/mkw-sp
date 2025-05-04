@@ -83,10 +83,8 @@ void RaceManager::Player::calc() {
             return;
         }
 
-        auto TAHopDodgePracticeEnabled = saveManager->getSetting<SP::ClientSettings::Setting::TAHopDodgePractice>() 
-            == SP::ClientSettings::TAHopDodgePractice::Enable;
-        auto ItemWheelEnabled = saveManager->getSetting<SP::ClientSettings::Setting::YButton>() 
-            == SP::ClientSettings::YButton::ItemWheel;
+        auto TAHopDodgePracticeEnabled = saveManager->getSetting<SP::ClientSettings::Setting::TAHopDodgePractice>() == SP::ClientSettings::TAHopDodgePractice::Enable;
+        auto ItemWheelEnabled = saveManager->getSetting<SP::ClientSettings::Setting::YButton>() == SP::ClientSettings::YButton::ItemWheel;
 
         if (ItemWheelEnabled) {
             if (auto *itemDirector = Item::ItemDirector::Instance()) {
@@ -197,6 +195,21 @@ void RaceManager::endPlayerRace(u32 playerId) {
 
     REPLACED(endPlayerRace)(playerId);
 }
+
+bool RaceManager::getIfPlayerHopped() {
+    auto *playerPadProxy = System::RaceManager::Instance()->player(0)->padProxy();
+    auto buttons = playerPadProxy->currentRaceInputState().rawButtons;
+    auto controller = playerPadProxy->pad()->getControllerId();
+
+    // TODO: Check for other controllers.
+    if (controller == Registry::Controller::GameCube) {
+        if (((buttons & PAD_BUTTON_B) == PAD_BUTTON_B) || ((buttons & PAD_TRIGGER_R) == PAD_TRIGGER_R)) {
+            return true;
+        }
+    }
+    return false;
+}  
+
 
 RaceManager *RaceManager::CreateInstance() {
     s_instance = new RaceManager;

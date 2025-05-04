@@ -1,6 +1,9 @@
 #include "RacePage.hh"
 
+#include "game/item/PowManager.hh"
+#include "game/kart/KartObjectManager.hh"
 #include "game/system/RaceConfig.hh"
+#include "game/system/RaceManager.hh"
 #include "game/system/SaveManager.hh"
 #include "game/ui/SectionManager.hh"
 #include "game/ui/ctrl/CtrlRaceBattleAddPoint.hh"
@@ -13,6 +16,8 @@
 #include "game/ui/ctrl/CtrlRaceWaitSymbol.hh"
 
 #include <sp/cs/RaceManager.hh>
+
+static bool isPowActive = false;
 
 namespace UI {
 
@@ -68,6 +73,36 @@ void RacePage::onInit() {
 void RacePage::afterCalc() {
     m_lastWatchedPlayerId = m_watchedPlayerId;
 
+    if (m_ghostMessage) {
+        auto isTACurrentMode = System::RaceConfig::Instance()->raceScenario().gameMode == System::RaceConfig::GameMode::TimeAttack;
+        auto isHopDodgePracticeEnabled = System::SaveManager::Instance()->getSetting<SP::ClientSettings::Setting::TAHopDodgePractice>() == SP::ClientSettings::TAHopDodgePractice::Enable;
+    
+        auto *raceManager = System::RaceManager::Instance();
+        auto *powManager = Item::PowManager::Instance();
+
+        u32 powTimer = powManager->getPowTimer();
+        bool getIfPlayerHopped = raceManager->getIfPlayerHopped();
+
+        /*
+        // We can get more accurate information checking physics information. 
+        auto accessor = Kart::KartObjectManager::Instance()->object(0)->m_accessor;
+
+        auto *state = accessor.state;
+        auto *action = accessor.action;
+        */
+
+        if (isTACurrentMode && isHopDodgePracticeEnabled) {
+            if (getIfPlayerHopped && powTimer != 0 && !isPowActive) {
+              isPowActive = true;
+              // For this, we need to be careful to check the first time a player hops, since thats the important one. 
+              // They will hold the hop button for more than one frame, but we only care about the initial one.
+              SP_LOG("Player hopped. Pow timer: %u", powTimer);
+            }
+            if (powTimer == 0) {
+                isPowActive = false;
+            }
+        }
+    }
     REPLACED(afterCalc)();
 }
 

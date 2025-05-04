@@ -5,6 +5,9 @@
 namespace Kart {
 
 class KartAction : public KartObjectProxy {
+public:
+    bool isPowActive() const; 
+
 private:
     u8 _0c[0x100 - 0x0c];
 };
