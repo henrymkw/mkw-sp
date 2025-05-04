@@ -20,6 +20,9 @@ public:
         void setExtraGhostPadProxy();
 
     private:
+        REPLACE void calc();
+        void REPLACED(calc)();
+
         u8 _00[0x08 - 0x00];
         u8 m_playerId;
         u8 _09[0x20 - 0x09];

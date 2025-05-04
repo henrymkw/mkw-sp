@@ -8,7 +8,6 @@ class SaveStateManager {
 public:
     void save();
     void reload();
-    void processInput(bool isPressed);
 
     static void CreateInstance();
     static void DestroyInstance();

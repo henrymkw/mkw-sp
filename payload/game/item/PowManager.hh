@@ -8,12 +8,19 @@ class PowManager {
 public:
     static PowManager *Instance();
 
-    REPLACE void unk(u32 playerIndex);
+    REPLACE void beginPow(u32 playerIndex);
 
-    void REPLACED(unk)(u32 playerIndex);
+    void REPLACED(beginPow)(u32 playerIndex);
 
 private:
-    u8 _00[0x28 - 0x00];
+    REPLACE void calc();
+    void REPLACED(calc)();
+
+    u32 m_powTimer;
+    u8 _04[0x08 - 0x04];
+    u8 m_powUserPlayerId;
+    bool m_playerIdxAffectedByPow[12];
+    u8 _15[0x28 - 0x15];
 
     static PowManager *s_instance;
 };

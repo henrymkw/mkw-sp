@@ -47,7 +47,8 @@ enum class Setting {
     TAGhostSound,
     TAItemBoxes,
     TALongerTCs,
-
+    TAHopDodgePractice,
+    
     // VS
     VSTeamSize,
     VSRaceCount,
@@ -58,7 +59,6 @@ enum class Setting {
     VSVehicles,
     VSItemFrequency,
     VSMegaClouds,
-    HopDodgePractice,
 
     // Battle
     BTTeamSize,
@@ -316,7 +316,7 @@ enum class VSMegaClouds {
     Enable,
 };
 
-enum class HopDodgePractice {
+enum class TAHopDodgePractice {
     Disable,
     Enable,
 };
@@ -655,8 +655,8 @@ struct Helper<ClientSettings::Setting, ClientSettings::Setting::VSMegaClouds> {
 };
 
 template <>
-struct Helper<ClientSettings::Setting, ClientSettings::Setting::HopDodgePractice> {
-    using type = SP::ClientSettings::HopDodgePractice;
+struct Helper<ClientSettings::Setting, ClientSettings::Setting::TAHopDodgePractice> {
+    using type = SP::ClientSettings::TAHopDodgePractice;
 };
 
 template <>

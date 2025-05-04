@@ -50,24 +50,4 @@ void SaveStateManager::reload() {
     }
 }
 
-void SaveStateManager::processInput(bool isPressed) {
-    if (!isPressed) {
-        if (m_framesHeld == 0) {
-            return;
-        }
-
-        if (m_framesHeld <= 60) {
-            SP_LOG("Reloading!");
-            reload();
-        } else {
-            SP_LOG("Saved!");
-            save();
-        };
-
-        m_framesHeld = 0;
-    } else if (m_framesHeld != 255) {
-        m_framesHeld += 1;
-    }
-}
-
 } // namespace SP

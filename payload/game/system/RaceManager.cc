@@ -1,9 +1,17 @@
 #include "RaceManager.hh"
 
 #include "game/gfx/CameraManager.hh"
+#include "game/item/ItemDirector.hh"
+#include "game/item/PowManager.hh"
 #include "game/system/RaceConfig.hh"
+#include "game/system/SaveManager.hh"
 #include "game/ui/SectionManager.hh"
 
+extern "C" {
+    #include <revolution/kpad.h>
+}
+
+#include <sp/SaveStateManager.hh>
 #include <sp/ThumbnailManager.hh>
 #include <sp/cs/RaceManager.hh>
 
@@ -31,6 +39,73 @@ PadProxy *RaceManager::Player::padProxy() {
 
 void RaceManager::Player::setExtraGhostPadProxy() {
     m_padProxy = InputManager::Instance()->extraGhostProxy(m_playerId);
+}
+
+void RaceManager::Player::calc() {
+    REPLACED(calc)();
+    
+    // Check if user wants to load state, rotate items, or use pow. 
+    auto *raceConfig = System::RaceConfig::Instance();
+    auto gameMode = raceConfig->raceScenario().gameMode;
+    auto *saveManager = System::SaveManager::Instance();
+
+    // These settings are exclusive to TTs. We check for playerId to prevent unintended behavior from ghosts.
+    if (gameMode == System::RaceConfig::GameMode::TimeAttack && m_playerId == 0) {
+        auto *playerPadProxy = System::RaceManager::Instance()->player(0)->padProxy();
+        auto buttons = playerPadProxy->currentRaceInputState().rawButtons;
+        auto controller = playerPadProxy->pad()->getControllerId();
+        
+        bool shouldUsePow = false;
+        bool shouldUpdateItem = false;
+        bool shouldLoadState = false;
+        switch (controller) {
+        case Registry::Controller::WiiWheel:
+            shouldUsePow = (buttons & PAD_BUTTON_START) == PAD_BUTTON_START;
+            shouldUpdateItem = (buttons & PAD_BUTTON_START) == PAD_BUTTON_START;
+            shouldLoadState = (buttons & WPAD_CL_BUTTON_HOME) == WPAD_CL_BUTTON_HOME;
+            break;
+        case Registry::Controller::WiiRemoteAndNunchuck:
+            shouldUsePow = (buttons & WPAD_BUTTON_DOWN) == WPAD_BUTTON_DOWN;
+            shouldUpdateItem = (buttons & WPAD_BUTTON_DOWN) == WPAD_BUTTON_DOWN;
+            shouldLoadState = (buttons & KPAD_CL_TRIGGER_ZR) == KPAD_CL_TRIGGER_ZR;
+            break;
+        case Registry::Controller::Classic:
+            shouldUsePow = (buttons & KPAD_CL_BUTTON_X) == KPAD_CL_BUTTON_X;
+            shouldUpdateItem = (buttons & KPAD_CL_TRIGGER_ZL) == KPAD_CL_TRIGGER_ZL;
+            shouldLoadState = (buttons & KPAD_CL_BUTTON_HOME) == KPAD_CL_BUTTON_HOME;
+            break;
+        case Registry::Controller::GameCube:
+            shouldUsePow = (buttons & PAD_BUTTON_X) == PAD_BUTTON_X;
+            shouldUpdateItem = (buttons & PAD_BUTTON_Y) == PAD_BUTTON_Y;
+            shouldLoadState = (buttons & PAD_TRIGGER_Z) == PAD_TRIGGER_Z;
+            break;
+        case Registry::Controller::None:
+            return;
+        }
+
+        auto TAHopDodgePracticeEnabled = saveManager->getSetting<SP::ClientSettings::Setting::TAHopDodgePractice>() 
+            == SP::ClientSettings::TAHopDodgePractice::Enable;
+        auto ItemWheelEnabled = saveManager->getSetting<SP::ClientSettings::Setting::YButton>() 
+            == SP::ClientSettings::YButton::ItemWheel;
+
+        if (ItemWheelEnabled) {
+            if (auto *itemDirector = Item::ItemDirector::Instance()) {
+                itemDirector->processInput(shouldUpdateItem);
+            }
+        }
+
+        if (shouldUsePow && TAHopDodgePracticeEnabled) {
+            if (auto *powManager = Item::PowManager::Instance()) {
+                powManager->beginPow(0);
+            }
+        }
+
+        if (auto *saveStateManager = SP::SaveStateManager::Instance()) {
+            if (shouldLoadState) {
+                saveStateManager->reload();
+            }
+        }
+    }
 }
 
 Util::Random *RaceManager::dynamicRandom() {

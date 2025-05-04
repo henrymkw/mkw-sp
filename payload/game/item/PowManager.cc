@@ -11,8 +11,13 @@ PowManager *PowManager::Instance() {
     return s_instance;
 }
 
-void PowManager::unk(u32 playerIndex) {
-    REPLACED(unk)(playerIndex);
+void PowManager::calc() {
+    REPLACED(calc)();
+}
+
+void PowManager::beginPow(u32 playerIndex) {
+    REPLACED(beginPow)(playerIndex);
+    m_playerIdxAffectedByPow[0] = true;
 }
 
 } // namespace Item

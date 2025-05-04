@@ -629,6 +629,7 @@
 0x80533c6c _ZN6System11RaceManager13endPlayerRaceEj
 0x80533ed8 RaceManagerPlayer_ct
 0x80534df8 RaceManagerPlayer_calcCheckPoint
+0x80535304 _ZN6System11RaceManager6Player4calcEv
 0x80535d14 _ZN6System18TimeAttackRaceMode10canEndRaceEv
 0x80536230 _ZNK6System11RaceManager15hasReachedStageENS0_5StageE
 0x805362dc _ZN6System11RaceManager17getStartTransformEP4Vec3S2_j
@@ -1295,7 +1296,7 @@
 0x80797928 _ZN4Item8KartItem4calcEv
 0x8079864c KartItem_activateMushroom
 0x80798c38 _ZN4Item8KartItem7setItemEjjj
-0x80799850 _ZN4Item11ItemManager4calcEv
+0x80799850 _ZN4Item12ItemDirector4calcEv
 0x807aa688 ItemObjKouraAka_vf_20
 0x807aae78 ItemObjKouraAka_807aae78
 0x807ac49c ItemObjKouraAo_807ac49c
@@ -1304,7 +1305,8 @@
 0x807ad958 ItemObjKouraAo_807ad958
 0x807aec64 ItemObjKouraMidori_807aec64
 0x807b1b2c _ZN4Item8KartItem6usePowEv
-0x807b1db4 _ZN4Item10PowManager3unkEj
+0x807b1db4 _ZN4Item10PowManager8beginPowEj
+0x807b22f8 _ZN4Item10PowManager4calcEv
 0x807b54f4 Item_807b54f4
 0x807b7570 ItemObjThrowable_CalcCollision
 0x807b9fb0 ItemSlot_init
@@ -1608,7 +1610,7 @@
 0x809c2f38 _ZN4Race13DriverManager10s_instanceE
 0x809c2f3c unk_809c2f3c
 0x809C2F44 _ZN4Race13FieldDirector10s_instanceE
-0x809c3618 _ZN4Item11ItemManager10s_instanceE
+0x809c3618 _ZN4Item12ItemDirector10s_instanceE
 0x809c3660 _ZN4Item10PowManager10s_instanceE
 0x809c4330 _ZN3Geo11ObjDirector10s_instanceE
 0x809c4680 s_racePage

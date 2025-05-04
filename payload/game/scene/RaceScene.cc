@@ -4,7 +4,7 @@
 #include "game/effect/EffectManager.hh"
 #include "game/enemy/EnemyManager.hh"
 #include "game/gfx/CameraManager.hh"
-#include "game/item/ItemManager.hh"
+#include "game/item/ItemDirector.hh"
 #include "game/kart/KartObjectManager.hh"
 #include "game/obj/ObjDirector.hh"
 #include "game/race/BoxColManager.hh"
@@ -89,7 +89,7 @@ void RaceScene::calcSubsystems(s32 drift) {
             Race::JugemManager::Instance()->calc();
 
             if (raceManager->hasReachedStage(System::RaceManager::Stage::Countdown)) {
-                Item::ItemManager::Instance()->calc();
+                Item::ItemDirector::Instance()->calc();
             }
 
             if (!SP::RoomManager::Instance() ||

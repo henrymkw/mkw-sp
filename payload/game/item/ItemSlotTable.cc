@@ -7,8 +7,8 @@ namespace Item {
 
 void ItemSlotTable::resetPowTimer() {
     if (System::SaveManager::Instance()
-                    ->getSetting<SP::ClientSettings::Setting::HopDodgePractice>() ==
-            SP::ClientSettings::HopDodgePractice::Enable) {
+                    ->getSetting<SP::ClientSettings::Setting::TAHopDodgePractice>() ==
+            SP::ClientSettings::TAHopDodgePractice::Enable) {
         powTimer = 60;
     } else {
         REPLACED(resetPowTimer)();

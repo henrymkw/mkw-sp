@@ -15,12 +15,7 @@ public:
 
     ItemId nextItem();
 
-    void REPLACED(calc)();
-    REPLACE void calc();
-
-    REPLACE void usePow();
-
-    void REPLACED(usePow)();
+    void calcItemWheel(bool isPressed);
 
 private:
     u8 _000[0x018 - 0x00c];
