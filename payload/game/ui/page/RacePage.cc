@@ -18,6 +18,9 @@
 #include <sp/cs/RaceManager.hh>
 
 static bool isPowActive = false;
+static bool playerPressedHopButton = false;
+static u32 timeOfHopAction = 0;
+static bool writtenMessage = false;
 
 namespace UI {
 
@@ -71,39 +74,92 @@ void RacePage::onInit() {
 }
 
 void RacePage::afterCalc() {
+    REPLACED(afterCalc)();   
     m_lastWatchedPlayerId = m_watchedPlayerId;
 
     if (m_ghostMessage) {
+        m_ghostMessage->setVisible(true);
         auto isTACurrentMode = System::RaceConfig::Instance()->raceScenario().gameMode == System::RaceConfig::GameMode::TimeAttack;
         auto isHopDodgePracticeEnabled = System::SaveManager::Instance()->getSetting<SP::ClientSettings::Setting::TAHopDodgePractice>() == SP::ClientSettings::TAHopDodgePractice::Enable;
-    
         auto *raceManager = System::RaceManager::Instance();
         auto *powManager = Item::PowManager::Instance();
 
         u32 powTimer = powManager->getPowTimer();
-        bool getIfPlayerHopped = raceManager->getIfPlayerHopped();
-
-        /*
-        // We can get more accurate information checking physics information. 
+        
         auto accessor = Kart::KartObjectManager::Instance()->object(0)->m_accessor;
-
         auto *state = accessor.state;
-        auto *action = accessor.action;
-        */
+        
+        bool playerStartHop = state->hopStart();
+        bool isTouchingGround = state->touchingGround();
 
         if (isTACurrentMode && isHopDodgePracticeEnabled) {
-            if (getIfPlayerHopped && powTimer != 0 && !isPowActive) {
-              isPowActive = true;
-              // For this, we need to be careful to check the first time a player hops, since thats the important one. 
-              // They will hold the hop button for more than one frame, but we only care about the initial one.
-              SP_LOG("Player hopped. Pow timer: %u", powTimer);
+
+            // We check if the pow is active using the timer. For simplicity the user has a 20 frame window but this isnt needed.
+            if (powTimer < 55 && powTimer > 35) {
+                isPowActive = true;
+                m_ghostMessage->setVisible(true);
             }
-            if (powTimer == 0) {
+            else {
+                // Gotta reset variables when pow isn't active.
                 isPowActive = false;
+                playerPressedHopButton = false;
+                writtenMessage = false;
+                timeOfHopAction = 0;
             }
+            
+            if (isPowActive) {
+                // This entire if body is more complicated than it should be
+                // We need to get the time the player started the hop (one flag),
+                // but the way we get that depends if the user was early or late (physics variable or controller input)
+
+                if (powTimer > 45 && playerStartHop && !playerPressedHopButton) {
+                    playerPressedHopButton = true;
+                    timeOfHopAction = powTimer;
+                    SP_LOG("Player started hop. Pow timer: %u", powTimer);
+                }
+                else if (powTimer < 45 && raceManager->getIfPlayerHopped() && !playerPressedHopButton) {
+                    playerPressedHopButton = true;
+                    timeOfHopAction = powTimer;
+                    SP_LOG("Player pressed hop button. Pow timer: %u", powTimer);
+                }
+                else if (powTimer == 45 && playerStartHop && !playerPressedHopButton) {
+                    timeOfHopAction = 45;
+                    playerPressedHopButton = true;
+                    SP_LOG("This should hop dodge??");
+                }
+
+                // I think the first two flags are explanitory, the last is so we don't spam writing. 
+                if (playerPressedHopButton && !isTouchingGround && !writtenMessage) {
+                    if (timeOfHopAction == 45) {
+                        m_ghostMessage->setMessageAll(10472);
+                    }
+                    else {
+                        bool early = false;
+                        early = timeOfHopAction > 45;
+                        
+                        wchar_t message[64];
+                        if (early) {
+                            swprintf(message, sizeof(message), L"%d frames too early!", timeOfHopAction - 45);
+                        }
+                        else {
+                            swprintf(message, sizeof(message), L"%d frames too late!", 45 - timeOfHopAction);
+                        }
+
+                        MessageInfo info;
+                        info.strings[0] = message;
+                        m_ghostMessage->setMessageAll(10471, &info);
+                    } 
+                    writtenMessage = true;
+                }
+            }
+
+            
         }
     }
-    REPLACED(afterCalc)();
+    else {
+        SP_LOG("m_ghostMessage is null");
+    }
+
 }
 
 u8 RacePage::getControlCount(u32 controls) const {

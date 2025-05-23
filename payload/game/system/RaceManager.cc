@@ -207,6 +207,15 @@ bool RaceManager::getIfPlayerHopped() {
             return true;
         }
     }
+    else if (controller == Registry::Controller::WiiRemoteAndNunchuck) {
+        if (((buttons & WPAD_CL_BUTTON_B) == WPAD_CL_BUTTON_B)) {
+            return true;
+        }
+    } else if (controller == Registry::Controller::Classic) {
+        if (((buttons & WPAD_CL_BUTTON_B) == WPAD_CL_BUTTON_B) || ((buttons & WPAD_CL_TRIGGER_R) == WPAD_CL_TRIGGER_R)) {
+            return true;
+        }
+    }
     return false;
 }  
 

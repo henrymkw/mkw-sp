@@ -117,4 +117,7 @@
     "10419": "Load State",
     "10420": "{arg string|0}",
     "10452": "Unable to save ghost. Please turn off item wheel!",
+    "10471": "You hopped {arg string|0}!",
+    "10472": "Hop dodge successful (assuming surface is flat)!",
+    "10473": "",
 }

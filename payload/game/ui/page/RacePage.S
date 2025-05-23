@@ -29,9 +29,12 @@ PATCH_REPLACE_END(RacePage_initControls, 0x680)
 // "GHOST DATA CANNOT BE SAVED" -> "Ghost data will be truncated."
 
 PATCH_REPLACE_START(RacePage_initControls, 0x8d8)
-    li r4, 10070
+    li r4, 10473
 PATCH_REPLACE_END(RacePage_initControls, 0x8d8)
 
+PATCH_REPLACE_START(RacePage_initControls, 0x8ec)
+    stb 0x0, 0x0080(r3)
+PATCH_REPLACE_END(RacePage_initControls, 0x8ec)
 
 
 PATCH_B_START(RacePage_beforeCalc, 0x3c)
@@ -77,10 +80,13 @@ PATCH_REPLACE_END(RacePage_beforeCalc, 0x380)
 
 // Do not show "Ghost data could not be saved." after 6 minutes
 
-PATCH_REPLACE_START(RacePage_afterCalc, 0x5e8)
-    nop
-PATCH_REPLACE_END(RacePage_afterCalc, 0x5e8)
+// PATCH_REPLACE_START(RacePage_afterCalc, 0x5e8)
+//     nop
+// PATCH_REPLACE_END(RacePage_afterCalc, 0x5e8)
 
+PATCH_REPLACE_START(RacePage_afterCalc, 0x5f4)
+    stb 0x0, 0x0080(r3)
+PATCH_REPLACE_END(RacePage_afterCalc, 0x5f4)
 
 
 // Allow pausing during the countdown in non-replay modes
