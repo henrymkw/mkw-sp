@@ -1297,6 +1297,7 @@
 0x8079864c KartItem_activateMushroom
 0x80798c38 _ZN4Item8KartItem7setItemEjjj
 0x80799850 _ZN4Item12ItemDirector4calcEv
+0x80799cac ItemDirector_checkKartCollision
 0x807aa688 ItemObjKouraAka_vf_20
 0x807aae78 ItemObjKouraAka_807aae78
 0x807ac49c ItemObjKouraAo_807ac49c

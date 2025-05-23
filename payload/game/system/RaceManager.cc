@@ -65,14 +65,14 @@ void RaceManager::Player::calc() {
             shouldLoadState = (buttons & WPAD_CL_BUTTON_HOME) == WPAD_CL_BUTTON_HOME;
             break;
         case Registry::Controller::WiiRemoteAndNunchuck:
-            shouldUsePow = (buttons & WPAD_BUTTON_DOWN) == WPAD_BUTTON_DOWN;
+            shouldUsePow = ((buttons & WPAD_BUTTON_LEFT) == WPAD_BUTTON_LEFT) || ((buttons & WPAD_BUTTON_RIGHT) == WPAD_BUTTON_RIGHT);
             shouldUpdateItem = (buttons & WPAD_BUTTON_DOWN) == WPAD_BUTTON_DOWN;
-            shouldLoadState = (buttons & KPAD_CL_TRIGGER_ZR) == KPAD_CL_TRIGGER_ZR;
+            shouldLoadState = (buttons & WPAD_CL_BUTTON_DOWN) == WPAD_CL_BUTTON_DOWN;
             break;
         case Registry::Controller::Classic:
             shouldUsePow = (buttons & KPAD_CL_BUTTON_X) == KPAD_CL_BUTTON_X;
             shouldUpdateItem = (buttons & KPAD_CL_TRIGGER_ZL) == KPAD_CL_TRIGGER_ZL;
-            shouldLoadState = (buttons & KPAD_CL_BUTTON_HOME) == KPAD_CL_BUTTON_HOME;
+            shouldLoadState = (buttons & KPAD_CL_TRIGGER_ZR) == KPAD_CL_TRIGGER_ZR;
             break;
         case Registry::Controller::GameCube:
             shouldUsePow = (buttons & PAD_BUTTON_X) == PAD_BUTTON_X;
