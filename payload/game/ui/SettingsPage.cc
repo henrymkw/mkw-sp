@@ -85,7 +85,7 @@ void SettingsPage::onInit() {
     u32 messageId = padType == REGISTERED_PAD_TYPE_GC ? 2306 : 2305;
     MessageInfo info = {};
     info.messageIds[0] = messageId;
-    m_categorySwapPlusIcon.setMessageAll(10428, &info);
+    m_categorySwapPlusIcon.setMessageAll(3012, &info);
     m_categorySwapPlusIcon.m_zIndex = 10.0f;
 
     m_inputManager.setHandler(MenuInputManager::InputId::Back, &m_onBack, false, false);
