@@ -145,24 +145,25 @@ std::optional<Apploader::GameEntryFunc> Run() {
     void *payloadDst;
     const void *payloadSrc;
     u32 payloadSize;
+    // Nothing super scientific about these addresses, as long as they don't overlap with the rel
     switch (REGION) {
     case REGION_P:
-        payloadDst = reinterpret_cast<void *>(0x8076F000);
+        payloadDst = reinterpret_cast<void *>(0x809C4FA0);
         payloadSrc = &payloadP;
         payloadSize = payloadPSize;
         break;
     case REGION_E:
-        payloadDst = reinterpret_cast<void *>(0x8076A000);
+        payloadDst = reinterpret_cast<void *>(0x809C5000);
         payloadSrc = &payloadE;
         payloadSize = payloadESize;
         break;
     case REGION_J:
-        payloadDst = reinterpret_cast<void *>(0x8076E000);
+        payloadDst = reinterpret_cast<void *>(0x809C5000);
         payloadSrc = &payloadJ;
         payloadSize = payloadJSize;
         break;
     case REGION_K:
-        payloadDst = reinterpret_cast<void *>(0x8075D000);
+        payloadDst = reinterpret_cast<void *>(0x809C5000);
         payloadSrc = &payloadK;
         payloadSize = payloadKSize;
         break;

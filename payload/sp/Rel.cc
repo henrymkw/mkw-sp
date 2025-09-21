@@ -100,7 +100,7 @@ static bool IsClean(const void *rel, u32 roundedRelSize) {
 }
 
 std::expected<void, const char *> Load() {
-    void *src = reinterpret_cast<void *>(OSRoundUp32B(OSGetMEM1ArenaLo()));
+    void *src = reinterpret_cast<void *>(OSRoundUp32B(Rel_getStart()));
 
     DVDFileInfo fileInfo;
     if (!DVDOpen("/rel/StaticR.rel", &fileInfo)) {
@@ -117,37 +117,8 @@ std::expected<void, const char *> Load() {
         return std::unexpected("StaticR.rel has been modified.");
     }
 
-    void *dst = Rel_getStart();
-    auto *srcHeader = reinterpret_cast<OSModuleHeader *>(src);
-    memcpy(dst, src, srcHeader->fixSize);
-    ICInvalidateRange(dst, srcHeader->fixSize);
-    auto *dstHeader = reinterpret_cast<OSModuleHeader *>(dst);
-
-    void *bss = reinterpret_cast<void *>(
-            AlignUp(reinterpret_cast<size_t>(dst) + srcHeader->fixSize, 0x20));
-    memset(bss, 0, srcHeader->bssSize);
-
-    dstHeader->info.sectionInfoOffset += reinterpret_cast<u32>(dst);
-    auto *dstSectionInfo = reinterpret_cast<OSSectionInfo *>(dstHeader->info.sectionInfoOffset);
-    for (u32 i = 1; i < dstHeader->info.numSections; i++) {
-        if (dstSectionInfo[i].offset != 0) {
-            dstSectionInfo[i].offset += reinterpret_cast<u32>(dst);
-        } else if (dstSectionInfo[i].size != 0) {
-            dstSectionInfo[i].offset = reinterpret_cast<u32>(bss);
-        }
-    }
-
-    dstHeader->impOffset += reinterpret_cast<u32>(src);
-    auto *importInfo = reinterpret_cast<OSImportInfo *>(dstHeader->impOffset);
-    for (u32 i = 0; i < dstHeader->impSize / sizeof(OSImportInfo); i++) {
-        importInfo[i].offset += reinterpret_cast<u32>(src);
-    }
-
-    Relocate(NULL, dstHeader);
-    Relocate(dstHeader, dstHeader);
-
-    OSSectionInfo *prologSectionInfo = dstSectionInfo + dstHeader->prologSection;
-    entry = reinterpret_cast<EntryFunction>(prologSectionInfo->offset + dstHeader->prolog);
+    OSLink(reinterpret_cast<OSModuleHeader *>(src), Rel_getBssSectionStart());
+    entry = reinterpret_cast<EntryFunction>(reinterpret_cast<OSModuleHeader *>(src)->prolog);
     return {};
 }
 

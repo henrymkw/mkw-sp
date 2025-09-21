@@ -1,0 +1,12 @@
+#pragma once
+
+#include <Common.hh>
+
+namespace Net {
+
+class RACEDATAPacket {
+    u8 _00[0x40 - 0x00];
+};
+static_assert(sizeof(RACEDATAPacket) == 0x40);
+
+} // namespace Net

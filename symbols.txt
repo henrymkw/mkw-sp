@@ -1,22 +1,82 @@
+# DOL .init start (0x80004000)
 0x80005f34 memcpy_slow
 0x80006038 memset_slow
 0x80006210 __init_registers
+# DOL .init end (0x80006460)
 
+# DOL .text start (0x800072C0)
 0x80008ef0 RKSystem_main
 0x80009194 RKSystem_initialize
 0x8000951c RKSystem_run
 0x80009844 _ZN6System14RKSceneManager22changeSceneWithCreatorEiPv
-
 0x8000f314 memcmp
 0x80011938 snprintf
+0x80011a2c sprintf
 0x800135f0 strstr
-
+0x80021254 strlen
+0x800ccb4c DWC_GetLastError
+0x800ccb64 DWC_GetLastErrorEx
+0x800ccc38 DWC_ClearError
+0x800ccc54 DWCi_IsError
+0x800ccc68 DWCi_SetError
+0x800ceb00 DWCi_GetProfileIDFromList
+0x800d0fec DWC_ShutdownFriendsMatch
+0x800d115c DWC_ProcessFriendsMatch
+0x800d2170 DWC_GetMyAid
+0x800d2644 DWC_IsValidAid
+0x800d2e4c DWCi_HandleGT2Error
+0x800d3648 DWCi_GPRecvBuddyMessageCallback
+0x800d4e58 DWCi_QR2Startup
+0x800d6424 DWCi_MatchProcess
+0x800d86e4 DWCi_GT2UnrecognizedMessageCallback
+0x800d8858 DWCi_GT2ConnectAttemptCallback
+0x800dbd38 DWCi_SendMatchCommand
+0x800dc234 DWCi_ProcessRecvMatchCommand
+0x800de6b8 DWCi_CheckResvCommand
+0x800e8380 DWCi_SendReliable
+0x800e8654 DWC_SendUnreliable
+0x800e87c8 DWCi_InitTransport
+# Currently we can't have both an asm patch and a C patch for the same symbol, so make two
+0x800e8950 DWCi_TransportProcessASM
+0x800e8950 DWCi_TransportProcess
+0x800e8d68 DWCi_ShutdownTransport
+0x800ed6e8 DWCi_Auth_SendRequest
+0x800fb874 gpProcess
+0x80109c1c gti2ReceivedCallback
+0x8010a3c0 gti2AcceptConnection
+0x8010a464 gti2RejectConnection
+0x8010a964 gt2Think
+0x8010a9b0 gt2Listen
+0x8010a9bc gt2Connect
+0x8010a9bc gt2Connect
+0x8010ab64 gt2Send
+0x8010ac88 gt2GetConnectionState
+0x8010b178 gti2HandleClientResponse
+0x8010b480 gti2DeliverReliableMessage
+0x8010bdfc gti2HandleReliableMessage
+0x8010c434 gti2HandleUnreliableMessage
+0x8010c6fc gti2HandleMessage
+0x8010ced8 gti2ReceiveMessages
+0x8010d124 gti2BeginReliableMessage
+0x8010dd40 gti2Send
+0x8010dd78 gti2SendAppReliable
+0x8010deb0 gti2SocketFindConnection
+0x8010e174 gti2Listen
+0x8010e17c gti2NewSocketConnection
+0x8010f2b4 qr2_shutdown
+0x80110720 qr2_parse_queryA
+0x8011bf54 NNProcessData
 0x8015df4c DVDConvertPathToEntrynum
 0x8015e254 DVDFastOpen
 0x8015e2bc DVDOpen
-0x8015e834 DVDReadPrio
 0x8015e568 DVDClose
-
+0x8015e834 DVDReadPrio
+0x801937e0 IOS_OpenAsync
+0x801938f8 IOS_Open
+0x80193ad8 IOS_Close
+0x80194158 IOS_IoctlAsync
+0x80194290 IOS_Ioctl
+0x801945e0 IOS_Ioctlv
 0x8019fc68 OSInit
 0x801a10a4 OSGetMEM1ArenaHi
 0x801a10bc OSGetMEM1ArenaLo
@@ -25,25 +85,102 @@
 0x801a162c DCFlushRange
 0x801a165c DCStoreRange
 0x801a1710 ICInvalidateRange
+0x801a25d0 OSReport
 0x801a4ec4 OSFatal
 0x801a65ac OSDisableInterrupts
 0x801a65d4 OSRestoreInterrupts
 0x801a6d3c Relocate
+0x801a72dc OSLink
 0x801a75d0 OSGetPhysicalMem1Size
 0x801a75dc OSGetPhysicalMem2Size
-
+0x801a7ee4 OSLockMutex
+0x801a7fc0 OSUnlockMutex
+0x801aad5c OSGetTime
 0x801b94a4 VIInit
 0x801b99ec VIWaitForRetrace
 0x801ba9a4 VIFlush
 0x801bab2c VISetBlack
 0x801d17f8 NETMemCpy
 0x801d1ba0 NETMemSet
+0x801d1ca0 NETCalcCRC32
 0x801d24f4 NETSHA1Init
 0x801d2544 NETSHA1Update
 0x801d25f8 NETSHA1GetDigest
-
+0x801d8d30 NHTTPStartup
+0x801d8dbc NHTTPCleanupAsync
+0x801d8ff8 NHTTPCreateRequest
+0x801d925c NHTTPSendRequestAsync
+0x801d92b8 NHTTPCancelRequestAsync
+0x801d92f8 NHTTPDestroyResponse
+0x801d937c NHTTPGetBodyAll
+0x801d93e4 NHTTPGetResultCode
+0x801ec184 SOStartup
+0x801ecff4 SOSocket
+0x801ed0e4 SOClose
+0x801ed270 SOConnect
+0x801ed454 SORecvFrom
+0x801ed47c SORecv
+0x801ed4a0 SOSendTo
+0x801ed4c8 SOSend
+0x801ed99c SOHtoNs
+0x801ed9a4 net_recvfrom
 0x8023afe0 _ZN3EGG12SceneManager18changeSiblingSceneEi
+0x802f1cb8 s_auth_error
+# DOL .text end (0x80244DE0)
 
+#DOL .rodata start (0x80244EC0)
+0x803856d0 NNMagicData
+0x803862f0 s_dwcContext
+0x8038630c s_dwcMatch
+0x80386318 s_dwcTransport
+0x8038633c s_DWCAuthContext
 0x80386638 MaxEntryNum
 0x8038663c FstStringStart
 0x80386640 FstStart
+#DOL .rodata end (0x80258580)
+
+#DOL .data start (0x80258580)
+#DOL .data end (0x802A4040)
+
+# DOL .bss start (0x802A4080)
+# DOL .bss end (0x80384C00)
+
+# DOL .sdata start (0x80384C00)
+# DOL .sdata end (0x80385FC0)
+
+# DOL .sbss start (0x80385FC0)
+# DOL .sbss end (0x80386FA0)
+
+# DOL .sdata2 start (0x80386FA0)
+# DOL .sdata2 end (0x80389140)
+
+# DOL .sbss2 start (0x80389140)
+# DOL .sbss2 end (0x8038917C)
+
+# REL .text start (0x805103B4)
+0x80656704 _ZN3Net10NetManager14joinFriendRoomEjh
+0x806567d8 _ZN3Net10NetManager16createFriendRoomEh
+0x80656920 _ZN3Net10NetManager17setDisconnectInfoENS_14DisconnectTypeEi
+0x80657e30 NetManager_SendRacePacket
+0x80657e30 _ZN3Net10NetManager14SendRacePacketEv
+0x80658148 _ZNK3Net10NetManager18GetConnectionStateEv
+0x806581cc _ZN3Net10NetManager11handleErrorEv
+0x806585f4 _ZN3Net10NetManager16userRecvCallbackEhPhj
+0x80658d3c _ZN3Net10NetManager11InitMMInfosEv
+0x80659a84 _ZN3Net10NetManager17ProcessRACEPacketEhPNS_12HEADERPacketEj
+0x8065a30c _ZN3Net10NetManager12PacketHolder5resetEv
+0x8065a30c _ZN3Net12PacketHolder5resetEv
+0x8065a34c _ZN3Net10NetManager12PacketHolder4copyEPvj
+0x8065a34c _ZN3Net12PacketHolder4copyEPvj
+0x8065ab8c _ZN3Net11ROOMHandler4InitENS0_8RoomRoleE
+# REL .text end (0x8088F400)
+
+# REL .rodata start (0x8088F720)
+# REL .rodata end (0x808B2BD0)
+
+# REL .data start (0x808B2BD0)
+# REL .data end (0x808DD3D4)
+
+# REL .bss start (0x809BD6E0)
+0x809c20e0 _ZN3Net11ROOMHandler10s_instanceE
+# REL .bss end (0x809C4F90)

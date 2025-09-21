@@ -39,6 +39,8 @@ for arg in sys.argv[1:]:
 parser = argparse.ArgumentParser()
 parser.add_argument("--dry", action="store_true")
 parser.add_argument("--ci", action="store_true")
+parser.add_argument("--debug", action="store_true")
+parser.add_argument("--prod", action="store_true")
 args = parser.parse_args(our_argv)
 
 out_buf = io.StringIO()
@@ -295,6 +297,12 @@ else:
         '-Werror=vla',
     ))
 
+if args.debug:
+    common_cflags += ['-g']
+    common_ccflags += ['-g']
+if args.prod:
+    common_cflags.append("-DPROD")
+
 target_cflags = {
     'stub': [
         '-DSP_STUB',
@@ -423,6 +431,8 @@ code_in_files = {
         os.path.join('common', 'Font.cc'),
         os.path.join('common', 'VI.cc'),
         os.path.join('vendor', 'lzma', 'LzmaDec.c'),
+        os.path.join('vendor', 'sha256', 'sha256.c'),
+        os.path.join('vendor', 'rsa', 'rsa.c'),
         *sorted(glob.glob("payload/**/*.cc", recursive=True)),
         *sorted(glob.glob("payload/**/*.c", recursive=True)),
         *sorted(glob.glob("payload/**/*.S", recursive=True)),
@@ -572,10 +582,10 @@ for region in ['P', 'E', 'J', 'K']:
             suffix = 'D' if profile == 'DEBUG' else ''
             extension = 'bin' if fmt == 'binary' else 'elf'
             base = {
-                'P': '0x8076F000',
-                'E': '0x8076A000',
-                'J': '0x8076E000',
-                'K': '0x8075D000',
+                'P': '0x809C4FA0',
+                'E': '0x809C5000',
+                'J': '0x809C5000',
+                'K': '0x809C5000',
             }[region]
             n.build(
                 os.path.join('$builddir', 'bin', f'payload{region}{suffix}.{extension}'),
@@ -852,7 +862,6 @@ n.build(
     ],
 )
 n.newline()
-n.default(["test"])
 
 if args.dry:
     with open('build.ninja', 'w') as out_file:

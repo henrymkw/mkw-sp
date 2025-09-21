@@ -172,19 +172,19 @@ SRC_BINARIES = {
 DST_BINARIES = {
     'P': {
         'dol': DstBinary(0x80004000, 0x8038917c),
-        'rel': DstBinary(0x80399F2C, 0x8076E8FC),
+        'rel': DstBinary(0x805102e0, 0x808e4cb0),
     },
     'E': {
         'dol': DstBinary(0x80004000, 0x80384dfc),
-        'rel': DstBinary(0x80394F2C, 0x8076951C),
+        'rel': DstBinary(0x8050bf60, 0x808e0930),
     },
     'J': {
         'dol': DstBinary(0x80004000, 0x80388afc),
-        'rel': DstBinary(0x80398F2C, 0x8076D0BC),
+        'rel': DstBinary(0x8050fc60, 0x808e4630),
     },
     'K': {
         'dol': DstBinary(0x80004000, 0x8037719c),
-        'rel': DstBinary(0x80387F2C, 0x8075CD5C),
+        'rel': DstBinary(0x804fe300, 0x808d2cd0),
     },
 }
 
@@ -201,7 +201,12 @@ CHUNKS = {
         Chunk(0x80240e18, 0x80244dd4, 0x8023ff5c),
         Chunk(0x802a4080, 0x80384c18, 0x8029fd00),
         Chunk(0x80385908, 0x8038590c, 0x80381588),
+        Chunk(0x803856d0, 0x803856d6, 0x80381350),
         Chunk(0x80385fc0, 0x80386008, 0x80381c40),
+        Chunk(0x803862f0, 0x803862f4, 0x80381f70),
+        Chunk(0x8038630c, 0x80386310, 0x80381f8c),
+        Chunk(0x80386318, 0x8038631c, 0x80381f98),
+        Chunk(0x8038633c, 0x80386340, 0x80381fbc),
         Chunk(0x80386638, 0x80386644, 0x803822b8),
         Chunk(0x80386f48, 0x80386f90, 0x80382bc0),
         Chunk(0x805103b4, 0x80510a90, 0x8050c034),
@@ -473,6 +478,7 @@ CHUNKS = {
         Chunk(0x809c1988, 0x809c198c, 0x809bd378),
         Chunk(0x809c19a0, 0x809c19bc, 0x809bd180),
         Chunk(0x809c1e38, 0x809c1e3c, 0x809bd508),
+        Chunk(0x809c20e0, 0x809c20e4, 0x809c20e0),
         Chunk(0x809c21d0, 0x809c21d4, 0x809bda10),
         Chunk(0x809c21d8, 0x809c21dc, 0x809bda18),
         Chunk(0x809c2328, 0x809c232c, 0x809bdb60),
@@ -526,6 +532,7 @@ CHUNKS = {
         Chunk(0x809c18f8, 0x809c18fc, 0x809c0958),
         Chunk(0x809c1988, 0x809c198c, 0x809c09e8),
         Chunk(0x809c19a0, 0x809c19bc, 0x809c0a00),
+        Chunk(0x809c20e0, 0x809c20e4, 0x809c20e0),
         Chunk(0x809c1e38, 0x809c1e3c, 0x809c0e98),
         Chunk(0x809c21d0, 0x809c21d4, 0x809c1230),
         Chunk(0x809c21d8, 0x809c21dc, 0x809c1238),
@@ -620,6 +627,7 @@ CHUNKS = {
         Chunk(0x809c1988, 0x809c198c, 0x809affc8),
         Chunk(0x809c19a0, 0x809c19bc, 0x809affe0),
         Chunk(0x809c1e38, 0x809c1e3c, 0x809b0478),
+        Chunk(0x809c20e0, 0x809c20e4, 0x809c20e0),
         Chunk(0x809c21d0, 0x809c21d4, 0x809b0810),
         Chunk(0x809c21d8, 0x809c21dc, 0x809b0818),
         Chunk(0x809c2328, 0x809c232c, 0x809b0968),

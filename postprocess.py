@@ -68,7 +68,7 @@ backup = copy.deepcopy(replacement_symbols)
 out_symbols = ''
 with open(args.in_symbols_path, 'r') as in_symbols_file:
     for symbol in in_symbols_file.readlines():
-        if symbol.isspace():
+        if symbol.strip().startswith('#') or symbol.isspace():
             out_symbols += '\n'
             continue
 
