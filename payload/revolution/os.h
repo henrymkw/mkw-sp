@@ -52,8 +52,8 @@ u32 OSGetPhysicalMem2Size(void);
 #define OS_MEM1_REGION_PREFIX 0x00000000
 #define OS_MEM2_REGION_PREFIX 0x10000000
 #define OS_MEM_REGION_ID_MASK 0x30000000
-#define OSIsMEM1Region(addr) (((u32)(addr)&OS_MEM_REGION_ID_MASK) == OS_MEM1_REGION_PREFIX)
-#define OSIsMEM2Region(addr) (((u32)(addr)&OS_MEM_REGION_ID_MASK) == OS_MEM2_REGION_PREFIX)
+#define OSIsMEM1Region(addr) (((u32)(addr) & OS_MEM_REGION_ID_MASK) == OS_MEM1_REGION_PREFIX)
+#define OSIsMEM2Region(addr) (((u32)(addr) & OS_MEM_REGION_ID_MASK) == OS_MEM2_REGION_PREFIX)
 
 void *OSGetStackPointer(void);
 
@@ -67,7 +67,7 @@ typedef s64 OSTime;
 #define OS_BUS_CLOCK (*(u32 *)0x800000f8)
 #define OS_TIMER_CLOCK (OS_BUS_CLOCK / 4)
 
-#define OSSecondsToTicks(sec) ((sec)*OS_TIMER_CLOCK)
+#define OSSecondsToTicks(sec) ((sec) * OS_TIMER_CLOCK)
 #define OSMillisecondsToTicks(msec) ((msec) * (OS_TIMER_CLOCK / 1000))
 #define OSMicrosecondsToTicks(usec) ((usec) * (OS_TIMER_CLOCK / 1000000))
 #define OSNanosecondsToTicks(nsec) ((nsec) / (1000000000 / OS_TIMER_CLOCK))

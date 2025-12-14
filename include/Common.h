@@ -109,7 +109,7 @@ __attribute__((format(printf, 1, 2))) static inline void CheckFormat(const char 
         OSReport("[" __FILE_NAME__ ":" SP_TOSTRING2(__LINE__) "] " m "\n", ##__VA_ARGS__); \
     } while (0)
 
-#define ROUND_UP(n, a) (((uintptr_t)(n) + (a)-1) & ~((a)-1))
+#define ROUND_UP(n, a) (((uintptr_t)(n) + (a) - 1) & ~((a) - 1))
 #define ROUND_DOWN(n, a) ((uintptr_t)(n) & ~(a - 1))
 
 enum {
