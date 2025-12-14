@@ -5,10 +5,10 @@
 
 #include <revolution/dwc/DWCTransport.h>
 
-#ifdef PROD
-#define SERVER_IP 0x607e6b90 // mkw-server.xyz
-#else
+#ifdef LOCAL_MKW_SERVER
 #define SERVER_IP 0x7F000001 // localhost
+#else
+#define SERVER_IP 0x607e6b90 // mkw-server.xyz
 #endif
 
 int SOSendTo(int s, const char *buf, int len, int flags, void *sockTo) {

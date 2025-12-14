@@ -9,11 +9,11 @@
 
 #include <string.h>
 
-#ifdef PROD
-#define WWFC_DOMAIN "mkw-server.xyz"
-#else
+#ifdef LOCAL_MKW_SERVER
 // nwfc.wiinoma.com points to localhost
 #define WWFC_DOMAIN "nwfc.wiinoma.com"
+#else
+#define WWFC_DOMAIN "mkw-server.xyz"
 #endif
 
 #define PAYLOAD_BLOCK_SIZE 0x20000
@@ -181,16 +181,10 @@ typedef struct {
 
 // clang-format off
 static const RSAPublicKey PayloadPublicKey = {
-    #ifdef PROD
-        #include <PRODIncludeRSAPublicPayloadKey.txt>
-    #else
+    #ifdef LOCAL_MKW_SERVER
         #include <TESTIncludeRSAPublicPayloadKey.txt>
+    #else
+        #include <PRODIncludeRSAPublicPayloadKey.txt>
     #endif
 };
 // clang-format on
-
-#ifdef PROD
-#pragma message("Using PROD RSA Public Key for Payload Verification")
-#else
-#pragma message("Using TEST RSA Public Key for Payload Verification")
-#endif

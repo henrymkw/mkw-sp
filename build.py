@@ -40,7 +40,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument("--dry", action="store_true")
 parser.add_argument("--ci", action="store_true")
 parser.add_argument("--debug", action="store_true")
-parser.add_argument("--prod", action="store_true")
+parser.add_argument("--local_mkw_server", action="store_true")
 args = parser.parse_args(our_argv)
 
 out_buf = io.StringIO()
@@ -300,8 +300,8 @@ else:
 if args.debug:
     common_cflags += ['-g']
     common_ccflags += ['-g']
-if args.prod:
-    common_cflags.append("-DPROD")
+if args.local_mkw_server:
+    common_cflags.append("-DLOCAL_MKW_SERVER")
 
 target_cflags = {
     'stub': [

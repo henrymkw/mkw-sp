@@ -78,10 +78,10 @@ void tryGetMKWServerAddress() {
     // atm too lazy to dns resolve the address
     addr.family = 2;
     addr.port = 27900;
-#ifdef PROD
-    addr.addr.addr = 0x607e6b90;
-#else
+#ifdef LOCAL_MKW_SERVER
     addr.addr.addr = 0x7F000001;
+#else
+    addr.addr.addr = 0x607e6b90;
 #endif
 
     // [0] = magic 0xd
