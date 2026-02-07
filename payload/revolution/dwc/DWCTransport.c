@@ -15,8 +15,7 @@ void DWCi_TransportProcess() {
     // do nothing
 }
 
-BOOL DWCi_GT2UnrecognizedMessageCallback(GT2Socket socket, u32 ip, u16 port, u8 *message,
-        s32 len) {
+BOOL DWCi_GT2UnrecognizedMessageCallback(GT2Socket socket, u32 ip, u16 port, u8 *message, s32 len) {
     if (message == NULL || len == 0) {
         SP_LOG("GT2 Unrecognized : Null message or zero length.");
         return GT2False;

@@ -77,8 +77,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Install clang-format
-        run: sudo apt-get update && sudo apt-get install clang-format-15
+        run: sudo apt-get update && sudo apt-get install clang-format
       - name: Format MKW-SP
         run: |
           dirs="common include loader payload stub"
-          find $dirs -regex '.*\.\(c\|h\|cc\|hh\)' | xargs clang-format-15 --dry-run -Werror
+          find $dirs -regex '.*\.\(c\|h\|cc\|hh\)' | xargs clang-format --dry-run -Werror

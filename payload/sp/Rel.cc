@@ -127,7 +127,7 @@ std::expected<void, const char *> Load() {
 void Run() {
     assert(entry);
     Patcher_patch(PATCHER_BINARY_REL);
-    
+
     if (HostPlatform_IsDolphin(Host_GetPlatform())) {
         Console_init();
     }
