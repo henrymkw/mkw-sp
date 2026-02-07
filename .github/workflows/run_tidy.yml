@@ -5,12 +5,10 @@ on:
     paths-ignore:
       - '.github/workflows/clean_bmg.yml'
       - '.github/workflows/build_sp.yml'
-      - '.github/workflows/build_tools.yml'
   pull_request:
     paths-ignore:
       - '.github/workflows/clean_bmg.yml'
       - '.github/workflows/build_sp.yml'
-      - '.github/workflows/build_tools.yml'
 
 jobs:
   tidy:
