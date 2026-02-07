@@ -114,7 +114,6 @@ public:
 };
 
 enum class StorageType {
-    Net,
     FAT,
     NANDArchive,
     DVD,
@@ -156,9 +155,6 @@ std::optional<NodeInfo> Stat(const wchar_t *path);
 bool Rename(const wchar_t *srcPath, const wchar_t *dstPath);
 bool Remove(const wchar_t *path, bool allowNop);
 
-static constexpr u32 BENCHMARK_BUFFER_SIZE = 1024 * 1024;
-std::optional<Throughputs> Benchmark(StorageType type, void *buffer);
-std::optional<BenchmarkStatus> GetBenchmarkStatus();
 u32 GetMessageId(StorageType type);
 
 } // namespace SP::Storage

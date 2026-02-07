@@ -65,14 +65,20 @@ for symbol_name, demangled in replaced_symbols:
     thunk_symbols[replacement_name] = symbol_name
 
 backup = copy.deepcopy(replacement_symbols)
+processed_replacements = set()
 out_symbols = ''
 with open(args.in_symbols_path, 'r') as in_symbols_file:
     for symbol in in_symbols_file.readlines():
-        if symbol.isspace():
+        if symbol.strip().startswith('#') or symbol.isspace():
             out_symbols += '\n'
             continue
 
-        address, name = symbol.split()
+        name = None
+        try: 
+            symbol = symbol.strip()
+            address, name = symbol.split()
+        except ValueError:
+            sys.exit(f'Invalid line in symbols.txt: {symbol.strip()}')
         address = int(address, 16)
 
         if name in regular_symbols:
@@ -80,7 +86,11 @@ with open(args.in_symbols_path, 'r') as in_symbols_file:
 
         if name in replacement_symbols:
             replacement_symbols.remove(name)
+            processed_replacements.add(name)
             name = 'replaced_' + name
+        elif name in processed_replacements:
+            # Skip duplicate entries for already-replaced symbols
+            continue
         out_symbols += f'0x{address:08x} {name}\n'
 for name in replacement_symbols:
     sys.exit(f'Attempted to REPLACE {name}, but it doesn\'t exist in symbols.txt!')

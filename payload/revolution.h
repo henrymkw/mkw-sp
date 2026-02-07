@@ -11,7 +11,7 @@
 #include "revolution/os.h"
 #include "revolution/pad.h"
 #include "revolution/sc.h"
-#include "revolution/so.h"
+#include "revolution/so/so.h"
 #include "revolution/vi.h"
 
 #include "revolution/net.h"
@@ -19,3 +19,7 @@
 #include "revolution/exi.h"
 
 #include "revolution/es.h"
+
+// These must come after os.h and so.h since they depend on types from those headers
+#include "revolution/gamespy.h"
+#include "revolution/dwc.h"

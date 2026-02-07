@@ -3,7 +3,6 @@
 
 #include <revolution.h>
 #include <sp/ScopeLock.h>
-#include <sp/keyboard/Keyboard.h>
 #include <stdio.h>
 #include <string.h>
 
@@ -56,18 +55,8 @@ static void Console_stateDefault(int frames_since_last_console_message) {
         sLineVisible = false;
     }
 }
-static void Console_stateTyping() {
-    sLineVisible = true;
-    sConsoleAlpha = 1.0f;
-}
 
 static void Console_drawImpl() {
-    const SP_Line line = SP_GetCurrentLine();
-    if (line.len != 0) {
-        memcpy(sLastLine, line.buf, MIN(line.len, sizeof(sLastLine) - 1));
-        sLastLine[MIN(line.len, sizeof(sLastLine) - 1)] = '\0';
-    }
-
     const float font_size = 7.0f;
 
     if (sConsoleAlpha == 0.0f && !sLineVisible) {
@@ -101,24 +90,17 @@ void Console_init(void) {
     sInit = true;
 }
 void Console_draw(void) {
-    if (!sInit || !SP_IsConsoleInputInit()) {
+    if (!sInit) {
         return;
     }
     SP_SCOPED_MUTEX_LOCK(sConsoleMutex);
+    if (sFramesSinceLastOpen < 0xffffffffu) {
+        ++sFramesSinceLastOpen;
+    }
+    Console_stateDefault((int)sFramesSinceLastOpen);
     Console_drawImpl();
 }
-void Console_calc(void) {
-    if (!sInit || !SP_IsConsoleInputInit()) {
-        return;
-    }
-    SP_SCOPED_MUTEX_LOCK(sConsoleMutex);
-    if (SP_IsTyping()) {
-        sFramesSinceLastOpen = 0;
-        Console_stateTyping();
-        return;
-    }
-    Console_stateDefault(sFramesSinceLastOpen++);
-}
+
 void Console_addLine(const char *s, size_t /* len */) {
     // To support being called by an interrupt handler, we can't use a mutex. If a call
     // was interrupted, the global state could be accesesd in an invalid state.
@@ -135,6 +117,8 @@ void Console_addLine(const char *s, size_t /* len */) {
         }
     }
 #endif
+    sFramesSinceLastOpen = 0;
+    snprintf(sLastLine, sizeof(sLastLine), "%s", s);
     AppendToHistory(s);
 }
 

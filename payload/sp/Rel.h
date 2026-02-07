@@ -7,6 +7,7 @@ extern u8 rel_end[];
 extern u8 rel_text_start[];
 extern u8 rel_text_end[];
 extern u8 rel_rodata_end[];
+extern u8 rel_bss_start[];
 
 static inline void *Rel_getStart(void) {
     return rel_start;
@@ -34,4 +35,8 @@ static inline u32 Rel_getTextSectionSize(void) {
 
 static inline void *Rel_getRodataSectionEnd(void) {
     return rel_rodata_end;
+}
+
+static inline void *Rel_getBssSectionStart(void) {
+    return rel_bss_start;
 }

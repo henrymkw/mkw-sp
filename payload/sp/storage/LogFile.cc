@@ -1,7 +1,6 @@
 #include "LogFile.hh"
 
 #include "sp/ScopeLock.hh"
-#include "sp/settings/GlobalSettings.hh"
 #include "sp/storage/Storage.hh"
 
 #include <cstdio>
@@ -65,70 +64,8 @@ static void *Run(void * /* arg */) {
     }
 }
 
-static bool IsValidLogFile(Storage::NodeInfo nodeInfo) {
-    if (nodeInfo.type != Storage::NodeType::File) {
-        return false;
-    }
-    if (wcslen(nodeInfo.name) != LOG_FILE_NAME_LENGTH + LOG_FILE_EXTENSION_LENGTH) {
-        return false;
-    }
-
-    for (size_t n = 0; n < LOG_FILE_NAME_LENGTH; n++) {
-        const wchar_t wc = nodeInfo.name[n];
-
-        if (LOG_FILE_NAME_FORMAT[n] == L'D') {
-            if (!iswdigit(wc)) {
-                return false;
-            }
-        } else {
-            if (wc != L'-') {
-                return false;
-            }
-        }
-    }
-
-    return std::wstring_view(nodeInfo.name).ends_with(LOG_FILE_EXTENSION);
-}
-
-static bool ShouldDeleteLogFile(OSTime tick) {
-    u32 logFileRetention = SP::GlobalSettings::Get<SP::GlobalSettings::Setting::LogFileRetention>();
-    if (logFileRetention == 0) {
-        return false;
-    }
-
-    OSTime oneDay = OSSecondsToTicks(86400ll);
-    OSTime retentionDays = oneDay * logFileRetention;
-
-    return tick + retentionDays <= OSGetTime();
-}
-
-static void RemoveOldLogFiles() {
-    auto dir = Storage::OpenDir(LOG_FILE_DIRECTORY);
-    if (!dir) {
-        return;
-    }
-
-    while (auto nodeInfo = dir->read()) {
-        if (!IsValidLogFile(*nodeInfo)) {
-            continue;
-        }
-        if (!ShouldDeleteLogFile(nodeInfo->tick)) {
-            continue;
-        }
-
-        wchar_t logFilePath[48];
-        swprintf(logFilePath, sizeof(logFilePath), LOG_FILE_DIRECTORY L"/%ls", nodeInfo->name);
-
-        if (!Storage::Remove(logFilePath, true)) {
-            SP_LOG("Failed to remove the log file '%ls'!", logFilePath);
-        }
-    }
-}
-
 void Init() {
     startTime = OSGetTime();
-
-    RemoveOldLogFiles();
 
     OSCreateThread(&thread, Run, nullptr, stack + sizeof(stack), sizeof(stack), 31, 0);
     OSResumeThread(&thread);

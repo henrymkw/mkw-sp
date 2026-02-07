@@ -6,6 +6,7 @@ extern f32 g_speedModFactor;
 
 namespace Kart {
 
+// NOTE: This class inherits Disposer
 class KartObjectManager {
 public:
     KartObjectManager();
@@ -16,8 +17,12 @@ public:
     void beforeCalc();
     void calc();
 
-    static REPLACE void CreateInstance();
-    static KartObjectManager *Instance();
+    REPLACE static KartObjectManager *CreateInstance();
+    static KartObjectManager *REPLACED(CreateInstance)();
+
+    static KartObjectManager *Instance() {
+        return s_instance;
+    }
 
 private:
     u8 _00[0x20 - 0x04];

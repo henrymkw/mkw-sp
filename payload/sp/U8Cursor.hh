@@ -25,7 +25,7 @@ struct U8Node {
 
 class U8Cursor {
 public:
-    U8Cursor(std::span<const u8> buffer) : m_buffer(buffer){};
+    U8Cursor(std::span<const u8> buffer) : m_buffer(buffer) {};
 
     size_t position() const;
     void setPosition(size_t newPos);

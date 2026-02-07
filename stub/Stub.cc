@@ -1,5 +1,4 @@
 #include "Archive.hh"
-#include "Dolphin.hh"
 #include "LZMA.hh"
 
 #include <common/Console.hh>
@@ -72,13 +71,6 @@ static std::optional<LoaderEntryFunc> Run() {
     Console::Print("Initializing IOS...");
     IOS::Init();
     Console::Print(" done.\n");
-
-    {
-        IOS::Dolphin dolphin;
-        if (dolphin.ok()) {
-            dolphin.setSpeedLimit(800);
-        }
-    }
 
 #ifndef SP_CHANNEL
     Console::Print("Loading the embedded archive...");
@@ -230,11 +222,7 @@ static std::optional<LoaderEntryFunc> Run() {
     Console::Print("Decompressing the loader...");
     // Because the stub is never updated, we can't actually change this in production unfortunately.
     // We move it to prevent overlap as the payload gets arbitrarily large.
-#ifdef GDB_COMPATIBLE
-    u8 *loader = reinterpret_cast<u8 *>(0x80e00000);
-#else
     u8 *loader = reinterpret_cast<u8 *>(0x80b00000);
-#endif
     std::optional<size_t> loaderSize = LZMA::Decode(file->data, loader, file->size, 0xb00000);
     if (!loaderSize) {
         Console::Print(" failed!\n");

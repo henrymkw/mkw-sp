@@ -81,7 +81,7 @@ void Formatting_setState(Formatting *f, FontStates state, bool v) {
 //
 #define discard_color (0b0000000000001111 << 16)
 #define discard_flags (0b1111111111110000 << 16)
-#define color_set(x) discard_color | ((x)&0b1111)
+#define color_set(x) discard_color | ((x) & 0b1111)
 #define flags_add(x) (1 << ((x) + 4))
 
 #define mask_or_start '0'

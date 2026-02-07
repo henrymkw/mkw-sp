@@ -18,7 +18,6 @@ class KartBody;
 class KartBullet;
 class KartCollide;
 class KartMove;
-class KartRollback;
 class KartSettings;
 class KartState;
 class KartSub;
@@ -39,9 +38,7 @@ struct KartAccessor {
     KartMove *move;
     KartAction *action;
     KartCollide *collide;
-    u8 _34[0x3c - 0x34];
-    KartRollback *rollback; // Replaced
-    u8 _40[0x60 - 0x40];
+    u8 _40[0x60 - 0x34];
     KartBullet *bullet;
 };
 
@@ -63,7 +60,6 @@ public:
     bool isGhost() const;
     KartMove *getKartMove();
     KartCollide *getKartCollide();
-    const KartRollback *getKartRollback() const;
     u32 getPlayerId() const;
     f32 getInternalSpeed() const;
     s16 getTimeBeforeRespawn() const;

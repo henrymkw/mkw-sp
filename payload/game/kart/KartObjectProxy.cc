@@ -3,7 +3,6 @@
 #include "game/kart/KartCollide.hh"
 #include "game/kart/KartMove.hh"
 #include "game/kart/VehiclePhysics.hh"
-#include "game/sound/KartSound.hh"
 
 namespace Kart {
 
@@ -17,14 +16,6 @@ KartState *KartObjectProxy::getKartState() {
 
 Race::Driver *KartObjectProxy::getDriver() {
     return m_accessor->playerModel;
-}
-
-Sound::KartSound *KartObjectProxy::getKartSound() {
-    return m_accessor->sound;
-}
-
-const KartRollback *KartObjectProxy::getKartRollback() const {
-    return m_accessor->rollback;
 }
 
 s16 KartObjectProxy::getTimeBeforeRespawn() const {

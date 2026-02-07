@@ -1,20 +1,15 @@
 #pragma once
 
-#include "game/host_system/Scene.hh"
-#include "game/system/MultiDvdArchive.hh"
-#include "game/util/Registry.hh"
+#include <Common.hh>
 
 #include <egg/core/eggExpHeap.hh>
 #include <egg/core/eggTaskThread.hh>
 
-namespace System {
+#include "game/system/MultiDvdArchive.hh"
 
-enum class ResourceType {
-    Race = 0,
-    Course = 1,
-    Menu = 2,
-    Font = 3,
-};
+#include "game/util/Registry.hh"
+
+namespace System {
 
 class ResourceManager {
 public:
@@ -40,29 +35,20 @@ public:
     };
     static_assert(sizeof(CourseCache) == 0x24);
 
-    ResourceManager();
-
-    void createMenuHeaps(u32 count, s32 heapIdx);
-    void process();
-
-    void initGlobeHeap();
-    void deinitGlobeHeap();
+    static ResourceManager *Instance();
 
     DvdArchive *getMenuArchive(size_t idx);
     REPLACE u16 getMenuArchiveCount() const;
-    REPLACE MultiDvdArchive *loadCourse(Registry::Course courseId, EGG::Heap *heap,
-            bool splitScreen);
-    REPLACE MultiDvdArchive *loadMission(Registry::Course courseId, u32 missionId, EGG::Heap *heap,
-            bool splitScreen);
-
-    void *getFile(ResourceType i, const char *name, size_t *size);
-
-    static void OnCreateScene(SceneId sceneId);
-    static REPLACE ResourceManager *CreateInstance();
-    static ResourceManager *Instance();
 
     static const char *GetCourseFilename(Registry::Course course);
     static const char *CourseFilenames[67];
+
+    void process();
+
+    REPLACE MultiDvdArchive *loadCourse(Registry::Course courseId, EGG::Heap *heap,
+            bool splitScreen);
+
+    static ResourceManager *s_instance;
 
 private:
     struct JobContext {
@@ -76,12 +62,7 @@ private:
         EGG::Heap *fileHeap;
     };
 
-    void loadGlobe(u8 **dst);
-
-    REPLACE static void LoadGlobeTask(void *arg);
-
-    // Loads the archive setup in ResourceManager->m_jobContexts
-    static void DoLoadTask(void *contextIdx);
+    static void DoLoadTask(void *contextId);
 
     u8 _000[0x004 - 0x000];
     MultiDvdArchive **m_archives;
@@ -94,11 +75,7 @@ private:
     u8 _60d[0x614 - 0x60d];
     EGG::Heap *m_globeHeap;
     u8 _618[0x61c - 0x618];
-    u8 *m_globe;
-
-    static ResourceManager *s_instance;
 };
-
-static_assert(sizeof(ResourceManager) == 0x61c + sizeof(u8 *));
+static_assert(sizeof(ResourceManager) == 0x61c);
 
 } // namespace System

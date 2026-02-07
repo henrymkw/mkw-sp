@@ -50,11 +50,6 @@ static const char *getLanguageCode() {
     }
 }
 
-void MultiDvdArchive::setMission(u32 missionId) {
-    m_formats[1] = Format::Single;
-    snprintf(m_names[1], 0x80, "Race/MissionRun/mr%02d.szs", missionId);
-}
-
 void MultiDvdArchive::init() {
     REPLACED(init)();
 
@@ -83,8 +78,7 @@ MultiDvdArchive *MultiDvdArchive::Create(ResourceType type) {
         return new CourseMultiDvdArchive;
     case ResourceType::Menu:
         return new MenuMultiDvdArchive;
-    case ResourceType::Font:
-        return new FontMultiDvdArchive;
+    // maybe font will be added back later on
     default:
         MultiDvdArchive *archive = new MultiDvdArchive(2);
         archive->init();
@@ -138,27 +132,6 @@ void MenuMultiDvdArchive::init() {
 
     for (size_t i = 0; i < 6; i++) {
         m_formats[i] = Format::Double;
-    }
-}
-
-FontMultiDvdArchive::FontMultiDvdArchive() : MultiDvdArchive(3) {
-    init();
-}
-
-FontMultiDvdArchive::~FontMultiDvdArchive() = default;
-
-void FontMultiDvdArchive::init() {
-    if (REGION == REGION_K) {
-        snprintf(m_names[0], 0x80, "/Scene/UI/Font_K.szs");
-        snprintf(m_names[1], 0x80, "/Scene/UI/FontSP_R.szs");
-    } else {
-        snprintf(m_names[0], 0x80, "/Scene/UI/Font.szs");
-        snprintf(m_names[1], 0x80, "/Scene/UI/FontSP_K.szs");
-    }
-    snprintf(m_names[2], 0x80, "/Scene/UI/Font_Dif.szs");
-
-    for (size_t i = 0; i < 3; i++) {
-        m_formats[i] = Format::Single;
     }
 }
 

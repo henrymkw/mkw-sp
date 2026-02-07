@@ -1,5 +1,7 @@
 #pragma once
 
+#include <Common.hh>
+
 #include "game/system/GameScene.hh"
 
 namespace Scene {
@@ -10,7 +12,7 @@ public:
     ~RaceScene() override;
     void vf_28() override;
     void vf_2c() override;
-    REPLACE void calcSubsystems() override;
+    void calcSubsystems() override;
     void REPLACED(destroySubsystems)();
     REPLACE void destroySubsystems() override;
     void vf_38() override;

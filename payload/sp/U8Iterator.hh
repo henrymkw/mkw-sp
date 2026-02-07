@@ -52,7 +52,7 @@ public:
     U8Iterator(U8Cursor &cursor, std::vector<u8, HeapAllocator<u8>> *fileOut, u32 nodeCount,
             u32 stringTableStart)
         : m_nodeCount(nodeCount), m_stringTableStart(stringTableStart), m_cursor(cursor),
-          m_fileOut(fileOut){};
+          m_fileOut(fileOut) {};
 
     void reset(size_t startPos);
     // May be null, to just get the dir path.

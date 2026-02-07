@@ -3,8 +3,6 @@
 #include "sp/Exchange.hh"
 #include "sp/LZ77Decoder.hh"
 #include "sp/LZMADecoder.hh"
-#include "sp/ThumbnailManager.hh"
-#include "sp/WBZDecoder.hh"
 #include "sp/YAZDecoder.hh"
 
 #include <game/system/RaceConfig.hh>
@@ -41,25 +39,6 @@ std::optional<FileHandle> ReadOptStorage(const wchar_t *path,
 }
 
 static std::optional<FileHandle> Open(const char *path, std::optional<StorageType> storageType) {
-    auto *raceConfig = System::RaceConfig::Instance();
-
-    // This is called before the game is loaded, so the nullptr check is actually needed.
-    if (raceConfig != nullptr && raceConfig->m_spRace.pathReplacement.m_len != 0) {
-        auto courseId = raceConfig->raceScenario().courseId;
-        auto courseFilename = System::ResourceManager::GetCourseFilename(courseId);
-
-        char coursePath[128];
-        snprintf(coursePath, std::size(coursePath), "ro:/Race/Course/%s.szs", courseFilename);
-        if (!strcmp(path, coursePath)) {
-            // We remove the pathReplacement to prevent further unnecessary checks.
-            FixedString<64> pathReplacement = raceConfig->m_spRace.pathReplacement;
-            raceConfig->m_spRace.pathReplacement = "";
-
-            // Recursive call to allow for .arc.lzma or .wbz to be added on.
-            return Open(pathReplacement.c_str(), storageType);
-        }
-    }
-
     size_t length = strlen(path);
     std::string_view pathSv(path, length);
     if (pathSv.starts_with("ro:/") && pathSv.ends_with(".szs")) {
@@ -136,8 +115,6 @@ bool Load(const char *path, size_t srcMaxSize, u64 srcOffset, u8 **dst, size_t *
         decoder.reset(new (heap, 0x4) YAZDecoder(src, srcSize, heap));
     } else if (LZ77Decoder::CheckMagic(Bytes::Read<u32, std::endian::little>(src, 0x0))) {
         decoder.reset(new (heap, 0x4) LZ77Decoder(src, srcSize, heap));
-    } else if (WBZDecoder::CheckMagic(Bytes::Read<u64, std::endian::big>(src, 0x0))) {
-        decoder.reset(new (heap, 0x4) WBZDecoder(src, srcSize, heap));
     } else {
         decoder.reset(new (heap, 0x4) LZMADecoder(src, srcSize, heap));
     }

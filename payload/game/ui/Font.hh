@@ -1,7 +1,5 @@
 #pragma once
 
-#include "game/system/Mii.hh"
-
 #include <nw4r/lyt/lyt_textBox.hh>
 
 namespace UI {
@@ -22,7 +20,7 @@ static_assert(sizeof(GlyphRenderer) == 0x10);
 struct MessageInfo {
     s32 intVals[9];
     u32 messageIds[9];
-    const System::Mii *miis[9];
+    u8 _48[0x6c - 0x48];
     u8 licenseIds[9];
     u32 playerIds[9];
     const wchar_t *strings[9];

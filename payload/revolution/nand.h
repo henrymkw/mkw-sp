@@ -45,6 +45,7 @@ static_assert(sizeof(NANDFileInfo) == 0x8c);
 s32 NANDPrivateCreate(const char *path, u8 perm, u8 attr);
 
 s32 NANDOpen(const char *path, NANDFileInfo *info, u8 accType);
+
 s32 NANDPrivateOpen(const char *path, NANDFileInfo *info, u8 accType);
 
 s32 NANDClose(NANDFileInfo *info);

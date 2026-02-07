@@ -36,5 +36,3 @@ typedef struct {
     u16 lastCharCode;
     u16 lastGlyph;
 } ut_ResFont;
-
-void ResFont_SetResource(ut_ResFont *self, const void *res);

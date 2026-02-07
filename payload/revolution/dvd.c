@@ -1,7 +1,5 @@
 #include "dvd.h"
 
-#include "dvdex.h"
-
 typedef struct {
     u8 isDir : 8;
     u32 stringOffset : 24;

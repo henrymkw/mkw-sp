@@ -1,33 +1,11 @@
 #include "eggSystem.h"
 
 #include <game/system/Console.h>
-#include <sp/Commands.h>
-#include <sp/ItemCommand.h>
-#include <sp/keyboard/Keyboard.h>
 
-// IOS KBD module is not supported on this platform
-static bool sConsoleInputUnavailable = false;
+void EGG_ProcessMeter_draw(void *processMeter) {
+    REPLACED(EGG_ProcessMeter_draw)(processMeter);
 
-void my_onBeginFrame(void * /* system */) {
-    Item_beginFrame();
-    if (sConsoleInputUnavailable) {
-        return;
-    }
-
-    if (!SP_IsConsoleInputInit()) {
-        if (SP_InitConsoleInput()) {
-            Commands_init();
-            SP_SetLineCallback(Commands_lineCallback);
-        } else {
-            // Do not try again
-            sConsoleInputUnavailable = true;
-            return;
-        }
-    }
-
-    SP_ProcessConsoleInput();
-    Console_calc();
+    // until the settings infrastructure and ui is implemented, we
+    // just have to comment/uncomment this line to toggle the in-game console.
+    // Console_draw();
 }
-
-PATCH_B(EGG_ConfigurationData_onBeginFrame, my_onBeginFrame);
-PATCH_B(EGG_ProcessMeter_draw + 0xa4, Console_draw);

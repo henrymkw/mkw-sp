@@ -114,10 +114,6 @@ void GlyphRenderer::setupColors(u32 formatId, u32 colorId) {
         return;
     }
 
-    auto *saveManager = System::SaveManager::Instance();
-    auto setting = saveManager->getSetting<SP::ClientSettings::Setting::ColorPalette>();
-    bool colorblind = setting == SP::ClientSettings::ColorPalette::Colorblind;
-
     auto *material = m_textBox->getMaterial();
     GXColor bgColor = GXColorS10ToGXColor(material->tevColors[0]);
     GXSetTevColor(GX_TEVREG1, bgColor);
@@ -157,56 +153,28 @@ void GlyphRenderer::setupColors(u32 formatId, u32 colorId) {
         formatColor = (GXColor){.r = 100, .g = 180, .b = 255, .a = 255};
         break;
     case ColorId::Player1:
-        if (colorblind) {
-            formatColor = (GXColor){.r = 240, .g = 228, .b = 66, .a = 255};
-        } else {
-            formatColor = (GXColor){.r = 255, .g = 255, .b = 0, .a = 255};
-        }
+        formatColor = (GXColor){.r = 255, .g = 255, .b = 0, .a = 255};
         break;
     case ColorId::Player2:
-        if (colorblind) {
-            formatColor = (GXColor){.r = 0, .g = 114, .b = 178, .a = 255};
-        } else {
-            formatColor = (GXColor){.r = 0, .g = 111, .b = 255, .a = 255};
-        }
+        formatColor = (GXColor){.r = 0, .g = 111, .b = 255, .a = 255};
         break;
     case ColorId::Player3:
-        if (colorblind) {
-            formatColor = (GXColor){.r = 213, .g = 94, .b = 0, .a = 255};
-        } else {
-            formatColor = (GXColor){.r = 255, .g = 0, .b = 0, .a = 255};
-        }
+        formatColor = (GXColor){.r = 255, .g = 0, .b = 0, .a = 255};
         break;
     case ColorId::Player4:
-        if (colorblind) {
-            formatColor = (GXColor){.r = 0, .g = 158, .b = 115, .a = 255};
-        } else {
-            formatColor = (GXColor){.r = 0, .g = 186, .b = 0, .a = 255};
-        }
+        formatColor = (GXColor){.r = 0, .g = 186, .b = 0, .a = 255};
         break;
     case ColorId::Red:
         formatColor = (GXColor){.r = 234, .g = 117, .b = 125, .a = 255};
         break;
     case ColorId::Green:
-        if (colorblind) {
-            formatColor = (GXColor){.r = 0, .g = 158, .b = 115, .a = 255};
-        } else {
-            formatColor = (GXColor){.r = 0, .g = 255, .b = 0, .a = 255};
-        }
+        formatColor = (GXColor){.r = 0, .g = 255, .b = 0, .a = 255};
         break;
     case ColorId::Blue:
-        if (colorblind) {
-            formatColor = (GXColor){.r = 0, .g = 114, .b = 178, .a = 255};
-        } else {
-            formatColor = (GXColor){.r = 0, .g = 170, .b = 255, .a = 255};
-        }
+        formatColor = (GXColor){.r = 0, .g = 170, .b = 255, .a = 255};
         break;
     case ColorId::Pink:
-        if (colorblind) {
-            formatColor = (GXColor){.r = 204, .g = 121, .b = 167, .a = 255};
-        } else {
-            formatColor = (GXColor){.r = 255, .g = 0, .b = 255, .a = 255};
-        }
+        formatColor = (GXColor){.r = 255, .g = 0, .b = 255, .a = 255};
         break;
     default:
         formatColor = (GXColor){.r = 255, .g = 255, .b = 255, .a = 255};

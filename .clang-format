@@ -18,7 +18,6 @@ AlwaysBreakAfterReturnType: None
 AlwaysBreakBeforeMultilineStrings: True
 AlwaysBreakTemplateDeclarations: Yes
 BinPackArguments: True
-BinPackParameters: True
 BitFieldColonSpacing: Both
 BreakBeforeBinaryOperators: None
 BreakBeforeBraces: Attach

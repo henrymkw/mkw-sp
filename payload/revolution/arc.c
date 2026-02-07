@@ -1,5 +1,8 @@
 #include "arc.h"
 
+#include <revolution.h>
+#include <string.h>
+
 typedef struct {
     u8 isDir : 8;
     u32 stringOffset : 24;

@@ -3,13 +3,11 @@
 #include "sp/storage/DVDStorage.hh"
 #include "sp/storage/FATStorage.hh"
 #include "sp/storage/NANDArchiveStorage.hh"
-#include "sp/storage/NetStorage.hh"
 
 #include <common/Bytes.hh>
 
 namespace SP::Storage {
 
-static std::optional<NetStorage> netStorage{};
 static std::optional<FATStorage> fatStorage{};
 static std::optional<NANDArchiveStorage> nandArchiveStorage{};
 static DVDStorage dvdStorage;
@@ -84,9 +82,6 @@ std::optional<NodeInfo> DirHandle::read() {
 }
 
 bool Init() {
-    if (!netStorage) {
-        netStorage.emplace();
-    }
     if (!fatStorage) {
         fatStorage.emplace();
     }
@@ -99,7 +94,6 @@ bool Init() {
     }
     if (!nandArchiveStorage->ok()) {
         nandArchiveStorage.reset();
-        return false;
     }
 
     return true;
@@ -107,8 +101,6 @@ bool Init() {
 
 IStorage *GetStorage(StorageType type) {
     switch (type) {
-    case StorageType::Net:
-        return &*netStorage;
     case StorageType::FAT:
         return &*fatStorage;
     case StorageType::NANDArchive:
@@ -123,13 +115,6 @@ IStorage *GetStorage(StorageType type) {
 template <typename R, typename... Args>
 R Dispatch(R (IStorage::*function)(Args... args), Args... args) {
     {
-        R result = ((*netStorage).*function)(args...);
-        if (result) {
-            return result;
-        }
-    }
-
-    {
         R result = ((*fatStorage).*function)(args...);
         if (result) {
             return result;
@@ -142,7 +127,6 @@ R Dispatch(R (IStorage::*function)(Args... args), Args... args) {
             return result;
         }
     }
-
     return (dvdStorage.*function)(args...);
 }
 
@@ -288,105 +272,6 @@ bool Remove(const wchar_t *path, bool allowNop) {
     assert(path);
 
     return Dispatch(&IStorage::remove, path, allowNop);
-}
-
-static std::optional<Throughputs> Benchmark(FileHandle file, void *buffer) {
-    for (u32 i = 0; i < 8; i++) {
-        u8 seed[hydro_random_SEEDBYTES] = {};
-        Bytes::Write<u32>(seed, 0, i);
-        memset(seed, i, sizeof(seed));
-        hydro_random_buf_deterministic(buffer, BENCHMARK_BUFFER_SIZE, seed);
-        if (!file.write(buffer, BENCHMARK_BUFFER_SIZE, i * BENCHMARK_BUFFER_SIZE)) {
-            return {};
-        }
-    }
-
-    {
-        u8 seed[hydro_random_SEEDBYTES] = {};
-        hydro_random_buf_deterministic(buffer, BENCHMARK_BUFFER_SIZE, seed);
-    }
-
-    Throughputs throughputs;
-    u32 sizes[] = {1024 * 1024, 128 * 1024, 16 * 1024, 2 * 1024};
-    for (u32 i = 0; i < std::size(sizes); i++) {
-        throughputs.sizes[i] = sizes[i];
-        u32 count = 8 * BENCHMARK_BUFFER_SIZE / sizes[i];
-
-        {
-            {
-                ScopeLock<NoInterrupts> lock;
-                benchmarkStatus = {sizes[i], BenchmarkStatus::Mode::Read};
-            }
-            OSTime startTime = OSGetTime();
-            for (u32 j = 0; j < count; j++) {
-                u8 seed[hydro_random_SEEDBYTES] = {};
-                Bytes::Write<u32>(seed, 0, i);
-                Bytes::Write<u32>(seed, 4, j);
-
-                u32 k;
-                hydro_random_buf_deterministic(&k, sizeof(k), seed);
-                k %= count;
-
-                if (!file.read(buffer, sizes[i], k * sizes[i])) {
-                    ScopeLock<NoInterrupts> lock;
-                    benchmarkStatus.reset();
-                    return {};
-                }
-            }
-            OSTime duration = OSGetTime() - startTime;
-            throughputs.read[i] = OSSecondsToTicks(UINT64_C(8) * BENCHMARK_BUFFER_SIZE) / duration;
-        }
-
-        {
-            {
-                ScopeLock<NoInterrupts> lock;
-                benchmarkStatus = {sizes[i], BenchmarkStatus::Mode::Write};
-            }
-            OSTime startTime = OSGetTime();
-            for (u32 j = 0; j < count; j++) {
-                u8 seed[hydro_random_SEEDBYTES] = {};
-                Bytes::Write<u32>(seed, 0, i);
-                Bytes::Write<u32>(seed, 4, j);
-
-                u32 k;
-                hydro_random_buf_deterministic(&k, sizeof(k), seed);
-                k %= count;
-
-                if (!file.write(buffer, sizes[i], k * sizes[i])) {
-                    ScopeLock<NoInterrupts> lock;
-                    benchmarkStatus.reset();
-                    return {};
-                }
-            }
-            OSTime duration = OSGetTime() - startTime;
-            throughputs.write[i] = OSSecondsToTicks(UINT64_C(8) * BENCHMARK_BUFFER_SIZE) / duration;
-        }
-    }
-
-    ScopeLock<NoInterrupts> lock;
-    benchmarkStatus.reset();
-    return throughputs;
-}
-
-std::optional<Throughputs> Benchmark(StorageType type, void *buffer) {
-    auto *storage = GetStorage(type);
-    if (!storage) {
-        return {};
-    }
-    auto file = storage->startBenchmark();
-    if (!file) {
-        return {};
-    }
-
-    auto result = Benchmark(std::move(*file), buffer);
-
-    storage->endBenchmark();
-
-    return result;
-}
-
-std::optional<BenchmarkStatus> GetBenchmarkStatus() {
-    return benchmarkStatus;
 }
 
 u32 GetMessageId(StorageType type) {

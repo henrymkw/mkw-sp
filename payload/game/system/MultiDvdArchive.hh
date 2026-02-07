@@ -4,7 +4,12 @@
 
 namespace System {
 
-enum class ResourceType;
+enum class ResourceType {
+    Race = 0,
+    Course = 1,
+    Menu = 2,
+    Font = 3,
+};
 
 class MultiDvdArchive {
 public:
@@ -24,8 +29,6 @@ public:
     void load(const char *path, EGG::Heap *archiveHeap, EGG::Heap *fileHeap, u32);
     void loadOther(MultiDvdArchive *other, EGG::Heap *heap);
 
-    void setMission(u32 missionId);
-
     DvdArchive &archive(u16 i);
     u16 count() const;
 
@@ -33,6 +36,7 @@ public:
     bool exists(const char *path);
 
     static REPLACE MultiDvdArchive *Create(ResourceType type);
+    static MultiDvdArchive *REPLACED(Create)(ResourceType type);
 
 protected:
     DvdArchive *m_archives;
@@ -62,13 +66,6 @@ class MenuMultiDvdArchive : public MultiDvdArchive {
 public:
     MenuMultiDvdArchive();
     ~MenuMultiDvdArchive() override;
-    void init() override;
-};
-
-class FontMultiDvdArchive : public MultiDvdArchive {
-public:
-    FontMultiDvdArchive();
-    ~FontMultiDvdArchive() override;
     void init() override;
 };
 

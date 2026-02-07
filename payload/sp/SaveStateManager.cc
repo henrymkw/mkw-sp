@@ -5,6 +5,8 @@ extern "C" {
 }
 #include <tuple>
 
+#include "game/item/ItemDirector.hh"
+
 namespace SP {
 
 SaveStateManager *SaveStateManager::s_instance = nullptr;
@@ -31,7 +33,7 @@ auto SaveStateManager::GetKartState() {
     auto kartObject = kartObjectManager->object(0);
     auto physics = kartObject->getVehiclePhysics();
 
-    auto item = s_itemDirector->m_kartItems;
+    auto item = Item::ItemDirector::Instance()->getKartItem();
 
     return std::make_tuple(kartObject->m_accessor, physics, item);
 }
@@ -56,17 +58,17 @@ void SaveStateManager::processInput(bool isPressed) {
             return;
         }
 
-        if (m_framesHeld >= 60) {
+        if (m_framesHeld <= 30 && m_kartSaveState.has_value()) {
             SP_LOG("Reloading!");
             reload();
         } else {
-            SP_LOG("Saved!");
+            SP_LOG("Saving!");
             save();
-        };
+        }
 
         m_framesHeld = 0;
     } else if (m_framesHeld != 255) {
-        m_framesHeld += 1;
+        m_framesHeld++;
     }
 }
 

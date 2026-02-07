@@ -1,5 +1,7 @@
 #include "nand.h"
 
+#include <revolution.h>
+
 BOOL nandIsInitialized(void);
 
 s32 nandMove(const char *path, const char *destDir, void *callback, BOOL async, BOOL private);

@@ -7,6 +7,10 @@
 #include <stddef.h>
 #include <stdint.h>
 
+// common values through the game
+#define MAX_PLAYER_COUNT 12
+#define INVALID_AID 0xff
+
 #define SP_DEBUG_LEVEL_NONE (0 << 0)
 #define SP_DEBUG_STACK_RANDOMIZE (1 << 0)
 #define SP_DEBUG_LEVEL SP_DEBUG_LEVEL_NONE
@@ -111,7 +115,7 @@ __attribute__((format(printf, 1, 2))) static inline void CheckFormat(const char 
         OSReport("[" __FILE_NAME__ ":" SP_TOSTRING2(__LINE__) "] " m "\n", ##__VA_ARGS__); \
     } while (0)
 
-#define ROUND_UP(n, a) (((uintptr_t)(n) + (a)-1) & ~((a)-1))
+#define ROUND_UP(n, a) (((uintptr_t)(n) + (a) - 1) & ~((a) - 1))
 #define ROUND_DOWN(n, a) ((uintptr_t)(n) & ~(a - 1))
 
 enum {

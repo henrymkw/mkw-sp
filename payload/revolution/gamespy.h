@@ -1,0 +1,15 @@
+#pragma once
+
+#include "gamespy/darray.h"
+#include "gamespy/gp/gp.h"
+#include "gamespy/gt2/gt2.h"
+#include "gamespy/gt2/gt2Callback.h"
+#include "gamespy/gt2/gt2Connection.h"
+#include "gamespy/gt2/gt2Main.h"
+#include "gamespy/gt2/gt2Message.h"
+#include "gamespy/gt2/gt2Socket.h"
+#include "gamespy/hashtable.h"
+#include "gamespy/natneg/natify.h"
+#include "gamespy/natneg/natneg.h"
+#include "gamespy/qr2/qr2.h"
+#include "gamespy/qr2/qr2Main.h"

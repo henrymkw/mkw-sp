@@ -7,14 +7,11 @@
 #pragma once
 
 #include "KartBoost.hh"
+#include "KartItem.hh"
 #include "KartMove.hh"
 #include "KartObjectManager.hh"
 #include "KartTire.hh"
 #include "VehiclePhysics.hh"
-
-extern "C" {
-#include "game/item/ItemDirector.h"
-}
 
 namespace Kart {
 
@@ -54,6 +51,11 @@ private:
     // KartMove
     f32 m_internalSpeed;
     PODKartBoost m_boostState;
+    Vec3 m_up;
+    Vec3 m_dir;
+
+    // KartState
+    u32 m_airtime;
 
     MinifiedWheelPhysics m_wheelPhysics[4];
 

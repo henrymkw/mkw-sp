@@ -35,5 +35,5 @@ typedef struct {
 
 extern EGGTSystem sRKSystem;
 
-void EGG_ConfigurationData_onBeginFrame(void *system);
-void EGG_ProcessMeter_draw(void *);
+REPLACE void EGG_ProcessMeter_draw(void *processMeter);
+void REPLACED(EGG_ProcessMeter_draw)(void *processMeter);

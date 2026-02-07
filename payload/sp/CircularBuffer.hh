@@ -47,6 +47,21 @@ public:
         return true;
     }
 
+    bool push_front(const T &&val) {
+        if (full()) {
+            return false;
+        }
+        new (&m_vals[m_front = ((m_front - 1 + N) % N)]) T(val);
+        m_count++;
+        return true;
+    }
+
+    void pop_back() {
+        // TODO: check for empty
+        std::destroy_at(std::launder(reinterpret_cast<T *>(&m_vals[(m_front + m_count - 1) % N])));
+        m_count--;
+    }
+
     void pop_front() {
         std::destroy_at(std::launder(reinterpret_cast<T *>(&m_vals[m_front])));
         m_front = (m_front + 1) % N;

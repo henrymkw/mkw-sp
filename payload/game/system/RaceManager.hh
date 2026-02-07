@@ -1,86 +1,60 @@
 #pragma once
 
-#include "game/system/CourseMap.hh"
-#include "game/system/InputManager.hh"
-#include "game/util/Random.hh"
+#include <Common.hh>
 
-#include <common/TVec3.hh>
+#include "game/system/InputManager.hh"
 
 namespace System {
 
 class RaceManager {
 public:
+    enum class RaceState {
+        IntroCamera = 0,
+        Countdown = 1,
+        Racing = 2,
+        Finished = 3,
+        FinishedTimeAttack = 4,
+    };
     class Player {
     public:
-        u8 rank() const;
-        u16 battleScore() const;
-        u8 maxLap() const;
-        bool hasFinished() const;
         PadProxy *padProxy();
-        void setExtraGhostPadProxy();
 
     private:
+        REPLACE void calc();
+        void REPLACED(calc)();
+
         u8 _00[0x08 - 0x00];
         u8 m_playerId;
-        u8 _09[0x20 - 0x09];
-        u8 m_rank;
-        u8 _21[0x22 - 0x21];
-        u16 m_battleScore;
-        u8 _24[0x26 - 0x24];
-        u8 m_maxLap;
-        u8 _27[0x38 - 0x27];
-        u32 _pad0 : 30;
-        bool m_hasFinished : 1;
-        u32 _pad1 : 1;
-        u8 _3c[0x48 - 0x3c];
+        u8 _09[0x48 - 0x09];
         PadProxy *m_padProxy;
         u8 _4c[0x54 - 0x4c];
     };
     static_assert(sizeof(Player) == 0x54);
 
-    enum class Stage {
-        Sync,
-        Countdown,
-        Race,
-        // ...
-    };
-
-    Util::Random *dynamicRandom();
     Player *player(u32 playerId);
-    u32 time() const;
-    bool hasReachedStage(Stage stage) const;
-    MapdataKartPoint *REPLACED(getKartPoint)(u32 playerId);
-    REPLACE MapdataKartPoint *getKartPoint(u32 playerId);
-    void REPLACED(getStartTransform)(Vec3 *pos, Vec3 *rot, u32 playerId);
-    REPLACE void getStartTransform(Vec3 *pos, Vec3 *rot, u32 playerId);
-    void REPLACED(calc)();
-    REPLACE void calc();
-    void REPLACED(endPlayerRace)(u32 playerId);
-    REPLACE void endPlayerRace(u32 playerId);
 
-    static REPLACE RaceManager *CreateInstance();
     static RaceManager *Instance();
-    static u8 GetLapCount();
 
 private:
-    RaceManager();
+    // CreateInstance() is hooked to set the s_instance pointer
+    static REPLACE RaceManager *CreateInstance();
+    static RaceManager *REPLACED(CreateInstance)();
 
-    u8 _00[0x04 - 0x00];
-    Util::Random *m_dynamicRandom;
-    Util::Random *m_staticRandom;
+    REPLACE void calc();
+    void REPLACED(calc)();
+
+    u8 _00[0x0c - 0x00];
     Player **m_players;
-    u8 _10[0x20 - 0x10];
-    u32 m_time;
-    u8 m_battleKartPointStart;
-    u8 _25[0x2d - 0x25];
+    u8 _10[0x28 - 0x10];
+    RaceState m_state;
+    bool m_introWasSkipped;
     bool m_spectatorMode;
+    bool m_canCountdownStart;
+    bool m_cutSceneMode;
+    bool m_lapCountingIsEnabled;
+    u8 _31[0x4c - 0x31];
 
 public:
-    bool m_canStartCountdown;
-
-private:
-    u8 _2e[0x4c - 0x2f];
-
     static RaceManager *s_instance;
 };
 static_assert(sizeof(RaceManager) == 0x4c);
