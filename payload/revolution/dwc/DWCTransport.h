@@ -1,9 +1,8 @@
 #pragma once
 
 #include <Common.h>
-#include <revolution.h>
 
-#include <revolution/gamespy/gt2/gt2.h>
+#include <revolution.h>
 
 typedef void (*UserSendCallback)(u32 size, u8 aid);
 typedef void (*UserRecvCallback)(u8 aid, u8 *recvBuffer, u32 size);
@@ -24,17 +23,10 @@ typedef struct {
 } DWCTransport;
 static_assert(sizeof(DWCTransport) == 0x818);
 
-// added
-typedef enum {
-    MKW_SERVER_MSG_TYPE_SVR_ADDR = 0x1,
-} MKWServerMessageType;
-
 bool DWC_SendUnreliable(u8 aid, void *data, u32 size);
 
 REPLACE void DWCi_TransportProcess();
 
-// experimental patch to set the callback to a function that splits up packets, then calls
-// the original callback
 REPLACE bool DWC_SetUserRecvCallback(UserRecvCallback callback);
 
 REPLACE BOOL DWCi_GT2UnrecognizedMessageCallback(GT2Socket socket, u32 ip, u16 port, u8 *message,

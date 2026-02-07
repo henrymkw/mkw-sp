@@ -14,12 +14,12 @@ void tryGetMKWServerAddress() {
 
     SOSockAddrIn addr;
     addr.len = sizeof(SOSockAddrIn);
-    // atm too lazy to dns resolve the address
     addr.family = 2;
     addr.port = 27900;
 #ifdef LOCAL_MKW_SERVER
     addr.addr.addr = 0x7F000001;
 #else
+    // TODO: resolve the address
     addr.addr.addr = 0x607e6b90;
 #endif
 

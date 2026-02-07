@@ -2,8 +2,6 @@
 
 #include <Common.h>
 
-#include <revolution.h>
-
 typedef enum {
     DWC_ERROR_NONE = 0x0,
 } DWCError;

@@ -46,10 +46,6 @@ void DvdArchive::loadOther(DvdArchive *other, EGG::Heap *) { // gets called seco
     other->clear();
 }
 
-void *DvdArchive::getFile(const char *path, size_t *size) {
-    return REPLACED(getFile)(path, size);
-}
-
 void *DvdArchive::buffer() const {
     return m_archiveBuffer;
 }

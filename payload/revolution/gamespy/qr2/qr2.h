@@ -12,7 +12,6 @@
 
 typedef struct QR2Implementation *qr2;
 
-// gets called when leaving a froom, used to reset mkw-server related globals (server addr, has
-// addrs?, etc)
+// gets called when leaving a froom, used to reset mkw-server related globals
 REPLACE void qr2_shutdown(qr2 qr2);
 void REPLACED(qr2_shutdown)(qr2 qr2);

@@ -1,16 +1,17 @@
+/*
+ * Credits:
+ * - CLF78: Midnight-Variety-Pack, licensed under the MPL license. See license in
+ * licenses/Midnight-Variety-Pack.
+ *
+ */
+
 #pragma once
-// Credits: CLF78 OpenPayload and Midnight-Variety-Pack
 
 #include <Common.h>
-#include <revolution.h>
-#include <revolution/dwc/DWCError.h>
-#include <revolution/dwc/DWCFriend.h>
-#include <revolution/dwc/DWCNode.h>
 
-#include <revolution/gamespy/gt2/gt2.h>
+#include <revolution.h>
 #include <revolution/gamespy/gt2/gt2Callback.h>
 #include <revolution/gamespy/qr2/qr2.h>
-#include <revolution/gamespy/qr2/qr2Main.h>
 
 typedef enum {
     DWC_MATCH_STATE_INIT,
@@ -278,17 +279,12 @@ typedef struct {
 } DWCMatch;
 static_assert(sizeof(DWCMatch) == 0x8c0);
 
-REPLACE BOOL DWCi_ProcessRecvMatchCommand(DWCMatchCommandType command, s32 profileId, u32 publicIp,
+BOOL DWCi_ProcessRecvMatchCommand(DWCMatchCommandType command, s32 profileId, u32 publicIp,
         u16 publicPort, void *data, s32 dataLen);
-BOOL REPLACED(DWCi_ProcessRecvMatchCommand)(DWCMatchCommandType command, s32 profileId,
-        u32 publicIp, u16 publicPort, void *data, s32 dataLen);
 
-s32 REPLACED(DWCi_SendMatchCommand)(DWCMatchCommandType command, s32 profileId, u32 publicIp,
-        u16 publicPort, void *commandData, s32 dataLen);
-REPLACE s32 DWCi_SendMatchCommand(DWCMatchCommandType command, s32 profileId, u32 publicIp,
-        u16 publicPort, void *commandData, s32 dataLen);
+s32 DWCi_SendMatchCommand(DWCMatchCommandType command, s32 profileId, u32 publicIp, u16 publicPort,
+        void *commandData, s32 dataLen);
 
-REPLACE s32 DWCi_SendResvCommand(s32 profileId, s32 delay);
-s32 REPLACED(DWCi_SendResvCommand)(s32 profileId, s32 delay);
+s32 DWCi_SendResvCommand(s32 profileId, s32 delay);
 
 extern DWCMatch *s_dwcMatch;

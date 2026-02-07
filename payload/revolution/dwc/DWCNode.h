@@ -1,5 +1,11 @@
+/*
+ * Credits:
+ * - CLF78: Midnight-Variety-Pack, licensed under the MPL license. See license in
+ * licenses/Midnight-Variety-Pack.
+ *
+ */
+
 #pragma once
-// Credits: CLF78 OpenPayload and Midnight-Variety-Pack
 
 #include <Common.h>
 

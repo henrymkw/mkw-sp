@@ -19,14 +19,10 @@ public:
 
     REPLACE void load(const char *path, EGG::Heap *archiveHeap, bool isCompressed, s8 align,
             EGG::Heap *fileHeap, u32);
-    void REPLACED(load)(const char *path, EGG::Heap *archiveHeap, bool isCompressed, s8 align,
-            EGG::Heap *fileHeap, u32);
 
     REPLACE void loadOther(DvdArchive *other, EGG::Heap *);
-    void REPLACED(loadOther)(DvdArchive *other, EGG::Heap *);
 
-    void *REPLACED(getFile)(const char *path, size_t *size);
-    REPLACE void *getFile(const char *path, size_t *size);
+    void *getFile(const char *path, size_t *size);
 
     void *buffer() const;
     size_t size() const;

@@ -99,6 +99,7 @@ LANGUAGES = [
     'U', # English (NTSC)
     'N', # Dutch
 ]
+
 HUD_LANGUAGES = {
     'E': 'E',
     'F': 'F',
@@ -113,60 +114,9 @@ HUD_LANGUAGES = {
     'N': 'N',
 }
 
-
 asset_in_files = {
     os.path.join('Scene', 'UI', 'CrashSP.arc.lzma'): sorted(glob.glob("fatal/**/*.*", root_dir="assets", recursive=True)),
 }
-for language in LANGUAGES:
-    hud_language = HUD_LANGUAGES[language]
-    asset_in_files[os.path.join('Scene', 'UI', f'AwardSP_{language}.arc.lzma')] = [
-        os.path.join('message', f'Common_{language}.bmg.json5'),
-        os.path.join('message', f'Menu_{language}.bmg.json5'),
-        os.path.join('message', f'Race_{language}.bmg.json5'),
-    ]
-    asset_in_files[os.path.join('Scene', 'UI', f'ChannelSP_{language}.arc.lzma')] = [
-        os.path.join('message', f'Common_{language}.bmg.json5'),
-        os.path.join('message', f'Menu_{language}.bmg.json5'),
-    ]
-    asset_in_files[os.path.join('Scene', 'UI', f'GlobeSP_{language}.arc.lzma')] = [
-        os.path.join('message', f'Common_{language}.bmg.json5'),
-        os.path.join('message', f'Menu_{language}.bmg.json5'),
-    ]
-    asset_in_files[os.path.join('Scene', 'UI', f'MenuMultiSP_{language}.arc.lzma')] = [
-        os.path.join('message', f'Common_{language}.bmg.json5'),
-        os.path.join('message', f'Menu_{language}.bmg.json5'),
-    ]
-    asset_in_files[os.path.join('Scene', 'UI', f'MenuOtherSP_{language}.arc.lzma')] = [
-        os.path.join('message', f'Common_{language}.bmg.json5'),
-        os.path.join('message', f'Menu_{language}.bmg.json5'),
-    ]
-    asset_in_files[os.path.join('Scene', 'UI', f'MenuSingleSP_{language}.arc.lzma')] = [
-        os.path.join('message', f'Common_{language}.bmg.json5'),
-        os.path.join('message', f'Menu_{language}.bmg.json5'),
-    ]
-    asset_in_files[os.path.join('Scene', 'UI', f'RaceSP_{language}.arc.lzma')] = [
-        os.path.join('game_image', 'timg', f'tt_speed_{hud_language}.tpl'),
-        os.path.join('message', f'Common_{language}.bmg.json5'),
-        os.path.join('message', f'Menu_{language}.bmg.json5'),
-        os.path.join('message', f'Race_{language}.bmg.json5'),
-    ]
-    if hud_language != 'E':
-        asset_in_files[os.path.join('Scene', 'UI', f'RaceSP_{language}.arc.lzma')] += [
-            os.path.join('game_image', 'timg', f'tt_lap_{hud_language}.tpl'),
-            os.path.join('game_image', 'timg', f'tt_lap_{hud_language}_lap1.tpl'),
-            os.path.join('game_image', 'timg', f'tt_lap_{hud_language}_lap2.tpl'),
-            os.path.join('game_image', 'timg', f'tt_lap_{hud_language}_lap3.tpl'),
-            os.path.join('game_image', 'timg', f'tt_time_{hud_language}.tpl'),
-        ]
-        for i in range(12):
-            for base in ['tt_position_no_st_64x64', 'tt_multi_position_no_st_64x64']:
-                asset_in_files[os.path.join('Scene', 'UI', f'RaceSP_{language}.arc.lzma')] += [
-                    os.path.join('game_image', 'timg', f'{base}_{hud_language}_{i + 1:02d}.tpl')
-                ]
-    asset_in_files[os.path.join('Scene', 'UI', f'TitleSP_{language}.arc.lzma')] = [
-        os.path.join('message', f'Common_{language}.bmg.json5'),
-        os.path.join('message', f'Menu_{language}.bmg.json5'),
-    ]
 asset_out_files = {target: [] for target in asset_in_files}
 for target in asset_in_files:
     for in_file in asset_in_files[target]:

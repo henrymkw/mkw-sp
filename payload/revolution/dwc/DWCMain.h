@@ -1,11 +1,9 @@
 #pragma once
 
 #include <Common.h>
+
 #include <revolution.h>
-
-#include <revolution/dwc/DWCMain.h>
 #include <revolution/dwc/DWCNode.h>
-
 #include <revolution/gamespy/gt2/gt2.h>
 
 typedef enum {
@@ -16,8 +14,7 @@ typedef enum {
     DWC_STATE_CONNECTED_TO_PEERS = 0x6,
 } DWCState;
 
-REPLACE GT2Connection DWCi_GetGT2ConnectionByProfileID(s32 profileId);
-GT2Connection REPLACED(DWCi_GetGT2ConnectionByProfileID)(s32 profileId);
+GT2Connection DWCi_GetGT2ConnectionByProfileID(s32 profileId);
 
 typedef struct {
     GT2Socket socket;
