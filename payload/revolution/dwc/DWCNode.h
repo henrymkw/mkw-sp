@@ -1,4 +1,5 @@
 #pragma once
+// Credits: CLF78 OpenPayload and Midnight-Variety-Pack
 
 #include <Common.h>
 

@@ -1,7 +1,5 @@
 #include "qr2.h"
 
-#include <revolution/dwc/DWCTransport.h>
-
 #include <sp/net/MKW-Server.h>
 
 void qr2_shutdown(qr2 qr2) {

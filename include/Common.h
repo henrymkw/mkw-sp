@@ -29,6 +29,8 @@ enum {
 #endif
 
 typedef int BOOL;
+#define TRUE 1
+#define FALSE 0
 
 typedef int8_t s8;
 typedef int16_t s16;

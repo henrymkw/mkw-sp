@@ -40,8 +40,7 @@ private:
     static REPLACE RaceManager *CreateInstance();
     static RaceManager *REPLACED(CreateInstance)();
 
-    REPLACE void calc();
-    void REPLACED(calc)();
+    void calc();
 
     u8 _00[0x0c - 0x00];
     Player **m_players;

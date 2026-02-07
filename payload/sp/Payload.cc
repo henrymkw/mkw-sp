@@ -3,20 +3,21 @@ extern "C" {
 }
 
 extern "C" {
+#include "sp/Host.h"
 #include "sp/Patcher.h"
+#include "sp/storage/Usb.h"
 }
 #include "sp/Rel.hh"
+#include "sp/Time.hh"
 #include "sp/storage/DecompLoader.hh"
 #include "sp/storage/LogFile.hh"
 #include "sp/storage/Storage.hh"
-#include "sp/Time.hh"
 
 #include <common/Console.hh>
 #include <common/VI.hh>
 extern "C" {
+
 #include <revolution.h>
-#include "sp/storage/Usb.h"
-#include "sp/Host.h"
 }
 
 #include <cstring>

@@ -3,6 +3,8 @@
 #include <Common.h>
 #include <revolution.h>
 
+#include <revolution/gamespy/gt2/gt2.h>
+
 typedef void (*UserSendCallback)(u32 size, u8 aid);
 typedef void (*UserRecvCallback)(u8 aid, u8 *recvBuffer, u32 size);
 
@@ -35,9 +37,9 @@ REPLACE void DWCi_TransportProcess();
 // the original callback
 REPLACE bool DWC_SetUserRecvCallback(UserRecvCallback callback);
 
-REPLACE GT2Bool DWCi_GT2UnrecognizedMessageCallback(GT2Socket socket, u32 ip, u16 port, u8 *message,
+REPLACE BOOL DWCi_GT2UnrecognizedMessageCallback(GT2Socket socket, u32 ip, u16 port, u8 *message,
         s32 len);
-GT2Bool REPLACED(DWCi_GT2UnrecognizedMessageCallback)(GT2Socket socket, u32 ip, u16 port,
+BOOL REPLACED(DWCi_GT2UnrecognizedMessageCallback)(GT2Socket socket, u32 ip, u16 port,
         u8 *message, s32 len);
 
 extern DWCTransport *s_dwcTransport;

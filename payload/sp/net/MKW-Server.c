@@ -1,5 +1,7 @@
 #include "MKW-Server.h"
 
+#include <revolution/dwc/DWCMatch.h>
+
 #include <string.h>
 
 bool hasMKWServerAddress = false;

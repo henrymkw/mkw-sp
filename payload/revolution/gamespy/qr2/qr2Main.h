@@ -1,7 +1,7 @@
 #pragma once
 
 #include <Common.h>
-#include <revolution.h>
+#include <revolution/so/so.h>
 
 typedef struct QR2Implementation {
     SOCKET hbsock;

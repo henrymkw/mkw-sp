@@ -21,5 +21,4 @@
 #include "revolution/es.h"
 
 // These must come after os.h and so.h since they depend on types from those headers
-#include "revolution/gamespy.h"
 #include "revolution/dwc.h"

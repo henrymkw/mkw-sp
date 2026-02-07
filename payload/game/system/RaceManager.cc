@@ -19,7 +19,6 @@ PadProxy *RaceManager::Player::padProxy() {
 void RaceManager::Player::calc() {
     REPLACED(calc)();
 
-
     // Check if user wants to load state, rotate items, or use pow.
     auto *raceConfig = System::RaceConfig::Instance();
     auto gameMode = raceConfig->raceScenario().gameMode;
@@ -66,16 +65,6 @@ void RaceManager::Player::calc() {
 
 RaceManager::Player *RaceManager::player(u32 playerId) {
     return m_players[playerId];
-}
-
-void RaceManager::calc() {
-    REPLACED(calc)();
-    if (m_canCountdownStart) {
-    }
-
-    if (m_state == RaceState::Countdown) {
-
-    }
 }
 
 RaceManager *RaceManager::CreateInstance() {

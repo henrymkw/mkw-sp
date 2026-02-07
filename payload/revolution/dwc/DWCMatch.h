@@ -1,4 +1,5 @@
 #pragma once
+// Credits: CLF78 OpenPayload and Midnight-Variety-Pack
 
 #include <Common.h>
 #include <revolution.h>
@@ -6,8 +7,10 @@
 #include <revolution/dwc/DWCFriend.h>
 #include <revolution/dwc/DWCNode.h>
 
-// Forward declaration to avoid circular dependency
-typedef struct QR2Implementation *qr2;
+#include <revolution/gamespy/gt2/gt2.h>
+#include <revolution/gamespy/gt2/gt2Callback.h>
+#include <revolution/gamespy/qr2/qr2.h>
+#include <revolution/gamespy/qr2/qr2Main.h>
 
 typedef enum {
     DWC_MATCH_STATE_INIT,
@@ -162,7 +165,7 @@ typedef struct {
     u8 connectedOnceBefore;
     u8 _00e[0x010 - 0x00e];
 
-    qr2 qrec; // TODO header
+    qr2 qrec;
     u8 qr2MatchType;
     u8 qr2MatchTypeExt;
     u8 hostState;
@@ -190,7 +193,7 @@ typedef struct {
     u32 qr2IP;
     int qr2Reservation;
 
-    void *serverBrowser; // TODO header
+    void *serverBrowser;
     int serverBrowserUpdateFlag;
     u8 _6e4[0x6e8 - 0x6e4];
     OSTime serverBrowserUpdateTick;

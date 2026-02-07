@@ -6,6 +6,8 @@
 #include <revolution/dwc/DWCMain.h>
 #include <revolution/dwc/DWCNode.h>
 
+#include <revolution/gamespy/gt2/gt2.h>
+
 typedef enum {
     DWC_STATE_INIT = 0,
     DWC_STATE_LOGIN = 0x2,

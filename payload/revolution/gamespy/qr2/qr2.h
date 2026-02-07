@@ -5,9 +5,7 @@
 #pragma once
 
 #include <Common.h>
-#include <revolution.h>
-
-#include <revolution/so/so.h>
+#include <revolution/gamespy/qr2/qr2Main.h>
 
 #define QR_MAGIC_1 0xFE
 #define QR_MAGIC_2 0xFD
