@@ -2,10 +2,6 @@
 
 #include <sp/net/MKW-Server.h>
 
-void DWCi_TransportProcess() {
-    // do nothing
-}
-
 BOOL DWCi_GT2UnrecognizedMessageCallback(GT2Socket socket, u32 ip, u16 port, u8 *message, s32 len) {
     if (message == NULL || len == 0) {
         SP_LOG("GT2 Unrecognized : Null message or zero length.");
@@ -14,6 +10,15 @@ BOOL DWCi_GT2UnrecognizedMessageCallback(GT2Socket socket, u32 ip, u16 port, u8 
 
     MKWServerPacketType messageType = message[0];
     switch (messageType) {
+    case MKW_SERVER_RACE_PACKET:
+        if (s_dwcTransport == NULL || s_dwcTransport->userRecvCallback == NULL) {
+            return FALSE;
+        }
+
+        // the aid is in offset 0x3
+        u8 aid = message[3];
+        s_dwcTransport->userRecvCallback(aid, message, len);
+        return TRUE;
     case MKW_SERVER_COMBINED_RACE_PACKET:
         if (s_dwcTransport == NULL || s_dwcTransport->userRecvCallback == NULL) {
             return FALSE;

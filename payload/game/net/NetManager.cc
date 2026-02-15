@@ -7,6 +7,8 @@ extern "C" {
 
 #include <cstring>
 
+#include <game/system/GameScene.hh>
+
 #include <sp/net/CombinedRACEPacketHeader.hh>
 
 namespace Net {
@@ -19,12 +21,15 @@ NetManager *NetManager::construct(EGG::ExpHeap *heap) {
 void NetManager::connect() {
     REPLACED(connect)();
 
+    // Turning off the combined packets for now, commenting out code until settings are implemented
+    /*
     if (DWC_SetUserRecvCallback(processBufferedRACEPacketCB) == false) {
         SP_LOG("Failed to set buffered user receive callback");
     }
+    */
 }
 
-bool NetManager::isValidSendableAid(u8 aid) const {
+bool NetManager::canSendToAid(u8 aid) const {
     if ((((1 << aid) & m_matchMakingInfos[m_currMMInfo].availableAids) != 0) &&
             (aid != m_matchMakingInfos[m_currMMInfo].myAid)) {
         return true;
@@ -47,7 +52,7 @@ bool NetManager::hasFoundMatch() const {
 
 u32 NetManager::getRACEPacketSize(u8 aid) {
     u32 size = 0;
-    RacePacketHolder *holder = lastSentRACEBuffer(aid);
+    RacePacketHolder *holder = lastSentRaceBuffer(aid);
 
     for (u8 i = 0; i < 8; i++) {
         size += holder->getPacketHolder(i)->packetSize();
@@ -55,83 +60,47 @@ u32 NetManager::getRACEPacketSize(u8 aid) {
     return size;
 }
 
-void NetManager::formRacePacket() {
-    REPLACED(formRacePacket)();
-}
-
 void NetManager::sendRacePacket() {
-    OSTime timeSinceLastSendMs;
-
-    if (m_aidLastSentTo == INVALID_AID) {
-        timeSinceLastSendMs = MAX_TIME;
-    } else {
-        OSTime lastSentTime = m_timeOfLastSentRACE[m_aidLastSentTo];
-        if (lastSentTime == 0) {
-            timeSinceLastSendMs = MAX_TIME;
-        } else {
-            OSTime delta = OSGetTime() - lastSentTime;
-            timeSinceLastSendMs = OSTicksToMilliseconds(delta);
-        }
-    }
-
-    if (timeSinceLastSendMs <= 16) {
-        return;
-    }
-
-    u8 currentAid = m_aidLastSentTo;
-
+    // these get set once we send to mkw-server
+    bool sentSuccessfully = false;
+    OSTime sentTime = 0;
     for (u8 aid = 0; aid < MAX_PLAYER_COUNT; aid++) {
-        currentAid++;
-        if (currentAid >= MAX_PLAYER_COUNT) {
-            currentAid = 0;
-        }
-
-        if (!isValidSendableAid(currentAid)) {
+        if (!canSendToAid(aid)) {
             continue;
         }
 
-        PacketHolder<void> *outgoingPacket = m_outgoingRACEPacket[currentAid];
-
+        PacketHolder<void> *outgoingPacket = m_outgoingRACEPacket[aid];
         // patch the header for MKW server
         if (hasMKWServerAddress) {
             applyMKWServerHeader(reinterpret_cast<u8 *>(outgoingPacket->packet()),
                     m_matchMakingInfos[m_currMMInfo].myAid);
         }
 
-        bool sentSuccessfully = false;
-
         if (outgoingPacket->packetSize() != 0) {
             u32 crc32 = NETCalcCRC32(outgoingPacket->packet(), outgoingPacket->packetSize());
             Header *header = reinterpret_cast<Header *>(outgoingPacket->packet());
             header->crc32 = crc32;
 
-            bool sendResult = trySendRACEPacketToMKWServer(outgoingPacket->packet(),
-                    outgoingPacket->packetSize());
-
-            if (!sendResult) {
-                sendResult = DWC_SendUnreliable(currentAid, outgoingPacket->packet(),
-                        outgoingPacket->packetSize());
+            // we only want to send once a frame, the loop is mainly here to update the structs for
+            // other players.
+            if (!sentSuccessfully) {
+                sentSuccessfully =
+                        DWC_SendUnreliable(aid, reinterpret_cast<u8 *>(outgoingPacket->packet()),
+                                outgoingPacket->packetSize());
+                sentTime = OSGetTime();
             }
-
-            if (sendResult == true) {
-                OSTime lastSentTime = m_timeOfLastSentRACE[currentAid];
-
+            if (sentSuccessfully) {
+                OSTime lastSentTime = m_timeOfLastSentRACE[aid];
                 if (lastSentTime != 0) {
-                    OSTime delta = OSGetTime() - lastSentTime;
-                    m_timeBetweenSendingPackets[currentAid] = delta;
+                    OSTime delta = sentTime - lastSentTime;
+                    m_timeBetweenSendingPackets[aid] = delta;
                 }
 
-                m_aidLastSentTo = currentAid;
-                m_timeOfLastSentRACE[currentAid] = OSGetTime();
-
-                sentSuccessfully = true;
+                m_aidLastSentTo = aid;
+                m_timeOfLastSentRACE[aid] = sentTime;
             }
 
             outgoingPacket->reset();
-        }
-
-        if (sentSuccessfully) {
-            break;
         }
     }
 }

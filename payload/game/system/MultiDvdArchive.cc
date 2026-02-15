@@ -71,6 +71,11 @@ u16 MultiDvdArchive::count() const {
 }
 
 MultiDvdArchive *MultiDvdArchive::Create(ResourceType type) {
+    // the sp title and other assets occasionally load and I have no idea why. but it crashes the
+    // game with the current implementation. for now, just return after calling the original
+    // function so nothing loads
+    return REPLACED(Create)(type);
+
     switch (type) {
     case ResourceType::Race:
         return new RaceMultiDvdArchive;

@@ -32,7 +32,9 @@ SOCKET SOSocket(int pf, int type, int protocol);
 int SOClose(int s);
 
 // 0x801ed4a0
-int SOSendTo(int s, const void *buf, int len, int flags, SOSockAddrIn *sockTo);
+// patching the address here felt like lag starts improved, but I think that was a placebo
+REPLACE int SOSendTo(int s, const char *buf, int len, int flags, SOSockAddrIn *sockTo);
+int REPLACED(SOSendTo)(int s, const char *buf, int len, int flags, SOSockAddrIn *sockTo);
 
 // 0x801ed188
 int SOBind(int s, const void *sockAddr);

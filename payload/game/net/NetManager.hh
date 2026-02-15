@@ -34,6 +34,7 @@ public:
 
     // nearly byte-matched (regswap) so REPLACE is acceptable
     REPLACE void processRACEPacket(u8 aid, u8 *header, u32 size);
+    void REPLACED(processRACEPacket)(u8 aid, u8 *header, u32 size);
 
 private:
     enum class ConnectionState : u32 {
@@ -98,33 +99,37 @@ private:
     };
     static_assert(sizeof(MatchMakingInfo) == 0x58);
 
+    // 0x80657004
     REPLACE NetManager *construct(EGG::ExpHeap *heap);
     NetManager *REPLACED(construct)(EGG::ExpHeap *heap);
 
+    // 0x80658b9c
     // patch to set the UserRecvCallback to our function that splits packets
     REPLACE void connect();
     void REPLACED(connect)();
 
-    // Checks if the aid is in the room and that its not our aid.
-    // This same logic is in the base game (inlined) but don't know if a function exists.
-    bool isValidSendableAid(u8 aid) const;
+    // check that the aid isn't ours and the aid is in the room before sending a race packet
+    bool canSendToAid(u8 aid) const;
 
-    RacePacketHolder *getLastSentRACEPacket() {
-        return m_sendRACEPackets[m_lastSendIdx[m_aidLastSentTo]][m_aidLastSentTo];
+    u32 lastSendIdx(u8 aid) const {
+        return m_lastSendIdx[aid];
     }
 
-    RacePacketHolder *lastSentRACEBuffer(u8 aid) {
-        return m_sendRACEPackets[m_lastSendIdx[aid]][aid];
+    RacePacketHolder *lastSentRaceBuffer(u8 aid) {
+        return m_sendRacePackets[lastSendIdx(aid)][aid];
     }
 
+    // adds up the sizes in the header
     REPLACE u32 getRACEPacketSize(u8 aid);
 
+    // checks that my aid is unavailable and we have connected to someone
     REPLACE bool hasFoundMatch() const;
 
-    REPLACE void formRacePacket();
-    void REPLACED(formRacePacket)();
-
+    // 0x80657e30
+    // the patch patches the race packet. intention is for it to be called once a frame
     REPLACE void sendRacePacket();
+    // when settings are implemented, to turn mkw-server off, we just call the original function
+    void REPLACED(sendRacePacket)();
 
     // Two vtables
     void *m_vtable1; // offset 0xc is NetManager's dtor
@@ -139,10 +144,10 @@ private:
     RoomType m_roomType;
     VoteMatchMakingSuspended m_voteMMSuspension;
     // points to RACE packets to be sent, two per aid / 0xf0
-    RacePacketHolder *m_sendRACEPackets[2][MAX_PLAYER_COUNT];
+    RacePacketHolder *m_sendRacePackets[2][MAX_PLAYER_COUNT];
     // points to RACE packets to be recieved, two per aid / 0x150
     RacePacketHolder *m_recvRACEPackets[2][MAX_PLAYER_COUNT];
-    // The RACE packet to be sent, formed from m_sendRACEPackets, one per aid /
+    // The RACE packet to be sent, formed from m_sendRacePackets, one per aid /
     // 0x1b0
     PacketHolder<void> *m_outgoingRACEPacket[MAX_PLAYER_COUNT];
     OSTime m_timeOfLastSentRACE[MAX_PLAYER_COUNT];        // 0x1e0
@@ -166,7 +171,7 @@ private:
     u32 m_disconnectPenalty;
     s32 m_vr;
     s32 m_br;
-    u32 m_lastSendIdx[MAX_PLAYER_COUNT]; // idx of m_sendRACEPackets last sent per
+    u32 m_lastSendIdx[MAX_PLAYER_COUNT]; // idx of m_sendRacePackets last sent per
                                          // aid
     // idx of m_recvRACEPackets last recvieved per packet per aid
     u32 m_lastRecvIdx[MAX_PLAYER_COUNT][8];      // 0x279c

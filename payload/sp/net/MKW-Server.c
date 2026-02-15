@@ -6,6 +6,7 @@
 
 bool hasMKWServerAddress = false;
 bool hasSentMKWServerAddressRequest = false;
+SOSockAddrIn mkwServerAddr = {};
 
 void tryGetMKWServerAddress() {
     if (hasMKWServerAddress) {
@@ -18,6 +19,8 @@ void tryGetMKWServerAddress() {
     addr.port = 27900;
 #ifdef LOCAL_MKW_SERVER
     addr.addr.addr = 0x7F000001;
+#elif TEST_MKW_SERVER
+    addr.addr.addr = 0x327438d3; // test server
 #else
     // TODO: resolve the address
     addr.addr.addr = 0x607e6b90;
@@ -61,7 +64,7 @@ void resetMKWServerInfo() {
 }
 
 void applyMKWServerHeader(u8 *packet, u8 aid) {
-    packet[0] = 0xb; // magic
+    packet[0] = MKW_SERVER_RACE_PACKET; // magic
     packet[3] = aid;
 }
 
@@ -69,5 +72,9 @@ bool trySendRACEPacketToMKWServer(const void *data, u32 size) {
     if (!hasMKWServerAddress) {
         return false;
     }
-    return SOSendTo(s_dwcMatch->qrec->hbsock, data, size, 0, (void *)&mkwServerAddr);
+    bool result = SOSendTo(s_dwcMatch->qrec->hbsock, data, size, 0, (void *)&mkwServerAddr);
+    if (!result) {
+        SP_LOG("Failed to send to MKW Server!");
+    }
+    return result;
 }

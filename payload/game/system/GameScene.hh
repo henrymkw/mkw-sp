@@ -8,10 +8,12 @@ class GameScene : public Scene {
 public:
     GameScene(const char *name);
     ~GameScene() override;
+    // 0x8051b3c8
+    // currently just used to increment a timer frame timer, i am sure one exists in the base game
+    // but it wasnt easy to find. will be removed
     void REPLACED(calc)();
     REPLACE void calc() override;
-    void REPLACED(draw)();
-    REPLACE void draw() override;
+    void draw() override;
     void enter() override;
     void exit() override;
     void reinit() override;
@@ -33,9 +35,6 @@ public:
     static GameScene *Instance();
 
 private:
-    void REPLACED(setFramerate)(bool is30FPS);
-    REPLACE void setFramerate(bool is30FPS);
-
     u8 _0c70[0x0c94 - 0x0c70];
 
 public:

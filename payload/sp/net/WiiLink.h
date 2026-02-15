@@ -12,6 +12,8 @@
 #ifdef LOCAL_MKW_SERVER
 // nwfc.wiinoma.com points to localhost
 #define WWFC_DOMAIN "nwfc.wiinoma.com"
+#elif TEST_MKW_SERVER
+#define WWFC_DOMAIN "mkw-cs.xyz"
 #else
 #define WWFC_DOMAIN "mkw-server.xyz"
 #endif
@@ -183,6 +185,8 @@ typedef struct {
 static const RSAPublicKey PayloadPublicKey = {
     #ifdef LOCAL_MKW_SERVER
         #include <TESTIncludeRSAPublicPayloadKey.txt>
+    #elif TEST_MKW_SERVER
+        #include <TESTServerIncludeRSAPublicPayloadKey.txt>
     #else
         #include <PRODIncludeRSAPublicPayloadKey.txt>
     #endif

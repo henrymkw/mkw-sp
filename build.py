@@ -41,6 +41,7 @@ parser.add_argument("--dry", action="store_true")
 parser.add_argument("--ci", action="store_true")
 parser.add_argument("--debug", action="store_true")
 parser.add_argument("--local_mkw_server", action="store_true")
+parser.add_argument("--test_mkw_server", action="store_true")
 parser.add_argument("--asm", action="store_true", help="Generate assembly files (.s) alongside object files")
 args = parser.parse_args(our_argv)
 
@@ -294,6 +295,8 @@ if args.debug:
     common_ccflags += ['-g', '-O0']
 if args.local_mkw_server:
     common_cflags.append("-DLOCAL_MKW_SERVER")
+if args.test_mkw_server:
+    common_cflags.append("-DTEST_MKW_SERVER")
 
 target_cflags = {
     'stub': [
@@ -888,11 +891,10 @@ n.build(
     'phony',
     [
         'debug',
-        'test',
-        'release',
     ],
 )
 n.newline()
+n.default('debug')
 
 if args.dry:
     with open('build.ninja', 'w') as out_file:

@@ -198,6 +198,19 @@ enum class Vote : u8 {
     Random = 0xFF,
 };
 
+enum class Team {
+    Red = 0x00,
+    Blue = 0x01,
+    None = 0x02,
+};
+
+enum class EngineClass {
+    CC50 = 0x00,
+    CC100 = 0x01,
+    CC150 = 0x02,
+    Mirror = 0x03,
+};
+
 extern const Course OrderedCourses[0x20];
 
 } // namespace Registry

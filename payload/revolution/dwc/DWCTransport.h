@@ -23,7 +23,7 @@ typedef struct {
 } DWCTransport;
 static_assert(sizeof(DWCTransport) == 0x818);
 
-bool DWC_SendUnreliable(u8 aid, void *data, u32 size);
+bool DWC_SendUnreliable(u8 aid, u8 *data, u32 size);
 
 REPLACE void DWCi_TransportProcess();
 
