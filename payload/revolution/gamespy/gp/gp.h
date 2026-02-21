@@ -20,15 +20,7 @@ typedef struct {
     BOOL infoCachingBuddyAndBlockOnly; // 0x104
     BOOL simulation;                   // 0x108
     BOOL firewall;                     // 0x10C
-    char nick[31];                     // 0x110
-    char uniquenick[21];
-    char email[51];
-    char password[31];
-    int sessKey;
-    int userid;
-    int profileid;
-    int partnerID;
-    callback callbacks[6];
+    u8 _110[0x1f0 - 0x110];
     u32 cmSocket;
     int connectState;
     GPBuffer socketBuffer;
@@ -79,5 +71,11 @@ typedef struct {
     u32 quietModeFlags;
     u32 kaTransmit;
 } GPIConnection;
+static_assert(offsetof(GPIConnection, cmSocket) == 0x1f0);
+
+typedef GPIConnection *GPConnection;
 
 u32 gpProcess(GPIConnection *connection);
+
+bool gpiSendData(GPConnection *connection, s32 socket, const char *msg, s32 len, BOOL *closed, s32 *sent, char *id);
+

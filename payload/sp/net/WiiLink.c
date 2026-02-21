@@ -91,7 +91,8 @@ s32 HandleResponse() {
     }
 
     // Disable unnecessary patches
-    u32 patchMask = WWFC_PATCH_LEVEL_CRITICAL | WWFC_PATCH_LEVEL_SUPPORT;
+    u32 patchMask = WWFC_PATCH_LEVEL_CRITICAL | WWFC_PATCH_LEVEL_SUPPORT | WWFC_PATCH_LEVEL_BUGFIX |
+            WWFC_PATCH_LEVEL_PARITY | WWFC_PATCH_LEVEL_FEATURE;
 
     WWFCPatch *patch = (WWFCPatch *)((u8 *)s_payload + s_payload->info.patch_list_offset);
     WWFCPatch *patchesEnd = (WWFCPatch *)((u8 *)s_payload + s_payload->info.patch_list_end);
