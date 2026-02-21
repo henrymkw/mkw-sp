@@ -36,6 +36,10 @@ What has to be added to support the implementation?
 
 #### Server
 
+### Potential Issues
+
+What are the risks and potential pitfalls of this current plan? How will they be addressed?
+
 ## Testing
 
 How can testing be performed to verify correctness? What type of tests will be used?
