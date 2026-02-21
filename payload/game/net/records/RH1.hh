@@ -12,6 +12,14 @@ namespace Net {
 
 struct RH1Record {
     u32 elapsedTimeSinceRaceStart;
+    /* seed is used in two different ways:
+        1.  Used to determine when to start the countdown. When a player sends a RH1 record with
+            this set (non-zero), MiscPacketHandler::m_aidsWithRH1Seed gets set for that aid. When
+            every valid bit is set, MiscPacketHandler::isEveryoneInRace() returns true, causing the
+            countdown to start. The random part isn't used here
+        2.  Also used around (0x80609ecc, a RandomMatchingPage function), not sure what this does.
+            the random part is presumably used here.
+    */
     u32 seed; // random seed set from RaceConfig::Settings, MiscPacketHandler's bitfield
     Registry::Team p1Team : 16;
     Registry::Team p2Team : 16;
@@ -43,7 +51,8 @@ public:
         Registry::Character player1Character;
         Registry::Character player2Character;
         Registry::Course course;
-        u8 _18[0x20 - 0x18];
+        u8 _18[0x1c - 0x18];
+        u32 RH1Seed;
         u8 playerIdToAidMapping[12];
         u8 _2c[0x30 - 0x2c];
     };

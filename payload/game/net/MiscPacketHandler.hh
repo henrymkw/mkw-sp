@@ -32,7 +32,8 @@ private:
     // calls bellow functions as mentioned, but manages the start of a race also by making
     // decisions based off the timers of other players, voting to suspend/unsuspend match making
     // calls ItemHandler::update(), EventHandler::update(), and processLagFrames()
-    void updateAsRacer();
+    REPLACE void updateAsRacer();
+    void REPLACED(updateAsRacer)();
 
     // 0x80654d08
     // called by updateAsRacer(). only RH1 record gets created, both get exported to the send buffer
@@ -45,7 +46,8 @@ private:
     // 0x80654038
     // called by updateAsRacer() to begin the race countdown. the countdown can start once everyone
     // is in the race.
-    bool isEveryoneInRace() const;
+    REPLACE bool isEveryoneInRace() const;
+    bool REPLACED(isEveryoneInRace)() const;
 
     // 0x80654b00
     // tbd explanation, loops over recv RH1 records and compares other players lag frames with ours
@@ -74,7 +76,7 @@ private:
     u32 m_shouldStopAid;
     s16 m_myLagFrames;   // refers to frames that didnt get rendered due to lag, gets updated in
                          // processLagFrames()
-    s16 m_countDownTime; // set to 3000 ms,
+    s16 m_countdownTime; // set to 3000 ms,
     RaceDataRecord m_sendRaceDataRecords[2]; // 0x14 - 0x94
     EventRecord m_sendEventRecords;          // 0x94 - 0x18c
     u8 _18c[0x190 - 0x18c];
