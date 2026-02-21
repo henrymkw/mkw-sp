@@ -32,6 +32,10 @@ What base-game classes, functions, members, etc are relevant here? What has to b
 
 What has to be added to support the implementation?
 
+#### Client
+
+#### Server
+
 ## Testing
 
 How can testing be performed to verify correctness? What type of tests will be used?
