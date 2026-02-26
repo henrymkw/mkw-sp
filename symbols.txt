@@ -12,6 +12,7 @@
 0x8000951c RKSystem_run
 0x8000951c RkSystem_run
 0x80009820 EGG_ConfigurationData_onBeginFrame
+0x800ff0d0 gpiSendData
 0x80009844 SceneManager_changeSiblingScene
 0x8000ac50 _ZN6System13SystemManager4initEv
 0x8000b154 _ZN6System13SystemManager14shutdownSystemEv
@@ -29,8 +30,13 @@
 0x80013040 sscanf
 0x8001329c strcmp
 0x800133b8 strncmp
+0x800f14e4 inet_addr
+0x800f164c gethostbyname
+0x800f118c socket
+0x800f12a4 connect
 0x800133f8 strchr
 0x800135f0 strstr
+0x800f13a0 send
 0x80017814 swprintf
 0x80017998 wcslen
 0x800179b4 wcscpy
@@ -77,7 +83,11 @@
 0x800afef0 _ZN4nw4r2ut10FileStream6cancelEv
 0x800aff00 _ZN4nw4r2ut10FileStream11cancelAsyncEPvS2_
 0x800b28d0 ResFont_SetResource
+0x8011e038 ServerBrowserNewA
+0x800d1984 DWC_SetupGameServer
 0x800ccb4c DWC_GetLastError
+0x8011ef34 ServerListConnect
+0x801ed4ec SOFcntl
 0x800ccb64 DWC_GetLastErrorEx
 0x800ccc38 DWC_ClearError
 0x800ccc54 DWCi_IsError
@@ -360,7 +370,7 @@
 
 # DOL .sbss start (0x80385FC0)
 0x80386000 s_systemManager
-0x803862f0 s_dwcContext
+0x803862f0 s_dwcControl
 0x8038630c s_dwcMatch
 0x80386318 s_dwcTransport
 0x8038633c s_DWCAuthContext
@@ -383,6 +393,7 @@
 0x80519420 _ZN6System10DvdArchive7getFileEPKcPj
 0x805195a4 _ZN6System10DvdArchive4moveEv
 0x805195d8 _ZN6System10DvdArchive9loadOtherEPS0_PN3EGG4HeapE
+0x80658de0 _ZN3Net10NetManager30updateMatchMakingInfoAndRatingEv
 0x8051ce7c _ZNK6System3Pad15getControllerIdEv
 0x8051d5e8 _ZN6System10HBMManager7getFileEPKcPN3EGG4HeapEbPj
 0x8051d6a0 HomeButton_ct

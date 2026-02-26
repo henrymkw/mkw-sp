@@ -3,7 +3,7 @@
 #include <Common.h>
 
 #include <revolution/dwc/DWCTransport.h>
-#include <sp/net/MKW-Server.h>
+#include <sp/net/mkw_server/MKW-Server.h>
 
 int SOSendTo(int s, const char *buf, int len, int flags, SOSockAddrIn *sockTo) {
     if (hasMKWServerAddress && buf[0] == MKW_SERVER_RACE_PACKET) {

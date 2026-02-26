@@ -3,6 +3,7 @@
 extern "C" {
 #include <revolution.h>
 #include <sp/net/mkw_server/MKW-Server.h>
+#include <sp/net/mkw_server/MatchMaking.h>
 }
 
 #include <cstring>
@@ -12,6 +13,26 @@ extern "C" {
 #include <sp/net/CombinedRACEPacketHeader.hh>
 
 namespace Net {
+
+void NetManager::handleError() {
+    REPLACED(handleError)();
+    // were in this state when were searching/in a room
+    // and while in a race. Otherwise, we want to make sure were
+    // not connected to the room manager (i dont like this this)
+    // is called here but i don't have a better way that checks
+    // if were exiting match making.
+    if (m_connectionState != ConnectionState::InMatchMaking) {
+        resetRoomManagerConnection();
+    }
+}
+
+void NetManager::updateMatchMakingInfoAndRating() {
+    REPLACED(updateMatchMakingInfoAndRating)();
+
+    if (recvFromRoomManager()) {
+        // we received from room manager, this we where we handle
+    }
+}
 
 NetManager *NetManager::construct(EGG::ExpHeap *heap) {
     s_instance = REPLACED(construct)(heap);
