@@ -1,6 +1,6 @@
 #include "VotePage.h"
 
-#include <sp/net/MKW-Server.h>
+#include <sp/net/mkw_server/MKW-Server.h>
 
 void onInit(void *thisPtr) {
     // Read comment in Room.cc, we get and start sending to mkw-server

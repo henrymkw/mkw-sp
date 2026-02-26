@@ -2,7 +2,7 @@
 
 extern "C" {
 #include <revolution.h>
-#include <sp/net/MKW-Server.h>
+#include <sp/net/mkw_server/MKW-Server.h>
 }
 
 #include <cstring>

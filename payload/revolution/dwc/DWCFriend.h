@@ -9,6 +9,8 @@
 
 #include <Common.h>
 
+#include <revolution/gamespy/gp/gp.h>
+
 typedef struct {
     u32 flags;
     u8 _4[0xc - 0x4];
@@ -42,3 +44,10 @@ typedef union {
     DWCGsProfileId gs_profile_id;
 } DWCFriendData;
 static_assert(sizeof(DWCFriendData) == 0xc);
+
+typedef struct {
+    u8 _00[0x04 - 0x00];
+    GPConnection *gpConnection;
+    u8 _08[0x60 - 0x08];
+} DWCFriendControl;
+static_assert(sizeof(DWCFriendControl) == 0x60);

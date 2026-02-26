@@ -1,6 +1,6 @@
 #include "DWCTransport.h"
 
-#include <sp/net/MKW-Server.h>
+#include <sp/net/mkw_server/MKW-Server.h>
 
 BOOL DWCi_GT2UnrecognizedMessageCallback(GT2Socket socket, u32 ip, u16 port, u8 *message, s32 len) {
     if (message == NULL || len == 0) {

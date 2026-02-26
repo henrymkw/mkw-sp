@@ -25,8 +25,10 @@ typedef struct {
     DWCState state;
     DWCState prevState;
     u8 aid;
-    u8 _002d[0x1438 - 0x002d];
-} DWCContext;
-static_assert(sizeof(DWCContext) == 0x1438);
+    u8 _002d[0x0300 - 0x002d];
+    DWCFriendControl friendControl;
+    u8 _0360[0x1438 - 0x0360];
+} DWCControl;
+static_assert(sizeof(DWCControl) == 0x1438);
 
-extern DWCContext *s_dwcContext;
+extern DWCControl *s_dwcControl;
