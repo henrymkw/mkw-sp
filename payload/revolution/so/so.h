@@ -13,7 +13,6 @@ typedef struct SOSockAddr {
     u8 len;
     u8 family;
     u8 data[6];
-
 } SOSockAddr;
 
 typedef struct SOSockAddrIn {
@@ -22,6 +21,12 @@ typedef struct SOSockAddrIn {
     u16 port;
     SOInAddr addr;
 } SOSockAddrIn;
+
+#define AF_INET 2
+
+#define SOCK_STREAM 1
+
+#define IPPROTO_TCP 6
 
 #define SOCKET s32
 
@@ -57,4 +62,16 @@ void net_recvfrom(int r3, int s, void *buf, unsigned int len, unsigned int flags
 // 0x801ed99c
 u16 SOHtoNs(u16 hostshort);
 
-int SOGetHostByName(const char *name);
+s32 SOGetHostByName(const char *name);
+
+// 0x800f14e4
+s32 inet_addr(const char *name);
+
+// 0x800f164c
+void *gethostbyname(const char *name);
+
+// 0x800f118c
+s32 socket(int domain, int type, int protocol);
+
+// 0x800f12a4
+s32 connect(int sd, void *sockaddr, s32 socklen);
