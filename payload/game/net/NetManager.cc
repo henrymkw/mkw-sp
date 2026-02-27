@@ -14,6 +14,17 @@ extern "C" {
 
 namespace Net {
 
+void NetManager::handleError() {
+    // were in this state when were searching/in a room
+    // and while in a race. Otherwise, we want to make sure were
+    // not connected to the room manager (i dont like this this)
+    // is called here but i don't have a better way that checks
+    // if were exiting match making.
+    if (m_connectionState != ConnectionState::InMatchMaking) {
+        resetRoomManagerConnection();
+    }
+}
+
 void NetManager::updateMatchMakingInfoAndRating() {
     REPLACED(updateMatchMakingInfoAndRating)();
 

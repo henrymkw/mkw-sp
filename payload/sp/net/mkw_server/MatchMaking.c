@@ -48,6 +48,13 @@ bool connectToRoomManager() {
     return true;
 }
 
+void resetRoomManagerConnection() {
+    if (s_socket != -1) {
+        SOClose(s_socket);
+        s_socket = -1;
+    }
+}
+
 bool sendToRoomManager(void *message, s32 messageLength) {
     // check if we're connected to the server
     if (s_socket == -1) {

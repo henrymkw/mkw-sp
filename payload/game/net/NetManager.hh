@@ -99,6 +99,9 @@ private:
     };
     static_assert(sizeof(MatchMakingInfo) == 0x58);
 
+    REPLACE void handleError();
+    void REPLACED(handleError)();
+
     REPLACE void updateMatchMakingInfoAndRating();
     void REPLACED(updateMatchMakingInfoAndRating)();
 
