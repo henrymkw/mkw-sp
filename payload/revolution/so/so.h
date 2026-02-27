@@ -27,6 +27,9 @@ typedef struct SOSockAddrIn {
 #define SOCK_STREAM 1
 
 #define IPPROTO_TCP 6
+#define SO_F_GETFL 3
+#define SO_F_SETFL 4
+#define SO_O_NONBLOCK 0x04
 
 #define SOCKET s32
 
@@ -50,6 +53,8 @@ int SORecv(int s, void *buf, int len, int flags);
 // 0x801ed454
 int SORecvFrom(int s, void *buf, int len, int flags, void *sockFrom);
 
+int SOFcntl(int s, int cmd, ...);
+
 int SOStartup();
 
 int SOConnect(int s, const void *sockAddr);
@@ -57,7 +62,7 @@ int SOConnect(int s, const void *sockAddr);
 int SOSend(int s, const void *buf, int len, int flags);
 
 // 0x801ed9a4
-void net_recvfrom(int r3, int s, void *buf, unsigned int len, unsigned int flags, int *fromlen);
+void net_recvfrom(int r3, s32 s, void *buf, u32 len, u32 flags, s32 *fromlen);
 
 // 0x801ed99c
 u16 SOHtoNs(u16 hostshort);
@@ -71,7 +76,9 @@ s32 inet_addr(const char *name);
 void *gethostbyname(const char *name);
 
 // 0x800f118c
-s32 socket(int domain, int type, int protocol);
+s32 socket(s32 domain, int type, int protocol);
 
 // 0x800f12a4
-s32 connect(int sd, void *sockaddr, s32 socklen);
+s32 connect(s32 sd, void *sockaddr, s32 socklen);
+
+s32 send(s32 sock, const void *buf, s32 len, s32 flags);

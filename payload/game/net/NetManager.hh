@@ -99,6 +99,9 @@ private:
     };
     static_assert(sizeof(MatchMakingInfo) == 0x58);
 
+    REPLACE void updateMatchMakingInfoAndRating();
+    void REPLACED(updateMatchMakingInfoAndRating)();
+
     // 0x80657004
     REPLACE NetManager *construct(EGG::ExpHeap *heap);
     NetManager *REPLACED(construct)(EGG::ExpHeap *heap);

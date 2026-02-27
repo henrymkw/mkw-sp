@@ -2,6 +2,8 @@
 
 #include <Common.h>
 
-void dummyCallback();
-
 bool connectToRoomManager();
+
+bool sendToRoomManager(void *message, s32 messageLength);
+
+bool recvFromRoomManager();

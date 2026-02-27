@@ -87,6 +87,7 @@
 0x800d1984 DWC_SetupGameServer
 0x800ccb4c DWC_GetLastError
 0x8011ef34 ServerListConnect
+0x801ed4ec SOFcntl
 0x800ccb64 DWC_GetLastErrorEx
 0x800ccc38 DWC_ClearError
 0x800ccc54 DWCi_IsError

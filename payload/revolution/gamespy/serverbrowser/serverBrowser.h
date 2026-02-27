@@ -33,9 +33,6 @@ BOOL SBServerListConnectAndQuery(SBServerList *list, const char *fieldList,
 
 BOOL ServerListConnect(SBServerList *list);
 
-// gamespy wrapper around SOSend()
-int send(int sock, const char *buf, int len, int flags);
-
 void gsifree(void *ptr);
 
 int closesocket(int sock);
