@@ -15,6 +15,7 @@ extern "C" {
 namespace Net {
 
 void NetManager::handleError() {
+    REPLACED(handleError)();
     // were in this state when were searching/in a room
     // and while in a race. Otherwise, we want to make sure were
     // not connected to the room manager (i dont like this this)
