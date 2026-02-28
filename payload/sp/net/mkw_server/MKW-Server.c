@@ -2,35 +2,27 @@
 
 #include <revolution/dwc/DWCMatch.h>
 
+#include <sp/net/WiiLink.h>
+
 #include <string.h>
+
+#define SEARCH_ID_MAGIC "SEARCHID"
 
 bool hasMKWServerAddress = false;
 bool hasSentMKWServerAddressRequest = false;
 SOSockAddrIn mkwServerAddr = {};
+u64 searchId = 0;
 
 void tryGetMKWServerAddress() {
     if (hasMKWServerAddress) {
         return;
     }
 
-    SOSockAddrIn addr;
-    addr.len = sizeof(SOSockAddrIn);
-    addr.family = 2;
-    addr.port = 27900;
-#ifdef LOCAL_MKW_SERVER
-    addr.addr.addr = 0x7F000001;
-#elif TEST_MKW_SERVER
-    addr.addr.addr = 0x327438d3; // test server
-#else
-    // TODO: resolve the address
-    addr.addr.addr = 0x607e6b90;
-#endif
-
     // [0] = magic 0xd
     // [1] = 0x2 (join friend room)
-    const char buf[2] = {0xc, 0x2};
+    const u8 buf[2] = {0xc, 0x2};
 
-    s32 result = SOSendTo(s_dwcMatch->qrec->hbsock, buf, sizeof(buf), 0, (void *)&addr);
+    s32 result = sendMessageToQR2(buf, sizeof(buf));
     if (result < 0) {
         SP_LOG("Failed to send to mkw-server manager!");
         return;
@@ -77,4 +69,52 @@ bool trySendRACEPacketToMKWServer(const void *data, u32 size) {
         SP_LOG("Failed to send to MKW Server!");
     }
     return result;
+}
+
+bool verifySearchIDMagic(const char *packet, u32 size) {
+    if (size < 8) {
+        return false;
+    }
+    return strncmp(packet, SEARCH_ID_MAGIC, 8) == 0;
+}
+
+bool handleSearchIDPacket(const u8 *packet, u32 size) {
+    if (size != sizeof(SearchIDPacket)) {
+        SP_LOG("Invalid SearchID Packet Size: %d", size);
+        return false;
+    }
+
+    SearchIDPacket *searchIdPacket = (SearchIDPacket *)packet;
+    if (strncmp(searchIdPacket->magic, SEARCH_ID_MAGIC, 8) != 0) {
+        SP_LOG("Invalid SearchID Packet Magic: %.8s", searchIdPacket->magic);
+        return false;
+    }
+
+    searchId = searchIdPacket->searchId;
+    SP_LOG("Received Search ID: %llu, sending back the packet", searchId);
+
+    // send back the same packet to confirm receipt, we'll hear back if there are issues
+    bool result = sendMessageToQR2(packet, size);
+    if (!result) {
+        SP_LOG("Failed to send Search ID response to MKW Server!");
+        return false;
+    }
+
+    return true;
+}
+
+bool sendMessageToQR2(const u8 *data, u32 size) {
+    SOSockAddrIn qr2Addr;
+    qr2Addr.len = sizeof(SOSockAddrIn);
+    qr2Addr.family = 2;
+    qr2Addr.port = 27900;
+    qr2Addr.addr.addr = getWFCServerAddress();
+
+    s32 result = SOSendTo(s_dwcMatch->qrec->hbsock, data, size, 0, (void *)&qr2Addr);
+    if (result < 0) {
+        SP_LOG("Failed to send message to QR2!");
+        return false;
+    }
+
+    return true;
 }

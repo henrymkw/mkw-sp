@@ -22,6 +22,16 @@ extern s32 s_auth_error;
 // TODO: Make a type for this
 extern s32 *s_DWCAuthContext;
 
+u32 getWFCServerAddress() {
+#ifdef LOCAL_MKW_SERVER
+    return 0x7F000001; // localhost
+#elif TEST_MKW_SERVER
+    return 0x327438d3; // test server
+#else
+    return 0x607e6b90; // mkw-server.xyz
+#endif
+}
+
 bool GenerateRandomSalt(u8 *out) {
     // Generate cryptographic random with ES_Sign
     s32 fd = IOS_Open("/dev/es", IPC_OPEN_NONE);

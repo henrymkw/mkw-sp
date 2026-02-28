@@ -41,8 +41,8 @@ int SOClose(int s);
 
 // 0x801ed4a0
 // patching the address here felt like lag starts improved, but I think that was a placebo
-REPLACE int SOSendTo(int s, const char *buf, int len, int flags, SOSockAddrIn *sockTo);
-int REPLACED(SOSendTo)(int s, const char *buf, int len, int flags, SOSockAddrIn *sockTo);
+REPLACE int SOSendTo(int s, const u8 *buf, int len, int flags, SOSockAddrIn *sockTo);
+int REPLACED(SOSendTo)(int s, const u8 *buf, int len, int flags, SOSockAddrIn *sockTo);
 
 // 0x801ed188
 int SOBind(int s, const void *sockAddr);

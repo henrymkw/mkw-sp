@@ -32,6 +32,7 @@
 0x800133b8 strncmp
 0x800f14e4 inet_addr
 0x800f164c gethostbyname
+0x800eb830 DWCi_Acc_GetUserId
 0x800f118c socket
 0x800f12a4 connect
 0x800133f8 strchr
