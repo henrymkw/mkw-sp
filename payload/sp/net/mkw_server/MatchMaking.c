@@ -6,8 +6,14 @@
 
 static SOSockAddrIn s_serverAddr;
 static SOCKET s_socket = -1;
+static s32 connection = -1;
 
 bool connectToRoomManager() {
+    if (connection == 0) {
+        SP_LOG("Already connected to Room Manager!");
+        return true;
+    }
+
     s_serverAddr.family = AF_INET;
     s_serverAddr.port = SOHtoNs(28910);
 
@@ -25,10 +31,10 @@ bool connectToRoomManager() {
     }
 
     s_serverAddr.len = sizeof(s_serverAddr);
-    s32 connectResult = SOConnect(s_socket, &s_serverAddr);
+    connection = SOConnect(s_socket, &s_serverAddr);
 
-    if (connectResult != 0) {
-        SP_LOG("Failed to connect to room manager server. connectResult: %d", connectResult);
+    if (connection != 0) {
+        SP_LOG("Failed to connect to room manager server. connection: %d", connection);
         return false;
     }
 
@@ -49,9 +55,10 @@ bool connectToRoomManager() {
 }
 
 void resetRoomManagerConnection() {
-    if (s_socket != -1) {
+    if (s_socket != -1 && connection == 0) {
         SOClose(s_socket);
         s_socket = -1;
+        connection = -1;
     }
 }
 
@@ -79,4 +86,9 @@ bool recvFromRoomManager() {
     }
 
     return false;
+}
+
+bool sendOpenRoomRequest() {
+    MMRequestType openRoomRequest = MM_REQUEST_OPEN_ROOM;
+    return sendToRoomManager(&openRoomRequest, sizeof(openRoomRequest));
 }

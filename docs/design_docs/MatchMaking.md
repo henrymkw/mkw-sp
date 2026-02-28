@@ -65,15 +65,16 @@ Match making information will be transmitted from MKW-Server to players as defin
 
 | Name | Description | Return Value of | Offset | Length |
 | ---- | ----------- | --------------- | ------ | ------ |
-| Aid Bitmap | Bitmap of the available aids | `DWC_GetAidBitmap()` | 0x00 | 0x4 |
+| Magic | Magic of this packet. Value is always 0x77846772 ("MTCH") | 0x00 | 0x4 |
+| Aid Bitmap | Bitmap of the available aids | `DWC_GetAidBitmap()` | 0x04 | 0x4 |
 | Aid Count | # of non-guest players | `DWC_GetNumConnectionHost()` | 0x04 | 0x04 |
-| Player Count | # of players, including guests | `DWC_GetDirectConnectedAIDBitmap()` | 0x08 | 0x04 |
-| Room ID | ID of the room | `DWC_GetGroupId()` | 0x0c | 0x4 |
-| Player Aid | Aid of the receiving player | `DWC_GetMyAid()` | 0x10 | 0x1 |
-| Host Aid | Aid of the room's host. Used for compatibility reasons | `DWC_GetServerAid()` | 0x11 | 0x1 |
-| Match Making Suspended | The match making suspend state of the room | `DWC_GetSuspendMatch()` | 0x12 | 0x1 |
-| Cancel Match | If the match is canceled | `DWC_IsValidMatchCancel()` | 0x13 | 0x1 |
-| Local Player Count | Local player count for each player, indexed by aid. This is in little endian since `NetManager::updateMatchMakingInfosAndRatings()` expects it to be. | `DWC_GetConnectionUserData()` | 0x14 | 0x30 |
+| Player Count | # of players, including guests | `DWC_GetDirectConnectedAIDBitmap()` | 0x0c | 0x04 |
+| Room ID | ID of the room | `DWC_GetGroupId()` | 0x10 | 0x4 |
+| Player Aid | Aid of the receiving player | `DWC_GetMyAid()` | 0x14 | 0x1 |
+| Host Aid | Aid of the room's host. Used for compatibility reasons | `DWC_GetServerAid()` | 0x15 | 0x1 |
+| Match Making Suspended | The match making suspend state of the room | `DWC_GetSuspendMatch()` | 0x16 | 0x1 |
+| Cancel Match | If the match is canceled | `DWC_IsValidMatchCancel()` | 0x17 | 0x1 |
+| Local Player Count | Local player count for each player, indexed by aid. This is in little endian since `NetManager::updateMatchMakingInfosAndRatings()` expects it to be. | `DWC_GetConnectionUserData()` | 0x18 | 0x30 |
 
 `Match` packet's contents will be parsed and stored into a static variables in [MatchMaking.h](../../payload/sp/net/mkw_server/MatchMaking.h). From here, the DWC functions will be replaced to return the values specified in the above table.
 
