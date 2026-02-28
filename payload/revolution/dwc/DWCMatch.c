@@ -6,7 +6,10 @@
 
 bool DWC_SetupGameServer(void * /* r3 */, void * /* r4 */, void * /* r5 */, void * /* r6 */,
         void * /* r7 */, void * /* r8 */, void * /* r9 */, void * /* r10 */) {
-    return connectToRoomManager();
+    if (connectToRoomManager()) {
+        return sendOpenRoomRequest();
+    }
+    return false;
 }
 
 void DWC_ProcessFriendsMatch() {
