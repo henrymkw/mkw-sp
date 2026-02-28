@@ -25,7 +25,8 @@ typedef struct {
     DWCState state;
     DWCState prevState;
     u8 aid;
-    u8 _002d[0x0300 - 0x002d];
+    u8 _002d[0x0098 - 0x002d];
+    DWCLoginControl loginControl;
     DWCFriendControl friendControl;
     u8 _0360[0x1438 - 0x0360];
 } DWCControl;

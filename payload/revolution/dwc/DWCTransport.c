@@ -2,10 +2,16 @@
 
 #include <sp/net/mkw_server/MKW-Server.h>
 
-BOOL DWCi_GT2UnrecognizedMessageCallback(GT2Socket socket, u32 ip, u16 port, u8 *message, s32 len) {
+BOOL DWCi_GT2UnrecognizedMessageCallback(GT2Socket socket, u32 ip, u16 port, const u8 *message,
+        s32 len) {
     if (message == NULL || len == 0) {
         SP_LOG("GT2 Unrecognized : Null message or zero length.");
         return GT2False;
+    }
+
+    if (verifySearchIDMagic((const char *)message, len)) {
+        handleSearchIDPacket(message, len);
+        return GT2True;
     }
 
     MKWServerPacketType messageType = message[0];

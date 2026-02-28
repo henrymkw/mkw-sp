@@ -5,7 +5,7 @@
 #include <revolution.h>
 
 typedef void (*UserSendCallback)(u32 size, u8 aid);
-typedef void (*UserRecvCallback)(u8 aid, u8 *recvBuffer, u32 size);
+typedef void (*UserRecvCallback)(u8 aid, const u8 *recvBuffer, u32 size);
 
 typedef struct {
     u8 _00[0x38 - 0x00];
@@ -29,9 +29,9 @@ REPLACE void DWCi_TransportProcess();
 
 REPLACE bool DWC_SetUserRecvCallback(UserRecvCallback callback);
 
-REPLACE BOOL DWCi_GT2UnrecognizedMessageCallback(GT2Socket socket, u32 ip, u16 port, u8 *message,
-        s32 len);
-BOOL REPLACED(DWCi_GT2UnrecognizedMessageCallback)(GT2Socket socket, u32 ip, u16 port, u8 *message,
-        s32 len);
+REPLACE BOOL DWCi_GT2UnrecognizedMessageCallback(GT2Socket socket, u32 ip, u16 port,
+        const u8 *message, s32 len);
+BOOL REPLACED(DWCi_GT2UnrecognizedMessageCallback)(GT2Socket socket, u32 ip, u16 port,
+        const u8 *message, s32 len);
 
 extern DWCTransport *s_dwcTransport;
