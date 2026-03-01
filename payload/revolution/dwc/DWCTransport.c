@@ -9,8 +9,8 @@ BOOL DWCi_GT2UnrecognizedMessageCallback(GT2Socket socket, u32 ip, u16 port, con
         return GT2False;
     }
 
-    if (verifySearchIDMagic((const char *)message, len)) {
-        handleSearchIDPacket(message, len);
+    if (verifySearchIdMagic((const char *)message, len)) {
+        handleSearchIdPacket(message, len);
         return GT2True;
     }
 

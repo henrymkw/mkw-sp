@@ -11,7 +11,7 @@
 bool hasMKWServerAddress = false;
 bool hasSentMKWServerAddressRequest = false;
 SOSockAddrIn mkwServerAddr = {};
-u64 searchId = 0;
+u64 wfcSearchId = 0;
 
 void tryGetMKWServerAddress() {
     if (hasMKWServerAddress) {
@@ -71,32 +71,32 @@ bool trySendRACEPacketToMKWServer(const void *data, u32 size) {
     return result;
 }
 
-bool verifySearchIDMagic(const char *packet, u32 size) {
+bool verifySearchIdMagic(const char *packet, u32 size) {
     if (size < 8) {
         return false;
     }
     return strncmp(packet, SEARCH_ID_MAGIC, 8) == 0;
 }
 
-bool handleSearchIDPacket(const u8 *packet, u32 size) {
-    if (size != sizeof(SearchIDPacket)) {
-        SP_LOG("Invalid SearchID Packet Size: %d", size);
+bool handleSearchIdPacket(const u8 *packet, u32 size) {
+    if (size != sizeof(SearchIdPacket)) {
+        SP_LOG("Invalid SearchId Packet Size: %d", size);
         return false;
     }
 
-    SearchIDPacket *searchIdPacket = (SearchIDPacket *)packet;
+    SearchIdPacket *searchIdPacket = (SearchIdPacket *)packet;
     if (strncmp(searchIdPacket->magic, SEARCH_ID_MAGIC, 8) != 0) {
-        SP_LOG("Invalid SearchID Packet Magic: %.8s", searchIdPacket->magic);
+        SP_LOG("Invalid SearchId Packet Magic: %.8s", searchIdPacket->magic);
         return false;
     }
 
-    searchId = searchIdPacket->searchId;
-    SP_LOG("Received Search ID: %llu, sending back the packet", searchId);
+    wfcSearchId = searchIdPacket->wfcSearchId;
+    SP_LOG("Received Search Id: %llu, sending back the packet", wfcSearchId);
 
     // send back the same packet to confirm receipt, we'll hear back if there are issues
     bool result = sendMessageToQR2(packet, size);
     if (!result) {
-        SP_LOG("Failed to send Search ID response to MKW Server!");
+        SP_LOG("Failed to send Search Id response to MKW Server!");
         return false;
     }
 

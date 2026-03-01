@@ -69,7 +69,7 @@ Match making information will be transmitted from MKW-Server to players as defin
 | Aid Bitmap | Bitmap of the available aids | `DWC_GetAidBitmap()` | 0x04 | 0x4 |
 | Aid Count | # of non-guest players | `DWC_GetNumConnectionHost()` | 0x04 | 0x04 |
 | Player Count | # of players, including guests | `DWC_GetDirectConnectedAIDBitmap()` | 0x0c | 0x04 |
-| Room ID | ID of the room | `DWC_GetGroupId()` | 0x10 | 0x4 |
+| Room Id | Id of the room | `DWC_GetGroupId()` | 0x10 | 0x4 |
 | Player Aid | Aid of the receiving player | `DWC_GetMyAid()` | 0x14 | 0x1 |
 | Host Aid | Aid of the room's host. Used for compatibility reasons | `DWC_GetServerAid()` | 0x15 | 0x1 |
 | Match Making Suspended | The match making suspend state of the room | `DWC_GetSuspendMatch()` | 0x16 | 0x1 |
@@ -80,42 +80,53 @@ Match making information will be transmitted from MKW-Server to players as defin
 
 ### Match Request Packets
 
-For the player to open a room, join a room, search for a public room, etc., they will send requests to wfc-server. There are different types of requests players can send, which all may specify different parameters. To support this, each type of request will have their own packet type defined bellow:
+For the player to open a room, join a room, search for a public room, etc., they will send requests to wfc-server. These sort of packets can generally be called `Match Request` packets. There are different types of requests players can send, which all may specify different parameters. To support this, each type of request will have their own packet type defined bellow:
 
-`CreateRoom` packet:
+### `MatchRequestHeader`
+
+| Name | Description | Offset | Length |
+| ---- | ----------- | ------ | ------ |
+| Magic | `MatchRequestHeader` magic, always `MREQ`. | 0x0 | 0x4 |
+| `MatchRequestType` | Type of match request packet | 0x4 | 0x1 |
+| Padding | Padding | 0x5 | 0x3 |
+| SearchId | Client SearchId | 0x8 | 0x8 |
+
+### `OpenRoom` packet
 
 Request to create a private room. This packet structure is simple.
 
-| Id | Description | Offset | Length |
-| -- | ----------- | ------ | ------ |
-| CreateRoomId | Request Id for the `CreateRoom` packet. Value is always 0 | 0x0 | 0x4 |
+| Name | Description | Offset | Length |
+| ---- | ----------- | ------ | ------ |
+| `MatchRequestHeader` | Header, `MatchRequestType` must be 0 | 0x00 | 0x10 |
 
-`JoinFroom` packet:
+### `JoinFroom` packet
 
 Request to join a friend's private room.
 
-| Id | Description | Offset | Length |
-| -- | ----------- | ------ | ------ |
-| JoinRoomId | Request Id for the `JoinRoom` packet. Value is always 1 | 0x0 | 0x1 |
-| FriendProfileId | ProfileId of the friend to join. | 0x1 | 0x4 |
+| Name | Description | Offset | Length |
+| ---- | ----------- | ------ | ------ |
+| `MatchRequestHeader` | Header, `MatchRequestType` must be 1 | 0x00 | 0x10 |
+| FriendProfileId | ProfileId of the friend to join. | 0x10 | 0x4 |
 
-`SearchPublicRoom` packet:
+### `SearchPublicRoom` packet
 
 Request to search for a public room.
 
-| Id | Description | Offset | Length |
-| -- | ----------- | ------ | ------ |
-| SearchPublicRoomId | Request Id for the `SearchPublicRoom` packet. Value is always 2 | 0x0 | 0x1 |
-| Region | Search Region. Value differs on the region to search. Value 0 is regionless (worldwide), 1 is NA, 2, is EU, 3 is JP, 4 is KOR. | 0x1 | 0x1 |
+| Name | Description | Offset | Length |
+| ---- | ----------- | ------ | ------ |
+| `MatchRequestHeader` | Header, `MatchRequestType` must be 2 | 0x00 | 0x10 |
+| Region | Search Region. Value differs on the region to search. Value 0 is regionless (worldwide), 1 is NA, 2, is EU, 3 is JP, 4 is KOR. | 0x10 | 0x1 |
+| Padding | Padding | 0x11 | 0x03 |
 
-`VoteSuspendMatch` packet:
+### `VoteSuspendMatch` packet
 
 Vote to suspend match making. Must already be in a room to send, which `wfc-server` will validate.
 
 | Id | Description | Offset | Length |
 | -- | ----------- | ------ | ------ |
-| VoteMatchSuspendId | Request Id for the `VoteMatchSuspend` packet. Value is always 3 | 0x0 | 0x1 |
-| SuspendVote | Vote for match making suspension. 0 is a unsuspend vote, 1 is a suspend vote. | 0x1 | 0x1 |
+| `MatchRequestHeader` | Header, `MatchRequestType` must be 3 | 0x00 | 0x10 |
+| SuspendVote | Vote for match making suspension. 0 is a unsuspend vote, 1 is a suspend vote. | 0x10 | 0x1 |
+| Padding | Padding | 0x11 | 0x03 |
 
 ## Client Code Changes
 
