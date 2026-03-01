@@ -5,7 +5,6 @@
 #pragma once
 
 #include <Common.h>
-#include <revolution.h>
 
 typedef int GT2Bool;
 #define GT2False 0
