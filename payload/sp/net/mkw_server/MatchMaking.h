@@ -22,6 +22,7 @@ extern MatchPacket g_recvMatchPacket;
 
 typedef enum {
     MATCH_REQUEST_OPEN_ROOM = 0x0,
+    MATCH_REQUEST_JOIN_ROOM = 0x1,
 } MatchRequestType;
 
 // opens up a tcp connection, called when player wants to create or join a room
@@ -36,4 +37,6 @@ bool sendToRoomManager(void *message, s32 messageLength);
 bool recvFromRoomManager();
 
 // sends a REQUEST_OPEN_ROOM
-bool sendOpenRoomRequest();
+bool sendOpenFroomRequest();
+
+bool sendJoinFroomRequest(s32 friendProfileId);
