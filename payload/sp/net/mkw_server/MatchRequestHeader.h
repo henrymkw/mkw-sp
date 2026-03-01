@@ -11,3 +11,5 @@ typedef struct {
     u64 searchId;
 } MatchRequestHeader;
 static_assert(sizeof(MatchRequestHeader) == 0x10);
+
+void createMatchRequestHeader(MatchRequestHeader *header, MatchRequestType type, u64 searchId);

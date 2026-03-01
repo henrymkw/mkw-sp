@@ -1,0 +1,24 @@
+FriendRosterManager contains lists of friends, indexes 0-29
+
+DWC Uses ProfileIDs to associate friends
+
+s32 DWCi_GetProfileIDFromList(s32 friendIdx) returns the friends profileId.
+
+The client can send a JoinFroomRequest, which could just be a MatchRequestHeader + ProfileId
+
+Looks like the changes need to be done are non-obvious. We need to verify that two players are friends (or the host has open-host enabled). All the friend data is in gpcm while the match making logic/where the JoinFriend request will be handled is in qr2.
+
+gpcm does import qr2, so adding gpcm as a import to qr2 would lead to a circular dependency, can't do that.
+
+Actually, it wasn't that bad: I added a friendsList to qr2's login struct, and an addFriend() function to qr2. When friends get added in gpcm, just add an associated call to the qr2.addFriend() function. If that function doesn't handle adding friends while online, then the change doesn't seem that bad, just add another call where needed in gpcm
+
+From here, we can pretty easily do the following:
+
+1. Sender sends a request to join a friend with their friend's profileId
+2. To get the friend list of the sender, we first get the senders Player by using the senders SearchId. Since player has a LoginInfo, which (now) has a friend list, we have access to the sender's friend list.
+  - Looking up the profileId to get the the LoginInfo seems insecure since profileIds are both public and permanent. I get spoofing concerns.
+3. Get the friend list of the sender's friend (their profileId). We can do this easily by getting logins[profileId]. We need to do a number of checks, like checking if the login exists, if the login's player exists
+4. We have both friend lists at this point, so we need to check if they're friends
+  - if the host has open host, let them join
+  - else, if both lists contain each other, let them join
+  - else, don't let them join 

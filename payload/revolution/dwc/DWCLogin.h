@@ -26,3 +26,5 @@ typedef struct {
 static_assert(sizeof(DWCLoginControl) == 0x268);
 
 u64 DWCi_Acc_GetUserId(DWCAccLoginId *loginId);
+
+s32 DWCi_GetProfileIDFromList(s32 friendId);

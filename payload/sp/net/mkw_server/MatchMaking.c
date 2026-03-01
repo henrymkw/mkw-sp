@@ -4,6 +4,7 @@
 
 #include <revolution/so/so.h>
 
+#include <sp/net/mkw_server/JoinFroomRequest.h>
 #include <sp/net/mkw_server/MKW-Server.h>
 #include <sp/net/mkw_server/MatchRequestHeader.h>
 
@@ -87,8 +88,6 @@ bool recvFromRoomManager() {
     s32 recvResult = SORecv(s_socket, (void *)&resp, sizeof(MatchPacket), 0);
 
     if (recvResult > 0) {
-        SP_LOG("Received MatchPacket from room manager: %d", recvResult);
-
         if (resp.magic != 0x77846772) {
             SP_LOG("Invalid magic in room manager response: %08X", resp.magic);
             return false;
@@ -103,11 +102,20 @@ bool recvFromRoomManager() {
     return false;
 }
 
-bool sendOpenRoomRequest() {
+bool sendOpenFroomRequest() {
     MatchRequestHeader openRoomRequest;
-    openRoomRequest.magic = 0x4D524551; // "MREQ"
-    openRoomRequest.type = MATCH_REQUEST_OPEN_ROOM;
-    openRoomRequest.searchId = wfcSearchId;
+    createMatchRequestHeader(&openRoomRequest, MATCH_REQUEST_OPEN_ROOM, wfcSearchId);
 
     return sendToRoomManager(&openRoomRequest, sizeof(openRoomRequest));
+}
+
+bool sendJoinFroomRequest(s32 friendProfileId) {
+    JoinFroomRequest joinRequest;
+    memset(&joinRequest, 0, sizeof(JoinFroomRequest));
+    createMatchRequestHeader(&joinRequest.header, MATCH_REQUEST_JOIN_ROOM, wfcSearchId);
+
+    joinRequest.friendProfileId = friendProfileId;
+    SP_LOG("Sending JoinFroomRequest for friend profile ID: %d", friendProfileId);
+
+    return sendToRoomManager(&joinRequest, sizeof(joinRequest));
 }

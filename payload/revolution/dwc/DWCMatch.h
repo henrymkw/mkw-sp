@@ -294,6 +294,9 @@ s32 DWCi_SendResvCommand(s32 profileId, s32 delay);
 REPLACE bool DWC_SetupGameServer(void *r3, void *r4, void *r5, void *r6, void *r7, void *r8,
         void *r9, void *r10);
 
+REPLACE bool DWC_ConnectToGameServerAsync(s32 friendId, void *r4, void *r5, void *r6, void *r7,
+        void *r8, void *r9, void *r10);
+
 REPLACE void DWC_ProcessFriendsMatch();
 void REPLACED(DWC_ProcessFriendsMatch)();
 
