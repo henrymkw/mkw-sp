@@ -4,6 +4,9 @@
 
 #include <revolution/so/so.h>
 
+#include <sp/net/mkw_server/MKW-Server.h>
+#include <sp/net/mkw_server/MatchRequestHeader.h>
+
 static SOSockAddrIn s_serverAddr;
 static SOCKET s_socket = -1;
 static s32 connection = -1;
@@ -89,6 +92,10 @@ bool recvFromRoomManager() {
 }
 
 bool sendOpenRoomRequest() {
-    MMRequestType openRoomRequest = MM_REQUEST_OPEN_ROOM;
+    MatchRequestHeader openRoomRequest;
+    openRoomRequest.magic = 0x4D524551; // "MREQ"
+    openRoomRequest.type = MATCH_REQUEST_OPEN_ROOM;
+    openRoomRequest.searchId = wfcSearchId;
+
     return sendToRoomManager(&openRoomRequest, sizeof(openRoomRequest));
 }

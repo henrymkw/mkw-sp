@@ -9,7 +9,7 @@ typedef struct {
     u32 aidBitmap;
     u32 numAids;
     u32 numPlayers;
-    u32 roomID;
+    u32 roomId;
     u8 myAid;
     u8 hostAid;
     bool suspended; // note to self: the NetManager enum has values 0 thru 3
@@ -18,8 +18,8 @@ typedef struct {
 } MatchPacket;
 
 typedef enum {
-    MM_REQUEST_OPEN_ROOM = 0x0,
-} MMRequestType;
+    MATCH_REQUEST_OPEN_ROOM = 0x0,
+} MatchRequestType;
 
 // opens up a tcp connection, called when player wants to create or join a room
 bool connectToRoomManager();
