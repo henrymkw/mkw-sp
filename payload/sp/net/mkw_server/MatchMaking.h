@@ -5,10 +5,10 @@
 #include <revolution/dwc/DWCNode.h>
 
 typedef struct {
-    u32 magic; // "MTCH"
+    u32 magic; // 0x77846772 ("MTCH")
     u32 aidBitmap;
     u32 numAids;
-    u32 numPlayers;
+    u32 directConnectedAidBitmap;
     u32 roomId;
     u8 myAid;
     u8 hostAid;
@@ -16,6 +16,9 @@ typedef struct {
     bool canceled;
     DWCConnectionUserData localPlayerCount[12];
 } MatchPacket;
+static_assert(sizeof(MatchPacket) == 0x48);
+
+extern MatchPacket g_recvMatchPacket;
 
 typedef enum {
     MATCH_REQUEST_OPEN_ROOM = 0x0,

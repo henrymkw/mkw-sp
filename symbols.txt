@@ -32,6 +32,15 @@
 0x800133b8 strncmp
 0x800f14e4 inet_addr
 0x800f164c gethostbyname
+0x800d24b4 DWC_GetAidBitmap
+0x800d2158 DWC_GetNumConnectionsHost
+0x800d225c DWC_GetDirectConnectedAidBitmap
+0x800d4994 DWC_GetGroupId
+0x800d26e8 DWC_GetServerAid
+0x800d2170 DWC_GetMyAid
+0x800d41f4 DWC_IsValidMatchCancel
+0x800d4ac8 DWC_GetConnectionUserData
+0x800d49b4 DWC_GetSuspendMatch
 0x800eb830 DWCi_Acc_GetUserId
 0x800f118c socket
 0x800f12a4 connect

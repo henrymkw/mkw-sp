@@ -2,9 +2,12 @@
 
 #include <Common.h>
 
-#include <revolution.h>
+#include <revolution/dwc/DWCFriend.h>
+#include <revolution/dwc/DWCLogin.h>
 #include <revolution/dwc/DWCNode.h>
+
 #include <revolution/gamespy/gt2/gt2.h>
+#include <revolution/gamespy/gt2/gt2Connection.h>
 
 typedef enum {
     DWC_STATE_INIT = 0,
@@ -31,5 +34,23 @@ typedef struct {
     u8 _0360[0x1438 - 0x0360];
 } DWCControl;
 static_assert(sizeof(DWCControl) == 0x1438);
+
+REPLACE u32 DWC_GetAidBitmap();
+
+REPLACE u32 DWC_GetNumConnectionsHost();
+
+REPLACE u32 DWC_GetDirectConnectedAidBitmap();
+
+REPLACE u32 DWC_GetGroupId();
+
+REPLACE u8 DWC_GetMyAid();
+
+REPLACE u8 DWC_GetServerAid();
+
+REPLACE u8 DWC_GetSuspendMatch();
+
+REPLACE u8 DWC_IsValidMatchCancel();
+
+REPLACE DWCConnectionUserData DWC_GetConnectionUserData(u8 aid);
 
 extern DWCControl *s_dwcControl;

@@ -65,10 +65,10 @@ Match making information will be transmitted from MKW-Server to players as defin
 
 | Name | Description | Return Value of | Offset | Length |
 | ---- | ----------- | --------------- | ------ | ------ |
-| Magic | Magic of this packet. Value is always 0x77846772 ("MTCH") | 0x00 | 0x4 |
+| Magic | Magic of this packet. Value is always 0x77846772 ("MTCH") | N/A | 0x00 | 0x4 |
 | Aid Bitmap | Bitmap of the available aids | `DWC_GetAidBitmap()` | 0x04 | 0x4 |
-| Aid Count | # of non-guest players | `DWC_GetNumConnectionHost()` | 0x04 | 0x04 |
-| Player Count | # of players, including guests | `DWC_GetDirectConnectedAIDBitmap()` | 0x0c | 0x04 |
+| Aid Count | # of non-guest players | `DWC_GetNumConnectionHost()` | 0x08 | 0x04 |
+| Direct Connected Aid Bitmap | # of players, including guests | `DWC_GetDirectConnectedAIDBitmap()` | 0x0c | 0x04 |
 | Room Id | Id of the room | `DWC_GetGroupId()` | 0x10 | 0x4 |
 | Player Aid | Aid of the receiving player | `DWC_GetMyAid()` | 0x14 | 0x1 |
 | Host Aid | Aid of the room's host. Used for compatibility reasons | `DWC_GetServerAid()` | 0x15 | 0x1 |

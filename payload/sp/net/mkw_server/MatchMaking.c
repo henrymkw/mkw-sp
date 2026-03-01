@@ -11,6 +11,8 @@ static SOSockAddrIn s_serverAddr;
 static SOCKET s_socket = -1;
 static s32 connection = -1;
 
+MatchPacket g_recvMatchPacket;
+
 bool connectToRoomManager() {
     if (connection == 0) {
         SP_LOG("Already connected to Room Manager!");
@@ -79,12 +81,22 @@ bool recvFromRoomManager() {
     if (s_socket == -1) {
         return false;
     }
-    char buffer[256];
 
-    s32 recvResult = SORecv(s_socket, buffer, sizeof(buffer), 0);
+    MatchPacket resp;
+
+    s32 recvResult = SORecv(s_socket, (void *)&resp, sizeof(MatchPacket), 0);
 
     if (recvResult > 0) {
-        SP_LOG("Received message from room manager: %.*s", recvResult, buffer);
+        SP_LOG("Received MatchPacket from room manager: %d", recvResult);
+
+        if (resp.magic != 0x77846772) {
+            SP_LOG("Invalid magic in room manager response: %08X", resp.magic);
+            return false;
+        }
+
+        // we should probably call a function that validates the received packet
+        memcpy(&g_recvMatchPacket, &resp, sizeof(MatchPacket));
+
         return true;
     }
 
