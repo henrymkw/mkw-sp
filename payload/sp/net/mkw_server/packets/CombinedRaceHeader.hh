@@ -4,7 +4,7 @@
 
 namespace SP {
 
-struct CombinedRacePacketHeader {
+struct CombinedRaceHeader {
     u8 magic;      // Magic is currently 0xD
     u8 numPackets; // Number of Race packets in this combined packet
     u16 totalSize; // Total size of combined packet

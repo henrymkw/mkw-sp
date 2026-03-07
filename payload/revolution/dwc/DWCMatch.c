@@ -24,7 +24,7 @@ bool DWC_ConnectToGameServerAsync(s32 friendId, void * /* r4 */, void * /* r5 */
     }
 
     if (connectToRoomManager()) {
-        return sendJoinFroomRequest(friendProfileId);
+        return sendJoinFroomRequestPacket(friendProfileId);
     }
 
     return false;

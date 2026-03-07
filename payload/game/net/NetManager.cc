@@ -10,7 +10,7 @@ extern "C" {
 
 #include <game/system/GameScene.hh>
 
-#include <sp/net/CombinedRacePacketHeader.hh>
+#include <sp/net/mkw_server/packets/CombinedRaceHeader.hh>
 
 namespace Net {
 
@@ -127,13 +127,13 @@ void NetManager::sendRacePacket() {
 }
 
 void NetManager::processBufferedRacePacket(u8 *buffer, u32 size) {
-    SP::CombinedRacePacketHeader *combinedRacePacketHeader =
-            reinterpret_cast<SP::CombinedRacePacketHeader *>(buffer);
+    SP::CombinedRaceHeader *combinedRaceHeader =
+            reinterpret_cast<SP::CombinedRaceHeader *>(buffer);
     u32 processedSize = 0;
-    for (u8 i = 0; i < combinedRacePacketHeader->numPackets; i++) {
-        u16 packetOffset = combinedRacePacketHeader->offsets[i];
+    for (u8 i = 0; i < combinedRaceHeader->numPackets; i++) {
+        u16 packetOffset = combinedRaceHeader->offsets[i];
         Header *header = reinterpret_cast<Header *>(
-                reinterpret_cast<u8 *>(combinedRacePacketHeader) + packetOffset);
+                reinterpret_cast<u8 *>(combinedRaceHeader) + packetOffset);
         if (header->magic != 0xb) {
             SP_LOG("Invalid Buffered Race Packet Magic!");
             return;
@@ -151,6 +151,7 @@ void NetManager::processBufferedRacePacket(u8 *buffer, u32 size) {
 }
 
 void NetManager::processRacePacket(u8 aid, u8 *packet, u32 size) {
+    SP_LOG("Processing race packet of size %d", size);
     Header *header = reinterpret_cast<Header *>(packet);
     u32 origCrc32 = header->crc32;
     header->crc32 = 0;

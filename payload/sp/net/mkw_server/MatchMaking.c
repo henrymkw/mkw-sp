@@ -4,15 +4,15 @@
 
 #include <revolution/so/so.h>
 
-#include <sp/net/mkw_server/JoinFroomRequest.h>
 #include <sp/net/mkw_server/MKW-Server.h>
-#include <sp/net/mkw_server/MatchRequestHeader.h>
+#include <sp/net/mkw_server/packets/JoinFroomRequest.h>
+#include <sp/net/mkw_server/packets/MatchRequestHeader.h>
 
 static SOSockAddrIn s_serverAddr;
 static SOCKET s_socket = -1;
 static s32 connection = -1;
 
-MatchPacket g_recvMatchPacket;
+MatchMakingInfoPacket g_recvMatchPacket;
 
 bool connectToRoomManager() {
     if (connection == 0) {
@@ -83,9 +83,9 @@ bool recvFromRoomManager() {
         return false;
     }
 
-    MatchPacket resp;
+    MatchMakingInfoPacket resp;
 
-    s32 recvResult = SORecv(s_socket, (void *)&resp, sizeof(MatchPacket), 0);
+    s32 recvResult = SORecv(s_socket, (void *)&resp, sizeof(MatchMakingInfoPacket), 0);
 
     if (recvResult > 0) {
         if (resp.magic != 0x77846772) {
@@ -94,7 +94,7 @@ bool recvFromRoomManager() {
         }
 
         // we should probably call a function that validates the received packet
-        memcpy(&g_recvMatchPacket, &resp, sizeof(MatchPacket));
+        memcpy(&g_recvMatchPacket, &resp, sizeof(MatchMakingInfoPacket));
 
         return true;
     }
@@ -110,12 +110,12 @@ bool sendOpenFroomRequest() {
 }
 
 bool sendJoinFroomRequest(s32 friendProfileId) {
-    JoinFroomRequest joinRequest;
-    memset(&joinRequest, 0, sizeof(JoinFroomRequest));
+    JoinFroomRequestPacket joinRequest;
+    memset(&joinRequest, 0, sizeof(JoinFroomRequestPacket));
     createMatchRequestHeader(&joinRequest.header, MATCH_REQUEST_JOIN_ROOM, wfcSearchId);
 
     joinRequest.friendProfileId = friendProfileId;
-    SP_LOG("Sending JoinFroomRequest for friend profile ID: %d", friendProfileId);
+    SP_LOG("Sending JoinFroomRequestPacket for friend profile ID: %d", friendProfileId);
 
     return sendToRoomManager(&joinRequest, sizeof(joinRequest));
 }
