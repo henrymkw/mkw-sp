@@ -13,10 +13,10 @@
 
 namespace Net {
 
-enum class RACEPacketRecordIdx : u8 {
+enum class RacePacketRecordIdx : u8 {
     Header = 0,
-    RACEHeader1 = 1,
-    RACEHeader2 = 2,
+    RaceHeader1 = 1,
+    RaceHeader2 = 2,
     RoomSelect = 3, // Room is used when the friend room is open, select otherwise
     RaceData = 4,
     User = 5,
@@ -27,23 +27,23 @@ enum class RACEPacketRecordIdx : u8 {
 class RacePacketHolder {
 public:
     template <typename T>
-    PacketHolder<T> *getPacketHolder(RACEPacketRecordIdx idx) {
+    PacketHolder<T> *getPacketHolder(RacePacketRecordIdx idx) {
         switch (idx) {
-        case RACEPacketRecordIdx::Header:
+        case RacePacketRecordIdx::Header:
             return reinterpret_cast<PacketHolder<T> *>(m_header);
-        case RACEPacketRecordIdx::RACEHeader1:
+        case RacePacketRecordIdx::RaceHeader1:
             return reinterpret_cast<PacketHolder<T> *>(m_raceHeader1);
-        case RACEPacketRecordIdx::RACEHeader2:
+        case RacePacketRecordIdx::RaceHeader2:
             return reinterpret_cast<PacketHolder<T> *>(m_raceHeader2);
-        case RACEPacketRecordIdx::RoomSelect:
+        case RacePacketRecordIdx::RoomSelect:
             return reinterpret_cast<PacketHolder<T> *>(m_roomSelect);
-        case RACEPacketRecordIdx::RaceData:
+        case RacePacketRecordIdx::RaceData:
             return reinterpret_cast<PacketHolder<T> *>(m_raceData);
-        case RACEPacketRecordIdx::User:
+        case RacePacketRecordIdx::User:
             return reinterpret_cast<PacketHolder<T> *>(m_user);
-        case RACEPacketRecordIdx::Item:
+        case RacePacketRecordIdx::Item:
             return reinterpret_cast<PacketHolder<T> *>(m_item);
-        case RACEPacketRecordIdx::Event:
+        case RacePacketRecordIdx::Event:
             return reinterpret_cast<PacketHolder<T> *>(m_event);
         default:
             return nullptr;
@@ -84,11 +84,11 @@ public:
 
     template <typename T>
     PacketHolder<T> *getPacketHolder(u8 idx) {
-        return getPacketHolder<T>(static_cast<RACEPacketRecordIdx>(idx));
+        return getPacketHolder<T>(static_cast<RacePacketRecordIdx>(idx));
     }
 
     PacketHolder<void> *getPacketHolder(u8 idx) {
-        return getPacketHolder<void>(static_cast<RACEPacketRecordIdx>(idx));
+        return getPacketHolder<void>(static_cast<RacePacketRecordIdx>(idx));
     }
 
     u32 getRecordSize(u8 idx) {

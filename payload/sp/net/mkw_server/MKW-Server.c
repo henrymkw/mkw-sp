@@ -60,7 +60,7 @@ void applyMKWServerHeader(u8 *packet, u8 aid) {
     packet[3] = aid;
 }
 
-bool trySendRACEPacketToMKWServer(const void *data, u32 size) {
+bool trySendRacePacketToMKWServer(const void *data, u32 size) {
     if (!hasMKWServerAddress) {
         return false;
     }

@@ -44,7 +44,7 @@ void resetMKWServerInfo();
 
 void applyMKWServerHeader(u8 *packet, u8 aid);
 
-bool trySendRACEPacketToMKWServer(const void *data, u32 size);
+bool trySendRacePacketToMKWServer(const void *data, u32 size);
 
 bool verifySearchIdMagic(const char *packet, u32 size);
 
