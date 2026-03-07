@@ -2,9 +2,11 @@
 
 #include <Common.h>
 
+#include <revolution/so/so.h>
+
 #include <sp/net/mkw_server/packets/MatchMakingInfo.h>
 
-extern MatchMakingInfoPacket g_recvMatchPacket;
+extern SOCKET g_MatchMakingSocket;
 
 typedef enum {
     MATCH_REQUEST_OPEN_ROOM = 0x0,

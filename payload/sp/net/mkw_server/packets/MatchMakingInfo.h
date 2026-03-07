@@ -2,8 +2,9 @@
 
 #include <revolution/dwc/DWCNode.h>
 
+#define MATCH_MAKING_INFO 0x77846772
+
 typedef struct {
-    u32 magic; // 0x77846772 ("MTCH")
     u32 aidBitmap;
     u32 numAids;
     u32 directConnectedAidBitmap;
@@ -14,4 +15,8 @@ typedef struct {
     bool canceled;
     DWCConnectionUserData localPlayerCount[12];
 } MatchMakingInfoPacket;
-static_assert(sizeof(MatchMakingInfoPacket) == 0x48);
+static_assert(sizeof(MatchMakingInfoPacket) == 0x44);
+
+extern MatchMakingInfoPacket g_recvMatchPacket;
+
+bool recvMatchMakingInfoPacket();
