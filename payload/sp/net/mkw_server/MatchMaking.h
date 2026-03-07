@@ -2,23 +2,11 @@
 
 #include <Common.h>
 
-#include <revolution/dwc/DWCNode.h>
+#include <revolution/so/so.h>
 
-typedef struct {
-    u32 magic; // 0x77846772 ("MTCH")
-    u32 aidBitmap;
-    u32 numAids;
-    u32 directConnectedAidBitmap;
-    u32 roomId;
-    u8 myAid;
-    u8 hostAid;
-    bool suspended; // note to self: the NetManager enum has values 0 thru 3
-    bool canceled;
-    DWCConnectionUserData localPlayerCount[12];
-} MatchPacket;
-static_assert(sizeof(MatchPacket) == 0x48);
+#include <sp/net/mkw_server/packets/MatchMakingInfo.h>
 
-extern MatchPacket g_recvMatchPacket;
+extern SOCKET g_MatchMakingSocket;
 
 typedef enum {
     MATCH_REQUEST_OPEN_ROOM = 0x0,

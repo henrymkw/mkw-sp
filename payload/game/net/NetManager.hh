@@ -30,11 +30,11 @@ public:
 
     // new function. the buffer is a number of concatenated race packets
     // it reads the header to split each one up to be processed individually
-    void processBufferedRACEPacket(u8 *buffer, u32 size);
+    void processBufferedRacePacket(u8 *buffer, u32 size);
 
     // nearly byte-matched (regswap) so REPLACE is acceptable
-    REPLACE void processRACEPacket(u8 aid, u8 *header, u32 size);
-    void REPLACED(processRACEPacket)(u8 aid, u8 *header, u32 size);
+    REPLACE void processRacePacket(u8 aid, u8 *header, u32 size);
+    void REPLACED(processRacePacket)(u8 aid, u8 *header, u32 size);
 
 private:
     enum class ConnectionState : u32 {
@@ -126,7 +126,7 @@ private:
     }
 
     // adds up the sizes in the header
-    REPLACE u32 getRACEPacketSize(u8 aid);
+    REPLACE u32 getRacePacketSize(u8 aid);
 
     // checks that my aid is unavailable and we have connected to someone
     REPLACE bool hasFoundMatch() const;
@@ -149,21 +149,21 @@ private:
     MatchMakingInfo m_matchMakingInfos[2]; // 0x0038 - 0x00e8
     RoomType m_roomType;
     VoteMatchMakingSuspended m_voteMMSuspension;
-    // points to RACE packets to be sent, two per aid / 0xf0
+    // points to Race packets to be sent, two per aid / 0xf0
     RacePacketHolder *m_sendRacePackets[2][MAX_PLAYER_COUNT];
-    // points to RACE packets to be recieved, two per aid / 0x150
-    RacePacketHolder *m_recvRACEPackets[2][MAX_PLAYER_COUNT];
-    // The RACE packet to be sent, formed from m_sendRacePackets, one per aid /
+    // points to Race packets to be recieved, two per aid / 0x150
+    RacePacketHolder *m_recvRacePackets[2][MAX_PLAYER_COUNT];
+    // The Race packet to be sent, formed from m_sendRacePackets, one per aid /
     // 0x1b0
-    PacketHolder<void> *m_outgoingRACEPacket[MAX_PLAYER_COUNT];
-    OSTime m_timeOfLastSentRACE[MAX_PLAYER_COUNT];        // 0x1e0
-    OSTime m_timeOfLastRecvRACE[MAX_PLAYER_COUNT];        // 0x240
+    PacketHolder<void> *m_outgoingRacePacket[MAX_PLAYER_COUNT];
+    OSTime m_timeOfLastSentRace[MAX_PLAYER_COUNT];        // 0x1e0
+    OSTime m_timeOfLastRecvRace[MAX_PLAYER_COUNT];        // 0x240
     OSTime m_timeBetweenSendingPackets[MAX_PLAYER_COUNT]; // time bewteen sent
                                                           // packets per aid / 0x2a0
     OSTime m_timeBetweenRecvPackets[MAX_PLAYER_COUNT];    // time between recieved
                                                           // packets per aid / 0x300
     u8 m_aidLastSentTo;                                   // Aid of last player we sent to / 0x360
-    u8 m_recvRACEPacketBuffer[MAX_PLAYER_COUNT][0x2e0];   // 0x361
+    u8 m_recvRacePacketBuffer[MAX_PLAYER_COUNT][0x2e0];   // 0x361
     u8 _25e1[0x25e4 - 0x25e1];                            // padding
     StatusData m_myStatusData;                            // 0x25e4
     FriendInfo m_friends[MAX_FRIEND_COUNT];
@@ -179,7 +179,7 @@ private:
     s32 m_br;
     u32 m_lastSendIdx[MAX_PLAYER_COUNT]; // idx of m_sendRacePackets last sent per
                                          // aid
-    // idx of m_recvRACEPackets last recvieved per packet per aid
+    // idx of m_recvRacePackets last recvieved per packet per aid
     u32 m_lastRecvIdx[MAX_PLAYER_COUNT][8];      // 0x279c
     u32 m_currMMInfo;                            // Current MM info used 0x291c
     u8 m_playerIdToAidMapping[MAX_PLAYER_COUNT]; // 0x2920
@@ -194,4 +194,4 @@ private:
 } // namespace Net
 
 // is there a better way to scope this?
-void processBufferedRACEPacketCB(u8 aid, u8 *buffer, u32 size);
+void processBufferedRacePacketCB(u8 aid, u8 *buffer, u32 size);

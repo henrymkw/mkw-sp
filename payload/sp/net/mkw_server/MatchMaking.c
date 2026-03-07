@@ -2,17 +2,15 @@
 
 #include <string.h>
 
-#include <revolution/so/so.h>
-
-#include <sp/net/mkw_server/JoinFroomRequest.h>
 #include <sp/net/mkw_server/MKW-Server.h>
-#include <sp/net/mkw_server/MatchRequestHeader.h>
+#include <sp/net/mkw_server/packets/JoinFroomRequest.h>
+#include <sp/net/mkw_server/packets/MKWServerInfo.h>
+#include <sp/net/mkw_server/packets/MatchMakingInfo.h>
+#include <sp/net/mkw_server/packets/MatchRequestHeader.h>
 
 static SOSockAddrIn s_serverAddr;
-static SOCKET s_socket = -1;
+SOCKET g_MatchMakingSocket = -1;
 static s32 connection = -1;
-
-MatchPacket g_recvMatchPacket;
 
 bool connectToRoomManager() {
     if (connection == 0) {
@@ -28,16 +26,16 @@ bool connectToRoomManager() {
     const char *serverHostname = "mariokartwii.ms19.gs.nintendowifi.net";
     s_serverAddr.addr.addr = inet_addr(serverHostname);
 
-    if (s_socket == -1) {
-        s_socket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
-        if (s_socket == -1) {
+    if (g_MatchMakingSocket == -1) {
+        g_MatchMakingSocket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+        if (g_MatchMakingSocket == -1) {
             SP_LOG("Failed to create room manager socket!");
             return false;
         }
     }
 
     s_serverAddr.len = sizeof(s_serverAddr);
-    connection = SOConnect(s_socket, &s_serverAddr);
+    connection = SOConnect(g_MatchMakingSocket, &s_serverAddr);
 
     if (connection != 0) {
         SP_LOG("Failed to connect to room manager server. connection: %d", connection);
@@ -45,13 +43,13 @@ bool connectToRoomManager() {
     }
 
     // set non-blocking, credits: vabold
-    s32 result = SOFcntl(s_socket, SO_F_GETFL, 0);
+    s32 result = SOFcntl(g_MatchMakingSocket, SO_F_GETFL, 0);
     if (result == -1) {
         SP_LOG("Failed to get status flags, returned %d", result);
         return false;
     }
 
-    result = SOFcntl(s_socket, SO_F_SETFL, result | SO_O_NONBLOCK);
+    result = SOFcntl(g_MatchMakingSocket, SO_F_SETFL, result | SO_O_NONBLOCK);
     if (result != 0) {
         SP_LOG("Failed to set status flags, returned %d", result);
         return false;
@@ -61,42 +59,58 @@ bool connectToRoomManager() {
 }
 
 void resetRoomManagerConnection() {
-    if (s_socket != -1 && connection == 0) {
-        SOClose(s_socket);
-        s_socket = -1;
+    if (g_MatchMakingSocket != -1 && connection == 0) {
+        SOClose(g_MatchMakingSocket);
+        g_MatchMakingSocket = -1;
         connection = -1;
     }
 }
 
 bool sendToRoomManager(void *message, s32 messageLength) {
     // check if we're connected to the server
-    if (s_socket == -1) {
+    if (g_MatchMakingSocket == -1) {
         SP_LOG("Not connected to room manager server!");
         return false;
     }
 
-    return SOSend(s_socket, message, messageLength, 0);
+    return SOSend(g_MatchMakingSocket, message, messageLength, 0);
 }
 
 bool recvFromRoomManager() {
-    if (s_socket == -1) {
+    if (g_MatchMakingSocket == -1) {
         return false;
     }
 
-    MatchPacket resp;
+    // first recv the magic, return if recv isn't 4 (i think)
+    // 4 indicates sucessful recv
+    u32 magic;
+    s32 magicRecv = SORecv(g_MatchMakingSocket, (void *)&magic, sizeof(u32), 0);
+    if (magicRecv != 4) {
+        return false;
+    }
 
-    s32 recvResult = SORecv(s_socket, (void *)&resp, sizeof(MatchPacket), 0);
-
-    if (recvResult > 0) {
-        if (resp.magic != 0x77846772) {
-            SP_LOG("Invalid magic in room manager response: %08X", resp.magic);
-            return false;
+    bool dataRecvResult = false;
+    switch (magic) {
+    case MATCH_MAKING_INFO:
+        dataRecvResult = recvMatchMakingInfoPacket();
+        if (!dataRecvResult) {
+            SP_LOG("Got Match Making Info magic (%d) but recvMatchMakingInfoPacket() returned false!",
+                    MATCH_MAKING_INFO);
         }
+        return dataRecvResult;
 
-        // we should probably call a function that validates the received packet
-        memcpy(&g_recvMatchPacket, &resp, sizeof(MatchPacket));
+        break;
+    case MKW_SERVER_INFO:
+        dataRecvResult = recvMKWServerInfoPacket();
+        if (!dataRecvResult) {
+            SP_LOG("Got MKWServerInfo magic (%d) but recvMKWServerInfoPacket() returned false", MKW_SERVER_INFO);
+        }
+        return dataRecvResult;
 
-        return true;
+        break;
+    default:
+        SP_LOG("Received unknown packet type with magic %x", magic);
+        break;
     }
 
     return false;
@@ -110,12 +124,12 @@ bool sendOpenFroomRequest() {
 }
 
 bool sendJoinFroomRequest(s32 friendProfileId) {
-    JoinFroomRequest joinRequest;
-    memset(&joinRequest, 0, sizeof(JoinFroomRequest));
+    JoinFroomRequestPacket joinRequest;
+    memset(&joinRequest, 0, sizeof(JoinFroomRequestPacket));
     createMatchRequestHeader(&joinRequest.header, MATCH_REQUEST_JOIN_ROOM, wfcSearchId);
 
     joinRequest.friendProfileId = friendProfileId;
-    SP_LOG("Sending JoinFroomRequest for friend profile ID: %d", friendProfileId);
+    SP_LOG("Sending JoinFroomRequestPacket for friend profile ID: %d", friendProfileId);
 
     return sendToRoomManager(&joinRequest, sizeof(joinRequest));
 }

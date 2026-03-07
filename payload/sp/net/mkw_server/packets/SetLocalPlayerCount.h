@@ -6,7 +6,6 @@
 
 typedef struct {
     MatchRequestHeader header;
-    u32 friendProfileId;
-    u8 _14[0x18 - 0x14]; // padding
-} JoinFroomRequest;
-static_assert(sizeof(JoinFroomRequest) == 0x18);
+    u8 playerCount;
+} SetLocalPlayerCountRequest;
+static_assert(sizeof(SetLocalPlayerCountRequest) == 0x18);
