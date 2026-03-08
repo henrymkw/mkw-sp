@@ -13,10 +13,9 @@ public:
     }
 
 private:
-
     u8 _00[0x9c - 0x00];
     static SectionManager *s_instance;
 };
 static_assert(sizeof(SectionManager) == 0x9c);
 
-}
+} // namespace UI
