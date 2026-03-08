@@ -51,6 +51,6 @@ REPLACE u8 DWC_GetSuspendMatch();
 
 REPLACE u8 DWC_IsValidMatchCancel();
 
-REPLACE DWCConnectionUserData DWC_GetConnectionUserData(u8 aid);
+REPLACE bool DWC_GetConnectionUserData(u8 aid, DWCConnectionUserData *playerCount);
 
 extern DWCControl *s_dwcControl;
