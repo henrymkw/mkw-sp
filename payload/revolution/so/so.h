@@ -6,7 +6,6 @@
 
 typedef struct SOInAddr {
     u32 addr;
-
 } SOInAddr;
 
 typedef struct SOSockAddr {

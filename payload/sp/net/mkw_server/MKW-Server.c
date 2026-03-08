@@ -22,7 +22,8 @@ void setMKWServerAddress(u32 addr, u16 port) {
     g_mkwServerAddr.family = 2;
 
     hasMKWServerAddress = true;
-    SP_LOG("Set MKW Server Address: %08x:%u", g_mkwServerAddr.addr.addr, SOHtoNs(g_mkwServerAddr.port));
+    SP_LOG("Set MKW Server Address: %08x:%u", g_mkwServerAddr.addr.addr,
+            SOHtoNs(g_mkwServerAddr.port));
 }
 
 void resetMKWServerInfo() {
@@ -38,12 +39,9 @@ void applyMKWServerHeader(u8 *packet, u8 aid) {
 
 bool trySendRacePacketToMKWServer(const void *data, u32 size) {
     if (!hasMKWServerAddress) {
-        // SP_LOG("Can't send packet to MKW-Server, dont have address");
         return false;
     }
-    if (g_recvMatchPacket.hostAid != g_recvMatchPacket.myAid) {
-        // SP_LOG("Has mkw-server address on send");
-    }
+
     bool result = SOSendTo(s_dwcMatch->qrec->hbsock, data, size, 0, (void *)&g_mkwServerAddr);
     if (!result) {
         SP_LOG("Failed to send to MKW Server!");

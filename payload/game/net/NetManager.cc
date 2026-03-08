@@ -105,16 +105,11 @@ void NetManager::sendRacePacket() {
             // we only want to send once a frame, the loop is mainly here to update the structs for
             // other players.
 
-            sentSuccessfully = trySendRacePacketToMKWServer(outgoingPacket->packet(), outgoingPacket->packetSize());
-
-            /*
             if (!sentSuccessfully) {
-                sentSuccessfully =
-                        DWC_SendUnreliable(aid, reinterpret_cast<u8 *>(outgoingPacket->packet()),
-                                outgoingPacket->packetSize());
-                sentTime = OSGetTime();
+                sentSuccessfully = trySendRacePacketToMKWServer(outgoingPacket->packet(),
+                        outgoingPacket->packetSize());
             }
-            */
+
             if (sentSuccessfully) {
                 OSTime lastSentTime = m_timeOfLastSentRace[aid];
                 if (lastSentTime != 0) {
@@ -132,8 +127,7 @@ void NetManager::sendRacePacket() {
 }
 
 void NetManager::processBufferedRacePacket(u8 *buffer, u32 size) {
-    SP::CombinedRaceHeader *combinedRaceHeader =
-            reinterpret_cast<SP::CombinedRaceHeader *>(buffer);
+    SP::CombinedRaceHeader *combinedRaceHeader = reinterpret_cast<SP::CombinedRaceHeader *>(buffer);
     u32 processedSize = 0;
     for (u8 i = 0; i < combinedRaceHeader->numPackets; i++) {
         u16 packetOffset = combinedRaceHeader->offsets[i];
@@ -156,7 +150,6 @@ void NetManager::processBufferedRacePacket(u8 *buffer, u32 size) {
 }
 
 void NetManager::processRacePacket(u8 aid, u8 *packet, u32 size) {
-    // SP_LOG("Processing race packet of size %d", size);
     Header *header = reinterpret_cast<Header *>(packet);
     u32 origCrc32 = header->crc32;
     header->crc32 = 0;

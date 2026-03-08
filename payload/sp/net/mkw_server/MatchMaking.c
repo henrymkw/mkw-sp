@@ -94,7 +94,8 @@ bool recvFromRoomManager() {
     case MATCH_MAKING_INFO:
         dataRecvResult = recvMatchMakingInfoPacket();
         if (!dataRecvResult) {
-            SP_LOG("Got Match Making Info magic (%d) but recvMatchMakingInfoPacket() returned false!",
+            SP_LOG("Got Match Making Info magic (%d) but recvMatchMakingInfoPacket() returned "
+                   "false!",
                     MATCH_MAKING_INFO);
         }
         return dataRecvResult;
@@ -103,7 +104,8 @@ bool recvFromRoomManager() {
     case MKW_SERVER_INFO:
         dataRecvResult = recvMKWServerInfoPacket();
         if (!dataRecvResult) {
-            SP_LOG("Got MKWServerInfo magic (%d) but recvMKWServerInfoPacket() returned false", MKW_SERVER_INFO);
+            SP_LOG("Got MKWServerInfo magic (%d) but recvMKWServerInfoPacket() returned false",
+                    MKW_SERVER_INFO);
         }
         return dataRecvResult;
 
