@@ -7,7 +7,7 @@
 
 extern bool hasMKWServerAddress;
 extern bool hasSentMKWServerAddressRequest;
-extern SOSockAddrIn mkwServerAddr;
+extern SOSockAddrIn g_mkwServerAddr;
 
 extern u64 wfcSearchId;
 
@@ -25,8 +25,7 @@ typedef enum {
     MKW_SERVER_MSG_TYPE_SVR_ADDR = 0x1,
 } MKWServerMessageType;
 
-void tryGetMKWServerAddress();
-void setMKWServerAddress(const u8 *msg, u32 len);
+void setMKWServerAddress(u32 addr, u16 port);
 void resetMKWServerInfo();
 
 void applyMKWServerHeader(u8 *packet, u8 aid);

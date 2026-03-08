@@ -4,7 +4,7 @@ DWC Uses ProfileIDs to associate friends
 
 s32 DWCi_GetProfileIDFromList(s32 friendIdx) returns the friends profileId.
 
-The client can send a JoinFroomRequest, which could just be a MatchRequestHeader + ProfileId
+The client can send a JoinFroomRequestPacket, which could just be a MatchRequestHeader + ProfileId
 
 Looks like the changes need to be done are non-obvious. We need to verify that two players are friends (or the host has open-host enabled). All the friend data is in gpcm while the match making logic/where the JoinFriend request will be handled is in qr2.
 

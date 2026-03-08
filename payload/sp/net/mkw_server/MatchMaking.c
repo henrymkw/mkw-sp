@@ -89,18 +89,24 @@ bool recvFromRoomManager() {
         return false;
     }
 
+    bool dataRecvResult = false;
     switch (magic) {
     case MATCH_MAKING_INFO:
-        bool recvResult = recvMatchMakingInfoPacket();
-        if (!recvResult) {
-            SP_LOG("Got Match Making Info magic (%d) but recvMatchMakingInfoPacket() returned "
-                   "false!",
+        dataRecvResult = recvMatchMakingInfoPacket();
+        if (!dataRecvResult) {
+            SP_LOG("Got Match Making Info magic (%d) but recvMatchMakingInfoPacket() returned false!",
                     MATCH_MAKING_INFO);
         }
-        return recvResult;
+        return dataRecvResult;
 
         break;
     case MKW_SERVER_INFO:
+        dataRecvResult = recvMKWServerInfoPacket();
+        if (!dataRecvResult) {
+            SP_LOG("Got MKWServerInfo magic (%d) but recvMKWServerInfoPacket() returned false", MKW_SERVER_INFO);
+        }
+        return dataRecvResult;
+
         break;
     default:
         SP_LOG("Received unknown packet type with magic %x", magic);

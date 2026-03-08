@@ -23,6 +23,7 @@ BOOL DWCi_GT2UnrecognizedMessageCallback(GT2Socket socket, u32 ip, u16 port, con
 
         // the aid is in offset 0x3
         u8 aid = message[3];
+	
         s_dwcTransport->userRecvCallback(aid, message, len);
         return TRUE;
     case MKW_SERVER_COMBINED_RACE_PACKET:
@@ -40,7 +41,8 @@ BOOL DWCi_GT2UnrecognizedMessageCallback(GT2Socket socket, u32 ip, u16 port, con
         }
 
         if (message[1] == MKW_SERVER_MSG_TYPE_SVR_ADDR) {
-            setMKWServerAddress(message, len);
+            SP_LOG("OLD WAY OF SETTING MKW-SERVER");
+            // setMKWServerAddress(message, len);
             return TRUE;
         }
         break;
