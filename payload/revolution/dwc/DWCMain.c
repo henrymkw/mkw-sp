@@ -36,12 +36,17 @@ u8 DWC_IsValidMatchCancel() {
     return g_recvMatchPacket.canceled;
 }
 
-DWCConnectionUserData DWC_GetConnectionUserData(u8 aid) {
+bool DWC_GetConnectionUserData(u8 aid, DWCConnectionUserData *playerCount) {
     if (aid >= 12) {
         SP_LOG("Invalid aid %d, returning 0", aid);
-        DWCConnectionUserData zeros;
-        zeros.playersAtConsole = 0;
-        return zeros;
+        return false;
     }
-    return g_recvMatchPacket.localPlayerCount[aid];
+    
+    if (playerCount == NULL) {
+        SP_LOG("playerCount is null, returning false");
+        return false;
+    }
+
+    playerCount->playersAtConsole = g_recvMatchPacket.localPlayerCount[aid].playersAtConsole;
+    return true;
 }
