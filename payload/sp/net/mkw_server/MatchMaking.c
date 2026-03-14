@@ -12,6 +12,7 @@
 static SOSockAddrIn s_serverAddr;
 SOCKET g_MatchMakingSocket = -1;
 static s32 connection = -1;
+static bool s_lastSuspendVote = false;
 
 bool connectToRoomManager() {
     if (connection == 0) {
@@ -145,9 +146,14 @@ bool sendLeaveFroomRequest() {
 }
 
 bool sendSuspendRequest(bool suspendVote) {
+    if (suspendVote == s_lastSuspendVote) {
+        return true;
+    }
+
     SuspendRequestPacket suspendRequest;
     createMatchRequestHeader(&suspendRequest.header, MATCH_REQUEST_SUSPEND, wfcSearchId);
     suspendRequest.suspendVote = suspendVote;
+    s_lastSuspendVote = suspendVote;
 
     return sendToRoomManager(&suspendRequest, sizeof(suspendRequest));
 }
