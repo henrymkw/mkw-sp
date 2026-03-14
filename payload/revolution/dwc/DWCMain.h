@@ -53,4 +53,6 @@ REPLACE u8 DWC_IsValidMatchCancel();
 
 REPLACE bool DWC_GetConnectionUserData(u8 aid, DWCConnectionUserData *playerCount);
 
+REPLACE bool DWC_RequestSuspendMatchAsync(bool suspendVote);
+
 extern DWCControl *s_dwcControl;

@@ -9,9 +9,11 @@
 extern SOCKET g_MatchMakingSocket;
 
 typedef enum {
-    MATCH_REQUEST_OPEN_ROOM = 0x0,
-    MATCH_REQUEST_JOIN_ROOM = 0x1,
-    MATCH_REQUEST_LEAVE_ROOM = 0x2
+    MATCH_REQUEST_OPEN_ROOM = 0,
+    MATCH_REQUEST_JOIN_ROOM = 1,
+    MATCH_REQUEST_LEAVE_ROOM = 2,
+    MATCH_REQUEST_SUSPEND = 3,
+
 } MatchRequestType;
 
 // opens up a tcp connection, called when player wants to create or join a room
@@ -31,3 +33,5 @@ bool sendOpenFroomRequest();
 bool sendJoinFroomRequest(s32 friendProfileId);
 
 bool sendLeaveFroomRequest();
+
+bool sendSuspendRequest(bool suspendVote);

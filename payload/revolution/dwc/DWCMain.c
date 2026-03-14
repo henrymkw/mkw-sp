@@ -41,7 +41,7 @@ bool DWC_GetConnectionUserData(u8 aid, DWCConnectionUserData *playerCount) {
         SP_LOG("Invalid aid %d, returning 0", aid);
         return false;
     }
-    
+
     if (playerCount == NULL) {
         SP_LOG("playerCount is null, returning false");
         return false;
@@ -49,4 +49,11 @@ bool DWC_GetConnectionUserData(u8 aid, DWCConnectionUserData *playerCount) {
 
     playerCount->playersAtConsole = g_recvMatchPacket.localPlayerCount[aid].playersAtConsole;
     return true;
+}
+
+bool DWC_RequestSuspendMatchAsync(bool suspendVote) {
+    if (connectToRoomManager()) {
+        return sendSuspendRequest(suspendVote);
+    }
+    return false;
 }
