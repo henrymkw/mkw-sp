@@ -135,3 +135,10 @@ bool sendJoinFroomRequest(s32 friendProfileId) {
 
     return sendToRoomManager(&joinRequest, sizeof(joinRequest));
 }
+
+bool sendLeaveFroomRequest() {
+    MatchRequestHeader leaveRoomRequest;
+    createMatchRequestHeader(&leaveRoomRequest, MATCH_REQUEST_LEAVE_ROOM, wfcSearchId);
+
+    return sendToRoomManager(&leaveRoomRequest, sizeof(leaveRoomRequest));
+}

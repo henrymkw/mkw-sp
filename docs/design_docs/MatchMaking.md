@@ -91,7 +91,7 @@ For the player to open a room, join a room, search for a public room, etc., they
 | Padding | Padding | 0x5 | 0x3 |
 | SearchId | Client SearchId | 0x8 | 0x8 |
 
-### `OpenRoom` packet
+### `OpenFroom` packet
 
 Request to create a private room. This packet structure is simple.
 
@@ -107,16 +107,15 @@ Request to join a friend's private room.
 | ---- | ----------- | ------ | ------ |
 | `MatchRequestHeader` | Header, `MatchRequestType` must be 1 | 0x00 | 0x10 |
 | FriendProfileId | ProfileId of the friend to join. | 0x10 | 0x4 |
+| Padding | Padding | 0x14 | 0x4 |
 
-### `SearchPublicRoom` packet
+### `LeaveFroom` packet
 
-Request to search for a public room.
+Request to leave private room.
 
 | Name | Description | Offset | Length |
 | ---- | ----------- | ------ | ------ |
 | `MatchRequestHeader` | Header, `MatchRequestType` must be 2 | 0x00 | 0x10 |
-| Region | Search Region. Value differs on the region to search. Value 0 is regionless (worldwide), 1 is NA, 2, is EU, 3 is JP, 4 is KOR. | 0x10 | 0x1 |
-| Padding | Padding | 0x11 | 0x03 |
 
 ### `VoteSuspendMatch` packet
 
@@ -126,6 +125,16 @@ Vote to suspend match making. Must already be in a room to send, which `wfc-serv
 | -- | ----------- | ------ | ------ |
 | `MatchRequestHeader` | Header, `MatchRequestType` must be 3 | 0x00 | 0x10 |
 | SuspendVote | Vote for match making suspension. 0 is a unsuspend vote, 1 is a suspend vote. | 0x10 | 0x1 |
+| Padding | Padding | 0x11 | 0x03 |
+
+### `SearchPublicRoom` packet
+
+Request to search for a public room.
+
+| Name | Description | Offset | Length |
+| ---- | ----------- | ------ | ------ |
+| `MatchRequestHeader` | Header, `MatchRequestType` must be 4 | 0x00 | 0x10 |
+| Region | Search Region. Value differs on the region to search. Value 0 is regionless (worldwide), 1 is NA, 2, is EU, 3 is JP, 4 is KOR. | 0x10 | 0x1 |
 | Padding | Padding | 0x11 | 0x03 |
 
 ## Client Code Changes
