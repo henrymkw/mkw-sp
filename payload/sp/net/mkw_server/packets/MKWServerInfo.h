@@ -2,7 +2,7 @@
 
 #include <Common.h>
 
-#define MKW_SERVER_INFO 0x77758783
+#define MKW_SERVER_INFO 0x4D4B5753 // "MKWS"
 
 typedef struct {
     u32 address;
