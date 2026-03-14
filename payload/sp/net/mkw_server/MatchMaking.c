@@ -7,6 +7,7 @@
 #include <sp/net/mkw_server/packets/MKWServerInfo.h>
 #include <sp/net/mkw_server/packets/MatchMakingInfo.h>
 #include <sp/net/mkw_server/packets/MatchRequestHeader.h>
+#include <sp/net/mkw_server/packets/SuspendRequest.h>
 
 static SOSockAddrIn s_serverAddr;
 SOCKET g_MatchMakingSocket = -1;
@@ -141,4 +142,12 @@ bool sendLeaveFroomRequest() {
     createMatchRequestHeader(&leaveRoomRequest, MATCH_REQUEST_LEAVE_ROOM, wfcSearchId);
 
     return sendToRoomManager(&leaveRoomRequest, sizeof(leaveRoomRequest));
+}
+
+bool sendSuspendRequest(bool suspendVote) {
+    SuspendRequestPacket suspendRequest;
+    createMatchRequestHeader(&suspendRequest.header, MATCH_REQUEST_SUSPEND, wfcSearchId);
+    suspendRequest.suspendVote = suspendVote;
+
+    return sendToRoomManager(&suspendRequest, sizeof(suspendRequest));
 }

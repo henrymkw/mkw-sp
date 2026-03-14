@@ -16,6 +16,16 @@ namespace Net {
 
 void NetManager::handleError() {
     REPLACED(handleError)();
+
+    // this particular case means we have left the room, so send a LeaveFroom to wfc-server
+    // TODO: Rewrite this to be a patch at 0x80657940 (PAL) so this doesn't have to be ran every
+    // frame
+    if (m_prevConnecitonState == ConnectionState::InMatchMaking &&
+            m_connectionState == ConnectionState::Idle) {
+        sendLeaveFroomRequest();
+    }
+    m_prevConnecitonState = m_connectionState;
+
     // were in this state when were searching/in a room
     // and while in a race. Otherwise, we want to make sure were
     // not connected to the room manager (i dont like this this)

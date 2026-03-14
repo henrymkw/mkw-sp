@@ -145,7 +145,7 @@ private:
     EGG::TaskThread *m_taskThread; // runs the mainLoop
     ConnectionState m_connectionState;
     DisconnectInfo m_disconnectInfo;
-    u8 _0034[0x0038 - 0x0034];             // padding?
+    ConnectionState m_prevConnecitonState; // added, was (likely) padding
     MatchMakingInfo m_matchMakingInfos[2]; // 0x0038 - 0x00e8
     RoomType m_roomType;
     VoteMatchMakingSuspended m_voteMMSuspension;
