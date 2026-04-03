@@ -759,21 +759,11 @@ with open(args.out_path, 'w') as out_file:
 
             # At the moment, this script only supports porting addresses from the PAL version of the game to other versions of the game
             binary_name = get_binary_name('P', address)
-            bss_section = next((section for section in SRC_BINARIES['P']['rel'].sections if section.name == 'bss'), None)
-            if bss_section is None:
-                sys.exit('Couldn\'t find the \'.bss\' section of the \'StaticR.rel\' module!')
-            is_rel_bss = bss_section.start <= address < bss_section.end
 
             address = port(args.region, address)
             if address is None:
                 sys.exit(f'Couldn\'t port symbol {name} to region {args.region}!')
-            if is_rel_bss and not args.base:
-                address -= {
-                    'P': 0xe02ec,
-                    'E': 0xe028c,
-                    'J': 0xe020c,
-                    'K': 0xe048c,
-                }[args.region]
+            
             address -= SRC_BINARIES[args.region][binary_name].start
             address += DST_BINARIES[args.region][binary_name].start
             write_symbol(out_file, name, address)

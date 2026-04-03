@@ -17,9 +17,6 @@ public:
     void beforeCalc();
     void calc();
 
-    REPLACE static KartObjectManager *CreateInstance();
-    static KartObjectManager *REPLACED(CreateInstance)();
-
     static KartObjectManager *Instance() {
         return s_instance;
     }
