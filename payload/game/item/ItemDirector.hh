@@ -16,9 +16,6 @@ public:
         return m_players;
     }
 
-    REPLACE static ItemDirector *CreateInstance();
-    static ItemDirector *REPLACED(CreateInstance)();
-
     static ItemDirector *Instance() {
         return s_instance;
     }
