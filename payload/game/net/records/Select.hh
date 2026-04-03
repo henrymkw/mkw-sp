@@ -41,9 +41,6 @@ struct SelectRecord {
 static_assert(sizeof(SelectRecord) == 0x38);
 class SelectHandler {
 private:
-    static REPLACE SelectHandler *CreateInstance();
-    static SelectHandler *REPLACED(CreateInstance)();
-
     void update();
 
     OnlineMode mode;

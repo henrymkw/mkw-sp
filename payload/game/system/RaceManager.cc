@@ -67,11 +67,6 @@ RaceManager::Player *RaceManager::player(u32 playerId) {
     return m_players[playerId];
 }
 
-RaceManager *RaceManager::CreateInstance() {
-    s_instance = REPLACED(CreateInstance)();
-    return s_instance;
-}
-
 RaceManager *RaceManager::Instance() {
     return s_instance;
 }

@@ -36,10 +36,6 @@ public:
     static RaceManager *Instance();
 
 private:
-    // CreateInstance() is hooked to set the s_instance pointer
-    static REPLACE RaceManager *CreateInstance();
-    static RaceManager *REPLACED(CreateInstance)();
-
     void calc();
 
     u8 _00[0x0c - 0x00];
