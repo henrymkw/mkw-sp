@@ -1,5 +1,7 @@
 #include "NetManager.hh"
 
+#include "game/net/records/Room.hh"
+
 extern "C" {
 #include <revolution.h>
 #include <sp/net/mkw_server/MKW-Server.h>
@@ -14,17 +16,60 @@ extern "C" {
 
 namespace Net {
 
+SearchRegion NetManager::getSearchRegion() {
+    // This would need to be modified for custom regions
+    switch (REGION) {
+    case REGION_P:
+        return SEARCH_REGION_EU;
+    case REGION_E:
+        return SEARCH_REGION_NA;
+    case REGION_J:
+        return SEARCH_REGION_JP;
+    case REGION_K:
+        return SEARCH_REGION_KOR;
+    default:
+        assert("Invalid region!");
+        return SEARCH_REGION_NONE;
+    }
+}
+
+void NetManager::connectToAnybodyAsync() {
+    if (connectToRoomManager()) {
+        // In vanilla, this function only gets called when searching for public rooms
+        // Because of that, we can assume that a non-ww room type is regional and can't be a private
+        // room
+        bool isWW =
+                m_roomType == RoomType::VersusWorldWide || m_roomType == RoomType::BattleWorldWide;
+        SearchRegion region = isWW ? SEARCH_REGION_WW : getSearchRegion();
+
+        bool isVS =
+                m_roomType == RoomType::VersusWorldWide || m_roomType == RoomType::VersusRegional;
+        GameMode mode = isVS ? GAME_MODE_VS : GAME_MODE_BATTLE;
+
+        if (!sendSearchRoomRequest(region, mode)) {
+            SP_LOG("Search room request failed! Region: %d, Mode: %d", region, mode);
+        }
+    }
+}
+
+void NetManager::cancelMatching() {
+    // Reset the two race packet handlers active during the globe scene
+    if (auto *rh1Handler = RH1Handler::Instance()) {
+        rh1Handler->reset();
+    }
+    if (auto *roomHandler = RoomHandler::Instance()) {
+        roomHandler->reset();
+    }
+
+    // This will exit the InMatchMaking state during the next iteration of the main loop
+    m_voteMMSuspension = VoteMatchMakingSuspended::Disconnected;
+
+    // inform wfc-server we're leaving the room
+    sendLeaveFroomRequest();
+}
+
 void NetManager::handleError() {
     REPLACED(handleError)();
-
-    // this particular case means we have left the room, so send a LeaveFroom to wfc-server
-    // TODO: Rewrite this to be a patch at 0x80657940 (PAL) so this doesn't have to be ran every
-    // frame
-    if (m_prevConnecitonState == ConnectionState::InMatchMaking &&
-            m_connectionState == ConnectionState::Idle) {
-        sendLeaveFroomRequest();
-    }
-    m_prevConnecitonState = m_connectionState;
 
     // were in this state when were searching/in a room
     // and while in a race. Otherwise, we want to make sure were

@@ -58,6 +58,12 @@ public:
     };
     static_assert(sizeof(RH1Player) == 0x30);
 
+    void reset();
+
+    static RH1Handler *Instance() {
+        return s_instance;
+    }
+
 private:
     void calc();
     void exportPackets();

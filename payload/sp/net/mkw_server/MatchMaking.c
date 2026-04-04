@@ -2,11 +2,12 @@
 
 #include <string.h>
 
+#include <sp/net/WiiLink.h>
 #include <sp/net/mkw_server/MKW-Server.h>
 #include <sp/net/mkw_server/packets/JoinFroomRequest.h>
 #include <sp/net/mkw_server/packets/MKWServerInfo.h>
-#include <sp/net/mkw_server/packets/MatchMakingInfo.h>
 #include <sp/net/mkw_server/packets/MatchRequestHeader.h>
+#include <sp/net/mkw_server/packets/SearchRoomRequest.h>
 #include <sp/net/mkw_server/packets/SuspendRequest.h>
 
 static SOSockAddrIn s_serverAddr;
@@ -15,7 +16,7 @@ static s32 connection = -1;
 
 bool connectToRoomManager() {
     if (connection == 0) {
-        SP_LOG("Already connected to Room Manager!");
+        // SP_LOG("Already connected to Room Manager!"); TODO: Unsupress!
         return true;
     }
 
@@ -24,8 +25,7 @@ bool connectToRoomManager() {
 
     // The wfc payload patches inet_addr to replace nintendowifi.net with whatever domain is used,
     // so this works (just unclear without comment, maybe should be changed to be a client patch)
-    const char *serverHostname = "mariokartwii.ms19.gs.nintendowifi.net";
-    s_serverAddr.addr.addr = inet_addr(serverHostname);
+    s_serverAddr.addr.addr = getWFCServerAddress();
 
     if (g_MatchMakingSocket == -1) {
         g_MatchMakingSocket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
@@ -123,6 +123,8 @@ bool sendOpenFroomRequest() {
     MatchRequestHeader openRoomRequest;
     createMatchRequestHeader(&openRoomRequest, MATCH_REQUEST_OPEN_ROOM, wfcSearchId);
 
+    SP_LOG("OpenFroom request header magic: %d", openRoomRequest.magic);
+
     return sendToRoomManager(&openRoomRequest, sizeof(openRoomRequest));
 }
 
@@ -138,6 +140,7 @@ bool sendJoinFroomRequest(s32 friendProfileId) {
 }
 
 bool sendLeaveFroomRequest() {
+    SP_LOG("Sending a leave request!");
     MatchRequestHeader leaveRoomRequest;
     createMatchRequestHeader(&leaveRoomRequest, MATCH_REQUEST_LEAVE_ROOM, wfcSearchId);
 
@@ -150,5 +153,23 @@ bool sendSuspendRequest(bool suspendVote) {
     suspendRequest.suspendVote = suspendVote;
 
     // TODO: Only send vote when it has changed
+    if (sizeof(suspendRequest) != 0x18) {
+        SP_LOG("SuspendRequest size isn't 0x18. Actual: %d. Vote: %d", sizeof(suspendRequest),
+                suspendRequest.suspendVote);
+    }
     return sendToRoomManager(&suspendRequest, sizeof(suspendRequest));
+}
+
+bool sendSearchRoomRequest(SearchRegion region, GameMode gameMode) {
+    SearchRoomRequestPacket searchRoomRequest;
+    memset(&searchRoomRequest, 0, sizeof(searchRoomRequest));
+    createMatchRequestHeader(&searchRoomRequest.header, MATCH_REQUEST_SEARCH_ROOM, wfcSearchId);
+    searchRoomRequest.region = region;
+    searchRoomRequest.gameMode = gameMode;
+
+    SP_LOG("Sending SearchRoomRequest where region: %d and gameMode: %d", region, gameMode);
+
+    SP_LOG("Search request header magic: %d and size %d", searchRoomRequest.header.magic,
+            sizeof(searchRoomRequest));
+    return sendToRoomManager(&searchRoomRequest, sizeof(searchRoomRequest));
 }
