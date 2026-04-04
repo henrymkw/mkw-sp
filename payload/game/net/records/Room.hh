@@ -25,6 +25,12 @@ class RoomHandler {
     static_assert(sizeof(RoomRecord) == 0x4);
 
 public:
+    void reset();
+
+    static RoomHandler *Instance() {
+        return s_instance;
+    }
+
 private:
     // Credits: https://wiki.tockdom.com/wiki/Network_Protocol/ROOM
 

@@ -15,6 +15,7 @@ extern "C" {
 #include <revolution/dwc/DWCNode.h>
 #include <revolution/os.h>
 #include <revolution/os/OSMutex.h>
+#include <sp/net/mkw_server/MatchMaking.h>
 }
 
 #define MAX_FRIEND_COUNT 30
@@ -99,6 +100,19 @@ private:
     };
     static_assert(sizeof(MatchMakingInfo) == 0x58);
 
+    // 0x80656898
+    // Called in vanilla to exit the InMatchMaking state (via exiting a room, disconnect, etc)
+    REPLACE void cancelMatching();
+
+    // 'converts' the REGION to associated SearchRegion
+    SearchRegion getSearchRegion();
+
+    // 0x80659170
+    // this gets called upon setting m_connectionState to InMatchMaking and the
+    // m_roomType is a public room. This function is replaced with mkw-server's public room joining
+    // logic
+    REPLACE void connectToAnybodyAsync();
+
     REPLACE void handleError();
     void REPLACED(handleError)();
 
@@ -145,7 +159,7 @@ private:
     EGG::TaskThread *m_taskThread; // runs the mainLoop
     ConnectionState m_connectionState;
     DisconnectInfo m_disconnectInfo;
-    ConnectionState m_prevConnecitonState; // added, was (likely) padding
+    u8 _0034[0x0038 - 0x0034];             // padding
     MatchMakingInfo m_matchMakingInfos[2]; // 0x0038 - 0x00e8
     RoomType m_roomType;
     VoteMatchMakingSuspended m_voteMMSuspension;
