@@ -113,6 +113,10 @@ private:
     // logic
     REPLACE void connectToAnybodyAsync();
 
+    // 0x80659680
+    // Called when joining a friends public room. replaced to implement mkw-server match making
+    REPLACE void connectToGameServerFromGroupId();
+
     REPLACE void handleError();
     void REPLACED(handleError)();
 
@@ -127,6 +131,8 @@ private:
     // patch to set the UserRecvCallback to our function that splits packets
     REPLACE void connect();
     void REPLACED(connect)();
+
+    MatchMakingInfo *currentMMInfo();
 
     // check that the aid isn't ours and the aid is in the room before sending a race packet
     bool canSendToAid(u8 aid) const;
@@ -150,6 +156,8 @@ private:
     REPLACE void sendRacePacket();
     // when settings are implemented, to turn mkw-server off, we just call the original function
     void REPLACED(sendRacePacket)();
+
+    FriendStatusIcon getFriendStatusIcon(u32 friendId);
 
     // Two vtables
     void *m_vtable1; // offset 0xc is NetManager's dtor

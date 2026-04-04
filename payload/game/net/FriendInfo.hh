@@ -19,11 +19,11 @@ enum class FriendStatus : u32 {
 
 // The enums here are a little confusing and deserve some explanation
 // Whereas FriendStatus only makes a destinction between public and private
-// rooms, FriendJoinableStatus goes a bit further in whether you can join the
+// rooms, FriendStatusIcon goes a bit further in whether you can join the
 // public room or not.
-enum class FriendJoinableStatus : u32 {
+enum class FriendStatusIcon : u32 {
     None = 0x0,
-    Offline = 0x1,
+    NotFriends = 0x1,
     Online = 0x2,
     OpenRoom = 0x3,
     PlayingWithFriend = 0x4,

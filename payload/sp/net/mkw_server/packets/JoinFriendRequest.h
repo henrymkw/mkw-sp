@@ -7,6 +7,7 @@
 typedef struct {
     MatchRequestHeader header;
     u32 friendProfileId;
-    u8 _14[0x18 - 0x14]; // padding
-} JoinFroomRequestPacket;
-static_assert(sizeof(JoinFroomRequestPacket) == 0x18);
+    SearchRegion searchRegion : 8;
+    u8 _15[0x18 - 0x15]; // padding
+} JoinFriendRequestPacket;
+static_assert(sizeof(JoinFriendRequestPacket) == 0x18);
