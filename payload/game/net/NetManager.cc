@@ -52,6 +52,31 @@ void NetManager::connectToAnybodyAsync() {
     }
 }
 
+void NetManager::connectToGameServerFromGroupId() {
+    u32 friendId = currentMMInfo()->hostFriendId;
+    FriendStatusIcon icon = getFriendStatusIcon(friendId);
+    SearchRegion searchRegion = SEARCH_REGION_NONE;
+
+    switch (icon) {
+        case FriendStatusIcon::WorldWideVersus:
+        case FriendStatusIcon::WorldWideBattle:
+            searchRegion = SEARCH_REGION_WW;
+            break;
+        case FriendStatusIcon::JoinableRegionalVS:
+        case FriendStatusIcon::JoinableRegionalBattle:
+            searchRegion = getSearchRegion();
+            break;
+        default:
+            SP_LOG("Mismatching search region as friend trying to join!");
+            break;
+    }
+
+    s32 friendProfileId = DWCi_GetProfileIDFromList(friendId);
+    if (connectToRoomManager()) {
+        sendJoinFriendRequest(friendProfileId, searchRegion);
+    }
+}
+
 void NetManager::cancelMatching() {
     // Reset the two race packet handlers active during the globe scene
     if (auto *rh1Handler = RH1Handler::Instance()) {
@@ -103,6 +128,10 @@ void NetManager::connect() {
         SP_LOG("Failed to set buffered user receive callback");
     }
     */
+}
+
+NetManager::MatchMakingInfo *NetManager::currentMMInfo() {
+    return &m_matchMakingInfos[m_currMMInfo];
 }
 
 bool NetManager::canSendToAid(u8 aid) const {

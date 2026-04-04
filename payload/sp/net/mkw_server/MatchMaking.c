@@ -4,7 +4,7 @@
 
 #include <sp/net/WiiLink.h>
 #include <sp/net/mkw_server/MKW-Server.h>
-#include <sp/net/mkw_server/packets/JoinFroomRequest.h>
+#include <sp/net/mkw_server/packets/JoinFriendRequest.h>
 #include <sp/net/mkw_server/packets/MKWServerInfo.h>
 #include <sp/net/mkw_server/packets/MatchRequestHeader.h>
 #include <sp/net/mkw_server/packets/SearchRoomRequest.h>
@@ -128,13 +128,14 @@ bool sendOpenFroomRequest() {
     return sendToRoomManager(&openRoomRequest, sizeof(openRoomRequest));
 }
 
-bool sendJoinFroomRequest(s32 friendProfileId) {
-    JoinFroomRequestPacket joinRequest;
-    memset(&joinRequest, 0, sizeof(JoinFroomRequestPacket));
-    createMatchRequestHeader(&joinRequest.header, MATCH_REQUEST_JOIN_ROOM, wfcSearchId);
+bool sendJoinFriendRequest(s32 friendProfileId, SearchRegion searchRegion) {
+    JoinFriendRequestPacket joinRequest;
+    memset(&joinRequest, 0, sizeof(JoinFriendRequestPacket));
+    createMatchRequestHeader(&joinRequest.header, MATCH_REQUEST_JOIN_FRIEND, wfcSearchId);
 
     joinRequest.friendProfileId = friendProfileId;
-    SP_LOG("Sending JoinFroomRequestPacket for friend profile ID: %d", friendProfileId);
+    joinRequest.searchRegion = searchRegion;
+    SP_LOG("Sending JoinFriendRequestPacket for friend profile ID: %d and searchRegion: %d", friendProfileId, searchRegion);
 
     return sendToRoomManager(&joinRequest, sizeof(joinRequest));
 }
