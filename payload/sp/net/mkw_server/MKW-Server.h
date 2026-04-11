@@ -29,7 +29,7 @@ void setMKWServerAddress(u32 addr, u16 port);
 
 void resetMKWServerInfo();
 
-bool applyMKWServerHeader(void *packet, u8 aid);
+bool applyMKWServerHeader(void *packet, u8 myAid, u8 applyMKWServerHeader);
 
 bool trySendRacePacketToMKWServer(const void *data, u32 size);
 

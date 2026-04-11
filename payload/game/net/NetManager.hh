@@ -5,8 +5,8 @@
 #include "game/net/DisconnectInfo.hh"
 #include "game/net/FriendInfo.hh"
 #include "game/net/MatchMakingInfo.hh"
-#include "game/net/PacketHolder.hh"
 #include "game/net/RacePacketHolder.hh"
+#include "game/net/RecordHolder.hh"
 
 #include <egg/core/eggExpHeap.hh>
 #include <egg/core/eggTaskThread.hh>
@@ -106,6 +106,8 @@ private:
     // check that the aid isn't ours and the aid is in the room before sending a race packet
     bool canSendToAid(u8 aid) const;
 
+    void flipLastSendIdx(u8 aid);
+
     u32 lastSendIdx(u8 aid) const {
         return m_lastSendIdx[aid];
     }
@@ -114,11 +116,17 @@ private:
         return m_sendRacePackets[lastSendIdx(aid)][aid];
     }
 
+    RecordHolder<void> *outgoingBuffer(u8 aid) {
+        return m_outgoingRacePacket[aid];
+    }
+
     // adds up the sizes in the header
     REPLACE u32 getRacePacketSize(u8 aid);
 
     // checks that my aid is unavailable and we have connected to someone
     REPLACE bool hasFoundMatch() const;
+
+    REPLACE void createRacePacket();
 
     // 0x80657e30
     // the patch patches the race packet. intention is for it to be called once a frame
@@ -148,7 +156,7 @@ private:
     RacePacketHolder *m_recvRacePackets[2][MAX_PLAYER_COUNT];
     // The Race packet to be sent, formed from m_sendRacePackets, one per aid /
     // 0x1b0
-    PacketHolder<void> *m_outgoingRacePacket[MAX_PLAYER_COUNT];
+    RecordHolder<void> *m_outgoingRacePacket[MAX_PLAYER_COUNT];
     OSTime m_timeOfLastSentRace[MAX_PLAYER_COUNT];        // 0x1e0
     OSTime m_timeOfLastRecvRace[MAX_PLAYER_COUNT];        // 0x240
     OSTime m_timeBetweenSendingPackets[MAX_PLAYER_COUNT]; // time bewteen sent

@@ -137,14 +137,77 @@ bool NetManager::hasFoundMatch() const {
     return aidInUse(myAid()) && numAids() > 1;
 }
 
+void NetManager::flipLastSendIdx(u8 aid) {
+    m_lastSendIdx[aid] ^= 1;
+}
+
 u32 NetManager::getRacePacketSize(u8 aid) {
     u32 size = 0;
     RacePacketHolder *holder = lastSentRaceBuffer(aid);
 
     for (u8 i = 0; i < 8; i++) {
-        size += holder->getPacketHolder(i)->packetSize();
+        size += holder->holder(i)->recordSize();
     }
     return size;
+}
+
+void NetManager::createRacePacket() {
+    if (!hasFoundMatch()) {
+        return;
+    }
+
+    for (u8 aid = 0; aid < MAX_PLAYER_COUNT; aid++) {
+        if (!canSendToAid(aid)) {
+            continue;
+        }
+
+        RacePacketHolder *lastSentPacket = lastSentRaceBuffer(aid);
+        // Bellow is some check vanilla does some check on the size here against 0.
+        // It returns early if the size is 0 and the time since last send is less than a second.
+        if (lastSentPacket->size() == 0) {
+            OSTime timeLastSentToAid = m_timeOfLastSentRace[aid];
+            OSTime delta = timeLastSentToAid == 0 ?
+                    -1 :
+                    OSTicksToMilliseconds(OSGetTime() - timeLastSentToAid);
+            if (delta <= 1000) {
+                continue;
+            }
+        }
+        u8 thisSendBufferIdx = m_lastSendIdx[aid];
+        flipLastSendIdx(aid); // XORs the last sent buffer index for next create()
+        RacePacketHolder *sendBuffer = m_sendRacePackets[thisSendBufferIdx][aid];
+
+        // get the outgoing race packet and clear it
+        RecordHolder<void> *outgoing = m_outgoingRacePacket[aid];
+        outgoing->reset();
+
+        // craft the header
+        Header header;
+        memset(&header, 0, sizeof(Header));
+
+        for (u8 i = 0; i < 8; i++) {
+            RecordHolder<void> *rh = sendBuffer->holder(i);
+
+            // The size of the header is always 0x10 and is always present
+            // 0 is is the record id for the header.
+            u8 size = i == 0 ? 0x10 : rh->recordSize();
+            header.setRecordSize(i, size);
+        }
+
+        // copy the crafted header to the outgoing buffer
+
+        sendBuffer->header()->copy(&header, sizeof(Header));
+
+        // outgoingRecordHolder->copy(&outgoingHeader, sizeof(outgoingHeader));
+
+        for (u8 i = 0; i < 8; i++) {
+            RecordHolder<void> *record = sendBuffer->holder(i);
+            if (record->recordSize() != 0) {
+                outgoing->append(record->record(), record->recordSize());
+                record->reset();
+            }
+        }
+    }
 }
 
 void NetManager::sendRacePacket() {
@@ -164,24 +227,24 @@ void NetManager::sendRacePacket() {
 
 bool NetManager::sendRacePacketToAid(u8 aid) {
     OSTime sentTime = 0;
-    PacketHolder<void> *outgoingPacket = m_outgoingRacePacket[aid];
+    RecordHolder<void> *outgoingPacket = m_outgoingRacePacket[aid];
 
-    if (outgoingPacket->packetSize() == 0) {
+    if (outgoingPacket->recordSize() == 0) {
         return false;
     }
     // Patch header for mkw-server. TODO: Move to createRacePacket()
-    if (!applyMKWServerHeader(outgoingPacket->packet(), myAid())) {
+    if (!applyMKWServerHeader(outgoingPacket->record(), myAid(), aid)) {
         return false;
     }
 
     // Calc the crc32
-    u32 crc32 = NETCalcCRC32(outgoingPacket->packet(), outgoingPacket->packetSize());
-    Header *header = reinterpret_cast<Header *>(outgoingPacket->packet());
+    u32 crc32 = NETCalcCRC32(outgoingPacket->record(), outgoingPacket->recordSize());
+    Header *header = reinterpret_cast<Header *>(outgoingPacket->record());
     header->crc32 = crc32;
 
     // Try to send
     bool sendResult =
-            trySendRacePacketToMKWServer(outgoingPacket->packet(), outgoingPacket->packetSize());
+            trySendRacePacketToMKWServer(outgoingPacket->record(), outgoingPacket->recordSize());
 
     // update time-based send members
     if (sendResult) {
@@ -218,15 +281,15 @@ void NetManager::processRacePacket(u8 aid, u8 *packet, u32 size) {
         // data for other packet is right after the header, so add the
         // packet[i] size to this to get a specific offset
         u8 *dataPacketPtr = reinterpret_cast<u8 *>(header);
-        for (u32 i = 0; i < std::size(header->packetSizes); i++) {
-            if (header->packetSizes[i] != 0) {
+        for (u32 i = 0; i < std::size(header->recordSizes); i++) {
+            if (header->recordSizes[i] != 0) {
                 // reset and copy the recieved packet into recv structs
-                m_recvRacePackets[m_lastRecvIdx[aid][i] ^ 1][aid]->getPacketHolder(i)->reset();
-                m_recvRacePackets[m_lastRecvIdx[aid][i] ^ 1][aid]->getPacketHolder(i)->copy(
-                        dataPacketPtr, header->packetSizes[i]);
+                m_recvRacePackets[m_lastRecvIdx[aid][i] ^ 1][aid]->holder(i)->reset();
+                m_recvRacePackets[m_lastRecvIdx[aid][i] ^ 1][aid]->holder(i)->copy(dataPacketPtr,
+                        header->recordSizes[i]);
 
                 // increment the data pointer to the next packet offset
-                dataPacketPtr += header->packetSizes[i];
+                dataPacketPtr += header->recordSizes[i];
 
                 // flip the last recieved buffer idx
                 m_lastRecvIdx[aid][i] ^= 1;
