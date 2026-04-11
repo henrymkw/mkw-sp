@@ -137,10 +137,6 @@ bool NetManager::hasFoundMatch() const {
     return aidInUse(myAid()) && numAids() > 1;
 }
 
-void NetManager::flipLastSendIdx(u8 aid) {
-    m_lastSendIdx[aid] ^= 1;
-}
-
 u32 NetManager::getRacePacketSize(u8 aid) {
     u32 size = 0;
     RacePacketHolder *holder = lastSentRaceBuffer(aid);
@@ -161,45 +157,30 @@ void NetManager::createRacePacket() {
             continue;
         }
 
-        RacePacketHolder *lastSentPacket = lastSentRaceBuffer(aid);
-        // Bellow is some check vanilla does some check on the size here against 0.
-        // It returns early if the size is 0 and the time since last send is less than a second.
-        if (lastSentPacket->size() == 0) {
-            OSTime timeLastSentToAid = m_timeOfLastSentRace[aid];
-            OSTime delta = timeLastSentToAid == 0 ?
-                    -1 :
-                    OSTicksToMilliseconds(OSGetTime() - timeLastSentToAid);
-            if (delta <= 1000) {
-                continue;
-            }
-        }
-        u8 thisSendBufferIdx = m_lastSendIdx[aid];
-        flipLastSendIdx(aid); // XORs the last sent buffer index for next create()
-        RacePacketHolder *sendBuffer = m_sendRacePackets[thisSendBufferIdx][aid];
+        // Get the current send buffer then flip it so subsequent record exports work
+        u8 sendBufferIdx = m_lastSendIdx[aid];
+        m_lastSendIdx[aid] ^= 1;
 
-        // get the outgoing race packet and clear it
-        RecordHolder<void> *outgoing = m_outgoingRacePacket[aid];
-        outgoing->reset();
-
-        // craft the header
+        RacePacketHolder *sendBuffer = m_sendRacePackets[sendBufferIdx][aid];
+        // Set the outgoing header's sizes
         Header header;
         memset(&header, 0, sizeof(Header));
-
         for (u8 i = 0; i < 8; i++) {
             RecordHolder<void> *rh = sendBuffer->holder(i);
 
-            // The size of the header is always 0x10 and is always present
-            // 0 is is the record id for the header.
+            // Header (idx == 0) always exists and has a size of 0x10
+            // Use the actual record size for all other records
             u8 size = i == 0 ? 0x10 : rh->recordSize();
             header.setRecordSize(i, size);
         }
 
-        // copy the crafted header to the outgoing buffer
-
+        // copy the header
         sendBuffer->header()->copy(&header, sizeof(Header));
 
-        // outgoingRecordHolder->copy(&outgoingHeader, sizeof(outgoingHeader));
+        RecordHolder<void> *outgoing = m_outgoingRacePacket[aid];
+        outgoing->reset();
 
+        // copy the records in the sendBuffer to the outgoing buffer
         for (u8 i = 0; i < 8; i++) {
             RecordHolder<void> *record = sendBuffer->holder(i);
             if (record->recordSize() != 0) {
