@@ -4,6 +4,7 @@
 
 #include "game/net/DisconnectInfo.hh"
 #include "game/net/FriendInfo.hh"
+#include "game/net/MatchMakingInfo.hh"
 #include "game/net/PacketHolder.hh"
 #include "game/net/RacePacketHolder.hh"
 
@@ -29,13 +30,11 @@ public:
         return s_instance;
     }
 
-    // new function. the buffer is a number of concatenated race packets
-    // it reads the header to split each one up to be processed individually
-    void processBufferedRacePacket(u8 *buffer, u32 size);
+    u8 myAid() const;
 
-    // nearly byte-matched (regswap) so REPLACE is acceptable
-    REPLACE void processRacePacket(u8 aid, u8 *header, u32 size);
-    void REPLACED(processRacePacket)(u8 aid, u8 *header, u32 size);
+    u32 availableAids() const;
+
+    u32 numAids() const;
 
 private:
     enum class ConnectionState : u32 {
@@ -75,31 +74,6 @@ private:
         VoteUnsuspend = 0x3, // Set when private room ends
     };
 
-    struct MatchMakingInfo {         // 0x0038
-        OSTime matchMakingStartTime; // gets set upon match making 0x0 / 0x0038
-        u32 numConnectedConsoles;    // number of non guest players 0x8  / 0x0040
-        u32 playerCount;             // players in room (includes guests) 0xC / 0x0044
-        // bitmap of available aids. When (1 << aid) & availableAids == 1, the aid is taken
-        // when 0, the aid is available. This doesn't include guests 1. offset: 0x10 / nm: 0x0048
-        u32 availableAids;
-        u32 directConnectedAidBitmap; // Aids I'm connected to. It will fill up to
-                                      // equal fullAidBitmap by the end of MM as
-                                      // I connect to other users. 0x14 / 0x004c
-        u32 roomId;                   // Also known as groupId by DWC 0x18 / 0x0050
-        s32 hostFriendId;             // -1 if host isn't a friend. 0x1C / 0x0054
-        u8 localPlayerCount;          // 0x20 / 0x0058
-        u8 myAid;                     // 0x21 / 0x0059
-        u8 hostAid;                   // value returned by DWC_GetServerAid() 0x22 / 0x005a
-        DWCConnectionUserData localPlayerCounts[MAX_PLAYER_COUNT];
-        // When matching is suspended, friends aren't able to join your room.
-        // This gets set to true during the voting screen in public rooms
-        // and transitioning to opening a private room, both cases friends can't
-        // join.
-        bool isMatchMakingSuspended; // 0x53 / 0x008b
-        u8 _54[0x58 - 0x54];
-    };
-    static_assert(sizeof(MatchMakingInfo) == 0x58);
-
     // 0x80656898
     // Called in vanilla to exit the InMatchMaking state (via exiting a room, disconnect, etc)
     REPLACE void cancelMatching();
@@ -123,16 +97,11 @@ private:
     REPLACE void updateMatchMakingInfoAndRating();
     void REPLACED(updateMatchMakingInfoAndRating)();
 
-    // 0x80657004
-    REPLACE NetManager *construct(EGG::ExpHeap *heap);
-    NetManager *REPLACED(construct)(EGG::ExpHeap *heap);
+    const MatchMakingInfo *currentMMInfo() const;
 
-    // 0x80658b9c
-    // patch to set the UserRecvCallback to our function that splits packets
-    REPLACE void connect();
-    void REPLACED(connect)();
-
-    MatchMakingInfo *currentMMInfo();
+    // nearly byte-matched (regswap) so REPLACE is acceptable
+    REPLACE void processRacePacket(u8 aid, u8 *header, u32 size);
+    void REPLACED(processRacePacket)(u8 aid, u8 *header, u32 size);
 
     // check that the aid isn't ours and the aid is in the room before sending a race packet
     bool canSendToAid(u8 aid) const;
@@ -156,6 +125,8 @@ private:
     REPLACE void sendRacePacket();
     // when settings are implemented, to turn mkw-server off, we just call the original function
     void REPLACED(sendRacePacket)();
+
+    REPLACE bool sendRacePacketToAid(u8 aid);
 
     FriendStatusIcon getFriendStatusIcon(u32 friendId);
 
@@ -214,6 +185,3 @@ private:
 };
 
 } // namespace Net
-
-// is there a better way to scope this?
-void processBufferedRacePacketCB(u8 aid, u8 *buffer, u32 size);

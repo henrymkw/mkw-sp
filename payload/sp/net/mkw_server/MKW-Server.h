@@ -26,9 +26,10 @@ typedef enum {
 } MKWServerMessageType;
 
 void setMKWServerAddress(u32 addr, u16 port);
+
 void resetMKWServerInfo();
 
-void applyMKWServerHeader(u8 *packet, u8 aid);
+bool applyMKWServerHeader(void *packet, u8 aid);
 
 bool trySendRacePacketToMKWServer(const void *data, u32 size);
 

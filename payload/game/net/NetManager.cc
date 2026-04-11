@@ -12,8 +12,6 @@ extern "C" {
 
 #include <game/system/GameScene.hh>
 
-#include <sp/net/mkw_server/packets/CombinedRaceHeader.hh>
-
 namespace Net {
 
 SearchRegion NetManager::getSearchRegion() {
@@ -58,17 +56,17 @@ void NetManager::connectToGameServerFromGroupId() {
     SearchRegion searchRegion = SEARCH_REGION_NONE;
 
     switch (icon) {
-        case FriendStatusIcon::WorldWideVersus:
-        case FriendStatusIcon::WorldWideBattle:
-            searchRegion = SEARCH_REGION_WW;
-            break;
-        case FriendStatusIcon::JoinableRegionalVS:
-        case FriendStatusIcon::JoinableRegionalBattle:
-            searchRegion = getSearchRegion();
-            break;
-        default:
-            SP_LOG("Mismatching search region as friend trying to join!");
-            break;
+    case FriendStatusIcon::WorldWideVersus:
+    case FriendStatusIcon::WorldWideBattle:
+        searchRegion = SEARCH_REGION_WW;
+        break;
+    case FriendStatusIcon::JoinableRegionalVS:
+    case FriendStatusIcon::JoinableRegionalBattle:
+        searchRegion = getSearchRegion();
+        break;
+    default:
+        SP_LOG("Mismatching search region as friend trying to join!");
+        break;
     }
 
     s32 friendProfileId = DWCi_GetProfileIDFromList(friendId);
@@ -114,29 +112,24 @@ void NetManager::updateMatchMakingInfoAndRating() {
     }
 }
 
-NetManager *NetManager::construct(EGG::ExpHeap *heap) {
-    s_instance = REPLACED(construct)(heap);
-    return s_instance;
-}
-
-void NetManager::connect() {
-    REPLACED(connect)();
-
-    // Turning off the combined packets for now, commenting out code until settings are implemented
-    /*
-    if (DWC_SetUserRecvCallback(processBufferedRacePacketCB) == false) {
-        SP_LOG("Failed to set buffered user receive callback");
-    }
-    */
-}
-
-NetManager::MatchMakingInfo *NetManager::currentMMInfo() {
+const MatchMakingInfo *NetManager::currentMMInfo() const {
     return &m_matchMakingInfos[m_currMMInfo];
 }
 
+u8 NetManager::myAid() const {
+    return currentMMInfo()->myAid;
+}
+
+u32 NetManager::availableAids() const {
+    return currentMMInfo()->availableAids;
+}
+
+u32 NetManager::numAids() const {
+    return currentMMInfo()->numAids;
+}
+
 bool NetManager::canSendToAid(u8 aid) const {
-    if ((((1 << aid) & m_matchMakingInfos[m_currMMInfo].availableAids) != 0) &&
-            (aid != m_matchMakingInfos[m_currMMInfo].myAid)) {
+    if ((((1 << aid) & availableAids()) != 0) && (aid != myAid())) {
         return true;
     }
     return false;
@@ -145,11 +138,10 @@ bool NetManager::canSendToAid(u8 aid) const {
 bool NetManager::hasFoundMatch() const {
     bool inMatch = false;
 
-    bool isMyAidInMatch = (1 << m_matchMakingInfos[m_currMMInfo].myAid) &
-            m_matchMakingInfos[m_currMMInfo].availableAids;
+    bool isMyAidInMatch = (1 << myAid()) & availableAids();
     // were in a match if my aid is in the room and we have connected to another
     // console
-    if (isMyAidInMatch && m_matchMakingInfos[m_currMMInfo].numConnectedConsoles > 1) {
+    if (isMyAidInMatch && numAids() > 1) {
         inMatch = true;
     }
     return inMatch;
@@ -166,71 +158,56 @@ u32 NetManager::getRacePacketSize(u8 aid) {
 }
 
 void NetManager::sendRacePacket() {
-    // these get set once we send to mkw-server
-    bool sentSuccessfully = false;
-    OSTime sentTime = 0;
     for (u8 aid = 0; aid < MAX_PLAYER_COUNT; aid++) {
         if (!canSendToAid(aid)) {
             continue;
         }
 
-        PacketHolder<void> *outgoingPacket = m_outgoingRacePacket[aid];
-        // patch the header for MKW server
-        if (hasMKWServerAddress) {
-            applyMKWServerHeader(reinterpret_cast<u8 *>(outgoingPacket->packet()),
-                    m_matchMakingInfos[m_currMMInfo].myAid);
-        }
-
-        if (outgoingPacket->packetSize() != 0) {
-            u32 crc32 = NETCalcCRC32(outgoingPacket->packet(), outgoingPacket->packetSize());
-            Header *header = reinterpret_cast<Header *>(outgoingPacket->packet());
-            header->crc32 = crc32;
-
-            // we only want to send once a frame, the loop is mainly here to update the structs for
-            // other players.
-
-            if (!sentSuccessfully) {
-                sentSuccessfully = trySendRacePacketToMKWServer(outgoingPacket->packet(),
-                        outgoingPacket->packetSize());
-            }
-
-            if (sentSuccessfully) {
-                OSTime lastSentTime = m_timeOfLastSentRace[aid];
-                if (lastSentTime != 0) {
-                    OSTime delta = sentTime - lastSentTime;
-                    m_timeBetweenSendingPackets[aid] = delta;
-                }
-
-                m_aidLastSentTo = aid;
-                m_timeOfLastSentRace[aid] = sentTime;
-            }
-
-            outgoingPacket->reset();
+        // TODO: Bug! Different players in the room can receive different records.
+        // This returns after the first successful send, resulting in many players being skipped
+        // over!
+        if (sendRacePacketToAid(aid)) {
+            return;
         }
     }
 }
 
-void NetManager::processBufferedRacePacket(u8 *buffer, u32 size) {
-    SP::CombinedRaceHeader *combinedRaceHeader = reinterpret_cast<SP::CombinedRaceHeader *>(buffer);
-    u32 processedSize = 0;
-    for (u8 i = 0; i < combinedRaceHeader->numPackets; i++) {
-        u16 packetOffset = combinedRaceHeader->offsets[i];
-        Header *header = reinterpret_cast<Header *>(
-                reinterpret_cast<u8 *>(combinedRaceHeader) + packetOffset);
-        if (header->magic != 0xb) {
-            SP_LOG("Invalid Buffered Race Packet Magic!");
-            return;
-        }
-        u32 packetSize = header->getSize();
+bool NetManager::sendRacePacketToAid(u8 aid) {
+    OSTime sentTime = 0;
+    PacketHolder<void> *outgoingPacket = m_outgoingRacePacket[aid];
 
-        if (processedSize + packetSize <= size) {
-            processRacePacket(header->aid, reinterpret_cast<u8 *>(header), packetSize);
-            processedSize += packetSize;
-        } else {
-            SP_LOG("Buffered Race Packet processing out of bounds!");
-            break;
-        }
+    if (outgoingPacket->packetSize() == 0) {
+        return false;
     }
+    // Patch header for mkw-server. TODO: Move to createRacePacket()
+    if (!applyMKWServerHeader(outgoingPacket->packet(), myAid())) {
+        return false;
+    }
+
+    // Calc the crc32
+    u32 crc32 = NETCalcCRC32(outgoingPacket->packet(), outgoingPacket->packetSize());
+    Header *header = reinterpret_cast<Header *>(outgoingPacket->packet());
+    header->crc32 = crc32;
+
+    // Try to send
+    bool sendResult =
+            trySendRacePacketToMKWServer(outgoingPacket->packet(), outgoingPacket->packetSize());
+
+    // update time-based send members
+    if (sendResult) {
+        OSTime lastSentTime = m_timeOfLastSentRace[aid];
+        if (lastSentTime != 0) {
+            OSTime delta = sentTime - lastSentTime;
+            m_timeBetweenSendingPackets[aid] = delta;
+        }
+
+        m_aidLastSentTo = aid;
+        m_timeOfLastSentRace[aid] = sentTime;
+    }
+
+    // always reset the outgoing buffer
+    outgoingPacket->reset();
+    return sendResult;
 }
 
 void NetManager::processRacePacket(u8 aid, u8 *packet, u32 size) {
@@ -271,11 +248,3 @@ void NetManager::processRacePacket(u8 aid, u8 *packet, u32 size) {
 }
 
 } // namespace Net
-
-void processBufferedRacePacketCB(u8 aid, u8 *buffer, u32 size) {
-    if (hasMKWServerAddress || aid == 0xff) {
-        Net::NetManager::Instance()->processBufferedRacePacket(buffer, size);
-    } else {
-        Net::NetManager::Instance()->processRacePacket(aid, buffer, size);
-    }
-}
