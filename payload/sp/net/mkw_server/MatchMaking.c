@@ -135,7 +135,6 @@ bool sendJoinFriendRequest(s32 friendProfileId, SearchRegion searchRegion) {
 
     joinRequest.friendProfileId = friendProfileId;
     joinRequest.searchRegion = searchRegion;
-    SP_LOG("Sending JoinFriendRequestPacket for friend profile ID: %d and searchRegion: %d", friendProfileId, searchRegion);
 
     return sendToRoomManager(&joinRequest, sizeof(joinRequest));
 }

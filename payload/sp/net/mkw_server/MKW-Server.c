@@ -32,11 +32,11 @@ void resetMKWServerInfo() {
     memset(&g_mkwServerAddr, 0, sizeof(SOSockAddrIn));
 }
 
-bool applyMKWServerHeader(void *packet, u8 aid) {
+bool applyMKWServerHeader(void *packet, u8 myAid) {
     if (hasMKWServerAddress) {
         u8 *data = (u8 *)packet;
         data[0] = MKW_SERVER_RACE_PACKET; // magic
-        data[3] = aid;
+        data[1] = myAid;
         return true;
     }
     return false;

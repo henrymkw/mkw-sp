@@ -2,7 +2,7 @@
 
 #include <Common.hh>
 
-#include "game/net/PacketHolder.hh"
+#include "game/net/RecordHolder.hh"
 #include "game/net/records/Event.hh"
 #include "game/net/records/Header.hh"
 #include "game/net/records/Item.hh"
@@ -13,7 +13,7 @@
 
 namespace Net {
 
-enum class RacePacketRecordIdx : u8 {
+enum class RecordType : u8 {
     Header = 0,
     RaceHeader1 = 1,
     RaceHeader2 = 2,
@@ -27,89 +27,85 @@ enum class RacePacketRecordIdx : u8 {
 class RacePacketHolder {
 public:
     template <typename T>
-    PacketHolder<T> *getPacketHolder(RacePacketRecordIdx idx) {
+    RecordHolder<T> *holder(RecordType idx) {
         switch (idx) {
-        case RacePacketRecordIdx::Header:
-            return reinterpret_cast<PacketHolder<T> *>(m_header);
-        case RacePacketRecordIdx::RaceHeader1:
-            return reinterpret_cast<PacketHolder<T> *>(m_raceHeader1);
-        case RacePacketRecordIdx::RaceHeader2:
-            return reinterpret_cast<PacketHolder<T> *>(m_raceHeader2);
-        case RacePacketRecordIdx::RoomSelect:
-            return reinterpret_cast<PacketHolder<T> *>(m_roomSelect);
-        case RacePacketRecordIdx::RaceData:
-            return reinterpret_cast<PacketHolder<T> *>(m_raceData);
-        case RacePacketRecordIdx::User:
-            return reinterpret_cast<PacketHolder<T> *>(m_user);
-        case RacePacketRecordIdx::Item:
-            return reinterpret_cast<PacketHolder<T> *>(m_item);
-        case RacePacketRecordIdx::Event:
-            return reinterpret_cast<PacketHolder<T> *>(m_event);
+        case RecordType::Header:
+            return reinterpret_cast<RecordHolder<T> *>(m_header);
+        case RecordType::RaceHeader1:
+            return reinterpret_cast<RecordHolder<T> *>(m_raceHeader1);
+        case RecordType::RaceHeader2:
+            return reinterpret_cast<RecordHolder<T> *>(m_raceHeader2);
+        case RecordType::RoomSelect:
+            return reinterpret_cast<RecordHolder<T> *>(m_roomSelect);
+        case RecordType::RaceData:
+            return reinterpret_cast<RecordHolder<T> *>(m_raceData);
+        case RecordType::User:
+            return reinterpret_cast<RecordHolder<T> *>(m_user);
+        case RecordType::Item:
+            return reinterpret_cast<RecordHolder<T> *>(m_item);
+        case RecordType::Event:
+            return reinterpret_cast<RecordHolder<T> *>(m_event);
         default:
             return nullptr;
         }
     }
 
-    PacketHolder<Header> *header() {
+    RecordHolder<Header> *header() {
         return m_header;
     }
 
-    PacketHolder<RH1Record> *rh1() {
+    RecordHolder<RH1Record> *rh1() {
         return m_raceHeader1;
     }
 
-    PacketHolder<RH2Record> *rh2() {
+    RecordHolder<RH2Record> *rh2() {
         return m_raceHeader2;
     }
 
-    PacketHolder<void> *roomSelect() {
+    RecordHolder<void> *roomSelect() {
         return m_roomSelect;
     }
 
-    PacketHolder<RaceDataRecord> *raceData() {
+    RecordHolder<RaceDataRecord> *raceData() {
         return m_raceData;
     }
 
-    PacketHolder<UserRecord> *user() {
+    RecordHolder<UserRecord> *user() {
         return m_user;
     }
 
-    PacketHolder<ItemRecord> *item() {
+    RecordHolder<ItemRecord> *item() {
         return m_item;
     }
 
-    PacketHolder<EventRecord> *event() {
+    RecordHolder<EventRecord> *event() {
         return m_event;
     }
 
     template <typename T>
-    PacketHolder<T> *getPacketHolder(u8 idx) {
-        return getPacketHolder<T>(static_cast<RacePacketRecordIdx>(idx));
+    RecordHolder<T> *holder(u8 idx) {
+        return holder<T>(static_cast<RecordType>(idx));
     }
 
-    PacketHolder<void> *getPacketHolder(u8 idx) {
-        return getPacketHolder<void>(static_cast<RacePacketRecordIdx>(idx));
+    RecordHolder<void> *holder(u8 idx) {
+        return holder<void>(static_cast<RecordType>(idx));
     }
 
-    u32 getRecordSize(u8 idx) {
-        return getPacketHolder<void>(idx)->packetSize();
-    }
+    u32 size();
 
     void reset();
 
-    void applyMKWServerHeader(u8 aid);
-
 private:
-    PacketHolder<Header> *m_header;
-    PacketHolder<RH1Record> *m_raceHeader1;
-    PacketHolder<RH2Record> *m_raceHeader2;
+    RecordHolder<Header> *m_header;
+    RecordHolder<RH1Record> *m_raceHeader1;
+    RecordHolder<RH2Record> *m_raceHeader2;
     // TODO: Room is present while in a room that hasn't started and select is for voting
     // so whats the best way to represent this?
-    PacketHolder<void> *m_roomSelect;
-    PacketHolder<RaceDataRecord> *m_raceData;
-    PacketHolder<UserRecord> *m_user;
-    PacketHolder<ItemRecord> *m_item;
-    PacketHolder<EventRecord> *m_event;
+    RecordHolder<void> *m_roomSelect;
+    RecordHolder<RaceDataRecord> *m_raceData;
+    RecordHolder<UserRecord> *m_user;
+    RecordHolder<ItemRecord> *m_item;
+    RecordHolder<EventRecord> *m_event;
 };
 static_assert(sizeof(RacePacketHolder) == 0x20);
 
