@@ -32,9 +32,9 @@ public:
 
     u8 myAid() const;
 
-    u32 availableAids() const;
-
     u32 numAids() const;
+
+    bool aidInUse(u8 aid) const;
 
 private:
     enum class ConnectionState : u32 {

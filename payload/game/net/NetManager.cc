@@ -120,31 +120,21 @@ u8 NetManager::myAid() const {
     return currentMMInfo()->myAid;
 }
 
-u32 NetManager::availableAids() const {
-    return currentMMInfo()->availableAids;
-}
-
 u32 NetManager::numAids() const {
     return currentMMInfo()->numAids;
 }
 
+bool NetManager::aidInUse(u8 aid) const {
+    return currentMMInfo()->availableAids.on(aid);
+}
+
 bool NetManager::canSendToAid(u8 aid) const {
-    if ((((1 << aid) & availableAids()) != 0) && (aid != myAid())) {
-        return true;
-    }
-    return false;
+    return aidInUse(aid) && aid != myAid();
 }
 
 bool NetManager::hasFoundMatch() const {
-    bool inMatch = false;
-
-    bool isMyAidInMatch = (1 << myAid()) & availableAids();
-    // were in a match if my aid is in the room and we have connected to another
-    // console
-    if (isMyAidInMatch && numAids() > 1) {
-        inMatch = true;
-    }
-    return inMatch;
+    // We're in a match if my aid is used and theres more than one aid.
+    return aidInUse(myAid()) && numAids() > 1;
 }
 
 u32 NetManager::getRacePacketSize(u8 aid) {
