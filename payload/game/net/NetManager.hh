@@ -19,6 +19,8 @@ extern "C" {
 #include <sp/net/mkw_server/MatchMaking.h>
 }
 
+#include <sp/net/mkw_server/packets/OutgoingPacket.hh>
+
 #define MAX_FRIEND_COUNT 30
 #define MAX_PLAYER_COUNT 12
 
@@ -74,6 +76,11 @@ private:
         VoteUnsuspend = 0x3, // Set when private room ends
     };
 
+    // 0x80655c10
+    // Hooked to initialize m_outgoingUniquePackets
+    REPLACE void init(u8 localPlayerCount);
+    void REPLACED(init)(u8 localPlayerCount);
+
     // 0x80656898
     // Called in vanilla to exit the InMatchMaking state (via exiting a room, disconnect, etc)
     REPLACE void cancelMatching();
@@ -106,8 +113,6 @@ private:
     // check that the aid isn't ours and the aid is in the room before sending a race packet
     bool canSendToAid(u8 aid) const;
 
-    void flipLastSendIdx(u8 aid);
-
     u32 lastSendIdx(u8 aid) const {
         return m_lastSendIdx[aid];
     }
@@ -126,6 +131,9 @@ private:
     // checks that my aid is unavailable and we have connected to someone
     REPLACE bool hasFoundMatch() const;
 
+    // 0x80657ab0
+    // Completely rewritten. This will export unique packets to the send buffer,
+    // and set the aids to send to.
     REPLACE void createRacePacket();
 
     // 0x80657e30
@@ -134,7 +142,7 @@ private:
     // when settings are implemented, to turn mkw-server off, we just call the original function
     void REPLACED(sendRacePacket)();
 
-    REPLACE bool sendRacePacketToAid(u8 aid);
+    bool sendRacePacketToMKWServer(u8 aid);
 
     FriendStatusIcon getFriendStatusIcon(u32 friendId);
 
@@ -189,7 +197,10 @@ private:
     u8 _2934[0x295c - 0x2934];                   // elo based MM struct
     u8 _295c[0x29c8 - 0x295c];                   // some timers
 
+    SP::OutgoingRacePackets m_outgoingUniquePackets; // added. TODO: Replace m_outgoingRacePacket
     static NetManager *s_instance;
 };
+// TODO: Idk why the + sizeof(u32) is needed, but it is
+static_assert(sizeof(NetManager) == (0x29c8 + sizeof(SP::OutgoingRacePackets) + sizeof(size_t)));
 
 } // namespace Net

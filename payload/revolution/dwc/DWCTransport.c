@@ -21,8 +21,8 @@ BOOL DWCi_GT2UnrecognizedMessageCallback(GT2Socket socket, u32 ip, u16 port, con
             return FALSE;
         }
 
-        // the aid is in offset 0x3
-        u8 aid = message[3];
+        // the aid is in offset 0x1
+        u8 aid = message[1];
 
         s_dwcTransport->userRecvCallback(aid, message, len);
         return TRUE;
