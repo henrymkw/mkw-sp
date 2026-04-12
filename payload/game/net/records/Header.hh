@@ -5,11 +5,19 @@
 namespace Net {
 
 struct Header {
-    u8 magic;
-    u8 _01[0x03 - 0x01];
-    u8 aid;
+    u8 magic;       // Added
+    u8 myAid;       // Added
+    u16 sendToAids; // Added. TODO: Change type to BitField
     u32 crc32;
     u8 recordSizes[8];
+
+    void set(u8 aid) {
+        sendToAids |= (1 << aid);
+    }
+
+    void setSendAids(u16 aids) {
+        sendToAids = aids;
+    }
 
     u8 size(u8 recordId) const {
         return recordSizes[recordId];

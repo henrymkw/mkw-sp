@@ -75,6 +75,13 @@ void NetManager::connectToGameServerFromGroupId() {
     }
 }
 
+void NetManager::init(u8 localPlayerCount) {
+    REPLACED(init)(localPlayerCount);
+
+    // initialize the unique packets buffer
+    m_outgoingUniquePackets.reset();
+}
+
 void NetManager::cancelMatching() {
     // Reset the two race packet handlers active during the globe scene
     if (auto *rh1Handler = RH1Handler::Instance()) {
@@ -152,6 +159,9 @@ void NetManager::createRacePacket() {
         return;
     }
 
+    // Reset the outgoing packets. new frame, new packets
+    m_outgoingUniquePackets.reset();
+
     for (u8 aid = 0; aid < MAX_PLAYER_COUNT; aid++) {
         if (!canSendToAid(aid)) {
             continue;
@@ -161,20 +171,35 @@ void NetManager::createRacePacket() {
         u8 sendBufferIdx = m_lastSendIdx[aid];
         m_lastSendIdx[aid] ^= 1;
 
+        // Get the send buffer for this aid
         RacePacketHolder *sendBuffer = m_sendRacePackets[sendBufferIdx][aid];
-        // Set the outgoing header's sizes
+
+        // Form a header
         Header header;
         memset(&header, 0, sizeof(Header));
+
+        // Set the outgoing header's sizes
+        u32 headerSizesMask = 0;
         for (u8 i = 0; i < 8; i++) {
             RecordHolder<void> *rh = sendBuffer->holder(i);
 
             // Header (idx == 0) always exists and has a size of 0x10
             // Use the actual record size for all other records
             u8 size = i == 0 ? 0x10 : rh->recordSize();
+            if (size != 0) {
+                headerSizesMask |= 1 << i;
+            }
             header.setRecordSize(i, size);
         }
 
-        // copy the header
+        s32 headerSizesIdx = m_outgoingUniquePackets.maskIdx(headerSizesMask);
+        if (headerSizesIdx != -1) {
+            // If this exact packet was already seen, just add this aid to the recipient bitmap
+            m_outgoingUniquePackets.setRecvAid(headerSizesIdx, aid);
+            continue;
+        }
+
+        // copy the header to the buffer that actually gets sent
         sendBuffer->header()->copy(&header, sizeof(Header));
 
         RecordHolder<void> *outgoing = m_outgoingRacePacket[aid];
@@ -188,59 +213,62 @@ void NetManager::createRacePacket() {
                 record->reset();
             }
         }
+
+        // We found a unique packet, so push it to be sent
+        if (!m_outgoingUniquePackets.push(outgoing, headerSizesMask, aid, myAid())) {
+            SP_LOG("Pushing a new packet failed!");
+        }
     }
 }
 
 void NetManager::sendRacePacket() {
-    for (u8 aid = 0; aid < MAX_PLAYER_COUNT; aid++) {
-        if (!canSendToAid(aid)) {
-            continue;
-        }
-
-        // TODO: Bug! Different players in the room can receive different records.
-        // This returns after the first successful send, resulting in many players being skipped
-        // over!
-        if (sendRacePacketToAid(aid)) {
-            return;
-        }
+    for (u8 i = 0; i < m_outgoingUniquePackets.count(); i++) {
+        sendRacePacketToMKWServer(i);
     }
+    m_outgoingUniquePackets.reset();
 }
 
-bool NetManager::sendRacePacketToAid(u8 aid) {
+bool NetManager::sendRacePacketToMKWServer(u8 packetIdx) {
     OSTime sentTime = 0;
-    RecordHolder<void> *outgoingPacket = m_outgoingRacePacket[aid];
+    const SP::Packet *outgoingPacket = m_outgoingUniquePackets[packetIdx];
 
-    if (outgoingPacket->recordSize() == 0) {
+    if (outgoingPacket == nullptr) {
         return false;
     }
-    // Patch header for mkw-server. TODO: Move to createRacePacket()
-    if (!applyMKWServerHeader(outgoingPacket->record(), myAid(), aid)) {
+
+    if (outgoingPacket->data == nullptr) {
+        return false;
+    }
+
+    if (outgoingPacket->data->recordSize() == 0) {
         return false;
     }
 
     // Calc the crc32
-    u32 crc32 = NETCalcCRC32(outgoingPacket->record(), outgoingPacket->recordSize());
-    Header *header = reinterpret_cast<Header *>(outgoingPacket->record());
+    u32 crc32 = NETCalcCRC32(outgoingPacket->data->record(), outgoingPacket->data->recordSize());
+    Header *header = reinterpret_cast<Header *>(outgoingPacket->data->record());
     header->crc32 = crc32;
+
+    void *recordToSend = outgoingPacket->data->record();
 
     // Try to send
     bool sendResult =
-            trySendRacePacketToMKWServer(outgoingPacket->record(), outgoingPacket->recordSize());
+            trySendRacePacketToMKWServer(recordToSend, outgoingPacket->data->recordSize());
 
     // update time-based send members
     if (sendResult) {
-        OSTime lastSentTime = m_timeOfLastSentRace[aid];
+        OSTime lastSentTime = m_timeOfLastSentRace[packetIdx];
         if (lastSentTime != 0) {
             OSTime delta = sentTime - lastSentTime;
-            m_timeBetweenSendingPackets[aid] = delta;
+            m_timeBetweenSendingPackets[packetIdx] = delta;
         }
 
-        m_aidLastSentTo = aid;
-        m_timeOfLastSentRace[aid] = sentTime;
+        m_aidLastSentTo = packetIdx;
+        m_timeOfLastSentRace[packetIdx] = sentTime;
     }
 
     // always reset the outgoing buffer
-    outgoingPacket->reset();
+    outgoingPacket->data->reset();
     return sendResult;
 }
 
