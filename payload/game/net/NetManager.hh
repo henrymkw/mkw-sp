@@ -76,6 +76,18 @@ private:
         VoteUnsuspend = 0x3, // Set when private room ends
     };
 
+    // 0x8065a8d4
+    // Callback thats evoked to update whether or not your friends have added you back. Hooked to
+    // inform wfc-server of the local player count. This was chosen since a session has been
+    // established and only gets called once in an online session.
+    REPLACE void updateAddedFriendsCallback(void *r3, void *r4, void *r5);
+    void REPLACED(updateAddedFriendsCallback)(void *r3, void *r4, void *r5);
+
+    // 0x806561a8
+    // Sets m_shutdownScheduled, which mainNetworkLoop() reacts to during next iteration.
+    // Resets all wfc-server/mkw-server structures
+    REPLACE void scheduleShutdown();
+
     // 0x80655c10
     // Hooked to initialize m_outgoingUniquePackets
     REPLACE void init(u8 localPlayerCount);
@@ -97,9 +109,6 @@ private:
     // 0x80659680
     // Called when joining a friends public room. replaced to implement mkw-server match making
     REPLACE void connectToGameServerFromGroupId();
-
-    REPLACE void handleError();
-    void REPLACED(handleError)();
 
     REPLACE void updateMatchMakingInfoAndRating();
     void REPLACED(updateMatchMakingInfoAndRating)();

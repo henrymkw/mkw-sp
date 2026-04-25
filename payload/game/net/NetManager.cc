@@ -10,7 +10,7 @@ extern "C" {
 
 #include <cstring>
 
-#include <game/system/GameScene.hh>
+#include "game/ui/SectionManager.hh"
 
 namespace Net {
 
@@ -75,6 +75,27 @@ void NetManager::connectToGameServerFromGroupId() {
     }
 }
 
+void NetManager::updateAddedFriendsCallback(void *r3, void *r4, void *r5) {
+    REPLACED(updateAddedFriendsCallback)(r3, r4, r5);
+
+    if (!connectToRoomManager()) {
+        SP_LOG("Failed to connect to room manager!");
+        return;
+    }
+
+    u8 localPlayerCount = UI::SectionManager::Instance()->getLocalPlayerCount();
+    bool sendResult = sendLocalPlayerCount(localPlayerCount);
+    if (!sendResult) {
+        SP_LOG("Sending localPlayerCount failed!");
+    }
+}
+
+void NetManager::scheduleShutdown() {
+    m_shutdownScheduled = true;
+
+    resetRoomManagerConnection();
+}
+
 void NetManager::init(u8 localPlayerCount) {
     REPLACED(init)(localPlayerCount);
 
@@ -96,19 +117,6 @@ void NetManager::cancelMatching() {
 
     // inform wfc-server we're leaving the room
     sendLeaveFroomRequest();
-}
-
-void NetManager::handleError() {
-    REPLACED(handleError)();
-
-    // were in this state when were searching/in a room
-    // and while in a race. Otherwise, we want to make sure were
-    // not connected to the room manager (i dont like this this)
-    // is called here but i don't have a better way that checks
-    // if were exiting match making.
-    if (m_connectionState != ConnectionState::InMatchMaking) {
-        resetRoomManagerConnection();
-    }
 }
 
 void NetManager::updateMatchMakingInfoAndRating() {

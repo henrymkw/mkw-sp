@@ -9,7 +9,7 @@ extern bool hasMKWServerAddress;
 extern bool hasSentMKWServerAddressRequest;
 extern SOSockAddrIn g_mkwServerAddr;
 
-extern u64 wfcSearchId;
+extern u64 g_wfcSearchId;
 
 // different race packet types, currently we check the first byte (which should be reconsidered at
 // some point) for the type of packet

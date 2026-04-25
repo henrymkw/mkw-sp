@@ -5,6 +5,7 @@
 #include <sp/net/WiiLink.h>
 #include <sp/net/mkw_server/MKW-Server.h>
 #include <sp/net/mkw_server/packets/JoinFriendRequest.h>
+#include <sp/net/mkw_server/packets/LocalPlayerCount.h>
 #include <sp/net/mkw_server/packets/MKWServerInfo.h>
 #include <sp/net/mkw_server/packets/MatchRequestHeader.h>
 #include <sp/net/mkw_server/packets/SearchRoomRequest.h>
@@ -121,7 +122,7 @@ bool recvFromRoomManager() {
 
 bool sendOpenFroomRequest() {
     MatchRequestHeader openRoomRequest;
-    createMatchRequestHeader(&openRoomRequest, MATCH_REQUEST_OPEN_ROOM, wfcSearchId);
+    createMatchRequestHeader(&openRoomRequest, MATCH_REQUEST_OPEN_ROOM, g_wfcSearchId);
 
     SP_LOG("OpenFroom request header magic: %d", openRoomRequest.magic);
 
@@ -131,7 +132,7 @@ bool sendOpenFroomRequest() {
 bool sendJoinFriendRequest(s32 friendProfileId, SearchRegion searchRegion) {
     JoinFriendRequestPacket joinRequest;
     memset(&joinRequest, 0, sizeof(JoinFriendRequestPacket));
-    createMatchRequestHeader(&joinRequest.header, MATCH_REQUEST_JOIN_FRIEND, wfcSearchId);
+    createMatchRequestHeader(&joinRequest.header, MATCH_REQUEST_JOIN_FRIEND, g_wfcSearchId);
 
     joinRequest.friendProfileId = friendProfileId;
     joinRequest.searchRegion = searchRegion;
@@ -142,14 +143,14 @@ bool sendJoinFriendRequest(s32 friendProfileId, SearchRegion searchRegion) {
 bool sendLeaveFroomRequest() {
     SP_LOG("Sending a leave request!");
     MatchRequestHeader leaveRoomRequest;
-    createMatchRequestHeader(&leaveRoomRequest, MATCH_REQUEST_LEAVE_ROOM, wfcSearchId);
+    createMatchRequestHeader(&leaveRoomRequest, MATCH_REQUEST_LEAVE_ROOM, g_wfcSearchId);
 
     return sendToRoomManager(&leaveRoomRequest, sizeof(leaveRoomRequest));
 }
 
 bool sendSuspendRequest(bool suspendVote) {
     SuspendRequestPacket suspendRequest;
-    createMatchRequestHeader(&suspendRequest.header, MATCH_REQUEST_SUSPEND, wfcSearchId);
+    createMatchRequestHeader(&suspendRequest.header, MATCH_REQUEST_SUSPEND, g_wfcSearchId);
     suspendRequest.suspendVote = suspendVote;
 
     // TODO: Only send vote when it has changed
@@ -163,7 +164,7 @@ bool sendSuspendRequest(bool suspendVote) {
 bool sendSearchRoomRequest(SearchRegion region, GameMode gameMode) {
     SearchRoomRequestPacket searchRoomRequest;
     memset(&searchRoomRequest, 0, sizeof(searchRoomRequest));
-    createMatchRequestHeader(&searchRoomRequest.header, MATCH_REQUEST_SEARCH_ROOM, wfcSearchId);
+    createMatchRequestHeader(&searchRoomRequest.header, MATCH_REQUEST_SEARCH_ROOM, g_wfcSearchId);
     searchRoomRequest.region = region;
     searchRoomRequest.gameMode = gameMode;
 
@@ -172,4 +173,14 @@ bool sendSearchRoomRequest(SearchRegion region, GameMode gameMode) {
     SP_LOG("Search request header magic: %d and size %d", searchRoomRequest.header.magic,
             sizeof(searchRoomRequest));
     return sendToRoomManager(&searchRoomRequest, sizeof(searchRoomRequest));
+}
+
+bool sendLocalPlayerCount(u8 localPlayerCount) {
+    LocalPlayerCountPacket lpcPacket;
+    memset(&lpcPacket, 0, sizeof(LocalPlayerCountPacket));
+    createMatchRequestHeader(&lpcPacket.header, MATCH_REQUEST_LOCAL_PLAYER_COUNT, g_wfcSearchId);
+    lpcPacket.localPlayerCount = localPlayerCount;
+
+    SP_LOG("Sending LocalPlayerCountPacket where localPlayerCount is %d", localPlayerCount);
+    return sendToRoomManager(&lpcPacket, sizeof(lpcPacket));
 }

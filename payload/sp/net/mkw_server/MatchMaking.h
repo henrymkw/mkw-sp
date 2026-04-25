@@ -14,6 +14,7 @@ typedef enum {
     MATCH_REQUEST_LEAVE_ROOM = 2,
     MATCH_REQUEST_SUSPEND = 3,
     MATCH_REQUEST_SEARCH_ROOM = 4,
+    MATCH_REQUEST_LOCAL_PLAYER_COUNT = 5,
 } MatchRequestType;
 
 typedef enum {
@@ -53,3 +54,5 @@ bool sendLeaveFroomRequest();
 bool sendSuspendRequest(bool suspendVote);
 
 bool sendSearchRoomRequest(SearchRegion region, GameMode gameMode);
+
+bool sendLocalPlayerCount(u8 localPlayerCount);

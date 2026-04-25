@@ -3,6 +3,7 @@
 #include <revolution/dwc/DWCMatch.h>
 
 #include <sp/net/WiiLink.h>
+#include <sp/net/mkw_server/MatchMaking.h>
 #include <sp/net/mkw_server/packets/MatchMakingInfo.h>
 
 #include <string.h>
@@ -12,7 +13,7 @@
 bool hasMKWServerAddress = false;
 bool hasSentMKWServerAddressRequest = false;
 SOSockAddrIn g_mkwServerAddr = {};
-u64 wfcSearchId = 0;
+u64 g_wfcSearchId = 0;
 
 void setMKWServerAddress(u32 addr, u16 port) {
     g_mkwServerAddr.addr.addr = addr;
@@ -73,13 +74,19 @@ bool handleSearchIdPacket(const u8 *packet, u32 size) {
         return false;
     }
 
-    wfcSearchId = searchIdPacket->wfcSearchId;
-    SP_LOG("Received Search Id: %llu, sending back the packet", wfcSearchId);
+    g_wfcSearchId = searchIdPacket->wfcSearchId;
+    SP_LOG("Received Search Id: %llu, sending back the packet", g_wfcSearchId);
 
     // send back the same packet to confirm receipt, we'll hear back if there are issues
     bool result = sendMessageToQR2(packet, size);
     if (!result) {
         SP_LOG("Failed to send Search Id response to MKW Server!");
+        return false;
+    }
+
+    // Establish connection with the room manager server early in session's existance
+    if (!connectToRoomManager()) {
+        SP_LOG("Unable to connect to room manager upon sending searchId!");
         return false;
     }
 

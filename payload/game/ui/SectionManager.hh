@@ -2,6 +2,8 @@
 
 #include <Common.hh>
 
+#include "game/ui/SectionParams.hh"
+
 namespace UI {
 
 class SectionManager {
@@ -13,7 +15,9 @@ public:
     }
 
 private:
-    u8 _00[0x9c - 0x00];
+    u8 _00[0x98 - 0x00];
+    SectionParams *m_sectionParams;
+
     static SectionManager *s_instance;
 };
 static_assert(sizeof(SectionManager) == 0x9c);
