@@ -10,7 +10,7 @@
 
 bool recvMKWServerInfoPacket() {
     MKWServerInfoPacket resp;
-    s32 recvResult = SORecv(g_MatchMakingSocket, (void *)&resp, sizeof(MKWServerInfoPacket), 0);
+    s32 recvResult = SORecv(g_matchMakingSocket, (void *)&resp, sizeof(MKWServerInfoPacket), 0);
 
     if (recvResult > 0) {
         // we should probably call a function that validates the received packet

@@ -11,7 +11,7 @@
 #include <sp/net/mkw_server/packets/SuspendRequest.h>
 
 static SOSockAddrIn s_serverAddr;
-SOCKET g_MatchMakingSocket = -1;
+SOCKET g_matchMakingSocket = -1;
 static s32 connection = -1;
 
 bool connectToRoomManager() {
@@ -27,16 +27,16 @@ bool connectToRoomManager() {
     // so this works (just unclear without comment, maybe should be changed to be a client patch)
     s_serverAddr.addr.addr = getWFCServerAddress();
 
-    if (g_MatchMakingSocket == -1) {
-        g_MatchMakingSocket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
-        if (g_MatchMakingSocket == -1) {
+    if (g_matchMakingSocket == -1) {
+        g_matchMakingSocket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+        if (g_matchMakingSocket == -1) {
             SP_LOG("Failed to create room manager socket!");
             return false;
         }
     }
 
     s_serverAddr.len = sizeof(s_serverAddr);
-    connection = SOConnect(g_MatchMakingSocket, &s_serverAddr);
+    connection = SOConnect(g_matchMakingSocket, &s_serverAddr);
 
     if (connection != 0) {
         SP_LOG("Failed to connect to room manager server. connection: %d", connection);
@@ -44,13 +44,13 @@ bool connectToRoomManager() {
     }
 
     // set non-blocking, credits: vabold
-    s32 result = SOFcntl(g_MatchMakingSocket, SO_F_GETFL, 0);
+    s32 result = SOFcntl(g_matchMakingSocket, SO_F_GETFL, 0);
     if (result == -1) {
         SP_LOG("Failed to get status flags, returned %d", result);
         return false;
     }
 
-    result = SOFcntl(g_MatchMakingSocket, SO_F_SETFL, result | SO_O_NONBLOCK);
+    result = SOFcntl(g_matchMakingSocket, SO_F_SETFL, result | SO_O_NONBLOCK);
     if (result != 0) {
         SP_LOG("Failed to set status flags, returned %d", result);
         return false;
@@ -60,32 +60,32 @@ bool connectToRoomManager() {
 }
 
 void resetRoomManagerConnection() {
-    if (g_MatchMakingSocket != -1 && connection == 0) {
-        SOClose(g_MatchMakingSocket);
-        g_MatchMakingSocket = -1;
+    if (g_matchMakingSocket != -1 && connection == 0) {
+        SOClose(g_matchMakingSocket);
+        g_matchMakingSocket = -1;
         connection = -1;
     }
 }
 
 bool sendToRoomManager(void *message, s32 messageLength) {
     // check if we're connected to the server
-    if (g_MatchMakingSocket == -1) {
+    if (g_matchMakingSocket == -1) {
         SP_LOG("Not connected to room manager server!");
         return false;
     }
 
-    return SOSend(g_MatchMakingSocket, message, messageLength, 0);
+    return SOSend(g_matchMakingSocket, message, messageLength, 0);
 }
 
 bool recvFromRoomManager() {
-    if (g_MatchMakingSocket == -1) {
+    if (g_matchMakingSocket == -1) {
         return false;
     }
 
     // first recv the magic, return if recv isn't 4 (i think)
     // 4 indicates sucessful recv
     u32 magic;
-    s32 magicRecv = SORecv(g_MatchMakingSocket, (void *)&magic, sizeof(u32), 0);
+    s32 magicRecv = SORecv(g_matchMakingSocket, (void *)&magic, sizeof(u32), 0);
     if (magicRecv != 4) {
         return false;
     }

@@ -6,7 +6,7 @@
 
 #include <sp/net/mkw_server/packets/MatchMakingInfo.h>
 
-extern SOCKET g_MatchMakingSocket;
+extern SOCKET g_matchMakingSocket;
 
 typedef enum {
     MATCH_REQUEST_OPEN_ROOM = 0,

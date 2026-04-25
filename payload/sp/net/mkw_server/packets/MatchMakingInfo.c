@@ -11,7 +11,7 @@ MatchMakingInfoPacket g_recvMatchPacket;
 
 bool recvMatchMakingInfoPacket() {
     MatchMakingInfoPacket resp;
-    s32 recvResult = SORecv(g_MatchMakingSocket, (void *)&resp, sizeof(MatchMakingInfoPacket), 0);
+    s32 recvResult = SORecv(g_matchMakingSocket, (void *)&resp, sizeof(MatchMakingInfoPacket), 0);
 
     if (recvResult > 0) {
         // we should probably call a function that validates the received packet
