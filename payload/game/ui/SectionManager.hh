@@ -8,7 +8,7 @@ namespace UI {
 
 class SectionManager {
 public:
-    u8 getLocalPlayerCount();
+    u8 getLocalPlayerCount() const;
 
     static SectionManager *Instance() {
         return s_instance;

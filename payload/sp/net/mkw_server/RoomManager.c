@@ -1,4 +1,4 @@
-#include "MatchMaking.h"
+#include "RoomManager.h"
 
 #include <string.h>
 
@@ -17,7 +17,7 @@ static s32 connection = -1;
 
 bool connectToRoomManager() {
     if (connection == 0) {
-        // SP_LOG("Already connected to Room Manager!"); TODO: Unsupress!
+        // Already connected
         return true;
     }
 
@@ -29,7 +29,7 @@ bool connectToRoomManager() {
     s_serverAddr.addr.addr = getWFCServerAddress();
 
     if (g_matchMakingSocket == -1) {
-        g_matchMakingSocket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+        g_matchMakingSocket = SOSocket(AF_INET, SOCK_STREAM, 0);
         if (g_matchMakingSocket == -1) {
             SP_LOG("Failed to create room manager socket!");
             return false;
@@ -83,10 +83,9 @@ bool recvFromRoomManager() {
         return false;
     }
 
-    // first recv the magic, return if recv isn't 4 (i think)
-    // 4 indicates sucessful recv
+    // first recv the magic, return if recv isn't 4 since 4 indicates sucessful recv
     u32 magic;
-    s32 magicRecv = SORecv(g_matchMakingSocket, (void *)&magic, sizeof(u32), 0);
+    s32 magicRecv = SORecv(g_matchMakingSocket, &magic, sizeof(u32), 0);
     if (magicRecv != 4) {
         return false;
     }
@@ -124,8 +123,7 @@ bool sendOpenFroomRequest() {
     MatchRequestHeader openRoomRequest;
     createMatchRequestHeader(&openRoomRequest, MATCH_REQUEST_OPEN_ROOM, g_wfcSearchId);
 
-    SP_LOG("OpenFroom request header magic: %d", openRoomRequest.magic);
-
+    SP_LOG("Sent OpenFroom request!");
     return sendToRoomManager(&openRoomRequest, sizeof(openRoomRequest));
 }
 
@@ -137,14 +135,16 @@ bool sendJoinFriendRequest(s32 friendProfileId, SearchRegion searchRegion) {
     joinRequest.friendProfileId = friendProfileId;
     joinRequest.searchRegion = searchRegion;
 
+    SP_LOG("Sending JoinFriendRequest where friendProfileId is %d and searchRegion is %d",
+            friendProfileId, searchRegion);
     return sendToRoomManager(&joinRequest, sizeof(joinRequest));
 }
 
-bool sendLeaveFroomRequest() {
-    SP_LOG("Sending a leave request!");
+bool sendLeaveRoomRequest() {
     MatchRequestHeader leaveRoomRequest;
     createMatchRequestHeader(&leaveRoomRequest, MATCH_REQUEST_LEAVE_ROOM, g_wfcSearchId);
 
+    SP_LOG("Sending LeaveRoom request!");
     return sendToRoomManager(&leaveRoomRequest, sizeof(leaveRoomRequest));
 }
 
@@ -154,10 +154,6 @@ bool sendSuspendRequest(bool suspendVote) {
     suspendRequest.suspendVote = suspendVote;
 
     // TODO: Only send vote when it has changed
-    if (sizeof(suspendRequest) != 0x18) {
-        SP_LOG("SuspendRequest size isn't 0x18. Actual: %d. Vote: %d", sizeof(suspendRequest),
-                suspendRequest.suspendVote);
-    }
     return sendToRoomManager(&suspendRequest, sizeof(suspendRequest));
 }
 
@@ -169,9 +165,6 @@ bool sendSearchRoomRequest(SearchRegion region, GameMode gameMode) {
     searchRoomRequest.gameMode = gameMode;
 
     SP_LOG("Sending SearchRoomRequest where region: %d and gameMode: %d", region, gameMode);
-
-    SP_LOG("Search request header magic: %d and size %d", searchRoomRequest.header.magic,
-            sizeof(searchRoomRequest));
     return sendToRoomManager(&searchRoomRequest, sizeof(searchRoomRequest));
 }
 

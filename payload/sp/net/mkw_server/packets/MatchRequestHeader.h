@@ -2,11 +2,13 @@
 
 #include <Common.h>
 
-#include <sp/net/mkw_server/MatchMaking.h>
+#include <sp/net/mkw_server/RoomManager.h>
+
+#define MATCH_REQUEST_HEADER_MAGIC 0x4D524551 // "MREQ"
 
 typedef struct {
-    u32 magic; // "MREQ"
-    u8 type;
+    u32 magic;
+    MatchRequestType type : 8;
     u8 _5[0x07 - 0x05];
     u64 searchId;
 } MatchRequestHeader;

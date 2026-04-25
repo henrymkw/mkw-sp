@@ -2,7 +2,7 @@
 
 #include <revolution.h>
 
-#include <sp/net/mkw_server/MatchMaking.h>
+#include <sp/net/mkw_server/RoomManager.h>
 
 u32 DWC_GetAidBitmap() {
     return g_recvMatchPacket.aidBitmap;

@@ -1,7 +1,5 @@
 #include "OutgoingPacket.hh"
 
-#include <game/net/records/Header.hh>
-
 extern "C" {
 #include <revolution.h>
 #include <sp/net/mkw_server/MKW-Server.h>
@@ -9,13 +7,12 @@ extern "C" {
 
 namespace SP {
 
-void Packet::setHeaderBitmap() {
-    u16 recipients = static_cast<u16>(receivingAids.field());
-    Net::Header *header = reinterpret_cast<Net::Header *>(data->record());
-    header->setSendAids(recipients);
+void Packet::addRecipient(u8 aid) {
+    receivingAids.set(aid);
+    data->record()->setSendAids(receivingAids);
 }
 
-bool OutgoingRacePackets::push(Net::RecordHolder<void> *data, u32 headerSizesMask, u8 aid,
+bool OutgoingRacePackets::push(Net::RecordHolder<Net::Header> *data, u32 headerSizes, u8 aid,
         u8 myAid) {
     auto &packet = m_outgoingPackets[m_count++];
 
@@ -25,25 +22,23 @@ bool OutgoingRacePackets::push(Net::RecordHolder<void> *data, u32 headerSizesMas
     }
 
     packet.data = data;
-    packet.mask = headerSizesMask;
-    packet.receivingAids = BitField<12>{};
-    packet.receivingAids.set(aid);
-    packet.setHeaderBitmap();
+    packet.headerSizes = headerSizes;
+    packet.receivingAids = BitField<u16, 12>{};
+    packet.addRecipient(aid);
     return true;
 }
 
-s32 OutgoingRacePackets::maskIdx(u32 headerSizesMask) {
+s32 OutgoingRacePackets::lookup(u32 sizesMask) {
     for (u8 i = 0; i < m_count; i++) {
-        if (m_outgoingPackets[i].mask == headerSizesMask) {
+        if (m_outgoingPackets[i].headerSizes == sizesMask) {
             return i;
         }
     }
     return -1;
 }
 
-void OutgoingRacePackets::setRecvAid(s32 idx, u8 aid) {
-    m_outgoingPackets[idx].receivingAids.set(aid);
-    m_outgoingPackets[idx].setHeaderBitmap();
+void OutgoingRacePackets::setRecipient(s32 idx, u8 aid) {
+    m_outgoingPackets[idx].addRecipient(aid);
 }
 
 void OutgoingRacePackets::reset() {
@@ -52,11 +47,6 @@ void OutgoingRacePackets::reset() {
 
 u32 OutgoingRacePackets::count() {
     return m_count;
-}
-
-void OutgoingRacePackets::setHeader(u32 idx, u8 aid) {
-    Net::Header *header = reinterpret_cast<Net::Header *>(m_outgoingPackets[idx].data->record());
-    header->set(aid);
 }
 
 } // namespace SP

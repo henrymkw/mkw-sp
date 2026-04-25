@@ -1,9 +1,8 @@
 #include "DWCMatch.h"
 
-#include "DWCLogin.h"
 #include "DWCMain.h"
 
-#include <sp/net/mkw_server/MatchMaking.h>
+#include <sp/net/mkw_server/RoomManager.h>
 
 bool DWC_SetupGameServer(void * /* r3 */, void * /* r4 */, void * /* r5 */, void * /* r6 */,
         void * /* r7 */, void * /* r8 */, void * /* r9 */, void * /* r10 */) {

@@ -49,7 +49,7 @@ bool sendOpenFroomRequest();
 
 bool sendJoinFriendRequest(s32 friendProfileId, SearchRegion searchRegion);
 
-bool sendLeaveFroomRequest();
+bool sendLeaveRoomRequest();
 
 bool sendSuspendRequest(bool suspendVote);
 

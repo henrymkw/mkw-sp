@@ -11,12 +11,14 @@ typedef struct {
     u32 roomId;
     u8 myAid;
     u8 hostAid;
-    bool suspended; // note to self: the NetManager enum has values 0 thru 3
+    bool suspended;
     bool canceled;
     DWCConnectionUserData localPlayerCount[12];
 } MatchMakingInfoPacket;
 static_assert(sizeof(MatchMakingInfoPacket) == 0x44);
 
 extern MatchMakingInfoPacket g_recvMatchPacket;
+
+bool matchMakingInfoValid(MatchMakingInfoPacket *mmInfo);
 
 bool recvMatchMakingInfoPacket();

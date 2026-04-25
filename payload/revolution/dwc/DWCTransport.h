@@ -23,12 +23,6 @@ typedef struct {
 } DWCTransport;
 static_assert(sizeof(DWCTransport) == 0x818);
 
-bool DWC_SendUnreliable(u8 aid, u8 *data, u32 size);
-
-REPLACE void DWCi_TransportProcess();
-
-REPLACE bool DWC_SetUserRecvCallback(UserRecvCallback callback);
-
 REPLACE BOOL DWCi_GT2UnrecognizedMessageCallback(GT2Socket socket, u32 ip, u16 port,
         const u8 *message, s32 len);
 BOOL REPLACED(DWCi_GT2UnrecognizedMessageCallback)(GT2Socket socket, u32 ip, u16 port,

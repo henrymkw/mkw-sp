@@ -3,7 +3,7 @@
 #include <revolution/dwc/DWCMatch.h>
 
 #include <sp/net/WiiLink.h>
-#include <sp/net/mkw_server/MatchMaking.h>
+#include <sp/net/mkw_server/RoomManager.h>
 #include <sp/net/mkw_server/packets/MatchMakingInfo.h>
 
 #include <string.h>
@@ -48,31 +48,22 @@ bool trySendRacePacketToMKWServer(const void *data, u32 size) {
         return false;
     }
 
-    bool result = SOSendTo(s_dwcMatch->qrec->hbsock, data, size, 0, (void *)&g_mkwServerAddr);
+    bool result = SOSendTo(s_dwcMatch->qrec->hbsock, data, size, 0, &g_mkwServerAddr);
     if (!result) {
         SP_LOG("Failed to send to MKW Server!");
     }
     return result;
 }
 
-bool verifySearchIdMagic(const char *packet, u32 size) {
+bool verifySearchIdMagic(const u8 *packet, u32 size) {
     if (size < 8) {
         return false;
     }
-    return strncmp(packet, SEARCH_ID_MAGIC, 8) == 0;
+    return strncmp((const char *)packet, SEARCH_ID_MAGIC, 8) == 0;
 }
 
 bool handleSearchIdPacket(const u8 *packet, u32 size) {
-    if (size != sizeof(SearchIdPacket)) {
-        SP_LOG("Invalid SearchId Packet Size: %d", size);
-        return false;
-    }
-
     SearchIdPacket *searchIdPacket = (SearchIdPacket *)packet;
-    if (strncmp(searchIdPacket->magic, SEARCH_ID_MAGIC, 8) != 0) {
-        SP_LOG("Invalid SearchId Packet Magic: %.8s", searchIdPacket->magic);
-        return false;
-    }
 
     g_wfcSearchId = searchIdPacket->wfcSearchId;
     SP_LOG("Received Search Id: %llu, sending back the packet", g_wfcSearchId);
@@ -100,7 +91,7 @@ bool sendMessageToQR2(const u8 *data, u32 size) {
     qr2Addr.port = 27900;
     qr2Addr.addr.addr = getWFCServerAddress();
 
-    s32 result = SOSendTo(s_dwcMatch->qrec->hbsock, data, size, 0, (void *)&qr2Addr);
+    s32 result = SOSendTo(s_dwcMatch->qrec->hbsock, data, size, 0, &qr2Addr);
     if (result < 0) {
         SP_LOG("Failed to send message to QR2!");
         return false;

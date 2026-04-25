@@ -23,10 +23,10 @@ struct MatchMakingInfo {
     // Bitmap of available aids, indexed by aid (1 << aid). When the bit position is 0,
     // that aid is available. When it's 1, that aid is used by another aid. availableAids
     // is also used to check if we're in a match. When availableAids != 0, we're in a match.
-    BitField<12> availableAids;
+    BitField<u32, 12> availableAids;
 
     // Aids we have established a connection with. This gets set, but isn't used
-    BitField<12> connectedToAids;
+    BitField<u32, 12> connectedToAids;
 
     // Identifier for the room a player is in. Group is the DWC term for a room
     u32 groupId;

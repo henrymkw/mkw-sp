@@ -88,7 +88,6 @@
 0x800d1ab4 DWC_ConnectToGameServerAsync
 0x800d2158 DWC_GetNumConnectionsHost
 0x800d2170 DWC_GetMyAid
-0x800d2170 DWC_GetMyAid
 0x800d225c DWC_GetDirectConnectedAidBitmap
 0x800d24b4 DWC_GetAidBitmap
 0x800d2644 DWC_IsValidAid
@@ -119,13 +118,7 @@
 0x800e8d68 DWCi_ShutdownTransport
 0x800eb830 DWCi_Acc_GetUserId
 0x800ed6e8 DWCi_Auth_SendRequest
-0x800f118c socket
-0x800f12a4 connect
-0x800f13a0 send
-0x800f14e4 inet_addr
-0x800f164c gethostbyname
 0x800fb874 gpProcess
-0x800ff0d0 gpiSendData
 0x80109c1c gti2ReceivedCallback
 0x8010a3c0 gti2AcceptConnection
 0x8010a464 gti2RejectConnection
@@ -328,6 +321,7 @@
 0x801ec184 SOStartup
 0x801ecff4 SOSocket
 0x801ed0e4 SOClose
+0x801ed188 SOBind
 0x801ed270 SOConnect
 0x801ed454 SORecvFrom
 0x801ed47c SORecv
@@ -335,7 +329,6 @@
 0x801ed4c8 SOSend
 0x801ed4ec SOFcntl
 0x801ed99c SOHtoNs
-0x801ed9a4 net_recvfrom
 0x801edf00 SOGetHostByName
 0x80215280 EGG_ColorFader_fadeIn
 0x802226d8 _ZN3EGG9DVDRipper13LoadToMainRAMEPKcPhPNS_4HeapENS0_14AllocDirectionEjPjS7_
@@ -554,7 +547,7 @@
 0x80659170 _ZN3Net10NetManager21connectToAnybodyAsyncEv
 0x80659680 _ZN3Net10NetManager30connectToGameServerFromGroupIdEv
 0x80659a84 _ZN3Net10NetManager17processRacePacketEhPhj
-0x80659fa4 _ZN3Net10NetManager19getFriendStatusIconEj
+0x80659fa4 _ZN3Net10NetManager23getFriendJoinableStatusEj
 0x8065a34c _ZN3Net10NetManager12PacketHolder4copyEPvj
 0x8065a34c _ZN3Net12PacketHolder4copyEPvj
 0x8065a38c _ZN3Net12PacketHolder6appendEPvj

@@ -32,8 +32,7 @@ private:
     // calls bellow functions as mentioned, but manages the start of a race also by making
     // decisions based off the timers of other players, voting to suspend/unsuspend match making
     // calls ItemHandler::update(), EventHandler::update(), and processLagFrames()
-    REPLACE void updateAsRacer();
-    void REPLACED(updateAsRacer)();
+    void updateAsRacer();
 
     // 0x80654d08
     // called by updateAsRacer(). only RH1 record gets created, both get exported to the send buffer
@@ -46,8 +45,7 @@ private:
     // 0x80654038
     // called by updateAsRacer() to begin the race countdown. the countdown can start once everyone
     // is in the race.
-    REPLACE bool isEveryoneInRace() const;
-    bool REPLACED(isEveryoneInRace)() const;
+    bool isEveryoneInRace() const;
 
     // 0x80654b00
     // tbd explanation, loops over recv RH1 records and compares other players lag frames with ours

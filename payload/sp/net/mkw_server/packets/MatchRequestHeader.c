@@ -4,7 +4,7 @@
 
 void createMatchRequestHeader(MatchRequestHeader *out, MatchRequestType type, u64 searchId) {
     memset(out, 0, sizeof(MatchRequestHeader));
-    out->magic = 0x4D524551; // "MREQ"
+    out->magic = MATCH_REQUEST_HEADER_MAGIC;
     out->type = type;
     out->searchId = searchId;
 }

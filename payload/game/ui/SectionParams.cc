@@ -2,7 +2,7 @@
 
 namespace UI {
 
-u8 SectionParams::getLocalPlayerCount() {
+u8 SectionParams::getLocalPlayerCount() const {
     return m_localPlayerCount;
 }
 

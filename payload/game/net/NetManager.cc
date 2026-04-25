@@ -5,127 +5,11 @@
 extern "C" {
 #include <revolution.h>
 #include <sp/net/mkw_server/MKW-Server.h>
-#include <sp/net/mkw_server/MatchMaking.h>
 }
-
-#include <cstring>
 
 #include "game/ui/SectionManager.hh"
 
 namespace Net {
-
-SearchRegion NetManager::getSearchRegion() {
-    // This would need to be modified for custom regions
-    switch (REGION) {
-    case REGION_P:
-        return SEARCH_REGION_EU;
-    case REGION_E:
-        return SEARCH_REGION_NA;
-    case REGION_J:
-        return SEARCH_REGION_JP;
-    case REGION_K:
-        return SEARCH_REGION_KOR;
-    default:
-        assert("Invalid region!");
-        return SEARCH_REGION_NONE;
-    }
-}
-
-void NetManager::connectToAnybodyAsync() {
-    if (connectToRoomManager()) {
-        // In vanilla, this function only gets called when searching for public rooms
-        // Because of that, we can assume that a non-ww room type is regional and can't be a private
-        // room
-        bool isWW =
-                m_roomType == RoomType::VersusWorldWide || m_roomType == RoomType::BattleWorldWide;
-        SearchRegion region = isWW ? SEARCH_REGION_WW : getSearchRegion();
-
-        bool isVS =
-                m_roomType == RoomType::VersusWorldWide || m_roomType == RoomType::VersusRegional;
-        GameMode mode = isVS ? GAME_MODE_VS : GAME_MODE_BATTLE;
-
-        if (!sendSearchRoomRequest(region, mode)) {
-            SP_LOG("Search room request failed! Region: %d, Mode: %d", region, mode);
-        }
-    }
-}
-
-void NetManager::connectToGameServerFromGroupId() {
-    u32 friendId = currentMMInfo()->hostFriendId;
-    FriendStatusIcon icon = getFriendStatusIcon(friendId);
-    SearchRegion searchRegion = SEARCH_REGION_NONE;
-
-    switch (icon) {
-    case FriendStatusIcon::WorldWideVersus:
-    case FriendStatusIcon::WorldWideBattle:
-        searchRegion = SEARCH_REGION_WW;
-        break;
-    case FriendStatusIcon::JoinableRegionalVS:
-    case FriendStatusIcon::JoinableRegionalBattle:
-        searchRegion = getSearchRegion();
-        break;
-    default:
-        SP_LOG("Mismatching search region as friend trying to join!");
-        break;
-    }
-
-    s32 friendProfileId = DWCi_GetProfileIDFromList(friendId);
-    if (connectToRoomManager()) {
-        sendJoinFriendRequest(friendProfileId, searchRegion);
-    }
-}
-
-void NetManager::updateAddedFriendsCallback(void *r3, void *r4, void *r5) {
-    REPLACED(updateAddedFriendsCallback)(r3, r4, r5);
-
-    if (!connectToRoomManager()) {
-        SP_LOG("Failed to connect to room manager!");
-        return;
-    }
-
-    u8 localPlayerCount = UI::SectionManager::Instance()->getLocalPlayerCount();
-    bool sendResult = sendLocalPlayerCount(localPlayerCount);
-    if (!sendResult) {
-        SP_LOG("Sending localPlayerCount failed!");
-    }
-}
-
-void NetManager::scheduleShutdown() {
-    m_shutdownScheduled = true;
-
-    resetRoomManagerConnection();
-}
-
-void NetManager::init(u8 localPlayerCount) {
-    REPLACED(init)(localPlayerCount);
-
-    // initialize the unique packets buffer
-    m_outgoingUniquePackets.reset();
-}
-
-void NetManager::cancelMatching() {
-    // Reset the two race packet handlers active during the globe scene
-    if (auto *rh1Handler = RH1Handler::Instance()) {
-        rh1Handler->reset();
-    }
-    if (auto *roomHandler = RoomHandler::Instance()) {
-        roomHandler->reset();
-    }
-
-    // This will exit the InMatchMaking state during the next iteration of the main loop
-    m_voteMMSuspension = VoteMatchMakingSuspended::Disconnected;
-
-    // inform wfc-server we're leaving the room
-    sendLeaveFroomRequest();
-}
-
-void NetManager::updateMatchMakingInfoAndRating() {
-    REPLACED(updateMatchMakingInfoAndRating)();
-
-    if (recvFromRoomManager()) {
-        // we received from room manager, this we where we handle
-    }
-}
 
 const MatchMakingInfo *NetManager::currentMMInfo() const {
     return &m_matchMakingInfos[m_currMMInfo];
@@ -147,19 +31,63 @@ bool NetManager::canSendToAid(u8 aid) const {
     return aidInUse(aid) && aid != myAid();
 }
 
+RacePacketHolder *NetManager::lastSentRaceBuffer(u8 aid) {
+    return m_sendRacePackets[m_lastSendIdx[aid]][aid];
+}
+
+RecordHolder<Header> *NetManager::outgoingBuffer(u8 aid) {
+    return m_outgoingRacePacket[aid];
+}
+
+SearchRegion NetManager::getSearchRegion() {
+    // This would need to be modified for custom regions
+    switch (REGION) {
+    case REGION_P:
+        return SEARCH_REGION_EU;
+    case REGION_E:
+        return SEARCH_REGION_NA;
+    case REGION_J:
+        return SEARCH_REGION_JP;
+    case REGION_K:
+        return SEARCH_REGION_KOR;
+    default:
+        assert("Invalid region!");
+        return SEARCH_REGION_NONE;
+    }
+}
+
+void NetManager::init(u8 localPlayerCount) {
+    REPLACED(init)(localPlayerCount);
+
+    // initialize the unique packets buffer
+    m_outgoingUniquePackets.reset();
+}
+
+void NetManager::scheduleShutdown() {
+    m_shutdownScheduled = true;
+
+    resetRoomManagerConnection();
+}
+
+void NetManager::cancelMatching() {
+    // Reset the two race packet handlers active during the globe scene
+    if (auto *rh1Handler = RH1Handler::Instance()) {
+        rh1Handler->reset();
+    }
+    if (auto *roomHandler = RoomHandler::Instance()) {
+        roomHandler->reset();
+    }
+
+    // This will exit the InMatchMaking state during the next iteration of the main loop
+    m_voteMMSuspension = VoteMatchMakingSuspended::Disconnected;
+
+    // inform wfc-server we're leaving the room
+    sendLeaveRoomRequest();
+}
+
 bool NetManager::hasFoundMatch() const {
     // We're in a match if my aid is used and theres more than one aid.
     return aidInUse(myAid()) && numAids() > 1;
-}
-
-u32 NetManager::getRacePacketSize(u8 aid) {
-    u32 size = 0;
-    RacePacketHolder *holder = lastSentRaceBuffer(aid);
-
-    for (u8 i = 0; i < 8; i++) {
-        size += holder->holder(i)->recordSize();
-    }
-    return size;
 }
 
 void NetManager::createRacePacket() {
@@ -183,34 +111,31 @@ void NetManager::createRacePacket() {
         RacePacketHolder *sendBuffer = m_sendRacePackets[sendBufferIdx][aid];
 
         // Form a header
-        Header header;
-        memset(&header, 0, sizeof(Header));
-
-        // Set the outgoing header's sizes
-        u32 headerSizesMask = 0;
+        Header header{};
+        u32 headerSizes = 0;
         for (u8 i = 0; i < 8; i++) {
             RecordHolder<void> *rh = sendBuffer->holder(i);
 
-            // Header (idx == 0) always exists and has a size of 0x10
-            // Use the actual record size for all other records
-            u8 size = i == 0 ? 0x10 : rh->recordSize();
+            // Header record (index 0) is always 0x10, others use actual size
+            u8 size = i == 0 ? sizeof(Header) : rh->recordSize();
             if (size != 0) {
-                headerSizesMask |= 1 << i;
+                headerSizes |= 1 << i;
             }
             header.setRecordSize(i, size);
         }
 
-        s32 headerSizesIdx = m_outgoingUniquePackets.maskIdx(headerSizesMask);
-        if (headerSizesIdx != -1) {
-            // If this exact packet was already seen, just add this aid to the recipient bitmap
-            m_outgoingUniquePackets.setRecvAid(headerSizesIdx, aid);
+        // Try to lookup the outgoing packet. its unique if -1 is returned
+        s32 uniquePacketIdx = m_outgoingUniquePackets.lookup(headerSizes);
+        if (uniquePacketIdx != -1) {
+            // add this aid as a recipient of this packet, move on to the next aid
+            m_outgoingUniquePackets.setRecipient(uniquePacketIdx, aid);
             continue;
         }
 
         // copy the header to the buffer that actually gets sent
         sendBuffer->header()->copy(&header, sizeof(Header));
 
-        RecordHolder<void> *outgoing = m_outgoingRacePacket[aid];
+        RecordHolder<Header> *outgoing = m_outgoingRacePacket[aid];
         outgoing->reset();
 
         // copy the records in the sendBuffer to the outgoing buffer
@@ -223,7 +148,7 @@ void NetManager::createRacePacket() {
         }
 
         // We found a unique packet, so push it to be sent
-        if (!m_outgoingUniquePackets.push(outgoing, headerSizesMask, aid, myAid())) {
+        if (!m_outgoingUniquePackets.push(outgoing, headerSizes, aid, myAid())) {
             SP_LOG("Pushing a new packet failed!");
         }
     }
@@ -237,7 +162,6 @@ void NetManager::sendRacePacket() {
 }
 
 bool NetManager::sendRacePacketToMKWServer(u8 packetIdx) {
-    OSTime sentTime = 0;
     const SP::Packet *outgoingPacket = m_outgoingUniquePackets[packetIdx];
 
     if (outgoingPacket == nullptr) {
@@ -263,21 +187,59 @@ bool NetManager::sendRacePacketToMKWServer(u8 packetIdx) {
     bool sendResult =
             trySendRacePacketToMKWServer(recordToSend, outgoingPacket->data->recordSize());
 
-    // update time-based send members
-    if (sendResult) {
-        OSTime lastSentTime = m_timeOfLastSentRace[packetIdx];
-        if (lastSentTime != 0) {
-            OSTime delta = sentTime - lastSentTime;
-            m_timeBetweenSendingPackets[packetIdx] = delta;
-        }
-
-        m_aidLastSentTo = packetIdx;
-        m_timeOfLastSentRace[packetIdx] = sentTime;
-    }
-
     // always reset the outgoing buffer
     outgoingPacket->data->reset();
     return sendResult;
+}
+
+void NetManager::updateMatchMakingInfoAndRating() {
+    REPLACED(updateMatchMakingInfoAndRating)();
+
+    recvFromRoomManager();
+}
+
+void NetManager::connectToAnybodyAsync() {
+    if (connectToRoomManager()) {
+        // In vanilla, this function only gets called when searching for public rooms
+        // Because of that, we can assume that a non-ww room type is regional and can't be a private
+        // room
+        bool isWW =
+                m_roomType == RoomType::VersusWorldWide || m_roomType == RoomType::BattleWorldWide;
+        SearchRegion region = isWW ? SEARCH_REGION_WW : getSearchRegion();
+
+        bool isVS =
+                m_roomType == RoomType::VersusWorldWide || m_roomType == RoomType::VersusRegional;
+        GameMode mode = isVS ? GAME_MODE_VS : GAME_MODE_BATTLE;
+
+        if (!sendSearchRoomRequest(region, mode)) {
+            SP_LOG("Search room request failed! Region: %d, Mode: %d", region, mode);
+        }
+    }
+}
+
+void NetManager::connectToGameServerFromGroupId() {
+    u32 friendId = currentMMInfo()->hostFriendId;
+    FriendJoinableStatus status = getFriendJoinableStatus(friendId);
+    SearchRegion searchRegion = SEARCH_REGION_NONE;
+
+    switch (status) {
+    case FriendJoinableStatus::WorldWideVersus:
+    case FriendJoinableStatus::WorldWideBattle:
+        searchRegion = SEARCH_REGION_WW;
+        break;
+    case FriendJoinableStatus::JoinableRegionalVS:
+    case FriendJoinableStatus::JoinableRegionalBattle:
+        searchRegion = getSearchRegion();
+        break;
+    default:
+        SP_LOG("Mismatching search region as friend trying to join!");
+        break;
+    }
+
+    s32 friendProfileId = DWCi_GetProfileIDFromList(friendId);
+    if (connectToRoomManager()) {
+        sendJoinFriendRequest(friendProfileId, searchRegion);
+    }
 }
 
 void NetManager::processRacePacket(u8 aid, u8 *packet, u32 size) {
@@ -288,13 +250,6 @@ void NetManager::processRacePacket(u8 aid, u8 *packet, u32 size) {
 
     // make sure the packet isn't corrupted
     if (origCrc32 == calcCrc32) {
-        // update time based structs
-        OSTime aidLastRecvTime = m_timeOfLastRecvRace[aid];
-        if (aidLastRecvTime != 0) {
-            m_timeBetweenRecvPackets[aid] = OSGetTime() - aidLastRecvTime;
-        }
-        m_timeOfLastRecvRace[aid] = OSGetTime();
-
         // data for other packet is right after the header, so add the
         // packet[i] size to this to get a specific offset
         u8 *dataPacketPtr = reinterpret_cast<u8 *>(header);
@@ -314,6 +269,21 @@ void NetManager::processRacePacket(u8 aid, u8 *packet, u32 size) {
         }
     } else {
         SP_LOG("Invalid Checksum!");
+    }
+}
+
+void NetManager::updateAddedFriendsCallback(void *r3, void *r4, void *r5) {
+    REPLACED(updateAddedFriendsCallback)(r3, r4, r5);
+
+    if (!connectToRoomManager()) {
+        SP_LOG("Failed to connect to room manager!");
+        return;
+    }
+
+    u8 localPlayerCount = UI::SectionManager::Instance()->getLocalPlayerCount();
+    bool sendResult = sendLocalPlayerCount(localPlayerCount);
+    if (!sendResult) {
+        SP_LOG("Sending localPlayerCount failed!");
     }
 }
 

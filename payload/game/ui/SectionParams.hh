@@ -6,7 +6,7 @@ namespace UI {
 
 class SectionParams {
 public:
-    u8 getLocalPlayerCount();
+    u8 getLocalPlayerCount() const;
 
 private:
     u8 _000[0x124 - 0x000];

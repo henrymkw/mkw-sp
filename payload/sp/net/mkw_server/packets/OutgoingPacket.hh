@@ -5,26 +5,33 @@
 #include <common/BitField.hh>
 
 #include <game/net/RecordHolder.hh>
+#include <game/net/records/Header.hh>
 
 #include <array>
 
 namespace SP {
 
 struct Packet {
-    Net::RecordHolder<void> *data;
-    BitField<12> receivingAids;
-    u32 mask;
+    // The packet to be sent
+    Net::RecordHolder<Net::Header> *data;
 
-    void setHeaderBitmap();
+    // Aids that will receive this packet
+    BitField<u16, 12> receivingAids;
+
+    // bit mask of the header sizes. funcitonally a unique id
+    u32 headerSizes;
+
+    // Adds aid to receivingAids, updates the header accordingly
+    void addRecipient(u8 aid);
 };
 
 class OutgoingRacePackets {
 public:
-    bool push(Net::RecordHolder<void> *data, u32 headerSizesMask, u8 aid, u8 myAid);
+    bool push(Net::RecordHolder<Net::Header> *data, u32 headerSizes, u8 aid, u8 myAid);
 
-    s32 maskIdx(u32 headerSizesMask);
+    s32 lookup(u32 sizesMask);
 
-    void setRecvAid(s32 idx, u8 aid);
+    void setRecipient(s32 idx, u8 aid);
 
     void reset();
 
@@ -38,8 +45,6 @@ public:
     }
 
 private:
-    void setHeader(u32 idx, u8 aid);
-
     std::array<Packet, MAX_PLAYER_COUNT> m_outgoingPackets;
     size_t m_count;
 };

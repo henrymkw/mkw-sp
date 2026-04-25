@@ -2,25 +2,44 @@
 
 #include <Common.hh>
 
-template <size_t N>
+template <typename T, size_t N>
 class BitField {
+private:
+    bool invalidAid(s8 n) const {
+        return n != -1 && n >= static_cast<s32>(N);
+    }
+
 public:
-    bool on(size_t n) const {
+    bool on(s8 n) const {
+        if (invalidAid(n)) {
+            panic("Invalid aid in on(%d)!", n);
+        }
         return m_field & (1 << n);
     }
 
-    void set(size_t n) {
+    void set(s8 n) {
+        if (invalidAid(n)) {
+            panic("Invalid aid in set(%d)!", n);
+        }
         m_field |= (1 << n);
     }
 
-    void clear(size_t n) {
+    void clear(s8 n) {
+        if (invalidAid(n)) {
+            panic("Invalid aid in clear(%d)!", n);
+        }
         m_field &= ~(1 << n);
     }
 
-    u32 field() const {
+    T field() const {
         return m_field;
     }
 
+    BitField &operator=(const BitField &lhs) {
+        m_field = lhs.m_field;
+        return *this;
+    }
+
 private:
-    u32 m_field;
+    T m_field;
 };
