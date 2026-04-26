@@ -67,16 +67,16 @@ Match making information will be transmitted from MKW-Server to players as defin
 | ---- | ----------- | --------------- | ------ | ------ |
 | Magic | Magic of this packet. Value is always 0x77846772 ("MTCH") | N/A | 0x00 | 0x4 |
 | Aid Bitmap | Bitmap of the available aids | `DWC_GetAidBitmap()` | 0x04 | 0x4 |
-| Aid Count | # of non-guest players | `DWC_GetNumConnectionHost()` | 0x08 | 0x04 |
+| Num Aids | # of non-guest players | `DWC_GetNumConnectionHost()` | 0x08 | 0x04 |
 | Direct Connected Aid Bitmap | # of players, including guests | `DWC_GetDirectConnectedAIDBitmap()` | 0x0c | 0x04 |
 | Room Id | Id of the room | `DWC_GetGroupId()` | 0x10 | 0x4 |
-| Player Aid | Aid of the receiving player | `DWC_GetMyAid()` | 0x14 | 0x1 |
-| Host Aid | Aid of the room's host. Used for compatibility reasons | `DWC_GetServerAid()` | 0x15 | 0x1 |
-| Match Making Suspended | The match making suspend state of the room | `DWC_GetSuspendMatch()` | 0x16 | 0x1 |
-| Cancel Match | If the match is canceled | `DWC_IsValidMatchCancel()` | 0x17 | 0x1 |
-| Local Player Count | Local player count for each player, indexed by aid. This is in little endian since `NetManager::updateMatchMakingInfosAndRatings()` expects it to be. | `DWC_GetConnectionUserData()` | 0x18 | 0x30 |
+| My Aid | Aid of the receiving player | `DWC_GetMyAid()` | 0x14 | 0x1 |
+| Host Aid | Aid of the room's host | `DWC_GetServerAid()` | 0x15 | 0x1 |
+| Suspension State | The match making suspend state of the room | `DWC_GetSuspendMatch()` | 0x16 | 0x1 |
+| Match Canceled | If the match is canceled | `DWC_IsValidMatchCancel()` | 0x17 | 0x1 |
+| Local Player Counts | Local player count for each player, indexed by aid. This is in little endian since `NetManager::updateMatchMakingInfosAndRatings()` expects it to be. | `DWC_GetConnectionUserData()` | 0x18 | 0x30 |
 
-`Match` packet's contents will be parsed and stored into a static variables in [MatchMaking.h](../../payload/sp/net/mkw_server/MatchMaking.h). From here, the DWC functions will be replaced to return the values specified in the above table.
+`Match` packet's contents will be parsed and stored into a static variables in [RoomManager.h](../../payload/sp/net/mkw_server/RoomManager.h). From here, the DWC functions will be replaced to return the values specified in the above table.
 
 ### Match Request Packets
 
@@ -91,7 +91,7 @@ For the player to open a room, join a room, search for a public room, etc., they
 | Padding | Padding | 0x5 | 0x3 |
 | SearchId | Client SearchId | 0x8 | 0x8 |
 
-### `OpenFroom` packet
+### `OpenRoom` packet
 
 Request to create a private room. This packet structure is simple.
 
@@ -99,7 +99,7 @@ Request to create a private room. This packet structure is simple.
 | ---- | ----------- | ------ | ------ |
 | `MatchRequestHeader` | Header, `MatchRequestType` must be 0 | 0x00 | 0x10 |
 
-### `JoinFroom` packet
+### `JoinFriend` packet
 
 Request to join a friend's private room.
 
@@ -107,9 +107,10 @@ Request to join a friend's private room.
 | ---- | ----------- | ------ | ------ |
 | `MatchRequestHeader` | Header, `MatchRequestType` must be 1 | 0x00 | 0x10 |
 | FriendProfileId | ProfileId of the friend to join. | 0x10 | 0x4 |
-| Padding | Padding | 0x14 | 0x4 |
+| SearchRegion | Search Region. Valid values are 0 for private room, 1 for worldwide, 2 for NA, 3 for EU, 4 for JP, 5 for KOR. | 0x10 | 0x1 |
+| Padding | Padding | 0x15 | 0x3 |
 
-### `LeaveFroom` packet
+### `LeaveRoom` packet
 
 Request to leave private room.
 
@@ -117,7 +118,7 @@ Request to leave private room.
 | ---- | ----------- | ------ | ------ |
 | `MatchRequestHeader` | Header, `MatchRequestType` must be 2 | 0x00 | 0x10 |
 
-### `VoteSuspendMatch` packet
+### `SuspendRequest` packet
 
 Vote to suspend match making. Must already be in a room to send, which `wfc-server` will validate.
 
@@ -125,17 +126,36 @@ Vote to suspend match making. Must already be in a room to send, which `wfc-serv
 | -- | ----------- | ------ | ------ |
 | `MatchRequestHeader` | Header, `MatchRequestType` must be 3 | 0x00 | 0x10 |
 | SuspendVote | Vote for match making suspension. 0 is a unsuspend vote, 1 is a suspend vote. | 0x10 | 0x1 |
-| Padding | Padding | 0x11 | 0x03 |
+| Padding | Padding | 0x11 | 0x07 |
 
-### `SearchPublicRoom` packet
+### `SearchRoom` packet
 
 Request to search for a public room.
 
 | Name | Description | Offset | Length |
 | ---- | ----------- | ------ | ------ |
 | `MatchRequestHeader` | Header, `MatchRequestType` must be 4 | 0x00 | 0x10 |
-| Region | Search Region. Value differs on the region to search. Value 0 is regionless (worldwide), 1 is NA, 2, is EU, 3 is JP, 4 is KOR. | 0x10 | 0x1 |
-| Padding | Padding | 0x11 | 0x03 |
+| Region | Search Region. Valid values are 1 for worldwide, 2 for NA, 3 for EU, 4 for JP, 5 for KOR. | 0x10 | 0x1 |
+| GameMode | Game mode to search for. 1 is VS, 2 is Battle | 0x11 | 0x1 |
+| Padding | Padding | 0x12 | 0x06 |
+
+### `LocalPlayerCount` packet
+
+Informing the server our local player count. This is sent soon after a session is established and doesn't change
+
+| Name | Description | Offset | Length |
+| ---- | ----------- | ------ | ------ |
+| `MatchRequestHeader` | Header, `MatchRequestType` must be 4 | 0x00 | 0x10 |
+| Local Player Count | Number of local players. Valid values are 1 or 2. | 0x10 | 0x1 |
+| Padding | Padding | 0x11 | 0x7 |
+
+### `SearchId` Packet
+
+The `SearchId` packet only gets sent from `wfc-server` to other players. It is sent right after the server establishes a connection with the player over UDP (reliable). The searchId, is used as a unique identifier for each player. This is included in the header so `wfc-server` can associate messages over TCP to the underlying player type.
+
+| Name | Description | Offset | Length |
+| Magic | "SEARCHID" | 0x0 | 0x8 |
+| SearchId | The player's searchId | 0x8 | 0x8 |
 
 ## Client Code Changes
 
@@ -154,17 +174,6 @@ List of potentially relevant DWC functions to replace, and what they do. Likely 
 - `DWC_GetConnectionUserData()`: Local Player Count
 - `DWC_RequestMatchSuspendAsync(bool canJoin)`: Vote to open up match making
 - `DWC_GetSuspendMatch()`: Can others join the room? Joining is possible when all players vote that match making is open.
-- `DWC_SetupGameServer()`: Creating private room
-- `DWC_ConnectToGameServerAsync()`: Joining private room
-- `DWC_ConnectToGameServerFromGroupID()`: Joining public room from friend
-- `DWC_ConnectToAnyoneAsync()`: Joining a public room
-- `DWC_ProcessFriendsMatch()`: Main DWC Loop. Will need to be modified.
-- `DWC_CloseAllConnectionsHard()`: Clean up NatNeg and other peer-to-peer stuff
-- `DWC_RegisterMatchingStatus()`
-- `DWC_IsValidMatchCancel()`: Check if the match has been canceled
-- `DWC_CancelMatch()`: Logic to cancel match
-- `DWC_RegisterMatchingStatus()`
-- `DWC_GetLastErrorEx()`: Might need to modify error handling if vanilla errors popup as result of rewrite.
 
 ### Communication
 
@@ -172,13 +181,13 @@ The communication for match making will be done over TCP, from client to server.
 
 ### Handlers
 
-A new source file, called `MatchMaking.h/c`, will be made to handle sending a receiving match making packets. This will be in C since DWC functions (written in C will call them).
+A new source file, called `RoomManager.h/c`, will be made to handle sending a receiving match making packets. This will be in C since DWC functions (written in C will call them).
 
 ## Server Code
 
 ### Refactors
 
-The term `group` will be renamed to `room` to better reflect MKW. `wfc-server` is generic by nature because it supports multiple games, but since MKW-Server is specific to MKW, and the term room is generally more understandable to the wider MKW community, renaming to `room` will be done to reflect that. Likewise, `session` will be renamed to `player`. On a similar note, the term `serverBrowser` will be renamed to `roomManager`, as that is more fitting for its repurpose.
+The term `group` will be renamed to `room` to better reflect MKW. `wfc-server` is generic by nature because it supports multiple games, but since MKW-Server is specific to MKW, and the term room is generally more understandable to the wider MKW community, renaming to `room` will be done to reflect that. Likewise, `session` will be renamed to `player`.
 
 ### Other Sections TODO
 
