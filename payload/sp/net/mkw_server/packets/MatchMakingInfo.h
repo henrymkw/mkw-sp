@@ -21,4 +21,6 @@ extern MatchMakingInfoPacket g_recvMatchPacket;
 
 bool matchMakingInfoValid(MatchMakingInfoPacket *mmInfo);
 
-bool recvMatchMakingInfoPacket();
+bool processMatchMakingInfoPacket(u8 *data);
+
+void resetMatchMakingInfoPacket();

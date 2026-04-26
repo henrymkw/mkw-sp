@@ -62,6 +62,9 @@ int SOSend(int s, const void *buf, int len, int flags);
 // 0x801ed4ec
 int SOFcntl(int s, int cmd, ...);
 
+// 0x801ed82c
+BOOL SOInetAtoN(const char *name, int *addr);
+
 // 0x801ed99c
 short SOHtoNs(short hostshort);
 

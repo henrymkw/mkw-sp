@@ -6,8 +6,6 @@
 
 #include <sp/net/mkw_server/packets/MatchMakingInfo.h>
 
-extern SOCKET g_matchMakingSocket;
-
 typedef enum {
     MATCH_REQUEST_OPEN_ROOM = 0,
     MATCH_REQUEST_JOIN_FRIEND = 1,
@@ -39,10 +37,8 @@ bool connectToRoomManager();
 // closes the tcp connection. called upon match making state exit.
 void resetRoomManagerConnection();
 
-// sends a generic message to room manager
-bool sendToRoomManager(void *message, s32 messageLength);
-
-bool recvFromRoomManager();
+// Receives and processes as many packets as possible in a single call
+void recvFromRoomManager();
 
 // sends a REQUEST_OPEN_ROOM
 bool sendOpenFroomRequest();

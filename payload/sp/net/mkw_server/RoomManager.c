@@ -12,8 +12,11 @@
 #include <sp/net/mkw_server/packets/SuspendRequest.h>
 
 static SOSockAddrIn s_serverAddr;
-SOCKET g_matchMakingSocket = -1;
+static SOCKET g_matchMakingSocket = -1;
 static s32 connection = -1;
+
+static u8 s_recvBuf[256];
+static s32 s_recvBufSize = 0;
 
 bool connectToRoomManager() {
     if (connection == 0) {
@@ -24,9 +27,17 @@ bool connectToRoomManager() {
     s_serverAddr.family = AF_INET;
     s_serverAddr.port = SOHtoNs(28910);
 
-    // The wfc payload patches inet_addr to replace nintendowifi.net with whatever domain is used,
-    // so this works (just unclear without comment, maybe should be changed to be a client patch)
-    s_serverAddr.addr.addr = getWFCServerAddress();
+    // The wfc payload patches SOInetAtoN() to replace nintendowifi.net with whatever domain is used
+    const char *serverHostname = "mariokartwii.ms19.gs.nintendowifi.net";
+    s32 addr;
+    BOOL addrResult = SOInetAtoN(serverHostname, &addr);
+    if (addrResult) {
+        s_serverAddr.addr.addr = addr;
+    } else {
+        // SOInetAtoN() can fail on console for unknown reasons
+        // If it does fail, fall back to getWFCServerAddress()
+        s_serverAddr.addr.addr = getWFCServerAddress();
+    }
 
     if (g_matchMakingSocket == -1) {
         g_matchMakingSocket = SOSocket(AF_INET, SOCK_STREAM, 0);
@@ -43,17 +54,20 @@ bool connectToRoomManager() {
         SP_LOG("Failed to connect to room manager server. connection: %d", connection);
         return false;
     }
+    SP_LOG("Connected to RoomManager!");
 
     // set non-blocking, credits: vabold
     s32 result = SOFcntl(g_matchMakingSocket, SO_F_GETFL, 0);
     if (result == -1) {
         SP_LOG("Failed to get status flags, returned %d", result);
+        resetRoomManagerConnection();
         return false;
     }
 
     result = SOFcntl(g_matchMakingSocket, SO_F_SETFL, result | SO_O_NONBLOCK);
     if (result != 0) {
         SP_LOG("Failed to set status flags, returned %d", result);
+        resetRoomManagerConnection();
         return false;
     }
 
@@ -61,14 +75,89 @@ bool connectToRoomManager() {
 }
 
 void resetRoomManagerConnection() {
-    if (g_matchMakingSocket != -1 && connection == 0) {
+    if (g_matchMakingSocket != -1) {
         SOClose(g_matchMakingSocket);
         g_matchMakingSocket = -1;
         connection = -1;
+        s_recvBufSize = 0;
+        resetMatchMakingInfoPacket();
+        resetMKWServerInfo();
+        SP_LOG("RoomManager connection/socket has been reset!");
     }
 }
 
-bool sendToRoomManager(void *message, s32 messageLength) {
+static s32 recvIntoBuffer(s32 needed) {
+    if (s_recvBufSize >= needed) {
+        // already have needed bytes
+        return s_recvBufSize;
+    }
+    // Try to receive, update size if successful.
+    s32 result = SORecv(g_matchMakingSocket, s_recvBuf + s_recvBufSize,
+            sizeof(s_recvBuf) - s_recvBufSize, 0);
+    if (result > 0) {
+        s_recvBufSize += result;
+    }
+    return s_recvBufSize;
+}
+
+static void consumeBuffer(s32 n) {
+    // Discard first n bytes by shifting remaining data forward
+    memmove(s_recvBuf, s_recvBuf + n, s_recvBufSize - n);
+    s_recvBufSize -= n;
+}
+
+void recvFromRoomManager() {
+    if (g_matchMakingSocket == -1) {
+        return;
+    }
+
+    // loop until we can't process anymore packets
+    while (true) {
+        // check if there is any magic that can be received
+        if (recvIntoBuffer(4) < 4) {
+            break;
+        }
+
+        u32 magic;
+        memcpy(&magic, s_recvBuf, sizeof(u32));
+
+        s32 packetSize = 0;
+        // identify the type of packet based off the magic set the size
+        switch (magic) {
+        case MATCH_MAKING_INFO:
+            packetSize = sizeof(u32) + sizeof(MatchMakingInfoPacket);
+            break;
+        case MKW_SERVER_INFO:
+            packetSize = sizeof(u32) + sizeof(MKWServerInfoPacket);
+            break;
+        default:
+            SP_LOG("Received unknown packet type with magic %x", magic);
+            s_recvBufSize = 0;
+            return;
+        }
+
+        // receive the rest of the packet if possible
+        if (recvIntoBuffer(packetSize) < packetSize) {
+            return;
+        }
+
+        switch (magic) {
+        case MATCH_MAKING_INFO:
+            bool processResult = processMatchMakingInfoPacket(s_recvBuf + 4);
+            if (!processResult) {
+                SP_LOG("processMatchMakingInfoPacket() failed!");
+            }
+            break;
+        case MKW_SERVER_INFO:
+            processMKWServerInfoPacket(s_recvBuf + 4);
+            break;
+        }
+
+        consumeBuffer(packetSize);
+    }
+}
+
+static bool sendToRoomManager(void *message, s32 messageLength) {
     // check if we're connected to the server
     if (g_matchMakingSocket == -1) {
         SP_LOG("Not connected to room manager server!");
@@ -76,47 +165,6 @@ bool sendToRoomManager(void *message, s32 messageLength) {
     }
 
     return SOSend(g_matchMakingSocket, message, messageLength, 0);
-}
-
-bool recvFromRoomManager() {
-    if (g_matchMakingSocket == -1) {
-        return false;
-    }
-
-    // first recv the magic, return if recv isn't 4 since 4 indicates sucessful recv
-    u32 magic;
-    s32 magicRecv = SORecv(g_matchMakingSocket, &magic, sizeof(u32), 0);
-    if (magicRecv != 4) {
-        return false;
-    }
-
-    bool dataRecvResult = false;
-    switch (magic) {
-    case MATCH_MAKING_INFO:
-        dataRecvResult = recvMatchMakingInfoPacket();
-        if (!dataRecvResult) {
-            SP_LOG("Got Match Making Info magic (%d) but recvMatchMakingInfoPacket() returned "
-                   "false!",
-                    MATCH_MAKING_INFO);
-        }
-        return dataRecvResult;
-
-        break;
-    case MKW_SERVER_INFO:
-        dataRecvResult = recvMKWServerInfoPacket();
-        if (!dataRecvResult) {
-            SP_LOG("Got MKWServerInfo magic (%d) but recvMKWServerInfoPacket() returned false",
-                    MKW_SERVER_INFO);
-        }
-        return dataRecvResult;
-
-        break;
-    default:
-        SP_LOG("Received unknown packet type with magic %x", magic);
-        break;
-    }
-
-    return false;
 }
 
 bool sendOpenFroomRequest() {

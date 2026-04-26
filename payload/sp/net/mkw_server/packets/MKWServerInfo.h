@@ -4,11 +4,13 @@
 
 #define MKW_SERVER_INFO 0x4D4B5753 // "MKWS"
 
+// Pack since wfc-server sends exactly 6 bytes
+#pragma pack(push, 1)
 typedef struct {
     u32 address;
     u16 port;
-    u8 _6[0x8 - 0x6];
 } MKWServerInfoPacket;
-static_assert(sizeof(MKWServerInfoPacket) == 0x8);
+#pragma pack(pop)
+static_assert(sizeof(MKWServerInfoPacket) == 0x6);
 
-bool recvMKWServerInfoPacket();
+void processMKWServerInfoPacket(u8 *data);
