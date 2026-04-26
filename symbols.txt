@@ -557,6 +557,7 @@
 0x806602fc _ZN3Net13SelectHandler6updateEv
 0x80663c88 _ZN3Net10RH1Handler5resetEv
 0x80663dd4 _ZN3Net10RH1Handler4calcEv
+0x80663dd4 RH1Handler_update
 0x8066506c _ZN3Net10RH1Handler13exportPacketsEv
 0x806651b4 _ZN3Net10RH1Handler13importPacketsEv
 0x807bc940 _ZN4Item13ItemInventory7setItemENS_6ItemIdE
