@@ -20,6 +20,9 @@
 
 #define PAYLOAD_BLOCK_SIZE 0x20000
 
+// gets the IP for WFC Server. The #ifdefs are temporary until settings are implemented
+u32 getWFCServerAddress();
+
 bool GenerateRandomSalt(u8 *out);
 
 s32 HandleResponse();

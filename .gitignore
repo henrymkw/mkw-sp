@@ -13,3 +13,9 @@ target
 Cargo.lock
 .DS_Store
 nanopb_pb2.py
+
+compile_flags.txt
+compile_commands.json
+
+.clangd
+.cache/

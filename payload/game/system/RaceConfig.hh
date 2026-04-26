@@ -34,10 +34,6 @@ public:
 
     Scenario &raceScenario();
 
-public:
-    REPLACE static RaceConfig *CreateInstance();
-    static RaceConfig *REPLACED(CreateInstance());
-
     static RaceConfig *Instance();
 
 private:

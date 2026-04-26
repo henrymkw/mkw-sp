@@ -478,7 +478,8 @@ CHUNKS = {
         Chunk(0x809c1988, 0x809c198c, 0x809bd378),
         Chunk(0x809c19a0, 0x809c19bc, 0x809bd180),
         Chunk(0x809c1e38, 0x809c1e3c, 0x809bd508),
-        Chunk(0x809c20e0, 0x809c20e4, 0x809c20e0),
+        Chunk(0x809c20e0, 0x809c20e4, 0x809bd920),
+        Chunk(0x809c2118, 0x809c211c, 0x809bd940),
         Chunk(0x809c21d0, 0x809c21d4, 0x809bda10),
         Chunk(0x809c21d8, 0x809c21dc, 0x809bda18),
         Chunk(0x809c2328, 0x809c232c, 0x809bdb60),
@@ -534,7 +535,8 @@ CHUNKS = {
         Chunk(0x809c18f8, 0x809c18fc, 0x809c0958),
         Chunk(0x809c1988, 0x809c198c, 0x809c09e8),
         Chunk(0x809c19a0, 0x809c19bc, 0x809c0a00),
-        Chunk(0x809c20e0, 0x809c20e4, 0x809c20e0),
+        Chunk(0x809c20e0, 0x809c20e4, 0x809c1140),
+        Chunk(0x809c2118, 0x809c211c, 0x809c1178),
         Chunk(0x809c1e38, 0x809c1e3c, 0x809c0e98),
         Chunk(0x809c21d0, 0x809c21d4, 0x809c1230),
         Chunk(0x809c21d8, 0x809c21dc, 0x809c1238),
@@ -631,7 +633,8 @@ CHUNKS = {
         Chunk(0x809c1988, 0x809c198c, 0x809affc8),
         Chunk(0x809c19a0, 0x809c19bc, 0x809affe0),
         Chunk(0x809c1e38, 0x809c1e3c, 0x809b0478),
-        Chunk(0x809c20e0, 0x809c20e4, 0x809c20e0),
+        Chunk(0x809c20e0, 0x809c20e4, 0x809b0720),
+        Chunk(0x809c2118, 0x809c211c, 0x809b0758),
         Chunk(0x809c21d0, 0x809c21d4, 0x809b0810),
         Chunk(0x809c21d8, 0x809c21dc, 0x809b0818),
         Chunk(0x809c2328, 0x809c232c, 0x809b0968),
@@ -759,21 +762,11 @@ with open(args.out_path, 'w') as out_file:
 
             # At the moment, this script only supports porting addresses from the PAL version of the game to other versions of the game
             binary_name = get_binary_name('P', address)
-            bss_section = next((section for section in SRC_BINARIES['P']['rel'].sections if section.name == 'bss'), None)
-            if bss_section is None:
-                sys.exit('Couldn\'t find the \'.bss\' section of the \'StaticR.rel\' module!')
-            is_rel_bss = bss_section.start <= address < bss_section.end
 
             address = port(args.region, address)
             if address is None:
                 sys.exit(f'Couldn\'t port symbol {name} to region {args.region}!')
-            if is_rel_bss and not args.base:
-                address -= {
-                    'P': 0xe02ec,
-                    'E': 0xe028c,
-                    'J': 0xe020c,
-                    'K': 0xe048c,
-                }[args.region]
+            
             address -= SRC_BINARIES[args.region][binary_name].start
             address += DST_BINARIES[args.region][binary_name].start
             write_symbol(out_file, name, address)

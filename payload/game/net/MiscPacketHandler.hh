@@ -74,7 +74,7 @@ private:
     u32 m_shouldStopAid;
     s16 m_myLagFrames;   // refers to frames that didnt get rendered due to lag, gets updated in
                          // processLagFrames()
-    s16 m_countDownTime; // set to 3000 ms,
+    s16 m_countdownTime; // set to 3000 ms,
     RaceDataRecord m_sendRaceDataRecords[2]; // 0x14 - 0x94
     EventRecord m_sendEventRecords;          // 0x94 - 0x18c
     u8 _18c[0x190 - 0x18c];

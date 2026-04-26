@@ -12,6 +12,7 @@
 #include <revolution.h>
 #include <revolution/gamespy/gt2/gt2Callback.h>
 #include <revolution/gamespy/qr2/qr2.h>
+#include <revolution/gamespy/serverbrowser/serverBrowser.h>
 
 typedef enum {
     DWC_MATCH_STATE_INIT,
@@ -194,7 +195,7 @@ typedef struct {
     u32 qr2IP;
     int qr2Reservation;
 
-    void *serverBrowser;
+    ServerBrowser *serverBrowser;
     int serverBrowserUpdateFlag;
     u8 _6e4[0x6e8 - 0x6e4];
     OSTime serverBrowserUpdateTick;
@@ -286,5 +287,17 @@ s32 DWCi_SendMatchCommand(DWCMatchCommandType command, s32 profileId, u32 public
         void *commandData, s32 dataLen);
 
 s32 DWCi_SendResvCommand(s32 profileId, s32 delay);
+
+// This gets called by NetManager::mainNetworkLoop() upon pressing the create room button
+// Patch sets up server browser communication, allowing us to send custom create room requests.
+// Patch done here since I don't want to rewrite mainNetworkLoop()
+REPLACE bool DWC_SetupGameServer(void *r3, void *r4, void *r5, void *r6, void *r7, void *r8,
+        void *r9, void *r10);
+
+REPLACE bool DWC_ConnectToGameServerAsync(s32 friendId, void *r4, void *r5, void *r6, void *r7,
+        void *r8, void *r9, void *r10);
+
+REPLACE void DWC_ProcessFriendsMatch();
+void REPLACED(DWC_ProcessFriendsMatch)();
 
 extern DWCMatch *s_dwcMatch;

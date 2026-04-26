@@ -4,18 +4,17 @@
 
 #include "game/net/DisconnectInfo.hh"
 #include "game/net/FriendInfo.hh"
-#include "game/net/PacketHolder.hh"
+#include "game/net/MatchMakingInfo.hh"
 #include "game/net/RacePacketHolder.hh"
 
 #include <egg/core/eggExpHeap.hh>
 #include <egg/core/eggTaskThread.hh>
 
 extern "C" {
-#include <revolution/dwc/DWCFriend.h>
-#include <revolution/dwc/DWCNode.h>
-#include <revolution/os.h>
-#include <revolution/os/OSMutex.h>
+#include <sp/net/mkw_server/RoomManager.h>
 }
+
+#include <sp/net/mkw_server/packets/OutgoingPacket.hh>
 
 #define MAX_FRIEND_COUNT 30
 #define MAX_PLAYER_COUNT 12
@@ -24,19 +23,6 @@ namespace Net {
 
 class NetManager {
 public:
-    static NetManager *Instance() {
-        return s_instance;
-    }
-
-    // new function. the buffer is a number of concatenated race packets
-    // it reads the header to split each one up to be processed individually
-    void processBufferedRACEPacket(u8 *buffer, u32 size);
-
-    // nearly byte-matched (regswap) so REPLACE is acceptable
-    REPLACE void processRACEPacket(u8 aid, u8 *header, u32 size);
-    void REPLACED(processRACEPacket)(u8 aid, u8 *header, u32 size);
-
-private:
     enum class ConnectionState : u32 {
         Shutdown = 0x0, // offline
         BeginLogin = 0x1,
@@ -74,62 +60,88 @@ private:
         VoteUnsuspend = 0x3, // Set when private room ends
     };
 
-    struct MatchMakingInfo {         // 0x0038
-        OSTime matchMakingStartTime; // gets set upon match making 0x0 / 0x0038
-        u32 numConnectedConsoles;    // number of non guest players 0x8  / 0x0040
-        u32 playerCount;             // players in room (includes guests) 0xC / 0x0044
-        // bitmap of available aids. When (1 << aid) & availableAids == 1, the aid is taken
-        // when 0, the aid is available. This doesn't include guests 1. offset: 0x10 / nm: 0x0048
-        u32 availableAids;
-        u32 directConnectedAidBitmap; // Aids I'm connected to. It will fill up to
-                                      // equal fullAidBitmap by the end of MM as
-                                      // I connect to other users. 0x14 / 0x004c
-        u32 roomId;                   // Also known as groupId by DWC 0x18 / 0x0050
-        s32 hostFriendId;             // -1 if host isn't a friend. 0x1C / 0x0054
-        u8 localPlayerCount;          // 0x20 / 0x0058
-        u8 myAid;                     // 0x21 / 0x0059
-        u8 hostAid;                   // value returned by DWC_GetServerAid() 0x22 / 0x005a
-        DWCConnectionUserData localPlayerCounts[MAX_PLAYER_COUNT];
-        // When matching is suspended, friends aren't able to join your room.
-        // This gets set to true during the voting screen in public rooms
-        // and transitioning to opening a private room, both cases friends can't
-        // join.
-        bool isMatchMakingSuspended; // 0x53 / 0x008b
-        u8 _54[0x58 - 0x54];
-    };
-    static_assert(sizeof(MatchMakingInfo) == 0x58);
+    static NetManager *Instance() {
+        return s_instance;
+    }
 
-    // 0x80657004
-    REPLACE NetManager *construct(EGG::ExpHeap *heap);
-    NetManager *REPLACED(construct)(EGG::ExpHeap *heap);
+private:
+    const MatchMakingInfo *currentMMInfo() const;
 
-    // 0x80658b9c
-    // patch to set the UserRecvCallback to our function that splits packets
-    REPLACE void connect();
-    void REPLACED(connect)();
+    u8 myAid() const;
+
+    u32 numAids() const;
+
+    bool aidInUse(u8 aid) const;
 
     // check that the aid isn't ours and the aid is in the room before sending a race packet
     bool canSendToAid(u8 aid) const;
 
-    u32 lastSendIdx(u8 aid) const {
-        return m_lastSendIdx[aid];
-    }
+    RacePacketHolder *lastSentRaceBuffer(u8 aid);
 
-    RacePacketHolder *lastSentRaceBuffer(u8 aid) {
-        return m_sendRacePackets[lastSendIdx(aid)][aid];
-    }
+    RecordHolder<Header> *outgoingBuffer(u8 aid);
 
-    // adds up the sizes in the header
-    REPLACE u32 getRACEPacketSize(u8 aid);
+    // 'converts' the REGION to associated SearchRegion
+    SearchRegion getSearchRegion();
 
+    // 0x80655c10
+    // Hooked to initialize m_outgoingUniquePackets
+    REPLACE void init(u8 localPlayerCount);
+    void REPLACED(init)(u8 localPlayerCount);
+
+    // 0x806561a8
+    // Sets m_shutdownScheduled, which mainNetworkLoop() reacts to during next iteration.
+    // Resets all wfc-server/mkw-server structures
+    REPLACE void scheduleShutdown();
+
+    // 0x80656898
+    // Called in vanilla to exit match making state, hooked to reset mkw-server mm info
+    REPLACE void cancelMatching();
+
+    // 0x80656f00
     // checks that my aid is unavailable and we have connected to someone
     REPLACE bool hasFoundMatch() const;
+
+    // 0x80657ab0
+    // Completely rewritten. This will export unique packets to the send buffer,
+    // and set the aids to send to.
+    REPLACE void createRacePacket();
 
     // 0x80657e30
     // the patch patches the race packet. intention is for it to be called once a frame
     REPLACE void sendRacePacket();
     // when settings are implemented, to turn mkw-server off, we just call the original function
     void REPLACED(sendRacePacket)();
+
+    // Sends the i-th unique packet
+    bool sendRacePacketToMKWServer(u8 packetIdx);
+
+    // 0x80658de0
+    // Retreives/stores new MatchMakingInfo values and vr/br
+    // Hooked to call recvFromRoomManager()
+    REPLACE void updateMatchMakingInfoAndRating();
+    void REPLACED(updateMatchMakingInfoAndRating)();
+
+    // 0x80659170
+    // Gets called upon entering match making connection state setting the room type to a public
+    // room. This function is replaced with mkw-server's public room joining
+    REPLACE void connectToAnybodyAsync();
+
+    // 0x80659680
+    // Called when joining a friends public room. replaced to implement mkw-server match making
+    REPLACE void connectToGameServerFromGroupId();
+
+    // 0x80659a84
+    REPLACE void processRacePacket(u8 aid, u8 *header, u32 size);
+
+    // 0x80659fa4
+    FriendJoinableStatus getFriendJoinableStatus(u32 friendId);
+
+    // 0x8065a8d4
+    // Callback thats evoked to update whether or not your friends have added you back. Hooked to
+    // inform wfc-server of the local player count. This funciton was chosen for this hook because
+    // the login session was just established and this function gets called once a session.
+    REPLACE void updateAddedFriendsCallback(void *r3, void *r4, void *r5);
+    void REPLACED(updateAddedFriendsCallback)(void *r3, void *r4, void *r5);
 
     // Two vtables
     void *m_vtable1; // offset 0xc is NetManager's dtor
@@ -139,25 +151,25 @@ private:
     EGG::TaskThread *m_taskThread; // runs the mainLoop
     ConnectionState m_connectionState;
     DisconnectInfo m_disconnectInfo;
-    u8 _0034[0x0038 - 0x0034];             // padding?
+    u8 _0034[0x0038 - 0x0034];             // padding
     MatchMakingInfo m_matchMakingInfos[2]; // 0x0038 - 0x00e8
     RoomType m_roomType;
     VoteMatchMakingSuspended m_voteMMSuspension;
-    // points to RACE packets to be sent, two per aid / 0xf0
+    // points to Race packets to be sent, two per aid / 0xf0
     RacePacketHolder *m_sendRacePackets[2][MAX_PLAYER_COUNT];
-    // points to RACE packets to be recieved, two per aid / 0x150
-    RacePacketHolder *m_recvRACEPackets[2][MAX_PLAYER_COUNT];
-    // The RACE packet to be sent, formed from m_sendRacePackets, one per aid /
+    // points to Race packets to be recieved, two per aid / 0x150
+    RacePacketHolder *m_recvRacePackets[2][MAX_PLAYER_COUNT];
+    // The Race packet to be sent, formed from m_sendRacePackets, one per aid /
     // 0x1b0
-    PacketHolder<void> *m_outgoingRACEPacket[MAX_PLAYER_COUNT];
-    OSTime m_timeOfLastSentRACE[MAX_PLAYER_COUNT];        // 0x1e0
-    OSTime m_timeOfLastRecvRACE[MAX_PLAYER_COUNT];        // 0x240
+    RecordHolder<Header> *m_outgoingRacePacket[MAX_PLAYER_COUNT];
+    OSTime m_timeOfLastSentRace[MAX_PLAYER_COUNT];        // 0x1e0
+    OSTime m_timeOfLastRecvRace[MAX_PLAYER_COUNT];        // 0x240
     OSTime m_timeBetweenSendingPackets[MAX_PLAYER_COUNT]; // time bewteen sent
                                                           // packets per aid / 0x2a0
     OSTime m_timeBetweenRecvPackets[MAX_PLAYER_COUNT];    // time between recieved
                                                           // packets per aid / 0x300
     u8 m_aidLastSentTo;                                   // Aid of last player we sent to / 0x360
-    u8 m_recvRACEPacketBuffer[MAX_PLAYER_COUNT][0x2e0];   // 0x361
+    u8 m_recvRacePacketBuffer[MAX_PLAYER_COUNT][0x2e0];   // 0x361
     u8 _25e1[0x25e4 - 0x25e1];                            // padding
     StatusData m_myStatusData;                            // 0x25e4
     FriendInfo m_friends[MAX_FRIEND_COUNT];
@@ -173,7 +185,7 @@ private:
     s32 m_br;
     u32 m_lastSendIdx[MAX_PLAYER_COUNT]; // idx of m_sendRacePackets last sent per
                                          // aid
-    // idx of m_recvRACEPackets last recvieved per packet per aid
+    // idx of m_recvRacePackets last recvieved per packet per aid
     u32 m_lastRecvIdx[MAX_PLAYER_COUNT][8];      // 0x279c
     u32 m_currMMInfo;                            // Current MM info used 0x291c
     u8 m_playerIdToAidMapping[MAX_PLAYER_COUNT]; // 0x2920
@@ -182,10 +194,10 @@ private:
     u8 _2934[0x295c - 0x2934];                   // elo based MM struct
     u8 _295c[0x29c8 - 0x295c];                   // some timers
 
+    SP::OutgoingRacePackets m_outgoingUniquePackets; // added. TODO: Replace m_outgoingRacePacket
     static NetManager *s_instance;
 };
+// TODO: Idk why the + sizeof(u32) is needed, but it is
+static_assert(sizeof(NetManager) == (0x29c8 + sizeof(SP::OutgoingRacePackets) + sizeof(size_t)));
 
 } // namespace Net
-
-// is there a better way to scope this?
-void processBufferedRACEPacketCB(u8 aid, u8 *buffer, u32 size);

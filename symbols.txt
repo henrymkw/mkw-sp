@@ -37,8 +37,6 @@
 0x80017a14 wcscmp
 0x80021254 strlen
 0x80022ab0 _ZN4nw4r2db18Console_DrawDirectEPNS0_6detail11ConsoleHeadE
-0x80168680 __EXIProbe
-0x80343680 Ecb
 0x800230e0 _ZN4nw4r2db21Console_GetTotalLinesEPNS0_6detail11ConsoleHeadE
 0x80023150 nw4r_db_Exception_Init
 0x800235a0 _ZN4nw4r2db17Exception_Printf_EPKcz
@@ -81,16 +79,27 @@
 0x800ccb64 DWC_GetLastErrorEx
 0x800ccc38 DWC_ClearError
 0x800ccc54 DWCi_IsError
-0x801edf00 SOGetHostByName
 0x800ccc68 DWCi_SetError
+0x800ceb00 DWCi_GetProfileIDFromList
 0x800ceb00 DWCi_GetProfileIDFromList
 0x800d0fec DWC_ShutdownFriendsMatch
 0x800d115c DWC_ProcessFriendsMatch
+0x800d1984 DWC_SetupGameServer
+0x800d1ab4 DWC_ConnectToGameServerAsync
+0x800d2158 DWC_GetNumConnectionsHost
 0x800d2170 DWC_GetMyAid
+0x800d225c DWC_GetDirectConnectedAidBitmap
+0x800d24b4 DWC_GetAidBitmap
 0x800d2644 DWC_IsValidAid
+0x800d26e8 DWC_GetServerAid
 0x800d2a88 DWCi_GetGT2ConnectionByProfileID
 0x800d2e4c DWCi_HandleGT2Error
 0x800d3648 DWCi_GPRecvBuddyMessageCallback
+0x800d41f4 DWC_IsValidMatchCancel
+0x800d4994 DWC_GetGroupId
+0x800d49b0 DWC_RequestSuspendMatchAsync
+0x800d49b4 DWC_GetSuspendMatch
+0x800d4ac8 DWC_GetConnectionUserData
 0x800d4e58 DWCi_QR2Startup
 0x800d6424 DWCi_MatchProcess
 0x800d86e4 DWCi_GT2UnrecognizedMessageCallback
@@ -107,6 +116,7 @@
 0x800e8950 DWCi_TransportProcessASM
 0x800e8950 DWCi_TransportProcess
 0x800e8d68 DWCi_ShutdownTransport
+0x800eb830 DWCi_Acc_GetUserId
 0x800ed6e8 DWCi_Auth_SendRequest
 0x800fb874 gpProcess
 0x80109c1c gti2ReceivedCallback
@@ -133,6 +143,8 @@
 0x8010f2b4 qr2_shutdown
 0x80110720 qr2_parse_queryA
 0x8011bf54 NNProcessData
+0x8011e038 ServerBrowserNewA
+0x8011ef34 ServerListConnect
 0x80124500 ARCInitHandle
 0x801245a0 ARCOpen
 0x80124844 ARCFastOpen
@@ -153,6 +165,7 @@
 0x801671d0 ESP_InitLib
 0x80167f68 EXIImm
 0x80168380 EXISync
+0x80168680 __EXIProbe
 0x801689d0 EXISelect
 0x80168b00 EXIDeselect
 0x80169164 EXILock
@@ -308,13 +321,15 @@
 0x801ec184 SOStartup
 0x801ecff4 SOSocket
 0x801ed0e4 SOClose
+0x801ed188 SOBind
 0x801ed270 SOConnect
 0x801ed454 SORecvFrom
 0x801ed47c SORecv
 0x801ed4a0 SOSendTo
 0x801ed4c8 SOSend
+0x801ed4ec SOFcntl
 0x801ed99c SOHtoNs
-0x801ed9a4 net_recvfrom
+0x801edf00 SOGetHostByName
 0x80215280 EGG_ColorFader_fadeIn
 0x802226d8 _ZN3EGG9DVDRipper13LoadToMainRAMEPKcPhPNS_4HeapENS0_14AllocDirectionEjPjS7_
 0x80226464 _ZN3EGG18ExceptionCallBack_EPN4nw4r2db6detail11ConsoleHeadEPv
@@ -338,6 +353,7 @@
 0x80242c18 _ZN3EGG10TaskThread7requestEPFvPvES1_S1_
 0x8024353c _ZN3EGG6Thread24kandoTestCancelAllThreadEv
 0x802435dc _ZN3EGG6Thread20switchThreadCallbackEP8OSThreadS2_
+0x802a4080 _ZN3EGG7TSystem10s_instanceE
 # DOL .text end (0x80244DE0)
 
 #DOL .rodata start (0x80244EC0)
@@ -347,10 +363,10 @@
 #DOL .data end (0x802A4040)
 
 # DOL .bss start (0x802A4080)
-0x802a4080 _ZN3EGG7TSystem10s_instanceE
 0x802a4080 sRKSystem
 0x802a70b8 _ZN4nw4r2db14sExceptionInfoE
 0x802f1cb8 s_auth_error
+0x80343680 Ecb
 # DOL .bss end (0x80384C00)
 
 # DOL .sdata start (0x80384C00)
@@ -360,7 +376,7 @@
 
 # DOL .sbss start (0x80385FC0)
 0x80386000 s_systemManager
-0x803862f0 s_dwcContext
+0x803862f0 s_dwcControl
 0x8038630c s_dwcMatch
 0x80386318 s_dwcTransport
 0x8038633c s_DWCAuthContext
@@ -383,12 +399,11 @@
 0x80519420 _ZN6System10DvdArchive7getFileEPKcPj
 0x805195a4 _ZN6System10DvdArchive4moveEv
 0x805195d8 _ZN6System10DvdArchive9loadOtherEPS0_PN3EGG4HeapE
+0x8051b3c8 _ZN6System9GameScene4calcEv
 0x8051ce7c _ZNK6System3Pad15getControllerIdEv
 0x8051d5e8 _ZN6System10HBMManager7getFileEPKcPN3EGG4HeapEbPj
 0x8051d6a0 HomeButton_ct
-0x806554a0 _ZN3Net17MiscPacketHandler21processRecvRH1RecordsEv
 0x8051e85c _ZN6System14RaceInputState5ResetERS0_
-0x8051b3c8 _ZN6System9GameScene4calcEv
 0x8051fc84 _ZN6System8PadProxy22wiiControllerCalcInnerEPvS1_S1_
 0x80526020 Mii_80526020
 0x8052a098 _ZN6System15MultiDvdArchive6CreateENS0_12ResourceTypeE
@@ -403,9 +418,6 @@
 0x8052a864 _ZN6System15MultiDvdArchive6existsEPKc
 0x8052bdf4 NandManager_createInstance
 0x8052bff8 NandManager_init
-0x8052fe58 _ZN6System10RaceConfig14CreateInstanceEv
-0x80532084 _ZN6System11RaceManager14CreateInstanceEv
-0x80649590 DCPageCalc
 0x805327a0 _ZN6System11RaceManagerC1Ev
 0x805331b4 _ZN6System11RaceManager4calcEv
 0x80535304 _ZN6System11RaceManager6Player4calcEv
@@ -420,14 +432,12 @@
 0x8054aa64 SceneCreatorDynamic_create
 0x80554208 _ZN5Scene9RaceScene16createSubsystemsEv
 0x805549b0 _ZN5Scene9RaceScene17destroySubsystemsEv
-0x8058faa8 _ZN4Kart17KartObjectManager14CreateInstanceEv
 0x80590100 _ZN4Kart17KartObjectManager6objectEj
 0x805903cc _ZN4Kart15KartObjectProxy17getVehiclePhysicsEv
 0x805903e0 _ZNK4Kart15KartObjectProxy17getVehiclePhysicsEv
 0x8059b7b8 _ZN4Kart10KartBullet14activateBulletEj
 0x8059c118 _ZN4Kart10KartBullet12cancelBulletEv
 0x805bd2d8 _ZN2UI9UIControl5vf_34Ev
-0x806554a0 MiscPacketHandler_handleLaggings
 0x805bd2dc _ZN2UI9UIControl5vf_24Ev
 0x805bd2dc _ZN2UI9UIControl5vf_24Ev
 0x805bd2e0 _ZN2UI9UIControl8calcSelfEv
@@ -511,30 +521,44 @@
 0x8063e924 _ZN2UI24LayoutUIControlScaleFade5vf_28Ev
 0x8063e924 _ZN2UI24LayoutUIControlScaleFade5vf_28Ev
 0x80643168 onInit
+0x80649590 DCPageCalc
+0x80654038 _ZNK3Net17MiscPacketHandler16isEveryoneInRaceEv
+0x80654150 _ZN3Net17MiscPacketHandler13updateAsRacerEv
+0x806554a0 _ZN3Net17MiscPacketHandler21processRecvRH1RecordsEv
+0x806554a0 MiscPacketHandler_handleLaggings
+0x80655b24 NetManager_CreateInstance
+0x80655c10 _ZN3Net10NetManager4initEh
+0x806561a8 _ZN3Net10NetManager16scheduleShutdownEv
 0x80656704 _ZN3Net10NetManager14joinFriendRoomEjh
 0x806567d8 _ZN3Net10NetManager16createFriendRoomEh
+0x80656898 _ZN3Net10NetManager14cancelMatchingEv
 0x80656920 _ZN3Net10NetManager17setDisconnectInfoENS_14DisconnectTypeEi
 0x80656f00 _ZNK3Net10NetManager13hasFoundMatchEv
 0x80657004 _ZN3Net10NetManager9constructEPN3EGG7ExpHeapE
 0x80657ab0 _ZN3Net10NetManager16createRacePacketEv
 0x80657e30 _ZN3Net10NetManager14sendRacePacketEv
-0x806580c4 _ZN3Net10NetManager17getRACEPacketSizeEh
+0x80657fe4 _ZN3Net10NetManager19sendRacePacketToAidEh
+0x806580c4 _ZN3Net10NetManager17getRacePacketSizeEh
 0x80658148 _ZNK3Net10NetManager18GetConnectionStateEv
-0x806581cc _ZN3Net10NetManager11handleErrorEv
 0x806585f4 _ZN3Net10NetManager16userRecvCallbackEhPhj
 0x80658b9c _ZN3Net10NetManager7connectEv
 0x80658d3c _ZN3Net10NetManager11InitMMInfosEv
-0x80659a84 _ZN3Net10NetManager17processRACEPacketEhPhj
+0x80658de0 _ZN3Net10NetManager30updateMatchMakingInfoAndRatingEv
+0x80659170 _ZN3Net10NetManager21connectToAnybodyAsyncEv
+0x80659680 _ZN3Net10NetManager30connectToGameServerFromGroupIdEv
+0x80659a84 _ZN3Net10NetManager17processRacePacketEhPhj
+0x80659fa4 _ZN3Net10NetManager23getFriendJoinableStatusEj
 0x8065a34c _ZN3Net10NetManager12PacketHolder4copyEPvj
 0x8065a34c _ZN3Net12PacketHolder4copyEPvj
 0x8065a38c _ZN3Net12PacketHolder6appendEPvj
-0x8065ab8c _ZN3Net11RoomHandler4initENS0_8RoomRoleE 
-0x8065fe8c _ZN3Net13SelectHandler14CreateInstanceEv
+0x8065a8d4 _ZN3Net10NetManager26updateAddedFriendsCallbackEPvS1_S1_
+0x8065ab8c _ZN3Net11RoomHandler4initENS0_8RoomRoleE
+0x8065ac94 _ZN3Net11RoomHandler5resetEv
 0x806602fc _ZN3Net13SelectHandler6updateEv
+0x80663c88 _ZN3Net10RH1Handler5resetEv
 0x80663dd4 _ZN3Net10RH1Handler4calcEv
 0x8066506c _ZN3Net10RH1Handler13exportPacketsEv
 0x806651b4 _ZN3Net10RH1Handler13importPacketsEv
-0x80799138 _ZN4Item12ItemDirector14CreateInstanceEv
 0x807bc940 _ZN4Item13ItemInventory7setItemENS_6ItemIdE
 0x807bc97c _ZN4Item13ItemInventory9resetItemEv
 0x807bc9c0 _ZN4Item13ItemInventory13resetHeldItemEv
@@ -555,9 +579,12 @@
 0x809bd738 _ZN6System15ResourceManager10s_instanceE
 0x809bd740 _ZN6System9RootScene10s_instanceE
 0x809c18f8 _ZN4Kart17KartObjectManager10s_instanceE
+0x809c1e38 _ZN2UI14SectionManager10s_instanceE
 0x809c20d8 _ZN3Net10NetManager10s_instanceE
+0x809c20e0 _ZN3Net11RoomHandler10s_instanceE
 0x809c20e0 _ZN3Net11ROOMHandler10s_instanceE
 0x809c2100 _ZN3Net13SelectHandler10s_instanceE
+0x809c2118 _ZN3Net10RH1Handler10s_instanceE
 0x809c3618 _ZN4Item12ItemDirector10s_instanceE
 # REL .bss end (0x809c4f90)
 

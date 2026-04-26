@@ -1,135 +1,248 @@
 #include "NetManager.hh"
 
+#include "game/net/records/Room.hh"
+
 extern "C" {
 #include <revolution.h>
-#include <sp/net/MKW-Server.h>
+#include <sp/net/mkw_server/MKW-Server.h>
 }
 
-#include <cstring>
-
-#include <game/system/GameScene.hh>
-
-#include <sp/net/CombinedRACEPacketHeader.hh>
+#include "game/ui/SectionManager.hh"
 
 namespace Net {
 
-NetManager *NetManager::construct(EGG::ExpHeap *heap) {
-    s_instance = REPLACED(construct)(heap);
-    return s_instance;
+const MatchMakingInfo *NetManager::currentMMInfo() const {
+    return &m_matchMakingInfos[m_currMMInfo];
 }
 
-void NetManager::connect() {
-    REPLACED(connect)();
+u8 NetManager::myAid() const {
+    return currentMMInfo()->myAid;
+}
 
-    // Turning off the combined packets for now, commenting out code until settings are implemented
-    /*
-    if (DWC_SetUserRecvCallback(processBufferedRACEPacketCB) == false) {
-        SP_LOG("Failed to set buffered user receive callback");
-    }
-    */
+u32 NetManager::numAids() const {
+    return currentMMInfo()->numAids;
+}
+
+bool NetManager::aidInUse(u8 aid) const {
+    return currentMMInfo()->availableAids.on(aid);
 }
 
 bool NetManager::canSendToAid(u8 aid) const {
-    if ((((1 << aid) & m_matchMakingInfos[m_currMMInfo].availableAids) != 0) &&
-            (aid != m_matchMakingInfos[m_currMMInfo].myAid)) {
-        return true;
+    return aidInUse(aid) && aid != myAid();
+}
+
+RacePacketHolder *NetManager::lastSentRaceBuffer(u8 aid) {
+    return m_sendRacePackets[m_lastSendIdx[aid]][aid];
+}
+
+RecordHolder<Header> *NetManager::outgoingBuffer(u8 aid) {
+    return m_outgoingRacePacket[aid];
+}
+
+SearchRegion NetManager::getSearchRegion() {
+    // This would need to be modified for custom regions
+    switch (REGION) {
+    case REGION_P:
+        return SEARCH_REGION_EU;
+    case REGION_E:
+        return SEARCH_REGION_NA;
+    case REGION_J:
+        return SEARCH_REGION_JP;
+    case REGION_K:
+        return SEARCH_REGION_KOR;
+    default:
+        assert("Invalid region!");
+        return SEARCH_REGION_NONE;
     }
-    return false;
+}
+
+void NetManager::init(u8 localPlayerCount) {
+    REPLACED(init)(localPlayerCount);
+
+    // initialize the unique packets buffer
+    m_outgoingUniquePackets.reset();
+}
+
+void NetManager::scheduleShutdown() {
+    m_shutdownScheduled = true;
+
+    resetRoomManagerConnection();
+}
+
+void NetManager::cancelMatching() {
+    // Reset the two race packet handlers active during the globe scene
+    if (auto *rh1Handler = RH1Handler::Instance()) {
+        rh1Handler->reset();
+    }
+    if (auto *roomHandler = RoomHandler::Instance()) {
+        roomHandler->reset();
+    }
+
+    // This will exit the InMatchMaking state during the next iteration of the main loop
+    m_voteMMSuspension = VoteMatchMakingSuspended::Disconnected;
+
+    // inform wfc-server we're leaving the room
+    sendLeaveRoomRequest();
 }
 
 bool NetManager::hasFoundMatch() const {
-    bool inMatch = false;
-
-    bool isMyAidInMatch = (1 << m_matchMakingInfos[m_currMMInfo].myAid) &
-            m_matchMakingInfos[m_currMMInfo].availableAids;
-    // were in a match if my aid is in the room and we have connected to another
-    // console
-    if (isMyAidInMatch && m_matchMakingInfos[m_currMMInfo].numConnectedConsoles > 1) {
-        inMatch = true;
-    }
-    return inMatch;
+    // We're in a match if my aid is used and theres more than one aid.
+    return aidInUse(myAid()) && numAids() > 1;
 }
 
-u32 NetManager::getRACEPacketSize(u8 aid) {
-    u32 size = 0;
-    RacePacketHolder *holder = lastSentRaceBuffer(aid);
-
-    for (u8 i = 0; i < 8; i++) {
-        size += holder->getPacketHolder(i)->packetSize();
+void NetManager::createRacePacket() {
+    if (!hasFoundMatch()) {
+        return;
     }
-    return size;
-}
 
-void NetManager::sendRacePacket() {
-    // these get set once we send to mkw-server
-    bool sentSuccessfully = false;
-    OSTime sentTime = 0;
+    // Reset the outgoing packets. new frame, new packets
+    m_outgoingUniquePackets.reset();
+
     for (u8 aid = 0; aid < MAX_PLAYER_COUNT; aid++) {
         if (!canSendToAid(aid)) {
             continue;
         }
 
-        PacketHolder<void> *outgoingPacket = m_outgoingRACEPacket[aid];
-        // patch the header for MKW server
-        if (hasMKWServerAddress) {
-            applyMKWServerHeader(reinterpret_cast<u8 *>(outgoingPacket->packet()),
-                    m_matchMakingInfos[m_currMMInfo].myAid);
+        // Get the current send buffer then flip it so subsequent record exports work
+        u8 sendBufferIdx = m_lastSendIdx[aid];
+        m_lastSendIdx[aid] ^= 1;
+
+        // Get the send buffer for this aid
+        RacePacketHolder *sendBuffer = m_sendRacePackets[sendBufferIdx][aid];
+
+        // Form a header
+        Header header{};
+        u32 headerSizes = 0;
+        for (u8 i = 0; i < 8; i++) {
+            RecordHolder<void> *rh = sendBuffer->holder(i);
+
+            // Header record (index 0) is always 0x10, others use actual size
+            u8 size = i == 0 ? sizeof(Header) : rh->recordSize();
+            if (size != 0) {
+                headerSizes |= 1 << i;
+            }
+            header.setRecordSize(i, size);
         }
 
-        if (outgoingPacket->packetSize() != 0) {
-            u32 crc32 = NETCalcCRC32(outgoingPacket->packet(), outgoingPacket->packetSize());
-            Header *header = reinterpret_cast<Header *>(outgoingPacket->packet());
-            header->crc32 = crc32;
+        // Try to lookup the outgoing packet. its unique if -1 is returned
+        s32 uniquePacketIdx = m_outgoingUniquePackets.lookup(headerSizes);
+        if (uniquePacketIdx != -1) {
+            // add this aid as a recipient of this packet, move on to the next aid
+            m_outgoingUniquePackets.setRecipient(uniquePacketIdx, aid);
+            continue;
+        }
 
-            // we only want to send once a frame, the loop is mainly here to update the structs for
-            // other players.
-            if (!sentSuccessfully) {
-                sentSuccessfully =
-                        DWC_SendUnreliable(aid, reinterpret_cast<u8 *>(outgoingPacket->packet()),
-                                outgoingPacket->packetSize());
-                sentTime = OSGetTime();
+        // copy the header to the buffer that actually gets sent
+        sendBuffer->header()->copy(&header, sizeof(Header));
+
+        RecordHolder<Header> *outgoing = m_outgoingRacePacket[aid];
+        outgoing->reset();
+
+        // copy the records in the sendBuffer to the outgoing buffer
+        for (u8 i = 0; i < 8; i++) {
+            RecordHolder<void> *record = sendBuffer->holder(i);
+            if (record->recordSize() != 0) {
+                outgoing->append(record->record(), record->recordSize());
+                record->reset();
             }
-            if (sentSuccessfully) {
-                OSTime lastSentTime = m_timeOfLastSentRACE[aid];
-                if (lastSentTime != 0) {
-                    OSTime delta = sentTime - lastSentTime;
-                    m_timeBetweenSendingPackets[aid] = delta;
-                }
+        }
 
-                m_aidLastSentTo = aid;
-                m_timeOfLastSentRACE[aid] = sentTime;
-            }
-
-            outgoingPacket->reset();
+        // We found a unique packet, so push it to be sent
+        if (!m_outgoingUniquePackets.push(outgoing, headerSizes, aid, myAid())) {
+            SP_LOG("Pushing a new packet failed!");
         }
     }
 }
 
-void NetManager::processBufferedRACEPacket(u8 *buffer, u32 size) {
-    SP::CombinedRACEPacketHeader *combinedRACEPacketHeader =
-            reinterpret_cast<SP::CombinedRACEPacketHeader *>(buffer);
-    u32 processedSize = 0;
-    for (u8 i = 0; i < combinedRACEPacketHeader->numPackets; i++) {
-        u16 packetOffset = combinedRACEPacketHeader->offsets[i];
-        Header *header = reinterpret_cast<Header *>(
-                reinterpret_cast<u8 *>(combinedRACEPacketHeader) + packetOffset);
-        if (header->magic != 0xb) {
-            SP_LOG("Invalid Buffered RACE Packet Magic!");
-            return;
-        }
-        u32 packetSize = header->getSize();
+void NetManager::sendRacePacket() {
+    for (u8 i = 0; i < m_outgoingUniquePackets.count(); i++) {
+        sendRacePacketToMKWServer(i);
+    }
+    m_outgoingUniquePackets.reset();
+}
 
-        if (processedSize + packetSize <= size) {
-            processRACEPacket(header->aid, reinterpret_cast<u8 *>(header), packetSize);
-            processedSize += packetSize;
-        } else {
-            SP_LOG("Buffered RACE Packet processing out of bounds!");
-            break;
+bool NetManager::sendRacePacketToMKWServer(u8 packetIdx) {
+    const SP::Packet *outgoingPacket = m_outgoingUniquePackets[packetIdx];
+
+    if (outgoingPacket == nullptr) {
+        return false;
+    }
+
+    if (outgoingPacket->data == nullptr) {
+        return false;
+    }
+
+    if (outgoingPacket->data->recordSize() == 0) {
+        return false;
+    }
+
+    // Calc the crc32
+    u32 crc32 = NETCalcCRC32(outgoingPacket->data->record(), outgoingPacket->data->recordSize());
+    Header *header = reinterpret_cast<Header *>(outgoingPacket->data->record());
+    header->crc32 = crc32;
+
+    void *recordToSend = outgoingPacket->data->record();
+
+    // Try to send
+    bool sendResult =
+            trySendRacePacketToMKWServer(recordToSend, outgoingPacket->data->recordSize());
+
+    // always reset the outgoing buffer
+    outgoingPacket->data->reset();
+    return sendResult;
+}
+
+void NetManager::updateMatchMakingInfoAndRating() {
+    REPLACED(updateMatchMakingInfoAndRating)();
+
+    recvFromRoomManager();
+}
+
+void NetManager::connectToAnybodyAsync() {
+    if (connectToRoomManager()) {
+        // In vanilla, this function only gets called when searching for public rooms
+        // Because of that, we can assume that a non-ww room type is regional and can't be a private
+        // room
+        bool isWW =
+                m_roomType == RoomType::VersusWorldWide || m_roomType == RoomType::BattleWorldWide;
+        SearchRegion region = isWW ? SEARCH_REGION_WW : getSearchRegion();
+
+        bool isVS =
+                m_roomType == RoomType::VersusWorldWide || m_roomType == RoomType::VersusRegional;
+        GameMode mode = isVS ? GAME_MODE_VS : GAME_MODE_BATTLE;
+
+        if (!sendSearchRoomRequest(region, mode)) {
+            SP_LOG("Search room request failed! Region: %d, Mode: %d", region, mode);
         }
     }
 }
 
-void NetManager::processRACEPacket(u8 aid, u8 *packet, u32 size) {
+void NetManager::connectToGameServerFromGroupId() {
+    u32 friendId = currentMMInfo()->hostFriendId;
+    FriendJoinableStatus status = getFriendJoinableStatus(friendId);
+    SearchRegion searchRegion = SEARCH_REGION_NONE;
+
+    switch (status) {
+    case FriendJoinableStatus::WorldWideVersus:
+    case FriendJoinableStatus::WorldWideBattle:
+        searchRegion = SEARCH_REGION_WW;
+        break;
+    case FriendJoinableStatus::JoinableRegionalVS:
+    case FriendJoinableStatus::JoinableRegionalBattle:
+        searchRegion = getSearchRegion();
+        break;
+    default:
+        SP_LOG("Mismatching search region as friend trying to join!");
+        break;
+    }
+
+    s32 friendProfileId = DWCi_GetProfileIDFromList(friendId);
+    if (connectToRoomManager()) {
+        sendJoinFriendRequest(friendProfileId, searchRegion);
+    }
+}
+
+void NetManager::processRacePacket(u8 aid, u8 *packet, u32 size) {
     Header *header = reinterpret_cast<Header *>(packet);
     u32 origCrc32 = header->crc32;
     header->crc32 = 0;
@@ -137,25 +250,18 @@ void NetManager::processRACEPacket(u8 aid, u8 *packet, u32 size) {
 
     // make sure the packet isn't corrupted
     if (origCrc32 == calcCrc32) {
-        // update time based structs
-        OSTime aidLastRecvTime = m_timeOfLastRecvRACE[aid];
-        if (aidLastRecvTime != 0) {
-            m_timeBetweenRecvPackets[aid] = OSGetTime() - aidLastRecvTime;
-        }
-        m_timeOfLastRecvRACE[aid] = OSGetTime();
-
         // data for other packet is right after the header, so add the
         // packet[i] size to this to get a specific offset
         u8 *dataPacketPtr = reinterpret_cast<u8 *>(header);
-        for (u32 i = 0; i < std::size(header->packetSizes); i++) {
-            if (header->packetSizes[i] != 0) {
+        for (u32 i = 0; i < std::size(header->recordSizes); i++) {
+            if (header->recordSizes[i] != 0) {
                 // reset and copy the recieved packet into recv structs
-                m_recvRACEPackets[m_lastRecvIdx[aid][i] ^ 1][aid]->getPacketHolder(i)->reset();
-                m_recvRACEPackets[m_lastRecvIdx[aid][i] ^ 1][aid]->getPacketHolder(i)->copy(
-                        dataPacketPtr, header->packetSizes[i]);
+                m_recvRacePackets[m_lastRecvIdx[aid][i] ^ 1][aid]->holder(i)->reset();
+                m_recvRacePackets[m_lastRecvIdx[aid][i] ^ 1][aid]->holder(i)->copy(dataPacketPtr,
+                        header->recordSizes[i]);
 
                 // increment the data pointer to the next packet offset
-                dataPacketPtr += header->packetSizes[i];
+                dataPacketPtr += header->recordSizes[i];
 
                 // flip the last recieved buffer idx
                 m_lastRecvIdx[aid][i] ^= 1;
@@ -166,12 +272,19 @@ void NetManager::processRACEPacket(u8 aid, u8 *packet, u32 size) {
     }
 }
 
-} // namespace Net
+void NetManager::updateAddedFriendsCallback(void *r3, void *r4, void *r5) {
+    REPLACED(updateAddedFriendsCallback)(r3, r4, r5);
 
-void processBufferedRACEPacketCB(u8 aid, u8 *buffer, u32 size) {
-    if (hasMKWServerAddress || aid == 0xff) {
-        Net::NetManager::Instance()->processBufferedRACEPacket(buffer, size);
-    } else {
-        Net::NetManager::Instance()->processRACEPacket(aid, buffer, size);
+    if (!connectToRoomManager()) {
+        SP_LOG("Failed to connect to room manager!");
+        return;
+    }
+
+    u8 localPlayerCount = UI::SectionManager::Instance()->getLocalPlayerCount();
+    bool sendResult = sendLocalPlayerCount(localPlayerCount);
+    if (!sendResult) {
+        SP_LOG("Sending localPlayerCount failed!");
     }
 }
+
+} // namespace Net

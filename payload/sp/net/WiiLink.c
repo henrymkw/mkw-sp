@@ -22,6 +22,16 @@ extern s32 s_auth_error;
 // TODO: Make a type for this
 extern s32 *s_DWCAuthContext;
 
+u32 getWFCServerAddress() {
+#ifdef LOCAL_MKW_SERVER
+    return 0x7F000001; // localhost
+#elif TEST_MKW_SERVER
+    return 0x327438d3; // test server
+#else
+    return 0x607e6b90; // mkw-server.xyz
+#endif
+}
+
 bool GenerateRandomSalt(u8 *out) {
     // Generate cryptographic random with ES_Sign
     s32 fd = IOS_Open("/dev/es", IPC_OPEN_NONE);
@@ -91,7 +101,8 @@ s32 HandleResponse() {
     }
 
     // Disable unnecessary patches
-    u32 patchMask = WWFC_PATCH_LEVEL_CRITICAL | WWFC_PATCH_LEVEL_SUPPORT;
+    u32 patchMask = WWFC_PATCH_LEVEL_CRITICAL | WWFC_PATCH_LEVEL_SUPPORT | WWFC_PATCH_LEVEL_BUGFIX |
+            WWFC_PATCH_LEVEL_PARITY | WWFC_PATCH_LEVEL_FEATURE;
 
     WWFCPatch *patch = (WWFCPatch *)((u8 *)s_payload + s_payload->info.patch_list_offset);
     WWFCPatch *patchesEnd = (WWFCPatch *)((u8 *)s_payload + s_payload->info.patch_list_end);
