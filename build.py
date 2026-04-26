@@ -290,14 +290,6 @@ else:
         '-Werror=vla',
     ))
 
-if args.debug:
-    common_cflags += ['-g', '-O0']
-    common_ccflags += ['-g', '-O0']
-if args.local_mkw_server:
-    common_cflags.append("-DLOCAL_MKW_SERVER")
-if args.test_mkw_server:
-    common_cflags.append("-DTEST_MKW_SERVER")
-
 target_cflags = {
     'stub': [
         '-DSP_STUB',
@@ -324,6 +316,17 @@ profile_cflags = {
         '-DSP_CHANNEL'
     ],
 }
+
+if args.debug:
+    profile_Sflags['DEBUG'] += ['-DDEBUG']
+    profile_cflags['DEBUG'] += ['-DDEBUG']
+    common_cflags += ['-g', '-O0']
+    common_ccflags += ['-g', '-O0']
+if args.local_mkw_server:
+    common_cflags.append("-DLOCAL_MKW_SERVER")
+if args.test_mkw_server:
+    common_cflags.append("-DTEST_MKW_SERVER")
+
 common_ldflags = [
     '-nostdlib',
     '-Wl,-n',

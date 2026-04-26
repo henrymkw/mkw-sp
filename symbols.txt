@@ -464,10 +464,12 @@
 0x805d1214 Font_buildTexObjs
 0x805d14a4 FontManager_init
 0x805d14a4 _ZN2UI11FontManager4initEv
+0x805d690c FriendInfoPage_onRemoveFriendButtonClick
 0x805e85a8 _ZN2UI6LayoutC2Ev
 0x805e8630 _ZN2UI10MainLayout2dtEi
 0x805e889c MainLayout_load
 0x805e9f80 PictureSourceLayoutList_load
+0x805edcd8 LicenseManagementPage_onDeleteLicenseButtonClick
 0x805f8b34 _ZN2UI12MessageGroupC1Ev
 0x805f8b50 _ZN2UI12MessageGroup2dtEi
 0x805f9f58 _ZN2UI8MiiGroup2dtEi
