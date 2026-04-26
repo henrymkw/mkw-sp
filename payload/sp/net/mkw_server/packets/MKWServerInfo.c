@@ -8,23 +8,9 @@
 
 #include <string.h>
 
-bool recvMKWServerInfoPacket() {
+void processMKWServerInfoPacket(u8 *data) {
     MKWServerInfoPacket resp;
-    s32 recvResult = SORecv(g_matchMakingSocket, &resp, sizeof(MKWServerInfoPacket), 0);
+    memcpy(&resp, data, sizeof(MKWServerInfoPacket));
 
-    if (recvResult > 0) {
-        u32 address;
-        u16 port;
-
-        memcpy(&address, &resp, sizeof(u32));
-        memcpy(&port, &resp.port, sizeof(u16));
-
-        setMKWServerAddress(address, port);
-
-        SP_LOG("Received MKW-Server Address: %x, %d", g_mkwServerAddr.addr.addr,
-                g_mkwServerAddr.port);
-        return true;
-    }
-
-    return false;
+    setMKWServerAddress(resp.address, resp.port);
 }

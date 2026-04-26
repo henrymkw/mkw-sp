@@ -328,6 +328,7 @@
 0x801ed4a0 SOSendTo
 0x801ed4c8 SOSend
 0x801ed4ec SOFcntl
+0x801ed82c SOInetAtoN
 0x801ed99c SOHtoNs
 0x801edf00 SOGetHostByName
 0x80215280 EGG_ColorFader_fadeIn
