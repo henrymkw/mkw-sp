@@ -35,8 +35,8 @@ bool connectToRoomManager() {
         s_serverAddr.addr.addr = addr;
     } else {
         // SOInetAtoN() can fail on console for unknown reasons
-        // If it does fail, fall back to getWFCServerAddress()
-        s_serverAddr.addr.addr = getWFCServerAddress();
+        // If it does fail, fall back to WFC_SERVER_ADDRESS
+        s_serverAddr.addr.addr = WFC_SERVER_ADDRESS;
     }
 
     if (g_matchMakingSocket == -1) {

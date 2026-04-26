@@ -1,5 +1,6 @@
 #pragma once
 
+#include "dwc/DWCAuth.h"
 #include "dwc/DWCError.h"
 #include "dwc/DWCFriend.h"
 #include "dwc/DWCLogin.h"

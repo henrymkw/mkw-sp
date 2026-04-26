@@ -55,7 +55,7 @@ static const std::array<ModuleInfo, 4> moduleInfoArray = {
 };
 
 static std::optional<u32> GetRegionIndex() {
-    switch (*reinterpret_cast<char *>(0x80000003)) {
+    switch (DISK_REGION) {
     case 'P':
         return 0;
     case 'E':

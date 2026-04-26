@@ -89,7 +89,7 @@ bool sendMessageToQR2(const u8 *data, u32 size) {
     qr2Addr.len = sizeof(SOSockAddrIn);
     qr2Addr.family = 2;
     qr2Addr.port = 27900;
-    qr2Addr.addr.addr = getWFCServerAddress();
+    qr2Addr.addr.addr = WFC_SERVER_ADDRESS;
 
     s32 result = SOSendTo(s_dwcMatch->qrec->hbsock, data, size, 0, &qr2Addr);
     if (result < 0) {

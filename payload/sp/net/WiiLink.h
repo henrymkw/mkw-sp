@@ -7,21 +7,30 @@
 
 #include <revolutionex/nhttp.h>
 
-#include <string.h>
-
+// clang-format off
 #ifdef LOCAL_MKW_SERVER
-// nwfc.wiinoma.com points to localhost
-#define WWFC_DOMAIN "nwfc.wiinoma.com"
+    #define WWFC_DOMAIN "nwfc.wiinoma.com" // nwfc.wiinoma.com points to localhost
+    #define WFC_SERVER_ADDRESS 0x7f000001
 #elif TEST_MKW_SERVER
-#define WWFC_DOMAIN "mkw-cs.xyz"
+    #define WWFC_DOMAIN "mkw-cs.xyz"
+    #define WFC_SERVER_ADDRESS 0x327438d3
 #else
-#define WWFC_DOMAIN "mkw-server.xyz"
+    #define WWFC_DOMAIN "mkw-server.xyz"
+    #define WFC_SERVER_ADDRESS 0x607e6b90 // mkw-server.xyz
 #endif
 
-#define PAYLOAD_BLOCK_SIZE 0x20000
+static const RSAPublicKey PayloadPublicKey = {
+    #ifdef LOCAL_MKW_SERVER
+        #include <TESTIncludeRSAPublicPayloadKey.txt>
+    #elif TEST_MKW_SERVER
+        #include <TESTServerIncludeRSAPublicPayloadKey.txt>
+    #else
+        #include <PRODIncludeRSAPublicPayloadKey.txt>
+    #endif
+};
+// clang-format on
 
-// gets the IP for WFC Server. The #ifdefs are temporary until settings are implemented
-u32 getWFCServerAddress();
+#define PAYLOAD_BLOCK_SIZE 0x20000
 
 bool GenerateRandomSalt(u8 *out);
 
@@ -29,11 +38,10 @@ s32 HandleResponse();
 
 void OnPayloadReceived(NHTTPError result, NHTTPResponseHandle response, void *userdata);
 
-void REPLACED(
-        DWCi_Auth_SendRequest)(u32 authStage, wchar_t *miiName, char *gameId, u32 r6, u64 userId);
+bool wwfcPayloadReady();
 
-REPLACE void DWCi_Auth_SendRequest(u32 authStage, wchar_t *miiName, char *gameId, u32 r6,
-        u64 userId);
+NHTTPRequestHandle createWFCAuthRequest();
+
 typedef struct {
     char magic[0xC]; // Always "WWFC/Payload"
     u32 total_size;
@@ -183,15 +191,3 @@ typedef struct {
 #define WL_ERROR_PAYLOAD_STAGE1_SIGNATURE_INVALID -20917
 #define WL_ERROR_PAYLOAD_STAGE1_WAITING -20918
 #define WL_ERROR_PAYLOAD_GAME_MISMATCH -20930
-
-// clang-format off
-static const RSAPublicKey PayloadPublicKey = {
-    #ifdef LOCAL_MKW_SERVER
-        #include <TESTIncludeRSAPublicPayloadKey.txt>
-    #elif TEST_MKW_SERVER
-        #include <TESTServerIncludeRSAPublicPayloadKey.txt>
-    #else
-        #include <PRODIncludeRSAPublicPayloadKey.txt>
-    #endif
-};
-// clang-format on

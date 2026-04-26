@@ -5,6 +5,7 @@
 #include "revolution/dvd.h"
 #include "revolution/dvdex.h"
 #include "revolution/gx.h"
+#include "revolution/ios.h"
 #include "revolution/mem.h"
 #include "revolution/mtx.h"
 #include "revolution/nand.h"

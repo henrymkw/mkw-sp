@@ -380,7 +380,7 @@
 0x803862f0 s_dwcControl
 0x8038630c s_dwcMatch
 0x80386318 s_dwcTransport
-0x8038633c s_DWCAuthContext
+0x8038633c s_DWCAuthControl
 0x80386638 MaxEntryNum
 0x8038663c FstStringStart
 0x80386640 FstStart

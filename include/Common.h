@@ -127,6 +127,8 @@ enum {
     REGION_K = 0x5511,
 };
 
+#define DISK_REGION (*(char *)0x80000003)
+
 #define REGION (*(u16 *)0x8000620a)
 
 #if !defined(NO_NEW_DELETE) && !defined(__cplusplus) // new/delete are reserved identifiers in C++
