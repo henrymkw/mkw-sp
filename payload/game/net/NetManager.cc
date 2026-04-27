@@ -1,13 +1,13 @@
 #include "NetManager.hh"
 
 #include "game/net/records/Room.hh"
+#include "game/ui/SectionManager.hh"
+
+#include <sp/net/mkw_server/MKW-Server.hh>
 
 extern "C" {
 #include <revolution.h>
-#include <sp/net/mkw_server/MKW-Server.h>
 }
-
-#include "game/ui/SectionManager.hh"
 
 namespace Net {
 

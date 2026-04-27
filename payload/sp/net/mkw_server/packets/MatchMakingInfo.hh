@@ -1,8 +1,12 @@
 #pragma once
 
-#include <Common.h>
+#include <Common.hh>
 
+extern "C" {
 #include <revolution/dwc/DWCNode.h>
+}
+
+#define MATCH_MAKING_INFO 0x77846772
 
 typedef struct {
     u32 aidBitmap;
@@ -17,4 +21,10 @@ typedef struct {
 } MatchMakingInfoPacket;
 static_assert(sizeof(MatchMakingInfoPacket) == 0x44);
 
-EXTERN_C MatchMakingInfoPacket *mmInfo();
+extern MatchMakingInfoPacket g_recvMatchPacket;
+
+bool matchMakingInfoValid(MatchMakingInfoPacket *mmInfo);
+
+bool processMatchMakingInfoPacket(u8 *data);
+
+void resetMatchMakingInfoPacket();

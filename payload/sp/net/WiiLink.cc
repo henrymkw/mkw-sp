@@ -1,6 +1,8 @@
-#include "WiiLink.h"
+#include "WiiLink.hh"
 
+extern "C" {
 #include <revolution.h>
+}
 
 #include <stdio.h>
 #include <string.h>
@@ -131,6 +133,8 @@ void OnPayloadReceived(NHTTPError result, NHTTPResponseHandle response, void * /
     setAuthError(-1);
 }
 
+extern "C" {
+
 bool wwfcPayloadReady() {
     return s_payloadReady;
 }
@@ -167,8 +171,8 @@ NHTTPRequestHandle createWFCAuthRequest() {
     SP_LOG("Requesting payload from URL: %s", url);
 
     // build the request
-    NHTTPRequestHandle request =
-            NHTTPCreateRequest(url, 0, (void *)s_payload, PAYLOAD_BLOCK_SIZE, OnPayloadReceived, 0);
+    NHTTPRequestHandle request = NHTTPCreateRequest(url, NHTTP_REQUEST_METHOD_GET,
+            reinterpret_cast<char *>(s_payload), PAYLOAD_BLOCK_SIZE, OnPayloadReceived, 0);
 
     if (request == NULL) {
         SP_LOG("Failed to create NHTTP request");
@@ -176,4 +180,5 @@ NHTTPRequestHandle createWFCAuthRequest() {
     }
 
     return request;
+}
 }

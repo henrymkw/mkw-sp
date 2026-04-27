@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Common.h>
+#include <Common.hh>
 
 #define MKW_SERVER_INFO 0x4D4B5753 // "MKWS"
 

@@ -3,37 +3,38 @@
 #include <revolution.h>
 
 #include <sp/net/mkw_server/RoomManager.h>
+#include <sp/net/mkw_server/packets/MatchMakingInfo.h>
 
 u32 DWC_GetAidBitmap() {
-    return g_recvMatchPacket.aidBitmap;
+    return mmInfo()->aidBitmap;
 }
 
 u32 DWC_GetNumConnectionsHost() {
-    return g_recvMatchPacket.numAids;
+    return mmInfo()->numAids;
 }
 
 u32 DWC_GetDirectConnectedAidBitmap() {
-    return g_recvMatchPacket.directConnectedAidBitmap;
+    return mmInfo()->directConnectedAidBitmap;
 }
 
 u32 DWC_GetGroupId() {
-    return g_recvMatchPacket.roomId;
+    return mmInfo()->roomId;
 }
 
 u8 DWC_GetMyAid() {
-    return g_recvMatchPacket.myAid;
+    return mmInfo()->myAid;
 }
 
 u8 DWC_GetServerAid() {
-    return g_recvMatchPacket.hostAid;
+    return mmInfo()->hostAid;
 }
 
 u8 DWC_GetSuspendMatch() {
-    return g_recvMatchPacket.suspended;
+    return mmInfo()->suspended;
 }
 
 u8 DWC_IsValidMatchCancel() {
-    return g_recvMatchPacket.canceled;
+    return mmInfo()->canceled;
 }
 
 bool DWC_GetConnectionUserData(u8 aid, DWCConnectionUserData *playerCount) {
@@ -47,7 +48,7 @@ bool DWC_GetConnectionUserData(u8 aid, DWCConnectionUserData *playerCount) {
         return false;
     }
 
-    playerCount->playersAtConsole = g_recvMatchPacket.localPlayerCount[aid].playersAtConsole;
+    playerCount->playersAtConsole = mmInfo()->localPlayerCount[aid].playersAtConsole;
     return true;
 }
 

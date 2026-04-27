@@ -1,8 +1,6 @@
 #include "Room.hh"
 
-extern "C" {
-#include <sp/net/mkw_server/MKW-Server.h>
-}
+#include <sp/net/mkw_server/MKW-Server.hh>
 
 namespace Net {
 

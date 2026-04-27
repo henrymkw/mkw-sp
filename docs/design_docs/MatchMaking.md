@@ -76,7 +76,7 @@ Match making information will be transmitted from MKW-Server to players as defin
 | Match Canceled | If the match is canceled | `DWC_IsValidMatchCancel()` | 0x17 | 0x1 |
 | Local Player Counts | Local player count for each player, indexed by aid. This is in little endian since `NetManager::updateMatchMakingInfosAndRatings()` expects it to be. | `DWC_GetConnectionUserData()` | 0x18 | 0x30 |
 
-`Match` packet's contents will be parsed and stored into a static variables in [RoomManager.h](../../payload/sp/net/mkw_server/RoomManager.h). From here, the DWC functions will be replaced to return the values specified in the above table.
+`Match` packet's contents will be parsed and stored into a static variables in [RoomManager.hh](../../payload/sp/net/mkw_server/RoomManager.hh). From here, the DWC functions will be replaced to return the values specified in the above table.
 
 ### Match Request Packets
 
@@ -181,7 +181,7 @@ The communication for match making will be done over TCP, from client to server.
 
 ### Handlers
 
-A new source file, called `RoomManager.h/c`, will be made to handle sending a receiving match making packets. This will be in C since DWC functions (written in C will call them).
+A new source file, called `RoomManager.hh/c`, will be made to handle sending a receiving match making packets. This will be in C since DWC functions (written in C will call them).
 
 ## Server Code
 

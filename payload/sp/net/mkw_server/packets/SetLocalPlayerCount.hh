@@ -1,8 +1,8 @@
 #pragma once
 
-#include <Common.h>
+#include <Common.hh>
 
-#include <sp/net/mkw_server/MatchRequestHeader.h>
+#include <sp/net/mkw_server/MatchRequestHeader.hh>
 
 typedef struct {
     MatchRequestHeader header;

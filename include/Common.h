@@ -28,6 +28,12 @@ enum {
 #define restrict __restrict
 #endif
 
+#ifdef __cplusplus
+#define EXTERN_C extern "C"
+#else
+#define EXTERN_C
+#endif
+
 typedef int BOOL;
 #define TRUE 1
 #define FALSE 0

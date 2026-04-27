@@ -10,10 +10,7 @@
 #include <egg/core/eggExpHeap.hh>
 #include <egg/core/eggTaskThread.hh>
 
-extern "C" {
-#include <sp/net/mkw_server/RoomManager.h>
-}
-
+#include <sp/net/mkw_server/RoomManager.hh>
 #include <sp/net/mkw_server/packets/OutgoingPacket.hh>
 
 #define MAX_FRIEND_COUNT 30

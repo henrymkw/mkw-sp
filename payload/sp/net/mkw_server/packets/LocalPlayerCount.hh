@@ -1,8 +1,8 @@
 #pragma once
 
-#include <Common.h>
+#include <Common.hh>
 
-#include <sp/net/mkw_server/packets/MatchRequestHeader.h>
+#include <sp/net/mkw_server/packets/MatchRequestHeader.hh>
 
 /*
    For local multi-player to work with the new match making implementation, the server needs to know

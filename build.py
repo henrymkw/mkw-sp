@@ -324,8 +324,10 @@ if args.debug:
     common_ccflags += ['-g', '-O0']
 if args.local_mkw_server:
     common_cflags.append("-DLOCAL_MKW_SERVER")
+    common_ccflags.append("-DLOCAL_MKW_SERVER")
 if args.test_mkw_server:
     common_cflags.append("-DTEST_MKW_SERVER")
+    common_ccflags.append("-DTEST_MKW_SERVER")
 
 common_ldflags = [
     '-nostdlib',

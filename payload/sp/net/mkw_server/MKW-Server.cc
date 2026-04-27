@@ -1,10 +1,13 @@
-#include "MKW-Server.h"
+#include "MKW-Server.hh"
 
+extern "C" {
+#include <revolution.h>
 #include <revolution/dwc/DWCMatch.h>
+}
 
-#include <sp/net/WiiLink.h>
-#include <sp/net/mkw_server/RoomManager.h>
-#include <sp/net/mkw_server/packets/MatchMakingInfo.h>
+#include <sp/net/WiiLink.hh>
+#include <sp/net/mkw_server/RoomManager.hh>
+#include <sp/net/mkw_server/packets/MatchMakingInfo.hh>
 
 #include <string.h>
 

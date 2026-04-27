@@ -1,9 +1,10 @@
-#include "MatchMakingInfo.h"
+#include "MatchMakingInfo.hh"
 
+extern "C" {
 #include <revolution.h>
-#include <revolution/so/so.h>
+}
 
-#include <sp/net/mkw_server/RoomManager.h>
+#include <sp/net/mkw_server/RoomManager.hh>
 
 #include <string.h>
 
@@ -67,4 +68,10 @@ bool processMatchMakingInfoPacket(u8 *data) {
 
 void resetMatchMakingInfoPacket() {
     memset(&g_recvMatchPacket, 0, sizeof(MatchMakingInfoPacket));
+}
+
+extern "C" {
+MatchMakingInfoPacket *mmInfo() {
+    return &g_recvMatchPacket;
+}
 }

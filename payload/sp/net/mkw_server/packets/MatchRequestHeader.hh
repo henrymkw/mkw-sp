@@ -1,8 +1,8 @@
 #pragma once
 
-#include <Common.h>
+#include <Common.hh>
 
-#include <sp/net/mkw_server/RoomManager.h>
+#include <sp/net/mkw_server/RoomManager.hh>
 
 #define MATCH_REQUEST_HEADER_MAGIC 0x4D524551 // "MREQ"
 

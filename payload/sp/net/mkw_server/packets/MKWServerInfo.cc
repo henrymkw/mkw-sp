@@ -1,10 +1,10 @@
-#include "MKWServerInfo.h"
+#include "MKWServerInfo.hh"
 
 #include <revolution.h>
 #include <revolution/so/so.h>
 
-#include <sp/net/mkw_server/MKW-Server.h>
-#include <sp/net/mkw_server/RoomManager.h>
+#include <sp/net/mkw_server/MKW-Server.hh>
+#include <sp/net/mkw_server/RoomManager.hh>
 
 #include <string.h>
 

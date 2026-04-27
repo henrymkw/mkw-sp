@@ -1,15 +1,15 @@
-#include "RoomManager.h"
+#include "RoomManager.hh"
 
 #include <string.h>
 
-#include <sp/net/WiiLink.h>
-#include <sp/net/mkw_server/MKW-Server.h>
-#include <sp/net/mkw_server/packets/JoinFriendRequest.h>
-#include <sp/net/mkw_server/packets/LocalPlayerCount.h>
-#include <sp/net/mkw_server/packets/MKWServerInfo.h>
-#include <sp/net/mkw_server/packets/MatchRequestHeader.h>
-#include <sp/net/mkw_server/packets/SearchRoomRequest.h>
-#include <sp/net/mkw_server/packets/SuspendRequest.h>
+#include <sp/net/WiiLink.hh>
+#include <sp/net/mkw_server/MKW-Server.hh>
+#include <sp/net/mkw_server/packets/JoinFriendRequest.hh>
+#include <sp/net/mkw_server/packets/LocalPlayerCount.hh>
+#include <sp/net/mkw_server/packets/MKWServerInfo.hh>
+#include <sp/net/mkw_server/packets/MatchRequestHeader.hh>
+#include <sp/net/mkw_server/packets/SearchRoomRequest.hh>
+#include <sp/net/mkw_server/packets/SuspendRequest.hh>
 
 static SOSockAddrIn s_serverAddr;
 static SOCKET g_matchMakingSocket = -1;
@@ -17,6 +17,8 @@ static s32 connection = -1;
 
 static u8 s_recvBuf[256];
 static s32 s_recvBufSize = 0;
+
+extern "C" {
 
 bool connectToRoomManager() {
     if (connection == 0) {
@@ -72,6 +74,7 @@ bool connectToRoomManager() {
     }
 
     return true;
+}
 }
 
 void resetRoomManagerConnection() {
@@ -142,12 +145,13 @@ void recvFromRoomManager() {
         }
 
         switch (magic) {
-        case MATCH_MAKING_INFO:
+        case MATCH_MAKING_INFO: {
             bool processResult = processMatchMakingInfoPacket(s_recvBuf + 4);
             if (!processResult) {
                 SP_LOG("processMatchMakingInfoPacket() failed!");
             }
             break;
+        }
         case MKW_SERVER_INFO:
             processMKWServerInfoPacket(s_recvBuf + 4);
             break;
