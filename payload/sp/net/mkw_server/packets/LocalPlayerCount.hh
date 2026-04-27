@@ -4,6 +4,7 @@
 
 #include <sp/net/mkw_server/packets/MatchRequestHeader.hh>
 
+namespace MKWServer {
 /*
    For local multi-player to work with the new match making implementation, the server needs to know
    the number of local players for each aid. Players will inform the server their local player count
@@ -13,9 +14,10 @@
    sent once. The only way the local player count can change is to disconnect and reconnect,
    creating a new session.
 */
-typedef struct {
+struct LocalPlayerCountPacket {
     MatchRequestHeader header;
     u8 localPlayerCount;
     u8 _11[0x18 - 0x11];
-} LocalPlayerCountPacket;
+};
 static_assert(sizeof(LocalPlayerCountPacket) == 0x18);
+} // namespace MKWServer

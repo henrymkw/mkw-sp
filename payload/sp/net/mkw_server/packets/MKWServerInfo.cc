@@ -7,10 +7,11 @@
 #include <sp/net/mkw_server/RoomManager.hh>
 
 #include <string.h>
-
+namespace MKWServer {
 void processMKWServerInfoPacket(u8 *data) {
     MKWServerInfoPacket resp;
     memcpy(&resp, data, sizeof(MKWServerInfoPacket));
 
     setMKWServerAddress(resp.address, resp.port);
 }
+} // namespace MKWServer

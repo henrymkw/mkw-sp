@@ -10,7 +10,7 @@ extern "C" {
 #include <sp/net/mkw_server/packets/MatchMakingInfo.hh>
 
 #include <string.h>
-
+namespace MKWServer {
 #define SEARCH_ID_MAGIC "SEARCHID"
 
 bool hasMKWServerAddress = false;
@@ -102,3 +102,4 @@ bool sendMessageToQR2(const u8 *data, u32 size) {
 
     return true;
 }
+} // namespace MKWServer

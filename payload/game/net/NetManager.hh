@@ -191,10 +191,12 @@ private:
     u8 _2934[0x295c - 0x2934];                   // elo based MM struct
     u8 _295c[0x29c8 - 0x295c];                   // some timers
 
-    SP::OutgoingRacePackets m_outgoingUniquePackets; // added. TODO: Replace m_outgoingRacePacket
+    MKWServer::OutgoingRacePackets
+            m_outgoingUniquePackets; // added. TODO: Replace m_outgoingRacePacket
     static NetManager *s_instance;
 };
 // TODO: Idk why the + sizeof(u32) is needed, but it is
-static_assert(sizeof(NetManager) == (0x29c8 + sizeof(SP::OutgoingRacePackets) + sizeof(size_t)));
+static_assert(
+        sizeof(NetManager) == (0x29c8 + sizeof(MKWServer::OutgoingRacePackets) + sizeof(size_t)));
 
 } // namespace Net

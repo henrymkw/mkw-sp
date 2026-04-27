@@ -10,15 +10,13 @@
 #include <sp/net/mkw_server/packets/MatchRequestHeader.hh>
 #include <sp/net/mkw_server/packets/SearchRoomRequest.hh>
 #include <sp/net/mkw_server/packets/SuspendRequest.hh>
-
+namespace MKWServer {
 static SOSockAddrIn s_serverAddr;
 static SOCKET g_matchMakingSocket = -1;
 static s32 connection = -1;
 
 static u8 s_recvBuf[256];
 static s32 s_recvBufSize = 0;
-
-extern "C" {
 
 bool connectToRoomManager() {
     if (connection == 0) {
@@ -74,7 +72,6 @@ bool connectToRoomManager() {
     }
 
     return true;
-}
 }
 
 void resetRoomManagerConnection() {
@@ -171,9 +168,9 @@ static bool sendToRoomManager(void *message, s32 messageLength) {
     return SOSend(g_matchMakingSocket, message, messageLength, 0);
 }
 
-bool sendOpenFroomRequest() {
+bool sendOpenRoomRequest() {
     MatchRequestHeader openRoomRequest;
-    createMatchRequestHeader(&openRoomRequest, MATCH_REQUEST_OPEN_ROOM, g_wfcSearchId);
+    createMatchRequestHeader(&openRoomRequest, MatchRequestType::OpenRoom, g_wfcSearchId);
 
     SP_LOG("Sent OpenFroom request!");
     return sendToRoomManager(&openRoomRequest, sizeof(openRoomRequest));
@@ -182,7 +179,7 @@ bool sendOpenFroomRequest() {
 bool sendJoinFriendRequest(s32 friendProfileId, SearchRegion searchRegion) {
     JoinFriendRequestPacket joinRequest;
     memset(&joinRequest, 0, sizeof(JoinFriendRequestPacket));
-    createMatchRequestHeader(&joinRequest.header, MATCH_REQUEST_JOIN_FRIEND, g_wfcSearchId);
+    createMatchRequestHeader(&joinRequest.header, MatchRequestType::JoinFriend, g_wfcSearchId);
 
     joinRequest.friendProfileId = friendProfileId;
     joinRequest.searchRegion = searchRegion;
@@ -194,7 +191,7 @@ bool sendJoinFriendRequest(s32 friendProfileId, SearchRegion searchRegion) {
 
 bool sendLeaveRoomRequest() {
     MatchRequestHeader leaveRoomRequest;
-    createMatchRequestHeader(&leaveRoomRequest, MATCH_REQUEST_LEAVE_ROOM, g_wfcSearchId);
+    createMatchRequestHeader(&leaveRoomRequest, MatchRequestType::LeaveRoom, g_wfcSearchId);
 
     SP_LOG("Sending LeaveRoom request!");
     return sendToRoomManager(&leaveRoomRequest, sizeof(leaveRoomRequest));
@@ -202,7 +199,7 @@ bool sendLeaveRoomRequest() {
 
 bool sendSuspendRequest(bool suspendVote) {
     SuspendRequestPacket suspendRequest;
-    createMatchRequestHeader(&suspendRequest.header, MATCH_REQUEST_SUSPEND, g_wfcSearchId);
+    createMatchRequestHeader(&suspendRequest.header, MatchRequestType::Suspend, g_wfcSearchId);
     suspendRequest.suspendVote = suspendVote;
 
     // TODO: Only send vote when it has changed
@@ -212,20 +209,23 @@ bool sendSuspendRequest(bool suspendVote) {
 bool sendSearchRoomRequest(SearchRegion region, GameMode gameMode) {
     SearchRoomRequestPacket searchRoomRequest;
     memset(&searchRoomRequest, 0, sizeof(searchRoomRequest));
-    createMatchRequestHeader(&searchRoomRequest.header, MATCH_REQUEST_SEARCH_ROOM, g_wfcSearchId);
+    createMatchRequestHeader(&searchRoomRequest.header, MatchRequestType::SearchRoom,
+            g_wfcSearchId);
     searchRoomRequest.region = region;
     searchRoomRequest.gameMode = gameMode;
 
-    SP_LOG("Sending SearchRoomRequest where region: %d and gameMode: %d", region, gameMode);
+    SP_LOG("Sending SearchRoomRequest where region: %d and gameMode: %d", region,
+            static_cast<u32>(gameMode));
     return sendToRoomManager(&searchRoomRequest, sizeof(searchRoomRequest));
 }
 
 bool sendLocalPlayerCount(u8 localPlayerCount) {
     LocalPlayerCountPacket lpcPacket;
     memset(&lpcPacket, 0, sizeof(LocalPlayerCountPacket));
-    createMatchRequestHeader(&lpcPacket.header, MATCH_REQUEST_LOCAL_PLAYER_COUNT, g_wfcSearchId);
+    createMatchRequestHeader(&lpcPacket.header, MatchRequestType::LocalPlayerCount, g_wfcSearchId);
     lpcPacket.localPlayerCount = localPlayerCount;
 
     SP_LOG("Sending LocalPlayerCountPacket where localPlayerCount is %d", localPlayerCount);
     return sendToRoomManager(&lpcPacket, sizeof(lpcPacket));
 }
+} // namespace MKWServer

@@ -6,7 +6,7 @@ extern "C" {
 
 #include <stdio.h>
 #include <string.h>
-
+namespace MKWServer {
 _Alignas(0x20) static u8 s_payloadBlock[PAYLOAD_BLOCK_SIZE + 0x20];
 static WWFCPayload *s_payload = NULL;
 static bool s_payloadReady = false;
@@ -84,19 +84,20 @@ s32 HandleResponse() {
     }
 
     // Disable unnecessary patches
-    u32 patchMask = WWFC_PATCH_LEVEL_CRITICAL | WWFC_PATCH_LEVEL_SUPPORT | WWFC_PATCH_LEVEL_BUGFIX |
-            WWFC_PATCH_LEVEL_PARITY | WWFC_PATCH_LEVEL_FEATURE;
+    WWFCPatchLevel patchMask = WWFCPatchLevel::Critical | WWFCPatchLevel::Support |
+            WWFCPatchLevel::Bugfix | WWFCPatchLevel::Parity | WWFCPatchLevel::Feature;
 
     WWFCPatch *patch = (WWFCPatch *)((u8 *)s_payload + s_payload->info.patch_list_offset);
     WWFCPatch *patchesEnd = (WWFCPatch *)((u8 *)s_payload + s_payload->info.patch_list_end);
 
     for (; patch < patchesEnd; patch++) {
-        if (patch->level == WWFC_PATCH_LEVEL_CRITICAL || (patch->level & patchMask)) {
+        if (patch->level == WWFCPatchLevel::Critical ||
+                static_cast<u8>(patch->level & patchMask) != 0) {
             continue;
         }
 
         // Otherwise disable the patch
-        patch->level |= WWFC_PATCH_LEVEL_DISABLED;
+        patch->level |= WWFCPatchLevel::Disabled;
     }
 
     entry = (EntryFunction)((u8 *)s_payload + s_payload->info.entry_point);
@@ -105,13 +106,13 @@ s32 HandleResponse() {
 }
 
 void OnPayloadReceived(NHTTPError result, NHTTPResponseHandle response, void * /*userdata */) {
-    // check for valid responce
+    // check for valid response
     if (response == NULL) {
         SP_LOG("NHTTP Response is NULL");
         return;
     }
 
-    // destroy responce
+    // destroy response
     NHTTPDestroyResponse(response);
 
     if (result != NHTTP_ERROR_NONE) {
@@ -133,13 +134,11 @@ void OnPayloadReceived(NHTTPError result, NHTTPResponseHandle response, void * /
     setAuthError(-1);
 }
 
-extern "C" {
-
-bool wwfcPayloadReady() {
+EXTERN_C bool wwfcPayloadReady() {
     return s_payloadReady;
 }
 
-NHTTPRequestHandle createWFCAuthRequest() {
+EXTERN_C NHTTPRequestHandle createWFCAuthRequest() {
     s_payload = (WWFCPayload *)s_payloadBlock;
     memset(s_payload, 0, PAYLOAD_BLOCK_SIZE);
 
@@ -181,4 +180,15 @@ NHTTPRequestHandle createWFCAuthRequest() {
 
     return request;
 }
+
+WWFCPatchLevel operator|(WWFCPatchLevel a, WWFCPatchLevel b) {
+    return static_cast<WWFCPatchLevel>(static_cast<u8>(a) | static_cast<u8>(b));
 }
+
+WWFCPatchLevel &operator|=(WWFCPatchLevel &a, WWFCPatchLevel b) {
+    return a = a | b;
+}
+WWFCPatchLevel operator&(WWFCPatchLevel a, WWFCPatchLevel b) {
+    return static_cast<WWFCPatchLevel>(static_cast<u8>(a) & static_cast<u8>(b));
+}
+} // namespace MKWServer

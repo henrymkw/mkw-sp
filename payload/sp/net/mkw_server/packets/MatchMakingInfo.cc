@@ -1,14 +1,11 @@
 #include "MatchMakingInfo.hh"
 
-extern "C" {
-#include <revolution.h>
-}
-
 #include <sp/net/mkw_server/RoomManager.hh>
 
 #include <string.h>
+namespace MKWServer {
 
-MatchMakingInfoPacket g_recvMatchPacket;
+static MatchMakingInfoPacket g_recvMatchPacket;
 
 bool matchMakingInfoValid(MatchMakingInfoPacket *mmInfo) {
     // Check that none of bits 12-31 are set
@@ -70,8 +67,7 @@ void resetMatchMakingInfoPacket() {
     memset(&g_recvMatchPacket, 0, sizeof(MatchMakingInfoPacket));
 }
 
-extern "C" {
-MatchMakingInfoPacket *mmInfo() {
+EXTERN_C MatchMakingInfoPacket *mmInfo() {
     return &g_recvMatchPacket;
 }
-}
+} // namespace MKWServer

@@ -66,7 +66,7 @@ void NetManager::init(u8 localPlayerCount) {
 void NetManager::scheduleShutdown() {
     m_shutdownScheduled = true;
 
-    resetRoomManagerConnection();
+    MKWServer::resetRoomManagerConnection();
 }
 
 void NetManager::cancelMatching() {
@@ -82,7 +82,7 @@ void NetManager::cancelMatching() {
     m_voteMMSuspension = VoteMatchMakingSuspended::Disconnected;
 
     // inform wfc-server we're leaving the room
-    sendLeaveRoomRequest();
+    MKWServer::sendLeaveRoomRequest();
 }
 
 bool NetManager::hasFoundMatch() const {
@@ -162,7 +162,7 @@ void NetManager::sendRacePacket() {
 }
 
 bool NetManager::sendRacePacketToMKWServer(u8 packetIdx) {
-    const SP::Packet *outgoingPacket = m_outgoingUniquePackets[packetIdx];
+    const MKWServer::Packet *outgoingPacket = m_outgoingUniquePackets[packetIdx];
 
     if (outgoingPacket == nullptr) {
         return false;
@@ -184,8 +184,8 @@ bool NetManager::sendRacePacketToMKWServer(u8 packetIdx) {
     void *recordToSend = outgoingPacket->data->record();
 
     // Try to send
-    bool sendResult =
-            trySendRacePacketToMKWServer(recordToSend, outgoingPacket->data->recordSize());
+    bool sendResult = MKWServer::trySendRacePacketToMKWServer(recordToSend,
+            outgoingPacket->data->recordSize());
 
     // always reset the outgoing buffer
     outgoingPacket->data->reset();
@@ -195,11 +195,11 @@ bool NetManager::sendRacePacketToMKWServer(u8 packetIdx) {
 void NetManager::updateMatchMakingInfoAndRating() {
     REPLACED(updateMatchMakingInfoAndRating)();
 
-    recvFromRoomManager();
+    MKWServer::recvFromRoomManager();
 }
 
 void NetManager::connectToAnybodyAsync() {
-    if (connectToRoomManager()) {
+    if (MKWServer::connectToRoomManager()) {
         // In vanilla, this function only gets called when searching for public rooms
         // Because of that, we can assume that a non-ww room type is regional and can't be a private
         // room
@@ -209,10 +209,11 @@ void NetManager::connectToAnybodyAsync() {
 
         bool isVS =
                 m_roomType == RoomType::VersusWorldWide || m_roomType == RoomType::VersusRegional;
-        GameMode mode = isVS ? GAME_MODE_VS : GAME_MODE_BATTLE;
+        MKWServer::GameMode mode = isVS ? MKWServer::GameMode::VS : MKWServer::GameMode::Battle;
 
-        if (!sendSearchRoomRequest(region, mode)) {
-            SP_LOG("Search room request failed! Region: %d, Mode: %d", region, mode);
+        if (!MKWServer::sendSearchRoomRequest(region, mode)) {
+            SP_LOG("Search room request failed! Region: %d, Mode: %d", region,
+                    static_cast<u32>(mode));
         }
     }
 }
@@ -237,8 +238,8 @@ void NetManager::connectToGameServerFromGroupId() {
     }
 
     s32 friendProfileId = DWCi_GetProfileIDFromList(friendId);
-    if (connectToRoomManager()) {
-        sendJoinFriendRequest(friendProfileId, searchRegion);
+    if (MKWServer::connectToRoomManager()) {
+        MKWServer::sendJoinFriendRequest(friendProfileId, searchRegion);
     }
 }
 
@@ -275,13 +276,13 @@ void NetManager::processRacePacket(u8 aid, u8 *packet, u32 size) {
 void NetManager::updateAddedFriendsCallback(void *r3, void *r4, void *r5) {
     REPLACED(updateAddedFriendsCallback)(r3, r4, r5);
 
-    if (!connectToRoomManager()) {
+    if (!MKWServer::connectToRoomManager()) {
         SP_LOG("Failed to connect to room manager!");
         return;
     }
 
     u8 localPlayerCount = UI::SectionManager::Instance()->getLocalPlayerCount();
-    bool sendResult = sendLocalPlayerCount(localPlayerCount);
+    bool sendResult = MKWServer::sendLocalPlayerCount(localPlayerCount);
     if (!sendResult) {
         SP_LOG("Sending localPlayerCount failed!");
     }

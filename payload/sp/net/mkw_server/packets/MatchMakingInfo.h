@@ -2,19 +2,6 @@
 
 #include <Common.h>
 
-#include <revolution/dwc/DWCNode.h>
-
-typedef struct {
-    u32 aidBitmap;
-    u32 numAids;
-    u32 directConnectedAidBitmap;
-    u32 roomId;
-    u8 myAid;
-    u8 hostAid;
-    bool suspended;
-    bool canceled;
-    DWCConnectionUserData localPlayerCount[12];
-} MatchMakingInfoPacket;
-static_assert(sizeof(MatchMakingInfoPacket) == 0x44);
+#include <sp/net/mkw_server/MKWServerTypes.h>
 
 EXTERN_C MatchMakingInfoPacket *mmInfo();

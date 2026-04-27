@@ -9,7 +9,7 @@
 
 #include <array>
 
-namespace SP {
+namespace MKWServer {
 
 struct Packet {
     // The packet to be sent
@@ -49,4 +49,4 @@ private:
     size_t m_count;
 };
 
-} // namespace SP
+} // namespace MKWServer

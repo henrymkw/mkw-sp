@@ -2,11 +2,7 @@
 
 #include <Common.h>
 
-// different race packet types, currently we check the first byte (which should be reconsidered at
-// some point) for the type of packet
-typedef enum {
-    MKW_SERVER_RACE_PACKET = 0xB,
-} MKWServerPacketType;
+#include <sp/net/mkw_server/MKWServerTypes.h>
 
 EXTERN_C bool verifySearchIdMagic(const u8 *packet, u32 size);
 

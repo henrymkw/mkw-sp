@@ -7,7 +7,7 @@ extern "C" {
 #include <vendor/rsa/rsa.h>
 #include <vendor/sha256/sha256.h>
 }
-
+namespace MKWServer {
 // clang-format off
 #ifdef LOCAL_MKW_SERVER
     #define WWFC_DOMAIN "nwfc.wiinoma.com" // nwfc.wiinoma.com points to localhost
@@ -39,13 +39,13 @@ s32 HandleResponse();
 
 void OnPayloadReceived(NHTTPError result, NHTTPResponseHandle response, void *userdata);
 
-typedef struct {
+struct WWFCHeader {
     char magic[0xC]; // Always "WWFC/Payload"
     u32 total_size;
     u8 signature[0x100]; // RSA-2048 signature
-} __attribute__((packed)) WWFCHeader;
+} __attribute__((packed));
 
-typedef struct {
+struct WWFCPayloadInfo {
     u32 format_version;        // Payload format version
     u32 format_version_compat; // Minimum payload format version that this
                                // payload is compatible with
@@ -61,28 +61,28 @@ typedef struct {
     u32 entry_point_no_got;
     u32 reserved[0x18 / 4];
     char build_timestamp[0x20];
-} __attribute__((packed)) WWFCPayloadInfo;
+} __attribute__((packed));
 
-typedef struct {
+struct WWFCPayload {
     WWFCHeader header;
     u8 salt[SHA256_DIGEST_SIZE];
     WWFCPayloadInfo info;
-} __attribute__((packed)) WWFCPayload;
+} __attribute__((packed));
 
-typedef enum {
+enum class WWFCPatchType : u8 {
     /**
      * Copy bytes specified in `args` to the destination `address`.
      * @param arg0 Pointer to the data to copy from.
      * @param arg1 Length of the data.
      */
-    WWFC_PATCH_TYPE_WRITE = 0,
+    Write = 0,
 
     /**
      * Write a branch: `address` = b `arg0`;
      * @param arg0 Branch destination address.
      * @param arg1 Not used.
      */
-    WWFC_PATCH_TYPE_BRANCH = 1,
+    Branch = 1,
 
     /**
      * Write a branch with a branch back: `address` = b `arg0`; `arg1` = b
@@ -90,14 +90,14 @@ typedef enum {
      * @param arg0 Branch destination address.
      * @param arg1 Address to write the branch back.
      */
-    WWFC_PATCH_TYPE_BRANCH_HOOK = 2,
+    BranchHook = 2,
 
     /**
      * Write a branch with link: `address` = bl `arg0`
      * @param arg0 Branch destination address.
      * @param arg1 Not used.
      */
-    WWFC_PATCH_TYPE_CALL = 3,
+    Call = 3,
 
     /**
      * Write a branch using the count register:
@@ -109,7 +109,7 @@ typedef enum {
      * @param arg0 Branch destination address.
      * @param arg1 Temporary register to use for call.
      */
-    WWFC_PATCH_TYPE_BRANCH_CTR = 4,
+    BranchCTR = 4,
 
     /**
      * Write a branch with link using the count register:
@@ -121,48 +121,52 @@ typedef enum {
      * @param arg0 Branch destination address.
      * @param arg1 Temporary register to use for call.
      */
-    WWFC_PATCH_TYPE_BRANCH_CTR_LINK = 5,
-} WWFCPatchType;
+    BranchCTRLink = 5,
+};
 
 // Flags for different patch levels.
-typedef enum {
+enum class WWFCPatchLevel : u8 {
 
     /**
      * Critical, used for security patches and other things required to connect
      * to the server. This has no value and is always automatically applied.
      */
-    WWFC_PATCH_LEVEL_CRITICAL = 0, // 0x00
+    Critical = 0, // 0x00
 
     /**
      * Patches that fix bugs in the game, such as anti-freeze patches.
      */
-    WWFC_PATCH_LEVEL_BUGFIX = 1 << 0, // 0x01
+    Bugfix = 1 << 0, // 0x01
 
     /**
      * Patches required for parity with clients using a regular WWFC patcher.
      */
-    WWFC_PATCH_LEVEL_PARITY = 1 << 1, // 0x02
+    Parity = 1 << 1, // 0x02
 
     /**
      * Additional feature, not required to be compatible with regular clients.
      */
-    WWFC_PATCH_LEVEL_FEATURE = 1 << 2, // 0x04
+    Feature = 1 << 2, // 0x04
 
     /**
      * General support patches that may be redundant depending on the patcher.
      * Used in cases like URL patches.
      */
-    WWFC_PATCH_LEVEL_SUPPORT = 1 << 3, // 0x08
+    Support = 1 << 3, // 0x08
 
     /**
      * Flag used to disable the patch if it has been already applied.
      */
-    WWFC_PATCH_LEVEL_DISABLED = 1 << 4, // 0x10
-} WWFCPatchLevel;
+    Disabled = 1 << 4, // 0x10
+};
 
-typedef struct {
-    u8 level; // wwfc_patch_level
-    u8 type;  // wwfc_patch_type
+WWFCPatchLevel operator|(WWFCPatchLevel a, WWFCPatchLevel b);
+WWFCPatchLevel &operator|=(WWFCPatchLevel &a, WWFCPatchLevel b);
+WWFCPatchLevel operator&(WWFCPatchLevel a, WWFCPatchLevel b);
+
+struct WWFCPatch {
+    WWFCPatchLevel level;
+    WWFCPatchType type;
     u8 reserved[2];
     u32 address;
 
@@ -173,7 +177,7 @@ typedef struct {
     };
 
     u32 arg1;
-} __attribute__((packed)) WWFCPatch;
+} __attribute__((packed));
 
 #define WL_ERROR_PAYLOAD_OK 0
 #define WL_ERROR_PAYLOAD_STAGE0_MISSING_STAGE1 -20901
@@ -188,3 +192,4 @@ typedef struct {
 #define WL_ERROR_PAYLOAD_STAGE1_SIGNATURE_INVALID -20917
 #define WL_ERROR_PAYLOAD_STAGE1_WAITING -20918
 #define WL_ERROR_PAYLOAD_GAME_MISMATCH -20930
+} // namespace MKWServer

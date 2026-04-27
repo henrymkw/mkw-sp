@@ -6,7 +6,7 @@ extern "C" {
 
 #include <sp/net/mkw_server/MKW-Server.hh>
 
-namespace SP {
+namespace MKWServer {
 
 void Packet::addRecipient(u8 aid) {
     receivingAids.set(aid);
@@ -50,4 +50,4 @@ u32 OutgoingRacePackets::count() {
     return m_count;
 }
 
-} // namespace SP
+} // namespace MKWServer
