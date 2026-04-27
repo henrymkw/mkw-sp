@@ -172,7 +172,7 @@ bool sendOpenRoomRequest() {
     MatchRequestHeader openRoomRequest;
     createMatchRequestHeader(&openRoomRequest, MatchRequestType::OpenRoom, g_wfcSearchId);
 
-    SP_LOG("Sent OpenFroom request!");
+    SP_LOG("Sent OpenRoom request!");
     return sendToRoomManager(&openRoomRequest, sizeof(openRoomRequest));
 }
 
