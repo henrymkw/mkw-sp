@@ -3,7 +3,7 @@
 #include <string.h>
 
 #include <sp/net/WiiLink.hh>
-#include <sp/net/mkw_server/MKW-Server.hh>
+#include <sp/net/mkw_server/MKWServer.hh>
 #include <sp/net/mkw_server/packets/JoinFriendRequest.hh>
 #include <sp/net/mkw_server/packets/LocalPlayerCount.hh>
 #include <sp/net/mkw_server/packets/MKWServerInfo.hh>

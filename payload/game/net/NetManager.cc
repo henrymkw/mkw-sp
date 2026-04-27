@@ -3,7 +3,7 @@
 #include "game/net/records/Room.hh"
 #include "game/ui/SectionManager.hh"
 
-#include <sp/net/mkw_server/MKW-Server.hh>
+#include <sp/net/mkw_server/MKWServer.hh>
 
 extern "C" {
 #include <revolution.h>

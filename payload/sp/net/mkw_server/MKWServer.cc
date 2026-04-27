@@ -1,4 +1,4 @@
-#include "MKW-Server.hh"
+#include "MKWServer.hh"
 
 extern "C" {
 #include <revolution.h>

@@ -4,7 +4,7 @@ extern "C" {
 #include <revolution.h>
 }
 
-#include <sp/net/mkw_server/MKW-Server.hh>
+#include <sp/net/mkw_server/MKWServer.hh>
 
 namespace MKWServer {
 
