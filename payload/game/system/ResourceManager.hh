@@ -22,6 +22,7 @@ public:
             Loaded = 2,
         };
 
+        // Remove CourseCache to save memory. Credits: Stebler
         REPLACE void init();
         REPLACE void load(u32 courseId);
 
