@@ -15,17 +15,16 @@ void Packet::addRecipient(u8 aid) {
 
 bool OutgoingRacePackets::push(Net::RecordHolder<Net::Header> *data, u32 headerSizes, u8 aid,
         u8 myAid) {
-    auto &packet = m_outgoingPackets[m_count++];
-
+    auto &packet = m_outgoingPackets[m_count];
     if (!applyMKWServerHeader(data->record(), myAid)) {
         SP_LOG("Applying MKW-Server header failed!");
         return false;
     }
-
     packet.data = data;
     packet.headerSizes = headerSizes;
     packet.receivingAids = BitField<u16, 12>{};
     packet.addRecipient(aid);
+    m_count++;
     return true;
 }
 

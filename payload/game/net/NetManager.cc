@@ -156,7 +156,9 @@ void NetManager::createRacePacket() {
 
 void NetManager::sendRacePacket() {
     for (u8 i = 0; i < m_outgoingUniquePackets.count(); i++) {
-        sendRacePacketToMKWServer(i);
+        if (!sendRacePacketToMKWServer(i)) {
+            SP_LOG("sendRacePacket(%d) failed!", i);
+        }
     }
     m_outgoingUniquePackets.reset();
 }
@@ -165,14 +167,17 @@ bool NetManager::sendRacePacketToMKWServer(u8 packetIdx) {
     const MKWServer::Packet *outgoingPacket = m_outgoingUniquePackets[packetIdx];
 
     if (outgoingPacket == nullptr) {
+        SP_LOG("Failed to sendRacePacket, outgoingPacket is null!");
         return false;
     }
 
     if (outgoingPacket->data == nullptr) {
+        SP_LOG("Failed to sendRacePacket, outgoingPacket->data is null!");
         return false;
     }
 
     if (outgoingPacket->data->recordSize() == 0) {
+        SP_LOG("Failed to sendRacePacket, outgoingPacket->data->recordSize() is 0!");
         return false;
     }
 
