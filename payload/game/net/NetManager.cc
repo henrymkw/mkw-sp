@@ -11,20 +11,20 @@ extern "C" {
 
 namespace Net {
 
-const MatchMakingInfo *NetManager::currentMMInfo() const {
-    return &m_matchMakingInfos[m_currMMInfo];
+const MatchMakingInfo &NetManager::currentMMInfo() const {
+    return m_matchMakingInfos[m_currMMInfo];
 }
 
 u8 NetManager::myAid() const {
-    return currentMMInfo()->myAid;
+    return currentMMInfo().myAid;
 }
 
 u32 NetManager::numAids() const {
-    return currentMMInfo()->numAids;
+    return currentMMInfo().numAids;
 }
 
 bool NetManager::aidInUse(u8 aid) const {
-    return currentMMInfo()->availableAids.on(aid);
+    return currentMMInfo().availableAids.on(aid);
 }
 
 bool NetManager::canSendToAid(u8 aid) const {
@@ -193,9 +193,32 @@ bool NetManager::sendRacePacketToMKWServer(u8 packetIdx) {
 }
 
 void NetManager::updateMatchMakingInfoAndRating() {
-    REPLACED(updateMatchMakingInfoAndRating)();
+    if (!MKWServer::recvFromRoomManager()) {
+        // return early if we don't have a MatchMakingInfo packet to process
+        // base game never returns early; it always tries to set vr/br
+        return;
+    }
 
-    MKWServer::recvFromRoomManager();
+    // Loop over both MatchMakingInfos and set them. In vanilla, calls to this function alternate
+    // writing to the two MatchMakingInfos, and XORs m_currMMInfo to do such. It is also the only
+    // function that writes to m_currMMInfo. Looping over both MatchMakingInfos when we receive a
+    // packet from MKW-Server is sufficient to get match making working in-game.
+    for (u8 i = 0; i < 2; i++) {
+        auto &mmInfo = m_matchMakingInfos[i];
+        MatchMakingInfoPacket *matchMakingInfo = &MKWServer::g_recvMatchPacket;
+
+        mmInfo.availableAids = matchMakingInfo->aidBitmap;
+        if (mmInfo.availableAids.none()) {
+            mmInfo.reset();
+        } else {
+            mmInfo.importMKWServerMMInfo(matchMakingInfo);
+        }
+    }
+    auto *userHandler = UserHandler::Instance();
+    if (userHandler->prepared()) {
+        m_vr = userHandler->myVR();
+        m_br = userHandler->myBR();
+    }
 }
 
 void NetManager::connectToAnybodyAsync() {
@@ -219,7 +242,7 @@ void NetManager::connectToAnybodyAsync() {
 }
 
 void NetManager::connectToGameServerFromGroupId() {
-    u32 friendId = currentMMInfo()->hostFriendId;
+    u32 friendId = currentMMInfo().hostFriendId;
     FriendJoinableStatus status = getFriendJoinableStatus(friendId);
     SearchRegion searchRegion = SEARCH_REGION_NONE;
 

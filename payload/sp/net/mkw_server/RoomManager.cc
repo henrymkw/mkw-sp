@@ -106,10 +106,13 @@ static void consumeBuffer(s32 n) {
     s_recvBufSize -= n;
 }
 
-void recvFromRoomManager() {
+// returns true when a MatchMakingInfoPacket can be processed, otherwise false
+bool recvFromRoomManager() {
     if (g_matchMakingSocket == -1) {
-        return;
+        return false;
     }
+
+    bool recvMMInfo = false;
 
     // loop until we can't process anymore packets
     while (true) {
@@ -133,18 +136,18 @@ void recvFromRoomManager() {
         default:
             SP_LOG("Received unknown packet type with magic %x", magic);
             s_recvBufSize = 0;
-            return;
+            return false;
         }
 
         // receive the rest of the packet if possible
         if (recvIntoBuffer(packetSize) < packetSize) {
-            return;
+            return false;
         }
 
         switch (magic) {
         case MATCH_MAKING_INFO: {
-            bool processResult = processMatchMakingInfoPacket(s_recvBuf + 4);
-            if (!processResult) {
+            recvMMInfo = processMatchMakingInfoPacket(s_recvBuf + 4);
+            if (!recvMMInfo) {
                 SP_LOG("processMatchMakingInfoPacket() failed!");
             }
             break;
@@ -156,6 +159,8 @@ void recvFromRoomManager() {
 
         consumeBuffer(packetSize);
     }
+
+    return recvMMInfo;
 }
 
 static bool sendToRoomManager(void *message, s32 messageLength) {

@@ -43,6 +43,7 @@ bool applyMKWServerHeader(void *packet, u8 myAid) {
         data[1] = myAid;
         return true;
     }
+    SP_LOG("Failed to apply MKW-Server header! Don't have MKW-Server Address");
     return false;
 }
 

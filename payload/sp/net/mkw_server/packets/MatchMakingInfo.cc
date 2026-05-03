@@ -5,7 +5,7 @@
 #include <string.h>
 namespace MKWServer {
 
-static MatchMakingInfoPacket g_recvMatchPacket;
+MatchMakingInfoPacket g_recvMatchPacket;
 
 bool matchMakingInfoValid(MatchMakingInfoPacket *mmInfo) {
     // Check that none of bits 12-31 are set
@@ -70,4 +70,5 @@ void resetMatchMakingInfoPacket() {
 EXTERN_C MatchMakingInfoPacket *mmInfo() {
     return &g_recvMatchPacket;
 }
+
 } // namespace MKWServer

@@ -30,7 +30,7 @@ EXTERN_C bool connectToRoomManager();
 void resetRoomManagerConnection();
 
 // Receives and processes as many packets as possible in a single call
-void recvFromRoomManager();
+bool recvFromRoomManager();
 
 EXTERN_C bool sendOpenRoomRequest();
 

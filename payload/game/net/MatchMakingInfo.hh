@@ -4,6 +4,8 @@
 
 #include <common/BitField.hh>
 
+#include <sp/net/mkw_server/packets/MatchMakingInfo.hh>
+
 extern "C" {
 #include <revolution.h>
 }
@@ -52,6 +54,10 @@ struct MatchMakingInfo {
 
     // Padding
     u8 _54[0x58 - 0x54];
+
+    void reset();
+
+    void importMKWServerMMInfo(MatchMakingInfoPacket *incomingPacket);
 };
 static_assert(sizeof(MatchMakingInfo) == 0x58);
 

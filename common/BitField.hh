@@ -35,8 +35,24 @@ public:
         return m_field;
     }
 
+    bool any() {
+        return m_field != 0;
+    }
+
+    bool none() {
+        return m_field = 0;
+    }
+
+    void reset() {
+        m_field = 0;
+    }
+
     BitField &operator=(const BitField &lhs) {
         m_field = lhs.m_field;
+        return *this;
+    }
+    BitField &operator=(u32 &lhs) {
+        m_field = lhs;
         return *this;
     }
 

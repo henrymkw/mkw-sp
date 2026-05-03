@@ -62,7 +62,7 @@ public:
     }
 
 private:
-    const MatchMakingInfo *currentMMInfo() const;
+    const MatchMakingInfo &currentMMInfo() const;
 
     u8 myAid() const;
 
@@ -116,7 +116,6 @@ private:
     // Retreives/stores new MatchMakingInfo values and vr/br
     // Hooked to call recvFromRoomManager()
     REPLACE void updateMatchMakingInfoAndRating();
-    void REPLACED(updateMatchMakingInfoAndRating)();
 
     // 0x80659170
     // Gets called upon entering match making connection state setting the room type to a public
