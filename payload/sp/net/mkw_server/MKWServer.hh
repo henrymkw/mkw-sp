@@ -8,17 +8,16 @@ extern "C" {
 
 #include <sp/net/mkw_server/packets/SearchId.hh>
 namespace MKWServer {
-extern bool hasMKWServerAddress;
-extern bool hasSentMKWServerAddressRequest;
-extern SOSockAddrIn g_mkwServerAddr;
-
-extern u64 g_wfcSearchId;
 
 void setMKWServerAddress(u32 addr, u16 port);
 
 void resetMKWServerInfo();
 
 bool applyMKWServerHeader(void *packet, u8 myAid);
+
+u64 getSearchId();
+
+bool hasMKWServerAddress();
 
 EXTERN_C bool trySendRacePacketToMKWServer(const void *data, u32 size);
 

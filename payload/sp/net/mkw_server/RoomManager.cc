@@ -174,17 +174,16 @@ static bool sendToRoomManager(void *message, s32 messageLength) {
 }
 
 bool sendOpenRoomRequest() {
-    MatchRequestHeader openRoomRequest;
-    createMatchRequestHeader(&openRoomRequest, MatchRequestType::OpenRoom, g_wfcSearchId);
+    MatchRequestHeader openRoomRequest{};
+    createMatchRequestHeader(&openRoomRequest, MatchRequestType::OpenRoom);
 
     SP_LOG("Sent OpenRoom request!");
     return sendToRoomManager(&openRoomRequest, sizeof(openRoomRequest));
 }
 
 bool sendJoinFriendRequest(s32 friendProfileId, SearchRegion searchRegion) {
-    JoinFriendRequestPacket joinRequest;
-    memset(&joinRequest, 0, sizeof(JoinFriendRequestPacket));
-    createMatchRequestHeader(&joinRequest.header, MatchRequestType::JoinFriend, g_wfcSearchId);
+    JoinFriendRequestPacket joinRequest{};
+    createMatchRequestHeader(&joinRequest.header, MatchRequestType::JoinFriend);
 
     joinRequest.friendProfileId = friendProfileId;
     joinRequest.searchRegion = searchRegion;
@@ -195,16 +194,16 @@ bool sendJoinFriendRequest(s32 friendProfileId, SearchRegion searchRegion) {
 }
 
 bool sendLeaveRoomRequest() {
-    MatchRequestHeader leaveRoomRequest;
-    createMatchRequestHeader(&leaveRoomRequest, MatchRequestType::LeaveRoom, g_wfcSearchId);
+    MatchRequestHeader leaveRoomRequest{};
+    createMatchRequestHeader(&leaveRoomRequest, MatchRequestType::LeaveRoom);
 
     SP_LOG("Sending LeaveRoom request!");
     return sendToRoomManager(&leaveRoomRequest, sizeof(leaveRoomRequest));
 }
 
 bool sendSuspendRequest(bool suspendVote) {
-    SuspendRequestPacket suspendRequest;
-    createMatchRequestHeader(&suspendRequest.header, MatchRequestType::Suspend, g_wfcSearchId);
+    SuspendRequestPacket suspendRequest{};
+    createMatchRequestHeader(&suspendRequest.header, MatchRequestType::Suspend);
     suspendRequest.suspendVote = suspendVote;
 
     // TODO: Only send vote when it has changed
@@ -212,10 +211,8 @@ bool sendSuspendRequest(bool suspendVote) {
 }
 
 bool sendSearchRoomRequest(SearchRegion region, GameMode gameMode) {
-    SearchRoomRequestPacket searchRoomRequest;
-    memset(&searchRoomRequest, 0, sizeof(searchRoomRequest));
-    createMatchRequestHeader(&searchRoomRequest.header, MatchRequestType::SearchRoom,
-            g_wfcSearchId);
+    SearchRoomRequestPacket searchRoomRequest{};
+    createMatchRequestHeader(&searchRoomRequest.header, MatchRequestType::SearchRoom);
     searchRoomRequest.region = region;
     searchRoomRequest.gameMode = gameMode;
 
@@ -225,9 +222,8 @@ bool sendSearchRoomRequest(SearchRegion region, GameMode gameMode) {
 }
 
 bool sendLocalPlayerCount(u8 localPlayerCount) {
-    LocalPlayerCountPacket lpcPacket;
-    memset(&lpcPacket, 0, sizeof(LocalPlayerCountPacket));
-    createMatchRequestHeader(&lpcPacket.header, MatchRequestType::LocalPlayerCount, g_wfcSearchId);
+    LocalPlayerCountPacket lpcPacket{};
+    createMatchRequestHeader(&lpcPacket.header, MatchRequestType::LocalPlayerCount);
     lpcPacket.localPlayerCount = localPlayerCount;
 
     SP_LOG("Sending LocalPlayerCountPacket where localPlayerCount is %d", localPlayerCount);

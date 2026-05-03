@@ -95,6 +95,10 @@ void NetManager::createRacePacket() {
         return;
     }
 
+    // Don't create a packet if we don't have MKW-Server's address.
+    if (!MKWServer::hasMKWServerAddress()) {
+        return;
+    }
     // Reset the outgoing packets. new frame, new packets
     m_outgoingUniquePackets.reset();
 

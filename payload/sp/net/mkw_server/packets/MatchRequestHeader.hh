@@ -14,5 +14,5 @@ struct MatchRequestHeader {
 };
 static_assert(sizeof(MatchRequestHeader) == 0x10);
 
-void createMatchRequestHeader(MatchRequestHeader *header, MatchRequestType type, u64 searchId);
+void createMatchRequestHeader(MatchRequestHeader *header, MatchRequestType type);
 } // namespace MKWServer
